@@ -42,3 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: qc
+    uniqueID: 3683468533
+    locked: 0
+  - name: nen
+    uniqueID: 1656336775
+    locked: 0
