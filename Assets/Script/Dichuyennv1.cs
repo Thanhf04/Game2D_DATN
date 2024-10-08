@@ -5,41 +5,29 @@ using UnityEngine;
 public class Dichuyennv1 : MonoBehaviour
 {
     public float speed = 5f;
-    private Rigidbody2D rb;
-
     public float jump = 10f;
+    public float rollDistance = 3f; // Đoạn lăn
+    public float rollDuration = 0.5f; // Thời gian lăn
+    private Rigidbody2D rb;
     private bool isGrounded;
-    private bool isRunning;
-    private bool isRoll;
-    private bool isJump;
     private Animator anim;
-
-    public float rollDistance = 3f;
-    public float rollDuration = 0.5f;
+    private bool isRolling; // Trạng thái lăn
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        isRunning = false;
-        isRoll = false;
-        isJump = false;
     }
 
     void Update()
     {
         float moveInput = Input.GetAxis("Horizontal");
 
-        if (isGrounded) 
+        if (isGrounded)
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-            isRunning = moveInput != 0;
+            bool isRunning = moveInput != 0;
             anim.SetBool("isRunning", isRunning);
-        } 
-        else 
-        {
-            isRunning = false;
-            anim.SetBool("isRunning", false);
         }
 
         if (moveInput > 0)
@@ -55,40 +43,38 @@ public class Dichuyennv1 : MonoBehaviour
         {
             rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isGrounded = false;
-            isJump = true;
             anim.SetBool("isJump", true);
+            anim.SetBool("isRunning", false);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) // Nhấn chuột trái để tấn công
         {
-            if (isJump)
-            {
-                anim.SetBool("isAttack2", true); // Kích hoạt animation tấn công khi nhảy
-                rb.velocity = new Vector2(rb.velocity.x, -10f); // Tăng tốc độ rơi xuống
-            }
-            else
-            {
-                StartCoroutine(Attack());
-            }
+            anim.SetBool("isAttack", true);
+        }
+        else if (Input.GetMouseButtonUp(0)) // Dừng animation tấn công khi nhả chuột trái
+        {
+            anim.SetBool("isAttack", false);
         }
 
-        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        if (Input.GetMouseButtonDown(1)) // Nhấn chuột phải để tấn công thứ hai
+        {
+            anim.SetBool("isAttack2", true);
+        }
+        else if (Input.GetMouseButtonUp(1)) // Dừng animation tấn công thứ hai khi nhả chuột phải
+        {
+            anim.SetBool("isAttack2", false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F) && isGrounded && !isRolling) // Nhấn phím F để lăn
         {
             StartCoroutine(Roll());
         }
     }
 
-    private IEnumerator Attack()
-    {
-        anim.SetBool("isAttack", true);
-        yield return new WaitForSeconds(0.25f);
-        anim.SetBool("isAttack", false);
-    }
-
     private IEnumerator Roll()
     {
-        isRoll = true;
-        anim.SetBool("isRoll", true);
+        isRolling = true;
+        anim.SetBool("isRoll", true); // Thiết lập trạng thái lăn
 
         float originalPosition = transform.position.x;
         float targetPosition = originalPosition + rollDistance * transform.localScale.x;
@@ -97,13 +83,13 @@ public class Dichuyennv1 : MonoBehaviour
         while (elapsedTime < rollDuration)
         {
             float newPosX = Mathf.Lerp(originalPosition, targetPosition, (elapsedTime / rollDuration));
-            rb.MovePosition(new Vector2(newPosX, rb.position.y)); // Chỉ thay đổi vận tốc x
+            rb.MovePosition(new Vector2(newPosX, rb.position.y)); // Di chuyển theo trục x
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         anim.SetBool("isRoll", false);
-        isRoll = false;
+        isRolling = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -111,9 +97,8 @@ public class Dichuyennv1 : MonoBehaviour
         if (collision.gameObject.CompareTag("NenDat"))
         {
             isGrounded = true;
-            isJump = false;
             anim.SetBool("isJump", false);
-            anim.SetBool("isAttack2", false); // Dừng animation tấn công khi nhảy
+            anim.SetBool("isRunning", false);
         }
     }
 

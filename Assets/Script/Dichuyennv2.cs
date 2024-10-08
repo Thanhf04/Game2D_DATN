@@ -5,29 +5,52 @@ using UnityEngine;
 public class Dichuyennv2 : MonoBehaviour
 {
     public float speed = 5f;
-    public float jump = 10f;
-    public float rollDistance = 3f; // Đoạn lăn
-    public float rollDuration = 0.5f; // Thời gian lăn
     private Rigidbody2D rb;
+
+    public float jump = 10f;
     private bool isGrounded;
+    private bool isRunning;
+    private bool isRoll;
+    private bool isJump;
     private Animator anim;
-    private bool isRolling; // Trạng thái lăn
+
+    public float rollDistance = 3f;
+    public float rollDuration = 0.5f;
+
+    public GameObject fireBulletPrefab; 
+    public GameObject fireBreathPrefab;
+    public GameObject fireHandPrefab;   
+    public Transform firePoint;         
+    public Transform firePoint2;
+    public Transform firePoint3;        
+    public float bulletSpeed = 10f;     
+    public float bulletLifeTime = 2f;   
+
+    private GameObject currentFireBreath;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        isRunning = false;
+        isRoll = false;
+        isJump = false;
     }
 
     void Update()
     {
         float moveInput = Input.GetAxis("Horizontal");
 
-        if (isGrounded)
+        if (isGrounded) 
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-            bool isRunning = moveInput != 0;
+            isRunning = moveInput != 0;
             anim.SetBool("isRunning", isRunning);
+        } 
+        else 
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
         }
 
         if (moveInput > 0)
@@ -43,38 +66,62 @@ public class Dichuyennv2 : MonoBehaviour
         {
             rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isGrounded = false;
+            isJump = true;
             anim.SetBool("isJump", true);
-            anim.SetBool("isRunning", false);
         }
 
-        if (Input.GetMouseButtonDown(0)) // Nhấn chuột trái để tấn công
+        if (Input.GetMouseButtonDown(0))
         {
-            anim.SetBool("isAttack", true);
-        }
-        else if (Input.GetMouseButtonUp(0)) // Dừng animation tấn công khi nhả chuột trái
-        {
-            anim.SetBool("isAttack", false);
-        }
-
-        if (Input.GetMouseButtonDown(1)) // Nhấn chuột phải để tấn công thứ hai
-        {
-            anim.SetBool("isAttack2", true);
-        }
-        else if (Input.GetMouseButtonUp(1)) // Dừng animation tấn công thứ hai khi nhả chuột phải
-        {
-            anim.SetBool("isAttack2", false);
+            if (isJump)
+            {
+                anim.SetBool("isAttack2", true);
+                rb.velocity = new Vector2(rb.velocity.x, -10f);
+            }
+            else
+            {
+                StartCoroutine(Attack());
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.F) && isGrounded && !isRolling) // Nhấn phím F để lăn
+        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
         {
             StartCoroutine(Roll());
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ShootFireBullet();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E)) 
+        {
+            BreathFire();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) 
+        {
+            FireHand();
+        }
+
+        // Cập nhật vị trí của lửa nếu đang phun lửa
+        if (currentFireBreath != null)
+        {
+            currentFireBreath.transform.position = firePoint2.position;
+            currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        }
+    }
+
+    private IEnumerator Attack()
+    {
+        anim.SetBool("isAttack", true);
+        yield return new WaitForSeconds(0.25f);
+        anim.SetBool("isAttack", false);
     }
 
     private IEnumerator Roll()
     {
-        isRolling = true;
-        anim.SetBool("isRoll", true); // Thiết lập trạng thái lăn
+        isRoll = true;
+        anim.SetBool("isRoll", true);
 
         float originalPosition = transform.position.x;
         float targetPosition = originalPosition + rollDistance * transform.localScale.x;
@@ -83,13 +130,13 @@ public class Dichuyennv2 : MonoBehaviour
         while (elapsedTime < rollDuration)
         {
             float newPosX = Mathf.Lerp(originalPosition, targetPosition, (elapsedTime / rollDuration));
-            rb.MovePosition(new Vector2(newPosX, rb.position.y)); // Di chuyển theo trục x
+            rb.MovePosition(new Vector2(newPosX, rb.position.y));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         anim.SetBool("isRoll", false);
-        isRolling = false;
+        isRoll = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -97,8 +144,9 @@ public class Dichuyennv2 : MonoBehaviour
         if (collision.gameObject.CompareTag("NenDat"))
         {
             isGrounded = true;
+            isJump = false;
             anim.SetBool("isJump", false);
-            anim.SetBool("isRunning", false);
+            anim.SetBool("isAttack2", false);
         }
     }
 
@@ -108,5 +156,57 @@ public class Dichuyennv2 : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    void ShootFireBullet()
+    {
+        GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
+        rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
+        StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
+    }
+
+    private IEnumerator DestroyBulletAfterTime(GameObject bullet, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(bullet);
+    }
+
+    void BreathFire()
+    {
+        if (currentFireBreath == null)
+        {
+            currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
+            currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+            StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
+        }
+    }
+
+    private IEnumerator DestroyFireBreathAfterTime(GameObject fireBreath, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(fireBreath);
+        currentFireBreath = null; // Reset biến lửa
+    }
+
+    void FireHand()
+    {
+        GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
+        fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
+        if (rbFireHand == null)
+        {
+            rbFireHand = fireHand.AddComponent<Rigidbody2D>();
+        }
+        rbFireHand.gravityScale = 1f;
+        Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
+        rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
+        StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+    }
+
+    private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(fireHand);
     }
 }

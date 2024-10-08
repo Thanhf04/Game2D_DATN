@@ -1,106 +1,46 @@
 fileFormatVersion: 2
-guid: c049ba42cf9c4254fb7c8b615fe09e30
+guid: a8ca785e5287d3a4588bf5a23ff74fa7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3466084621371655019
-    second: Fire_Napalm_Spread_128x32_0
+      213: 564983740382853904
+    second: Fire_Bomb_Explosion_96x48_0
   - first:
-      213: -6372165859395742734
-    second: Fire_Napalm_Spread_128x32_1
+      213: -6006455605923769680
+    second: Fire_Bomb_Explosion_96x48_1
   - first:
-      213: -2622950695751410802
-    second: Fire_Napalm_Spread_128x32_2
+      213: 2104417978433143140
+    second: Fire_Bomb_Explosion_96x48_2
   - first:
-      213: -7422817784630922759
-    second: Fire_Napalm_Spread_128x32_3
+      213: 2670408902306743655
+    second: Fire_Bomb_Explosion_96x48_3
   - first:
-      213: 7351887349841951738
-    second: Fire_Napalm_Spread_128x32_4
+      213: 787647822728609194
+    second: Fire_Bomb_Explosion_96x48_4
   - first:
-      213: 6001930930683070439
-    second: Fire_Napalm_Spread_128x32_5
+      213: -5381214156125771086
+    second: Fire_Bomb_Explosion_96x48_5
   - first:
-      213: 1542693450460042106
-    second: Fire_Napalm_Spread_128x32_6
+      213: 6069304472392192484
+    second: Fire_Bomb_Explosion_96x48_6
   - first:
-      213: 532448958868090168
-    second: Fire_Napalm_Spread_128x32_7
+      213: 8117952710303009403
+    second: Fire_Bomb_Explosion_96x48_7
   - first:
-      213: 5746100829588959608
-    second: Fire_Napalm_Spread_128x32_8
+      213: -946000942377729262
+    second: Fire_Bomb_Explosion_96x48_8
   - first:
-      213: 3863452290675617710
-    second: Fire_Napalm_Spread_128x32_9
+      213: -2836785303666701264
+    second: Fire_Bomb_Explosion_96x48_9
   - first:
-      213: 8840312328815443068
-    second: Fire_Napalm_Spread_128x32_10
+      213: 7929396251719590759
+    second: Fire_Bomb_Explosion_96x48_10
   - first:
-      213: -8221442136830229342
-    second: Fire_Napalm_Spread_128x32_11
+      213: -7106078118149239761
+    second: Fire_Bomb_Explosion_96x48_11
   - first:
-      213: -1028544033713741085
-    second: Fire_Napalm_Spread_128x32_12
-  - first:
-      213: 3203535590340605808
-    second: Fire_Napalm_Spread_128x32_13
-  - first:
-      213: -3551819606217467937
-    second: Fire_Napalm_Spread_128x32_14
-  - first:
-      213: 3942321456809009334
-    second: Fire_Napalm_Spread_128x32_15
-  - first:
-      213: -80767293240483639
-    second: Fire_Napalm_Spread_128x32_16
-  - first:
-      213: -1597075796409939770
-    second: Fire_Napalm_Spread_128x32_17
-  - first:
-      213: -950528286785291455
-    second: Fire_Napalm_Spread_128x32_18
-  - first:
-      213: -3977453152440043945
-    second: Fire_Napalm_Spread_128x32_19
-  - first:
-      213: 1317684256206483240
-    second: Fire_Napalm_Spread_128x32_20
-  - first:
-      213: -1786715263256404415
-    second: Fire_Napalm_Spread_128x32_21
-  - first:
-      213: 1243547340486563043
-    second: Fire_Napalm_Spread_128x32_22
-  - first:
-      213: 6872058380410301527
-    second: Fire_Napalm_Spread_128x32_0
-  - first:
-      213: 134905113013437570
-    second: Fire_Napalm_Spread_128x32_1
-  - first:
-      213: 4830837800560109240
-    second: Fire_Napalm_Spread_128x32_2
-  - first:
-      213: 9163805606276442714
-    second: Fire_Napalm_Spread_128x32_3
-  - first:
-      213: -4778929581297431777
-    second: Fire_Napalm_Spread_128x32_4
-  - first:
-      213: -7424779110149814063
-    second: Fire_Napalm_Spread_128x32_5
-  - first:
-      213: 513854845352484654
-    second: Fire_Napalm_Spread_128x32_6
-  - first:
-      213: -8962139092243239840
-    second: Fire_Napalm_Spread_128x32_7
-  - first:
-      213: 5884829879856264154
-    second: Fire_Napalm_Spread_128x32_8
-  - first:
-      213: 9214119560276440074
-    second: Fire_Napalm_Spread_128x32_9
+      213: -4976417178726163005
+    second: Fire_Bomb_Explosion_96x48_12
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -235,13 +175,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_0
+      name: Fire_Bomb_Explosion_96x48_0
       rect:
         serializedVersion: 2
-        x: 181
-        y: 0
-        width: 19
-        height: 19
+        x: 39
+        y: 170
+        width: 18
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -249,82 +189,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75c2a10ffa47e5f50800000000000000
-      internalID: 3466084621371655019
+      spriteID: 01b346de7b937d700800000000000000
+      internalID: 564983740382853904
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_1
+      name: Fire_Bomb_Explosion_96x48_1
       rect:
         serializedVersion: 2
-        x: 294
-        y: 0
-        width: 50
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 284cc8b4c774fd100800000000000000
-      internalID: -6372165859395742734
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_2
-      rect:
-        serializedVersion: 2
-        x: 405
-        y: 0
-        width: 82
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8b62aed72659a0340800000000000000
-      internalID: -2622950695751410802
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_3
-      rect:
-        serializedVersion: 2
-        x: 526
-        y: 0
-        width: 95
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a5a27d0a5a06c2f70800000000000000
-      internalID: -7422817784630922759
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_4
-      rect:
-        serializedVersion: 2
-        x: 646
-        y: 11
-        width: 110
+        x: 136
+        y: 170
+        width: 16
         height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -333,20 +210,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1b092c9dd4ddadb0800000000000000
-      internalID: 7351887349841951738
+      spriteID: 0b292c13378c4aca0800000000000000
+      internalID: -6006455605923769680
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_5
+      name: Fire_Bomb_Explosion_96x48_2
       rect:
         serializedVersion: 2
-        x: 774
-        y: 7
-        width: 117
-        height: 12
+        x: 232
+        y: 170
+        width: 15
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -354,20 +231,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1d887cbccb2e5f890800000000000000
-      internalID: 6001930930683070439
+      spriteID: 461047f6005643d10800000000000000
+      internalID: 2104417978433143140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_6
+      name: Fire_Bomb_Explosion_96x48_3
       rect:
         serializedVersion: 2
-        x: 903
-        y: 0
-        width: 116
-        height: 12
+        x: 327
+        y: 170
+        width: 17
+        height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -375,20 +252,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2f19536244912700800000000000000
-      internalID: 1542693450460042106
+      spriteID: 765c80b8fb23f0520800000000000000
+      internalID: 2670408902306743655
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_7
+      name: Fire_Bomb_Explosion_96x48_4
       rect:
         serializedVersion: 2
-        x: 59
-        y: 0
+        x: 43
+        y: 123
         width: 12
-        height: 6
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -396,20 +273,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06c2333aaf510a380800000000000000
-      internalID: 532448958868090168
+      spriteID: aad39d985894eea00800000000000000
+      internalID: 787647822728609194
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_8
+      name: Fire_Bomb_Explosion_96x48_5
       rect:
         serializedVersion: 2
-        x: 1036
-        y: 0
-        width: 113
-        height: 7
+        x: 140
+        y: 125
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -417,20 +294,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ad3ff68b89d1ba150800000000000000
-      internalID: 5746100829588959608
+      spriteID: 2bae1d36c361255b0800000000000000
+      internalID: -5381214156125771086
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Napalm_Spread_128x32_9
+      name: Fire_Bomb_Explosion_96x48_6
       rect:
         serializedVersion: 2
-        x: 1165
-        y: 0
-        width: 108
-        height: 5
+        x: 238
+        y: 126
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -438,8 +315,134 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a04714cebe02fdf70800000000000000
-      internalID: 3863452290675617710
+      spriteID: 4e150a6d2408a3450800000000000000
+      internalID: 6069304472392192484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_7
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 120
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7ac701baf2c8a070800000000000000
+      internalID: 8117952710303009403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_8
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 52
+        width: 50
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2130460b7212fd2f0800000000000000
+      internalID: -946000942377729262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_9
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 48
+        width: 70
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03cc5e6dbc6b1a8d0800000000000000
+      internalID: -2836785303666701264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_11
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 48
+        width: 73
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2cc985e993226d90800000000000000
+      internalID: -7106078118149239761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_13
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 48
+        width: 75
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 393195de9dfbb3749bfc5c6fffdba6f3
+      internalID: 1101058140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Bomb_Explosion_96x48_18
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 70
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 109ccb3b6ce1066428f68320287e4960
+      internalID: -1154952341
       vertices: []
       indices: 
       edges: []
@@ -455,16 +458,28 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Fire_Napalm_Spread_128x32_0: 3466084621371655019
-      Fire_Napalm_Spread_128x32_1: -6372165859395742734
-      Fire_Napalm_Spread_128x32_2: -2622950695751410802
-      Fire_Napalm_Spread_128x32_3: -7422817784630922759
-      Fire_Napalm_Spread_128x32_4: 7351887349841951738
-      Fire_Napalm_Spread_128x32_5: 6001930930683070439
-      Fire_Napalm_Spread_128x32_6: 1542693450460042106
-      Fire_Napalm_Spread_128x32_7: 532448958868090168
-      Fire_Napalm_Spread_128x32_8: 5746100829588959608
-      Fire_Napalm_Spread_128x32_9: 3863452290675617710
+      Fire_Bomb_Explosion_96x48_0: 564983740382853904
+      Fire_Bomb_Explosion_96x48_1: -6006455605923769680
+      Fire_Bomb_Explosion_96x48_10: 7929396251719590759
+      Fire_Bomb_Explosion_96x48_11: -7106078118149239761
+      Fire_Bomb_Explosion_96x48_12: -4976417178726163005
+      Fire_Bomb_Explosion_96x48_13: 1101058140
+      Fire_Bomb_Explosion_96x48_14: -2093814951
+      Fire_Bomb_Explosion_96x48_15: 119770541
+      Fire_Bomb_Explosion_96x48_16: -1208844597
+      Fire_Bomb_Explosion_96x48_17: -103431954
+      Fire_Bomb_Explosion_96x48_18: -1154952341
+      Fire_Bomb_Explosion_96x48_19: 1160895026
+      Fire_Bomb_Explosion_96x48_2: 2104417978433143140
+      Fire_Bomb_Explosion_96x48_20: -1487442685
+      Fire_Bomb_Explosion_96x48_21: 419428672
+      Fire_Bomb_Explosion_96x48_3: 2670408902306743655
+      Fire_Bomb_Explosion_96x48_4: 787647822728609194
+      Fire_Bomb_Explosion_96x48_5: -5381214156125771086
+      Fire_Bomb_Explosion_96x48_6: 6069304472392192484
+      Fire_Bomb_Explosion_96x48_7: 8117952710303009403
+      Fire_Bomb_Explosion_96x48_8: -946000942377729262
+      Fire_Bomb_Explosion_96x48_9: -2836785303666701264
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

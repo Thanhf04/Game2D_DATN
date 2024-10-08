@@ -96,7 +96,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 36
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -187,10 +187,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 96
-        width: 96
-        height: 32
+        x: 3
+        y: 107
+        width: 5
+        height: 5
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,10 +208,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 96
-        width: 96
-        height: 32
+        x: 99
+        y: 106
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,10 +229,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 96
-        width: 96
-        height: 32
+        x: 195
+        y: 104
+        width: 22
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,10 +250,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_3
       rect:
         serializedVersion: 2
-        x: 288
-        y: 96
-        width: 96
-        height: 32
+        x: 291
+        y: 102
+        width: 48
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,10 +271,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
-        width: 96
-        height: 32
+        x: 3
+        y: 70
+        width: 70
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,10 +292,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_5
       rect:
         serializedVersion: 2
-        x: 96
-        y: 64
-        width: 96
-        height: 32
+        x: 99
+        y: 70
+        width: 72
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -313,10 +313,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_6
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
-        width: 96
-        height: 32
+        x: 195
+        y: 69
+        width: 72
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,10 +334,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_7
       rect:
         serializedVersion: 2
-        x: 288
-        y: 64
-        width: 96
-        height: 32
+        x: 291
+        y: 70
+        width: 74
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -355,10 +355,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
-        width: 96
-        height: 32
+        x: 3
+        y: 38
+        width: 73
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,10 +376,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_9
       rect:
         serializedVersion: 2
-        x: 96
-        y: 32
-        width: 96
-        height: 32
+        x: 99
+        y: 38
+        width: 71
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -397,10 +397,10 @@ TextureImporter:
       name: Fire_Incendiary_96x32_10
       rect:
         serializedVersion: 2
-        x: 192
-        y: 32
-        width: 96
-        height: 32
+        x: 199
+        y: 33
+        width: 68
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -415,55 +415,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Incendiary_96x32_11
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 32
-        width: 96
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 764f3e7dcb0593890800000000000000
-      internalID: -7477856934265883545
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Incendiary_96x32_12
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 96
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 330763ca11e872d20800000000000000
-      internalID: 3253725462353309747
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Fire_Incendiary_96x32_13
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
-        width: 96
-        height: 32
+        x: 298
+        y: 34
+        width: 71
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -478,13 +436,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Incendiary_96x32_14
+      name: Fire_Incendiary_96x32_21
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 96
-        height: 32
+        x: 9
+        y: 3
+        width: 76
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -492,20 +450,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f79884f5b259f6970800000000000000
-      internalID: 8750376614518884735
+      spriteID: 7b837e3624cd69f4a80fc3760ba081f7
+      internalID: -1624986429
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Incendiary_96x32_15
+      name: Fire_Incendiary_96x32_26
       rect:
         serializedVersion: 2
-        x: 288
-        y: 0
-        width: 96
-        height: 32
+        x: 104
+        y: 4
+        width: 88
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -513,8 +471,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c784c3d95c4a83420800000000000000
-      internalID: 2610017152714688636
+      spriteID: 3f89ba302f7a8134e8bf1b8b464c3bd5
+      internalID: 954778055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_28
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 5
+        width: 87
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a03bc5a1b316c3418df81866860f13a
+      internalID: -1482079529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_31
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 4
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55ed551a53d1dbc45ac8642a9a50d080
+      internalID: -505191084
       vertices: []
       indices: 
       edges: []
@@ -538,9 +538,40 @@ TextureImporter:
       Fire_Incendiary_96x32_13: 710010488690403988
       Fire_Incendiary_96x32_14: 8750376614518884735
       Fire_Incendiary_96x32_15: 2610017152714688636
+      Fire_Incendiary_96x32_16: 1889507453
+      Fire_Incendiary_96x32_17: -1646605211
+      Fire_Incendiary_96x32_18: 1232816947
+      Fire_Incendiary_96x32_19: -1716195994
       Fire_Incendiary_96x32_2: -6678917434920263903
+      Fire_Incendiary_96x32_20: -1427203510
+      Fire_Incendiary_96x32_21: -1624986429
+      Fire_Incendiary_96x32_22: -761999027
+      Fire_Incendiary_96x32_23: -1011075705
+      Fire_Incendiary_96x32_24: -904281460
+      Fire_Incendiary_96x32_25: 1590176250
+      Fire_Incendiary_96x32_26: 954778055
+      Fire_Incendiary_96x32_27: -1276450525
+      Fire_Incendiary_96x32_28: -1482079529
+      Fire_Incendiary_96x32_29: -464652811
       Fire_Incendiary_96x32_3: -6898929026823205950
+      Fire_Incendiary_96x32_30: 142302112
+      Fire_Incendiary_96x32_31: -505191084
+      Fire_Incendiary_96x32_32: -2963322
+      Fire_Incendiary_96x32_33: 419482186
+      Fire_Incendiary_96x32_34: -707616145
+      Fire_Incendiary_96x32_35: -1065458886
+      Fire_Incendiary_96x32_36: -1282213820
+      Fire_Incendiary_96x32_37: -302389624
+      Fire_Incendiary_96x32_38: 69281642
+      Fire_Incendiary_96x32_39: 1750690629
       Fire_Incendiary_96x32_4: -4088476253307753314
+      Fire_Incendiary_96x32_40: 1608741642
+      Fire_Incendiary_96x32_41: 218574144
+      Fire_Incendiary_96x32_42: 1373036776
+      Fire_Incendiary_96x32_43: 457717241
+      Fire_Incendiary_96x32_44: -489508481
+      Fire_Incendiary_96x32_45: -35098604
+      Fire_Incendiary_96x32_46: 724018934
       Fire_Incendiary_96x32_5: -9022386717482406885
       Fire_Incendiary_96x32_6: -2147978348421139112
       Fire_Incendiary_96x32_7: -3134677286847059809

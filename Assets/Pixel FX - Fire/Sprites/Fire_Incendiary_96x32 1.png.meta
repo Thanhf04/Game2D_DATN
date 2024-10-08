@@ -1,46 +1,55 @@
 fileFormatVersion: 2
-guid: 284e94ec97dfd604ba0cc871504d5876
+guid: af7ebaba0c5dfda4d85a1e6d6d3f7922
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 564983740382853904
-    second: Fire_Bomb_Explosion_96x48_0
+      213: -5564397493214910013
+    second: Fire_Incendiary_96x32_0
   - first:
-      213: -6006455605923769680
-    second: Fire_Bomb_Explosion_96x48_1
+      213: -2843095853283080385
+    second: Fire_Incendiary_96x32_1
   - first:
-      213: 2104417978433143140
-    second: Fire_Bomb_Explosion_96x48_2
+      213: -6678917434920263903
+    second: Fire_Incendiary_96x32_2
   - first:
-      213: 2670408902306743655
-    second: Fire_Bomb_Explosion_96x48_3
+      213: -6898929026823205950
+    second: Fire_Incendiary_96x32_3
   - first:
-      213: 787647822728609194
-    second: Fire_Bomb_Explosion_96x48_4
+      213: -4088476253307753314
+    second: Fire_Incendiary_96x32_4
   - first:
-      213: -5381214156125771086
-    second: Fire_Bomb_Explosion_96x48_5
+      213: -9022386717482406885
+    second: Fire_Incendiary_96x32_5
   - first:
-      213: 6069304472392192484
-    second: Fire_Bomb_Explosion_96x48_6
+      213: -2147978348421139112
+    second: Fire_Incendiary_96x32_6
   - first:
-      213: 8117952710303009403
-    second: Fire_Bomb_Explosion_96x48_7
+      213: -3134677286847059809
+    second: Fire_Incendiary_96x32_7
   - first:
-      213: -946000942377729262
-    second: Fire_Bomb_Explosion_96x48_8
+      213: -6570920721470904551
+    second: Fire_Incendiary_96x32_8
   - first:
-      213: -2836785303666701264
-    second: Fire_Bomb_Explosion_96x48_9
+      213: 3553127706435692298
+    second: Fire_Incendiary_96x32_9
   - first:
-      213: 7929396251719590759
-    second: Fire_Bomb_Explosion_96x48_10
+      213: -3865183837477957130
+    second: Fire_Incendiary_96x32_10
   - first:
-      213: -7106078118149239761
-    second: Fire_Bomb_Explosion_96x48_11
+      213: -7477856934265883545
+    second: Fire_Incendiary_96x32_11
   - first:
-      213: -4976417178726163005
-    second: Fire_Bomb_Explosion_96x48_12
+      213: 3253725462353309747
+    second: Fire_Incendiary_96x32_12
+  - first:
+      213: 710010488690403988
+    second: Fire_Incendiary_96x32_13
+  - first:
+      213: 8750376614518884735
+    second: Fire_Incendiary_96x32_14
+  - first:
+      213: 2610017152714688636
+    second: Fire_Incendiary_96x32_15
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -175,13 +184,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_0
+      name: Fire_Incendiary_96x32_0
       rect:
         serializedVersion: 2
-        x: 39
-        y: 170
-        width: 18
-        height: 16
+        x: 3
+        y: 107
+        width: 5
+        height: 5
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -189,102 +198,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01b346de7b937d700800000000000000
-      internalID: 564983740382853904
+      spriteID: 3c9e9db16f947c2b0800000000000000
+      internalID: -5564397493214910013
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_1
+      name: Fire_Incendiary_96x32_1
       rect:
         serializedVersion: 2
-        x: 136
-        y: 170
-        width: 16
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b292c13378c4aca0800000000000000
-      internalID: -6006455605923769680
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_2
-      rect:
-        serializedVersion: 2
-        x: 232
-        y: 170
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 461047f6005643d10800000000000000
-      internalID: 2104417978433143140
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_3
-      rect:
-        serializedVersion: 2
-        x: 327
-        y: 170
-        width: 17
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 765c80b8fb23f0520800000000000000
-      internalID: 2670408902306743655
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_4
-      rect:
-        serializedVersion: 2
-        x: 43
-        y: 123
-        width: 12
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aad39d985894eea00800000000000000
-      internalID: 787647822728609194
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_5
-      rect:
-        serializedVersion: 2
-        x: 140
-        y: 125
+        x: 99
+        y: 106
         width: 9
         height: 9
       alignment: 0
@@ -294,20 +219,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bae1d36c361255b0800000000000000
-      internalID: -5381214156125771086
+      spriteID: f370da2826b4b88d0800000000000000
+      internalID: -2843095853283080385
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_6
+      name: Fire_Incendiary_96x32_2
       rect:
         serializedVersion: 2
-        x: 238
-        y: 126
-        width: 4
-        height: 4
+        x: 195
+        y: 104
+        width: 22
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -315,20 +240,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e150a6d2408a3450800000000000000
-      internalID: 6069304472392192484
+      spriteID: 12f1a67baf7bf43a0800000000000000
+      internalID: -6678917434920263903
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_7
+      name: Fire_Incendiary_96x32_3
       rect:
         serializedVersion: 2
-        x: 331
-        y: 120
-        width: 13
-        height: 14
+        x: 291
+        y: 102
+        width: 48
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -336,41 +261,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7ac701baf2c8a070800000000000000
-      internalID: 8117952710303009403
+      spriteID: 2cb42992a941240a0800000000000000
+      internalID: -6898929026823205950
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_8
+      name: Fire_Incendiary_96x32_4
       rect:
         serializedVersion: 2
-        x: 26
-        y: 52
-        width: 50
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2130460b7212fd2f0800000000000000
-      internalID: -946000942377729262
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_9
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 48
+        x: 3
+        y: 70
         width: 70
-        height: 48
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -378,20 +282,83 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03cc5e6dbc6b1a8d0800000000000000
-      internalID: -2836785303666701264
+      spriteID: e9ca8f06280d247c0800000000000000
+      internalID: -4088476253307753314
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_11
+      name: Fire_Incendiary_96x32_5
       rect:
         serializedVersion: 2
-        x: 203
-        y: 48
+        x: 99
+        y: 70
+        width: 72
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1c2246451b0ac280800000000000000
+      internalID: -9022386717482406885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_6
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 69
+        width: 72
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 855b0259219d032e0800000000000000
+      internalID: -2147978348421139112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_7
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 70
+        width: 74
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f98eef7ad936f74d0800000000000000
+      internalID: -3134677286847059809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_8
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 38
         width: 73
-        height: 49
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -399,20 +366,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2cc985e993226d90800000000000000
-      internalID: -7106078118149239761
+      spriteID: 91729750b666fc4a0800000000000000
+      internalID: -6570920721470904551
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_13
+      name: Fire_Incendiary_96x32_9
       rect:
         serializedVersion: 2
-        x: 299
-        y: 48
-        width: 75
-        height: 39
+        x: 99
+        y: 38
+        width: 71
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -420,20 +387,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 393195de9dfbb3749bfc5c6fffdba6f3
-      internalID: 1101058140
+      spriteID: a07a2bfd2de3f4130800000000000000
+      internalID: 3553127706435692298
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fire_Bomb_Explosion_96x48_18
+      name: Fire_Incendiary_96x32_10
       rect:
         serializedVersion: 2
-        x: 14
-        y: 0
-        width: 70
-        height: 28
+        x: 199
+        y: 33
+        width: 68
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -441,8 +408,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 109ccb3b6ce1066428f68320287e4960
-      internalID: -1154952341
+      spriteID: 6f19b8747cb1c5ac0800000000000000
+      internalID: -3865183837477957130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_13
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 34
+        width: 71
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49a613517c67ad900800000000000000
+      internalID: 710010488690403988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_21
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 3
+        width: 76
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b837e3624cd69f4a80fc3760ba081f7
+      internalID: -1624986429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_26
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 4
+        width: 88
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f89ba302f7a8134e8bf1b8b464c3bd5
+      internalID: 954778055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_28
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 5
+        width: 87
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a03bc5a1b316c3418df81866860f13a
+      internalID: -1482079529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Incendiary_96x32_31
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 4
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55ed551a53d1dbc45ac8642a9a50d080
+      internalID: -505191084
       vertices: []
       indices: 
       edges: []
@@ -458,28 +530,53 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Fire_Bomb_Explosion_96x48_0: 564983740382853904
-      Fire_Bomb_Explosion_96x48_1: -6006455605923769680
-      Fire_Bomb_Explosion_96x48_10: 7929396251719590759
-      Fire_Bomb_Explosion_96x48_11: -7106078118149239761
-      Fire_Bomb_Explosion_96x48_12: -4976417178726163005
-      Fire_Bomb_Explosion_96x48_13: 1101058140
-      Fire_Bomb_Explosion_96x48_14: -2093814951
-      Fire_Bomb_Explosion_96x48_15: 119770541
-      Fire_Bomb_Explosion_96x48_16: -1208844597
-      Fire_Bomb_Explosion_96x48_17: -103431954
-      Fire_Bomb_Explosion_96x48_18: -1154952341
-      Fire_Bomb_Explosion_96x48_19: 1160895026
-      Fire_Bomb_Explosion_96x48_2: 2104417978433143140
-      Fire_Bomb_Explosion_96x48_20: -1487442685
-      Fire_Bomb_Explosion_96x48_21: 419428672
-      Fire_Bomb_Explosion_96x48_3: 2670408902306743655
-      Fire_Bomb_Explosion_96x48_4: 787647822728609194
-      Fire_Bomb_Explosion_96x48_5: -5381214156125771086
-      Fire_Bomb_Explosion_96x48_6: 6069304472392192484
-      Fire_Bomb_Explosion_96x48_7: 8117952710303009403
-      Fire_Bomb_Explosion_96x48_8: -946000942377729262
-      Fire_Bomb_Explosion_96x48_9: -2836785303666701264
+      Fire_Incendiary_96x32_0: -5564397493214910013
+      Fire_Incendiary_96x32_1: -2843095853283080385
+      Fire_Incendiary_96x32_10: -3865183837477957130
+      Fire_Incendiary_96x32_11: -7477856934265883545
+      Fire_Incendiary_96x32_12: 3253725462353309747
+      Fire_Incendiary_96x32_13: 710010488690403988
+      Fire_Incendiary_96x32_14: 8750376614518884735
+      Fire_Incendiary_96x32_15: 2610017152714688636
+      Fire_Incendiary_96x32_16: 1889507453
+      Fire_Incendiary_96x32_17: -1646605211
+      Fire_Incendiary_96x32_18: 1232816947
+      Fire_Incendiary_96x32_19: -1716195994
+      Fire_Incendiary_96x32_2: -6678917434920263903
+      Fire_Incendiary_96x32_20: -1427203510
+      Fire_Incendiary_96x32_21: -1624986429
+      Fire_Incendiary_96x32_22: -761999027
+      Fire_Incendiary_96x32_23: -1011075705
+      Fire_Incendiary_96x32_24: -904281460
+      Fire_Incendiary_96x32_25: 1590176250
+      Fire_Incendiary_96x32_26: 954778055
+      Fire_Incendiary_96x32_27: -1276450525
+      Fire_Incendiary_96x32_28: -1482079529
+      Fire_Incendiary_96x32_29: -464652811
+      Fire_Incendiary_96x32_3: -6898929026823205950
+      Fire_Incendiary_96x32_30: 142302112
+      Fire_Incendiary_96x32_31: -505191084
+      Fire_Incendiary_96x32_32: -2963322
+      Fire_Incendiary_96x32_33: 419482186
+      Fire_Incendiary_96x32_34: -707616145
+      Fire_Incendiary_96x32_35: -1065458886
+      Fire_Incendiary_96x32_36: -1282213820
+      Fire_Incendiary_96x32_37: -302389624
+      Fire_Incendiary_96x32_38: 69281642
+      Fire_Incendiary_96x32_39: 1750690629
+      Fire_Incendiary_96x32_4: -4088476253307753314
+      Fire_Incendiary_96x32_40: 1608741642
+      Fire_Incendiary_96x32_41: 218574144
+      Fire_Incendiary_96x32_42: 1373036776
+      Fire_Incendiary_96x32_43: 457717241
+      Fire_Incendiary_96x32_44: -489508481
+      Fire_Incendiary_96x32_45: -35098604
+      Fire_Incendiary_96x32_46: 724018934
+      Fire_Incendiary_96x32_5: -9022386717482406885
+      Fire_Incendiary_96x32_6: -2147978348421139112
+      Fire_Incendiary_96x32_7: -3134677286847059809
+      Fire_Incendiary_96x32_8: -6570920721470904551
+      Fire_Incendiary_96x32_9: 3553127706435692298
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
