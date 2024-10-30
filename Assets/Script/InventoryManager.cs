@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -18,7 +16,7 @@ public class InventoryManager : MonoBehaviour
 
     public Image itemCursor;
 
-    [SerializeField]private GameObject[] slots;
+    [SerializeField] private GameObject[] slots;
     public bool isMoving;
 
     // Start is called before the first frame update
@@ -32,7 +30,7 @@ public class InventoryManager : MonoBehaviour
             slots[i] = slotsHolder.transform.GetChild(i).gameObject;
         }
 
-        for(int i=0; i < items.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
             items[i] = new SlotClass();
         }
@@ -56,7 +54,8 @@ public class InventoryManager : MonoBehaviour
             if (isMoving)
             {
                 EndMove();
-            }else
+            }
+            else
             {
                 BeginMove();
             }
@@ -79,7 +78,8 @@ public class InventoryManager : MonoBehaviour
             itemCursor.enabled = true;
             itemCursor.transform.position = Input.mousePosition;
             itemCursor.sprite = movingSlot.GetItem().itemIcon;
-        }else
+        }
+        else
         {
             itemCursor.enabled = false;
             itemCursor.sprite = null;
@@ -88,7 +88,7 @@ public class InventoryManager : MonoBehaviour
 
     private void RefreshUI()
     {
-        for(int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
             try
             {
@@ -97,11 +97,12 @@ public class InventoryManager : MonoBehaviour
                 if (!items[i].GetItem().isStackable)
                 {
                     slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
-                }else
+                }
+                else
                 {
                     slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity() + "";
                 }
-            
+
             }
             catch
             {
@@ -115,7 +116,7 @@ public class InventoryManager : MonoBehaviour
     public void AddItem(ItemClass item, int quantity)
     {
         SlotClass slot = ContainsItem(item);
-        if(slot != null && slot.GetItem().isStackable)
+        if (slot != null && slot.GetItem().isStackable)
         {
             slot.AddQuantity(quantity);
         }
@@ -134,18 +135,19 @@ public class InventoryManager : MonoBehaviour
         RefreshUI();
     }
 
-    public void RemoveItem(ItemClass item,int quanity)
+    public void RemoveItem(ItemClass item, int quanity)
     {
         SlotClass temp = ContainsItem(item);
         if (temp != null)
         {
-            if(temp.GetQuantity() > 1)
+            if (temp.GetQuantity() > 1)
             {
                 temp.SubQuantity(quanity);
-            }else
+            }
+            else
             {
                 int slotToRemoveIndex = 0;
-                for(int i = 0; i < items.Length; i++)
+                for (int i = 0; i < items.Length; i++)
                 {
                     if (items[i].GetItem() == item)
                     {
@@ -156,21 +158,22 @@ public class InventoryManager : MonoBehaviour
 
                 items[slotToRemoveIndex].RemoveItem();
             }
-        }else
+        }
+        else
         {
             return;
         }
 
-       
+
 
         RefreshUI();
     }
 
     private SlotClass ContainsItem(ItemClass item)
     {
-        for(int i=0; i < items.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
-            if(items[i].GetItem() == item)
+            if (items[i].GetItem() == item)
             {
                 return items[i];
             }
@@ -198,7 +201,7 @@ public class InventoryManager : MonoBehaviour
         if (originalSlot == null || originalSlot.GetItem() == null) return;
 
         movingSlot.AddItem(
-            originalSlot.GetItem(), 
+            originalSlot.GetItem(),
             originalSlot.GetQuantity());
         originalSlot.RemoveItem();
 
@@ -212,7 +215,7 @@ public class InventoryManager : MonoBehaviour
         originalSlot = GetClosestSlot();
 
         if (originalSlot == null || originalSlot.GetItem() == null) return;
-        if(originalSlot.GetQuantity() <= 1)
+        if (originalSlot.GetQuantity() <= 1)
         {
             return;
         }
@@ -230,7 +233,7 @@ public class InventoryManager : MonoBehaviour
     {
         originalSlot = GetClosestSlot();
 
-        if(originalSlot == null)
+        if (originalSlot == null)
         {
             AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
         }
@@ -247,7 +250,7 @@ public class InventoryManager : MonoBehaviour
                         int itemMaxStack = originalSlot.GetItem().maxStackQuantity; //Apple: 20
                         int count = originalSlot.GetQuantity() + movingSlot.GetQuantity();// 25
 
-                        if(count > itemMaxStack)
+                        if (count > itemMaxStack)
                         {
                             int remain = count - itemMaxStack; //5
                             originalSlot.SetQuantity(itemMaxStack);
@@ -256,7 +259,8 @@ public class InventoryManager : MonoBehaviour
                             isMoving = true;
                             RefreshUI();
                             return;
-                        }else
+                        }
+                        else
                         {
                             originalSlot.AddQuantity(movingSlot.GetQuantity());
                             movingSlot.RemoveItem();
@@ -286,7 +290,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-       
+
 
         isMoving = false;
         RefreshUI();

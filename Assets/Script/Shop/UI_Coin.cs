@@ -32,7 +32,6 @@ public class UI_Coin : MonoBehaviour
     private void Start()
     {
         UI_Coin.Instance.AddCoins(100);
-        // AddCoins(100);
         Debug.Log("Add coins");
     }
     public void AddCoins(int amount)
@@ -50,7 +49,6 @@ public class UI_Coin : MonoBehaviour
             Debug.Log("Buy Item Success");
             Debug.Log("Coin: " + curentCoins);
             Debug.Log("Bought item: " + itemType);
-            CheckCoins(itemType);
             return true;
         }
         if (curentCoins <= 0)
@@ -67,14 +65,6 @@ public class UI_Coin : MonoBehaviour
     public int GetCurrentCoins()
     {
         return curentCoins;
-    }
-    public void CheckCoins(Model_Shop.ItemType itemType)
-    {
-        int coins = Model_Shop.GetCost(itemType);
-        if (curentCoins < coins)
-        {
-            Debug.Log("You don't have enough money");
-        }
     }
 
 }
