@@ -32,9 +32,12 @@ public class Dichuyennv1 : MonoBehaviour
     public AudioSource playAttack_Fire1;
     public AudioSource playAttack_Fire2;
     public AudioSource playAttack_Fire3;
+
     // public AudioSource Die;
     public AudioSource playJump;
 
+    public int maxHealth = 100;
+    public int currentHealth;
 
     private GameObject currentFireBreath;
 
@@ -52,6 +55,7 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire2.Stop();
         playAttack_Fire3.Stop();
         playAttack2.Stop();
+        currentHealth = maxHealth;
     }
 
 
@@ -171,7 +175,11 @@ public class Dichuyennv1 : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < rollDuration)
         {
-            float newPosX = Mathf.Lerp(originalPosition, targetPosition, (elapsedTime / rollDuration));
+            float newPosX = Mathf.Lerp(
+                originalPosition,
+                targetPosition,
+                (elapsedTime / rollDuration)
+            );
             rb.MovePosition(new Vector2(newPosX, rb.position.y));
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -219,7 +227,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentFireBreath == null)
         {
-            currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
+            currentFireBreath = Instantiate(
+                fireBreathPrefab,
+                firePoint2.position,
+                firePoint2.rotation
+            );
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
             StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
 
@@ -255,5 +267,22 @@ public class Dichuyennv1 : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Destroy(fireHand);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount; // Giảm máu của người chơi
+
+        if (currentHealth <= 0)
+        {
+            Die(); // Xử lý chết nếu máu bằng 0
+        }
+    }
+
+    void Die()
+    {
+        // Xử lý khi người chơi chết, có thể phát animation hoặc restart game
+        Debug.Log("Player is dead");
+        Destroy(gameObject); // Xóa game object của người chơi
     }
 }
