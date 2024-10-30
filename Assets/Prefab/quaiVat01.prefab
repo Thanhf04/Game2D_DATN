@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 576949319175013950}
   - component: {fileID: -2749323619561142915}
   m_Layer: 0
-  m_Name: Idle_0
+  m_Name: quaiVat01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +154,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.33, y: 0.36}
+    oldSize: {x: 1.03125, y: 1.125}
     newSize: {x: 0.32, y: 0.43}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -191,7 +191,7 @@ Animator:
   m_GameObject: {fileID: 3254978284742475283}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4aa90dcf7c6c1234781af580c2bfe894, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
