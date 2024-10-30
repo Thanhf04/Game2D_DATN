@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NenDat
   - Bantay
+  - enemy
   layers:
   - Default
   - TransparentFX
