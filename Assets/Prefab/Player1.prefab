@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5300070000238474641}
   - component: {fileID: 7899522872482523845}
-  - component: {fileID: 6597846240170937485}
   m_Layer: 0
   m_Name: dame
   m_TagString: Untagged
@@ -78,19 +77,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.0001, y: 0.014400184}
   m_EdgeRadius: 0
---- !u!114 &6597846240170937485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3530439668453753796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e43f0d3d75b83c9479159377483c16c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageAmount: 10
 --- !u!1 &3803709565108677252
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +198,13 @@ MonoBehaviour:
   playAttack_Fire2: {fileID: 0}
   playAttack_Fire3: {fileID: 0}
   playJump: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 0
+  statsPanel: {fileID: 0}
+  openPanelButton: {fileID: 0}
+  increaseHealthButton: {fileID: 0}
+  decreaseHealthButton: {fileID: 0}
+  healthText: {fileID: 0}
 --- !u!50 &4465536761040421246
 Rigidbody2D:
   serializedVersion: 4

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,5 +27,10 @@ public class Enemy : MonoBehaviour
     {
         // Xử lý cái chết của quái vật, như là biến mất hoặc phát animation chết
         Destroy(gameObject); // Xóa quái vật
+    }
+
+    internal void TakeDamage(float damage)
+    {
+        throw new NotImplementedException();
     }
 }
