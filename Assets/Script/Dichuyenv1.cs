@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,6 +63,24 @@ public class Dichuyennv1 : MonoBehaviour
     public Text manaText;
     public Text levelText;
     public Text pointsText;
+
+    // Các biến cooldown và UI cho kỹ năng
+    public float skill1Cooldown = 2f;
+    public float skill2Cooldown = 3f;
+    public float skill3Cooldown = 5f;
+
+    private float skill1Timer;
+    private float skill2Timer;
+    private float skill3Timer;
+
+    public Image skill1Image;
+    public Image skill2Image;
+    public Image skill3Image;
+
+    public Text skill1CooldownText;
+    public Text skill2CooldownText;
+    public Text skill3CooldownText;
+
 
     void Start()
     {
@@ -161,6 +180,42 @@ public class Dichuyennv1 : MonoBehaviour
         {
             FireHand();
         }
+        // Cập nhật các timer hồi chiêu
+    if (skill1Timer > 0)
+    {
+        skill1Timer -= Time.deltaTime;
+        skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString();
+        skill1Image.fillAmount = skill1Timer / skill1Cooldown;
+    }
+    else if (Input.GetKeyDown(KeyCode.Q))
+    {
+        Skill1();
+        skill1Timer = skill1Cooldown;
+    }
+
+    if (skill2Timer > 0)
+    {
+        skill2Timer -= Time.deltaTime;
+        skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
+        skill2Image.fillAmount = skill2Timer / skill2Cooldown;
+    }
+    else if (Input.GetKeyDown(KeyCode.E))
+    {
+        Skill2();
+        skill2Timer = skill2Cooldown;
+    }
+
+    if (skill3Timer > 0)
+    {
+        skill3Timer -= Time.deltaTime;
+        skill3CooldownText.text = Mathf.Ceil(skill3Timer).ToString();
+        skill3Image.fillAmount = skill3Timer / skill3Cooldown;
+    }
+    else if (Input.GetKeyDown(KeyCode.R))
+    {
+        Skill3();
+        skill3Timer = skill3Cooldown;
+    }
 
         // Cập nhật vị trí của lửa nếu đang phun lửa
         if (currentFireBreath != null)
@@ -169,6 +224,88 @@ public class Dichuyennv1 : MonoBehaviour
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
         CheckLevelUp();
+
+        if (skill1Timer > 0)
+    {
+        skill1Timer -= Time.deltaTime;
+        skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString(); // Hiển thị thời gian còn lại
+        skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
+    }
+    else
+    {
+        skill1CooldownText.text = ""; // Ẩn văn bản khi không trong thời gian hồi
+    }
+
+    if (skill2Timer > 0)
+    {
+        skill2Timer -= Time.deltaTime;
+        skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
+        skill2Image.fillAmount = skill2Timer / skill2Cooldown;
+    }
+    else
+    {
+        skill2CooldownText.text = "";
+    }
+
+    if (skill3Timer > 0)
+    {
+        skill3Timer -= Time.deltaTime;
+        skill3CooldownText.text = Mathf.Ceil(skill3Timer).ToString();
+        skill3Image.fillAmount = skill3Timer / skill3Cooldown;
+    }
+    else
+    {
+        skill3CooldownText.text = "";
+    }
+
+    // Kiểm tra phím nhấn để kích hoạt kỹ năng và bắt đầu hồi chiêu
+    if (Input.GetKeyDown(KeyCode.Q) && skill1Timer <= 0)
+    {
+        Skill1();
+        skill1Timer = skill1Cooldown;
+    }
+
+    if (Input.GetKeyDown(KeyCode.E) && skill2Timer <= 0)
+    {
+        Skill2();
+        skill2Timer = skill2Cooldown;
+    }
+
+    if (Input.GetKeyDown(KeyCode.R) && skill3Timer <= 0)
+    {
+        Skill3();
+        skill3Timer = skill3Cooldown;
+    }
+        void Skill1()
+{
+    if (currentMana >= 20) // Kiểm tra nếu mana đủ
+    {
+        ShootFireBullet();
+        currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+        UpdateStatsText(); // Cập nhật giao diện người dùng
+    }
+}
+
+void Skill2()
+{
+    if (currentMana >= 30) // Kiểm tra nếu mana đủ
+    {
+        BreathFire();
+        currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+        UpdateStatsText(); // Cập nhật giao diện người dùng
+    }
+}
+
+void Skill3()
+{
+    if (currentMana >= 30) // Kiểm tra nếu mana đủ
+    {
+        FireHand();
+        currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+        UpdateStatsText(); // Cập nhật giao diện người dùng
+    }
+}
+
     }
     void CheckLevelUp()
 {
@@ -232,16 +369,14 @@ public class Dichuyennv1 : MonoBehaviour
     // Các phương thức liên quan đến tấn công
     void ShootFireBullet()
 {
-    if (currentMana >= 20) // Kiểm tra nếu mana đủ
-    {
+   
+    
         GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
         rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
         playAttack_Fire1.Play();
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-        currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
-    }
+    
 }
 
 
@@ -253,18 +388,15 @@ public class Dichuyennv1 : MonoBehaviour
 
    void BreathFire()
 {
-    if (currentMana >= 30) // Kiểm tra nếu mana đủ
-    {
+   
         if (currentFireBreath == null)
         {
             currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-            StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
+            StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 3f));
             playAttack_Fire2.Play();
-            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
-            UpdateStatsText(); // Cập nhật giao diện người dùng
+     
         }
-    }
 }
 
     private IEnumerator DestroyFireBreathAfterTime(GameObject fireBreath, float time)
@@ -274,31 +406,35 @@ public class Dichuyennv1 : MonoBehaviour
         currentFireBreath = null;
     }
 
-    void FireHand()
+void FireHand()
 {
-    if (currentMana >= 10) // Kiểm tra nếu mana đủ
+    // Tạo đối tượng fireHand tại vị trí của firePoint3
+    GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
+    fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+    
+    // Thêm Rigidbody2D và Collider2D nếu chưa có
+    Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
+    if (rbFireHand == null)
     {
-        GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
-        fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-        Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
-        if (rbFireHand == null)
-        {
-            rbFireHand = fireHand.AddComponent<Rigidbody2D>();
-        }
-        playAttack_Fire3.Play();
-        rbFireHand.gravityScale = 1f;
-        Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-        rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
-        StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
-        currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
+        rbFireHand = fireHand.AddComponent<Rigidbody2D>();
     }
+    
+    BoxCollider2D collider = fireHand.GetComponent<BoxCollider2D>();
+    if (collider == null)
+    {
+        collider = fireHand.AddComponent<BoxCollider2D>();
+    }
+    
+    playAttack_Fire3.Play();
+
+    // Bắt đầu quá trình tự hủy sau thời gian
+    StartCoroutine(DestroyFireHandAfterTime(fireHand, 2f)); // Sửa lỗi ở đây
+
 }
 
-    private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+    private string DestroyFireHandAfterTime(GameObject fireHand, float v)
     {
-        yield return new WaitForSeconds(time);
-        Destroy(fireHand);
+        throw new NotImplementedException();
     }
 
     public void TakeDamage(int amount)
@@ -350,8 +486,8 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (upgradePoints > 0)
         {
-            maxMana += 10;
-            currentMana += 10;
+            maxMana += 50;
+            currentMana += 50;
             upgradePoints--;
             UpdateStatsText();
         }
