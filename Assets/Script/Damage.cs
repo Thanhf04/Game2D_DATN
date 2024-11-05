@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Damage : MonoBehaviour
@@ -19,7 +17,8 @@ public class Damage : MonoBehaviour
             }
         }
     }
-    void Start() {
-    dichuyennv1 = GetComponent<Dichuyennv1>(); // Khởi tạo dichuyennv1
-}
+    void Start()
+    {
+        dichuyennv1 = GetComponent<Dichuyennv1>(); // Khởi tạo dichuyennv1
+    }
 }
