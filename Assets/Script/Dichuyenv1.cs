@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -127,13 +126,23 @@ public class Dichuyennv1 : MonoBehaviour
         transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
         if (!playWalk.isPlaying)
         {
-            playWalk.Play();
+            transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+            if (!playWalk.isPlaying)
+            {
+                playWalk.Play();
+            }
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
+
+            }
         }
     }
         else if (playWalk.isPlaying)
-    {
-        playWalk.Stop();
-    }
+        {
+            playWalk.Stop();
+
+        }
 
     // Nhảy
     if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -186,6 +195,16 @@ public class Dichuyennv1 : MonoBehaviour
         }
 
         CheckLevelUp();
+    }
+    void CheckLevelUp()
+    {
+
+        if (upgradePoints >= level + 5)
+        {
+            level++;
+            upgradePoints++;
+            UpdateStatsText();
+        }
     }
 
     void UpdateSkillCooldowns()
@@ -257,15 +276,7 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-    void CheckLevelUp()
-    {
-        if (upgradePoints >= level + 5)
-        {
-            level++;
-            upgradePoints++;
-            UpdateStatsText();
-        }
-    }
+
     private IEnumerator Attack()
     {
         anim.SetBool("isAttack", true);
@@ -316,16 +327,18 @@ public class Dichuyennv1 : MonoBehaviour
 
     // Các phương thức liên quan đến tấn công
     void ShootFireBullet()
-{
-   
-    
-        GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
-        rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
-        playAttack_Fire1.Play();
-        StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-    
-}
+    {
+        if (currentMana >= 20) // Kiểm tra nếu mana đủ
+        {
+            GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
+            rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
+            playAttack_Fire1.Play();
+            StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
+            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
+    }
 
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float time)
@@ -334,18 +347,21 @@ public class Dichuyennv1 : MonoBehaviour
         Destroy(bullet);
     }
 
-   void BreathFire()
-{
-   
-        if (currentFireBreath == null)
+    void BreathFire()
+    {
+        if (currentMana >= 30) // Kiểm tra nếu mana đủ
         {
-            currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
-            currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-            StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 3f));
-            playAttack_Fire2.Play();
-     
+            if (currentFireBreath == null)
+            {
+                currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
+                currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+                StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
+                playAttack_Fire2.Play();
+                currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                UpdateStatsText(); // Cập nhật giao diện người dùng
+            }
         }
-}
+    }
 
     private IEnumerator DestroyFireBreathAfterTime(GameObject fireBreath, float time)
     {
@@ -354,30 +370,26 @@ public class Dichuyennv1 : MonoBehaviour
         currentFireBreath = null;
     }
 
-void FireHand()
-{
-    // Tạo đối tượng fireHand tại vị trí của firePoint3
-    GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
-    fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-
-    // Thêm Rigidbody2D và Collider2D nếu chưa có
-    Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
-    if (rbFireHand == null)
+    void FireHand()
     {
-        rbFireHand = fireHand.AddComponent<Rigidbody2D>();
+        if (currentMana >= 10) // Kiểm tra nếu mana đủ
+        {
+            GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
+            fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+            Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
+            if (rbFireHand == null)
+            {
+                rbFireHand = fireHand.AddComponent<Rigidbody2D>();
+            }
+            playAttack_Fire3.Play();
+            rbFireHand.gravityScale = 1f;
+            Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
+            rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
+            StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+            currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
     }
-
-    BoxCollider2D collider = fireHand.GetComponent<BoxCollider2D>();
-    if (collider == null)
-    {
-        collider = fireHand.AddComponent<BoxCollider2D>();
-    }
-
-    playAttack_Fire3.Play();
-
-    // Bắt đầu quá trình tự hủy sau thời gian
-    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1.5f));
-}
 
 private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
 {
@@ -406,7 +418,7 @@ private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
     {
         statsPanel.SetActive(!statsPanel.activeSelf);
     }
-    
+
 
     void IncreaseHealth()
     {
