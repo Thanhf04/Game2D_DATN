@@ -359,31 +359,31 @@ void FireHand()
     // Tạo đối tượng fireHand tại vị trí của firePoint3
     GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
     fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-    
+
     // Thêm Rigidbody2D và Collider2D nếu chưa có
     Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
     if (rbFireHand == null)
     {
         rbFireHand = fireHand.AddComponent<Rigidbody2D>();
     }
-    
+
     BoxCollider2D collider = fireHand.GetComponent<BoxCollider2D>();
     if (collider == null)
     {
         collider = fireHand.AddComponent<BoxCollider2D>();
     }
-    
+
     playAttack_Fire3.Play();
 
     // Bắt đầu quá trình tự hủy sau thời gian
-    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1f)); // Sửa lỗi ở đây
-
+    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1.5f));
 }
 
-    private string DestroyFireHandAfterTime(GameObject fireHand, float v)
-    {
-        throw new NotImplementedException();
-    }
+private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+{
+    yield return new WaitForSeconds(time);
+    Destroy(fireHand);
+}
 
     public void TakeDamage(int amount)
     {
