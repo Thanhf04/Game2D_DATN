@@ -13,6 +13,7 @@ public class damageEnemy : MonoBehaviour
             Dichuyennv1 playerHealth = other.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
+                Debug.Log("kill palyer");
                 playerHealth.TakeDamage(damageAmount); // Gây sát thương cho người chơi
             }
         }
