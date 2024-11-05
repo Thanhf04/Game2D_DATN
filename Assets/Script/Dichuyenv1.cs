@@ -376,7 +376,7 @@ void FireHand()
     playAttack_Fire3.Play();
 
     // Bắt đầu quá trình tự hủy sau thời gian
-    StartCoroutine(DestroyFireHandAfterTime(fireHand, 2f)); // Sửa lỗi ở đây
+    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1f)); // Sửa lỗi ở đây
 
 }
 
