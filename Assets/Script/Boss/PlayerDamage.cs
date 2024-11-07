@@ -13,7 +13,6 @@ public class PlayerDamage : MonoBehaviour
         if (hit)
         {
             hit.GetComponent<Boss_Health>().TakeDamage(10);
-            Debug.Log("-10");
         }
     }
     private void OnDrawGizmosSelected()
