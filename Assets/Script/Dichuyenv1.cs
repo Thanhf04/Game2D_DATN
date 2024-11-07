@@ -110,112 +110,73 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Điều khiển di chuyển
         if (isGrounded)
-        {
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-            isRunning = moveInput != 0;
-            anim.SetBool("isRunning", isRunning);
-        }
+    {
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        isRunning = moveInput != 0;
+        anim.SetBool("isRunning", isRunning);
+    }
         else
-        {
-            isRunning = false;
-            anim.SetBool("isRunning", false);
-        }
+    {
+        isRunning = false;
+        anim.SetBool("isRunning", false);
+    }
 
-        // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-        if (moveInput != 0 && isGrounded)
+    // Đổi hướng nhân vật và bật âm thanh khi di chuyển
+    if (moveInput != 0 && isGrounded)
+    {
+        transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        if (!playWalk.isPlaying)
         {
-            transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-            if (!playWalk.isPlaying)
-            {
-                playWalk.Play();
-            }
+            playWalk.Play();
         }
+    }
         else if (playWalk.isPlaying)
-        {
-            playWalk.Stop();
-        }
+    {
+        playWalk.Stop();
+    }
 
-        // Nhảy
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-            isGrounded = false;
-            isJump = true;
-            anim.SetBool("isJump", true);
-            playJump.Play();
-            playWalk.Stop();
-        }
+    // Nhảy
+    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+    {
+        rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+        isGrounded = false;
+        isJump = true;
+        anim.SetBool("isJump", true);
+        playJump.Play();
+        playWalk.Stop();
+    }
 
         // Tấn công
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (isJump)
-            {
-                anim.SetBool("isAttack2", true);
-                rb.velocity = new Vector2(rb.velocity.x, -10f);
-                playAttack2.Play();
-            }
-            else
-            {
-                StartCoroutine(Attack());
-            }
-        }
+    if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+    {
+        StartCoroutine(Roll());
+    }
 
-        // Lăn (roll)
-        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-        {
-            StartCoroutine(Roll());
-        }
-
-        // Kỹ năng tấn công
+    // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            ShootFireBullet();
+            if (skill1Timer <= 0 && currentMana >= 20)
+            {
+                Skill1();
+            }
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            BreathFire();
+            if (skill2Timer <= 0 && currentMana >= 30)
+            {
+                Skill2();
+            }
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            FireHand();
+            if (skill3Timer <= 0 && currentMana >= 30)
+            {
+                Skill3();
+            }
         }
+
         // Cập nhật các timer hồi chiêu
-    if (skill1Timer > 0)
-    {
-        skill1Timer -= Time.deltaTime;
-        skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString();
-        skill1Image.fillAmount = skill1Timer / skill1Cooldown;
-    }
-    else if (Input.GetKeyDown(KeyCode.Q))
-    {
-        Skill1();
-        skill1Timer = skill1Cooldown;
-    }
-
-    if (skill2Timer > 0)
-    {
-        skill2Timer -= Time.deltaTime;
-        skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
-        skill2Image.fillAmount = skill2Timer / skill2Cooldown;
-    }
-    else if (Input.GetKeyDown(KeyCode.E))
-    {
-        Skill2();
-        skill2Timer = skill2Cooldown;
-    }
-
-    if (skill3Timer > 0)
-    {
-        skill3Timer -= Time.deltaTime;
-        skill3CooldownText.text = Mathf.Ceil(skill3Timer).ToString();
-        skill3Image.fillAmount = skill3Timer / skill3Cooldown;
-    }
-    else if (Input.GetKeyDown(KeyCode.R))
-    {
-        Skill3();
-        skill3Timer = skill3Cooldown;
-    }
+        UpdateSkillCooldowns();
 
         // Cập nhật vị trí của lửa nếu đang phun lửa
         if (currentFireBreath != null)
@@ -223,101 +184,88 @@ public class Dichuyennv1 : MonoBehaviour
             currentFireBreath.transform.position = firePoint2.position;
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
+
         CheckLevelUp();
+    }
 
+    void UpdateSkillCooldowns()
+    {
         if (skill1Timer > 0)
-    {
-        skill1Timer -= Time.deltaTime;
-        skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString(); // Hiển thị thời gian còn lại
-        skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
-    }
-    else
-    {
-        skill1CooldownText.text = ""; // Ẩn văn bản khi không trong thời gian hồi
+        {
+            skill1Timer -= Time.deltaTime;
+            skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString(); // Hiển thị thời gian còn lại
+            skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
+        }
+        else
+        {
+            skill1CooldownText.text = ""; // Ẩn văn bản khi không trong thời gian hồi
+        }
+
+        if (skill2Timer > 0)
+        {
+            skill2Timer -= Time.deltaTime;
+            skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
+            skill2Image.fillAmount = skill2Timer / skill2Cooldown;
+        }
+        else
+        {
+            skill2CooldownText.text = "";
+        }
+
+        if (skill3Timer > 0)
+        {
+            skill3Timer -= Time.deltaTime;
+            skill3CooldownText.text = Mathf.Ceil(skill3Timer).ToString();
+            skill3Image.fillAmount = skill3Timer / skill3Cooldown;
+        }
+        else
+        {
+            skill3CooldownText.text = "";
+        }
     }
 
-    if (skill2Timer > 0)
+    void Skill1()
     {
-        skill2Timer -= Time.deltaTime;
-        skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
-        skill2Image.fillAmount = skill2Timer / skill2Cooldown;
-    }
-    else
-    {
-        skill2CooldownText.text = "";
+        if (currentMana >= 20) // Kiểm tra nếu mana đủ
+        {
+            ShootFireBullet();
+            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            skill1Timer = skill1Cooldown; // Bắt đầu thời gian hồi chiêu
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
     }
 
-    if (skill3Timer > 0)
+    void Skill2()
     {
-        skill3Timer -= Time.deltaTime;
-        skill3CooldownText.text = Mathf.Ceil(skill3Timer).ToString();
-        skill3Image.fillAmount = skill3Timer / skill3Cooldown;
-    }
-    else
-    {
-        skill3CooldownText.text = "";
+        if (currentMana >= 30) // Kiểm tra nếu mana đủ
+        {
+            BreathFire();
+            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+            skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
     }
 
-    // Kiểm tra phím nhấn để kích hoạt kỹ năng và bắt đầu hồi chiêu
-    if (Input.GetKeyDown(KeyCode.Q) && skill1Timer <= 0)
+    void Skill3()
     {
-        Skill1();
-        skill1Timer = skill1Cooldown;
+        if (currentMana >= 30) // Kiểm tra nếu mana đủ
+        {
+            FireHand();
+            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+            skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
     }
 
-    if (Input.GetKeyDown(KeyCode.E) && skill2Timer <= 0)
-    {
-        Skill2();
-        skill2Timer = skill2Cooldown;
-    }
-
-    if (Input.GetKeyDown(KeyCode.R) && skill3Timer <= 0)
-    {
-        Skill3();
-        skill3Timer = skill3Cooldown;
-    }
-        void Skill1()
-{
-    if (currentMana >= 20) // Kiểm tra nếu mana đủ
-    {
-        ShootFireBullet();
-        currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
-    }
-}
-
-void Skill2()
-{
-    if (currentMana >= 30) // Kiểm tra nếu mana đủ
-    {
-        BreathFire();
-        currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
-    }
-}
-
-void Skill3()
-{
-    if (currentMana >= 30) // Kiểm tra nếu mana đủ
-    {
-        FireHand();
-        currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
-    }
-}
-
-    }
     void CheckLevelUp()
-{
-    
-    if (upgradePoints >= level + 5) 
     {
-        level++;
-        upgradePoints++; 
-        UpdateStatsText(); 
+        if (upgradePoints >= level + 5)
+        {
+            level++;
+            upgradePoints++;
+            UpdateStatsText();
+        }
     }
-}
-
     private IEnumerator Attack()
     {
         anim.SetBool("isAttack", true);
@@ -411,31 +359,31 @@ void FireHand()
     // Tạo đối tượng fireHand tại vị trí của firePoint3
     GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
     fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-    
+
     // Thêm Rigidbody2D và Collider2D nếu chưa có
     Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
     if (rbFireHand == null)
     {
         rbFireHand = fireHand.AddComponent<Rigidbody2D>();
     }
-    
+
     BoxCollider2D collider = fireHand.GetComponent<BoxCollider2D>();
     if (collider == null)
     {
         collider = fireHand.AddComponent<BoxCollider2D>();
     }
-    
+
     playAttack_Fire3.Play();
 
     // Bắt đầu quá trình tự hủy sau thời gian
-    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1f)); // Sửa lỗi ở đây
-
+    StartCoroutine(DestroyFireHandAfterTime(fireHand, 1.5f));
 }
 
-    private string DestroyFireHandAfterTime(GameObject fireHand, float v)
-    {
-        throw new NotImplementedException();
-    }
+private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+{
+    yield return new WaitForSeconds(time);
+    Destroy(fireHand);
+}
 
     public void TakeDamage(int amount)
     {
