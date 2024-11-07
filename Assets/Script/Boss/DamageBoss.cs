@@ -5,6 +5,7 @@ public class DamageBoss : MonoBehaviour
     public Transform attackPoint;
     public float attackRadius = 1f;
     public LayerMask Player;
+    public int damageBoss;
     public void Attack()
     {
 
@@ -15,7 +16,7 @@ public class DamageBoss : MonoBehaviour
             Dichuyennv1 playerHealth = hit.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10);
+                playerHealth.TakeDamage(damageBoss);
             }
         }
     }
