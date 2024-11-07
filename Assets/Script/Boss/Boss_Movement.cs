@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Boss_Movement : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class Boss_Movement : MonoBehaviour
     public GameObject skill3;
     public GameObject skill4;
     public GameObject skill5;
-    [Header("SkillPoint")]
+
+    [Header("Skill Spawn Points")]
     public Transform skillSpawnPoint1;
     public Transform skillSpawnPoint2;
     public Transform skillSpawnPoint3;
@@ -29,6 +31,8 @@ public class Boss_Movement : MonoBehaviour
     private bool facingRight = true;
 
     private Transform player;
+
+    private bool isAttacking = false;  // Kiểm tra xem quái vật có đang tấn công hay không
 
     void Start()
     {
@@ -50,25 +54,34 @@ public class Boss_Movement : MonoBehaviour
         }
 
         skillCooldownTimer -= Time.deltaTime;
+
+        // Kiểm tra cooldown skill và tấn công nếu có thể
         if (skillCooldownTimer <= 0f && IsPlayerInAttackRange())
         {
             UseSkill();
             skillCooldownTimer = skillCooldown;
         }
+
         if (IsPlayerInAttackRange())
         {
+            // Tấn công chỉ khi cooldown đã hết và animation chưa được phát
             animator.SetBool("AttackBasic", true);
+            isAttacking = true;
+            StartCoroutine(StartAttack());
+            StartCoroutine(ResetAttackAnimation());
         }
         else if (!IsPlayerInAttackRange())
         {
+            // Tắt animation tấn công khi không còn trong phạm vi tấn công
             animator.SetBool("AttackBasic", false);
+            isAttacking = false;
         }
+
 
     }
 
     void Patrol()
     {
-
         if (patrolPoints.Length == 0) return;
 
         Transform targetPoint = patrolPoints[currentPatrolIndex];
@@ -117,14 +130,29 @@ public class Boss_Movement : MonoBehaviour
         }
     }
 
-    // Hàm được gọi từ Animation Event để thực hiện skill sau khi animation hoàn tất
+    // Hàm để sử dụng một skill ngẫu nhiên khi gặp người chơi
     void UseSkill()
     {
-        SpawnAndMoveSkill(skill1, skillSpawnPoint1, 10, 1);
-        SpawnAndMoveSkill(skill2, skillSpawnPoint2, 2, 3);
-        SpawnAndMoveSkill(skill3, skillSpawnPoint3, 8, 1);
-        SpawnAndMoveSkill(skill4, skillSpawnPoint4, 5, 1);
-        SpawnAndMoveSkill(skill5, skillSpawnPoint5, 10, 1);
+        int randomSkill = Random.Range(1, 6); // Chọn ngẫu nhiên từ skill 1 đến skill 5
+
+        switch (randomSkill)
+        {
+            case 1:
+                SpawnAndMoveSkill(skill1, skillSpawnPoint1, 2, 2.5f);
+                break;
+            case 2:
+                SpawnAndMoveSkill(skill2, skillSpawnPoint2, 4, 2.5f);
+                break;
+            case 3:
+                SpawnAndMoveSkill(skill3, skillSpawnPoint3, 3, 2.5f);
+                break;
+            case 4:
+                SpawnAndMoveSkill(skill4, skillSpawnPoint4, 5, 2.5f);
+                break;
+            case 5:
+                SpawnAndMoveSkill(skill5, skillSpawnPoint5, 2, 2.5f);
+                break;
+        }
     }
 
     // Hàm để khởi tạo và thiết lập hướng di chuyển cho mỗi skill
@@ -137,19 +165,16 @@ public class Boss_Movement : MonoBehaviour
 
             if (rbSkill != null)
             {
+                Vector2 direction = facingRight ? Vector2.right : Vector2.left;
 
-                Vector2 direction = facingRight ? Vector2.right : Vector2.left; // Nếu nhìn sang phải, skill di chuyển sang phải, ngược lại sẽ di chuyển sang trái
-
-                // Đảo chiều trục X của skill nếu quái vật nhìn sang trái
                 if (!facingRight)
                 {
                     Vector3 scale = skillInstance.transform.localScale;
-                    scale.x *= -1; // Đảo chiều trục X
+                    scale.x *= -1;
                     skillInstance.transform.localScale = scale;
                 }
 
-                // Thiết lập vận tốc cho skill
-                rbSkill.velocity = direction * bulletSpeed; // Đặt vận tốc theo hướng
+                rbSkill.velocity = direction * bulletSpeed;
             }
 
             Destroy(skillInstance, skillLifetime);
@@ -162,5 +187,15 @@ public class Boss_Movement : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+    private IEnumerator ResetAttackAnimation()
+    {
+        yield return new WaitForSeconds(1.2f);  // Đợi 0.1 giây (hoặc tùy chỉnh theo hoạt hình)
+        animator.SetBool("AttackBasic", false);  // Tắt hoạt hình bị trúng đòn
+    }
+    private IEnumerator StartAttack()
+    {
+        animator.SetBool("AttackBasic", true);
+        yield return new WaitForSeconds(1f);
     }
 }

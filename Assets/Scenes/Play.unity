@@ -261,7 +261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &564200704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,11 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f039b166f47bd43a40e29ade8f57a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab:
+  networkPrefabRef:
     RawGuidValue: 8afeedf601350934c86fec0beb2519a9
-  createRoomButton: {fileID: 291333461}
-  joinRoomButton: {fileID: 1136538259}
-  roomCodeInput: {fileID: 1731937526}
 --- !u!1 &1058225755
 GameObject:
   m_ObjectHideFlags: 0

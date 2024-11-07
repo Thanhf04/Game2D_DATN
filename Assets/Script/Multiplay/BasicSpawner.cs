@@ -10,30 +10,18 @@ using UnityEngine.UI;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
+    private NetworkRunner networkRunner;
+
     [SerializeField]
-    public NetworkPrefabRef _playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters =
+    private NetworkPrefabRef networkPrefabRef;
+    private Dictionary<PlayerRef, NetworkObject> spawnedCharacters =
         new Dictionary<PlayerRef, NetworkObject>();
-    private List<PlayerRef> _pendingPlayers = new List<PlayerRef>(); // List to keep track of players waiting to spawn
 
-    public Button createRoomButton;
-    public Button joinRoomButton;
-    public TMP_InputField roomCodeInput;
-
-    private NetworkRunner _runner;
-
-    public static string RoomCode { get; private set; }
-
-    private void Start()
+    async void StartGame(GameMode mode)
     {
-        createRoomButton.onClick.AddListener(OnCreateRoomButtonPressed);
-        joinRoomButton.onClick.AddListener(() => OnJoinRoomButtonPressed(roomCodeInput.text));
-    }
-
-    public async void StartGame(GameMode mode, string sessionName)
-    {
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
+        // Tạo mới NetworkRunner
+        networkRunner = gameObject.AddComponent<NetworkRunner>();
+        networkRunner.ProvideInput = true;
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -42,107 +30,138 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
-        await _runner.StartGame(
+        // Đợi scene "Player2" tải xong trước khi bắt đầu game
+        await networkRunner.StartGame(
             new StartGameArgs()
             {
                 GameMode = mode,
-                SessionName = sessionName,
+                SessionName = "MySession",
                 Scene = scene,
                 SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
             }
         );
     }
-
-    public void OnCreateRoomButtonPressed()
+    private void OnGUI()
     {
-        RoomCode = GenerateRoomCode();
-        StartGame(GameMode.Host, RoomCode);
-        Debug.Log("Created room with code: " + RoomCode);
-
-        // Switch to game scene
-        SceneManager.LoadScene("Player2");
-    }
-
-    public void OnJoinRoomButtonPressed(string inputRoomCode)
-    {
-        StartGame(GameMode.Client, inputRoomCode);
-        Debug.Log("Attempting to join room with code: " + inputRoomCode);
-    }
-
-    private string GenerateRoomCode()
-    {
-        return UnityEngine.Random.Range(100000, 999999).ToString();
+        if (networkRunner == null)
+        {
+            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
+            {
+                StartGame(GameMode.Host);
+            }
+            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
+            {
+                StartGame(GameMode.Client);
+            }
+        }
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        if (runner.IsServer)
-        {
-            SceneManager.LoadScene("Player2");
-        }
+        
     }
 
     public void OnConnectFailed(
         NetworkRunner runner,
         NetAddress remoteAddress,
         NetConnectFailedReason reason
-    ) { }
+    )
+    {
+        
+    }
 
     public void OnConnectRequest(
         NetworkRunner runner,
         NetworkRunnerCallbackArgs.ConnectRequest request,
         byte[] token
-    ) { }
+    )
+    {
+        
+    }
 
     public void OnCustomAuthenticationResponse(
         NetworkRunner runner,
         Dictionary<string, object> data
-    ) { }
+    )
+    {
+        
+    }
 
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+    {
+        
+    }
 
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+        
+    }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
-
-        if (Input.GetKey(KeyCode.W))
-            data.direction += Vector3.forward;
-
-        if (Input.GetKey(KeyCode.S))
-            data.direction += Vector3.back;
-
-        if (Input.GetKey(KeyCode.A))
+        if(Input.GetKey(KeyCode.A)){
             data.direction += Vector3.left;
-
-        if (Input.GetKey(KeyCode.D))
+        }
+        if(Input.GetKey(KeyCode.D)){
             data.direction += Vector3.right;
-
+        }
         input.Set(data);
     }
 
-    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+    {
+        
+    }
 
-    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+        
+    }
 
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+        
+    }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (!_spawnedCharacters.ContainsKey(player))
+       // Khi người chơi tham gia, chuyển đến scene Player2
+        if (networkRunner.IsServer)
         {
-            // Add player to the pending list for spawning after scene load
-            _pendingPlayers.Add(player);
+            // Chuyển đến scene "Player2" sau khi người chơi join vào
+            SceneManager.LoadScene("Player2");
+
+            // Đảm bảo rằng scene mới đã được tải xong
+            StartCoroutine(WaitForSceneLoadAndSpawn(player));
         }
     }
 
+    private IEnumerator WaitForSceneLoadAndSpawn(PlayerRef player)
+{
+    // Chờ đợi một khoảng thời gian để scene "Player2" tải xong
+    yield return new WaitForSeconds(1);  // Thời gian có thể điều chỉnh để đảm bảo scene đã tải xong
+
+    // Kiểm tra nếu player đã có trong dictionary, tránh việc thêm lại nhân vật
+    if (!spawnedCharacters.ContainsKey(player))
+    {
+        // Sau khi scene đã tải xong, spawn nhân vật cho player
+        Vector3 playerPos = new Vector3((player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * 3.1f, 0f);
+        NetworkObject networkObject = networkRunner.Spawn(networkPrefabRef, playerPos, Quaternion.identity, player);
+        spawnedCharacters.Add(player, networkObject);
+    }
+    else
+    {
+        Debug.LogWarning("Player already spawned: " + player);
+    }
+}
+
+
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-        {
+        if(spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)){
             runner.Despawn(networkObject);
-            _spawnedCharacters.Remove(player);
+            spawnedCharacters.Remove(player);
         }
     }
 
@@ -151,44 +170,47 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         PlayerRef player,
         ReliableKey key,
         float progress
-    ) { }
+    )
+    {
+        
+    }
 
     public void OnReliableDataReceived(
         NetworkRunner runner,
         PlayerRef player,
         ReliableKey key,
         ArraySegment<byte> data
-    ) { }
+    )
+    {
+        
+    }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        // Spawn characters for all pending players
-        foreach (PlayerRef player in _pendingPlayers)
+        // Khi scene đã tải xong, spawn nhân vật cho player
+        foreach (var player in runner.ActivePlayers)
         {
-            if (runner.IsServer)
-            {
-                Vector3 spawnPosition = new Vector3(
-                    (player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3,
-                    1,
-                    0
-                );
-                NetworkObject networkPlayerObject = runner.Spawn(
-                    _playerPrefab,
-                    spawnPosition,
-                    Quaternion.identity,
-                    player
-                );
-                _spawnedCharacters[player] = networkPlayerObject;
-            }
+            OnPlayerJoined(runner, player);
         }
-        _pendingPlayers.Clear(); // Clear the pending list after spawning
     }
 
-    public void OnSceneLoadStart(NetworkRunner runner) { }
+    public void OnSceneLoadStart(NetworkRunner runner)
+    {
+        
+    }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+        
+    }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+        
+    }
 
-    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
+    {
+        
+    }
 }
