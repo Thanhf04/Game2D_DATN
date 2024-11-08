@@ -6,18 +6,13 @@ using TMPro;
 using UnityEngine;
 using Firebase;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
-    // Các thành phần UI
+    // Các tham số không còn cần thiết
     public TMP_InputField usernameInput; // Input field cho username
     public TMP_InputField passwordInput; // Input field cho password
     public TextMeshProUGUI feedbackText; // Text để hiển thị thông báo
-    public TextMeshProUGUI goldText; // Text UI để hiển thị Gold
-    public TextMeshProUGUI diamondText; // Text UI để hiển thị Diamond
-    public Image healthImage; // Image UI để hiển thị thanh tiến trình của Health
-    public Image energyImage; // Image UI để hiển thị thanh tiến trình của Energy
 
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
@@ -180,15 +175,7 @@ public class LoginManager : MonoBehaviour
             {
                 var characterData = JsonUtility.FromJson<CharacterData>(snapshot.GetRawJsonValue());
 
-                // Cập nhật thông tin Gold, Diamond, Health và Energy trên UI
-                goldText.text = "Gold: " + characterData.gold.ToString();  // Chuyển int sang string để hiển thị
-                diamondText.text = "Diamond: " + characterData.diamond.ToString();  // Chuyển int sang string để hiển thị
-
-                // Cập nhật thanh tiến trình cho Health và Energy
-                healthImage.fillAmount = characterData.health / 100f;  // Giả sử max health = 100
-                energyImage.fillAmount = characterData.energy / 100f;  // Giả sử max energy = 100
-
-                // Lưu thông tin cảnh
+                // Lưu thông tin cảnh (có thể dùng nếu cần phải tải lại cảnh)
                 if (!string.IsNullOrEmpty(characterData.scene))
                 {
                     string currentScene = characterData.scene;
@@ -218,7 +205,7 @@ public class LoginManager : MonoBehaviour
     }
 }
 
-// Đưa lớp CharacterData vào namespace để tránh xung đột
+// Đưa lớp CharacterData vào một file riêng biệt hoặc đảm bảo không trùng với các lớp khác
 [System.Serializable]
 public class CharacterData
 {
