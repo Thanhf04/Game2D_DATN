@@ -6,6 +6,7 @@ public class PlayerDamage : MonoBehaviour
     public LayerMask Boss;
     public float attackRadius = 1f;
     Animator animator;
+    Boss_Health health;
 
     public void Attack()
     {
@@ -17,15 +18,12 @@ public class PlayerDamage : MonoBehaviour
         Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, attackRadius, Boss);
         if (hit)
         {
-            Boss_Health bossHealth = hit.GetComponent<Boss_Health>();
-            if (bossHealth != null)
+            health = hit.GetComponent<Boss_Health>();
+            if (health != null)
             {
-                bossHealth.TakeDamage(10);
+                health.TakeDamage(10);
             }
-            else
-            {
-                Debug.LogWarning("Đối tượng không có Boss_Health.");
-            }
+
         }
 
     }

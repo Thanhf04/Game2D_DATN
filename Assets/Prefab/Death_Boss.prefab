@@ -105,7 +105,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455433669806504168}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d89d270ea126ee478e3e56f89f70ecf, type: 3}
   m_Name: 
@@ -124,7 +124,7 @@ MonoBehaviour:
   skillSpawnPoint4: {fileID: 5711506301075245079}
   skillSpawnPoint5: {fileID: 5894874490420761783}
   attackRange: 5
-  chaseRange: 5
+  chaseRange: 10
 --- !u!95 &5072912259093638273
 Animator:
   serializedVersion: 5
@@ -249,7 +249,7 @@ MonoBehaviour:
   attackRadius: 2.17
   Player:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   damageBoss: 5
 --- !u!1 &826274967730330792
 GameObject:
