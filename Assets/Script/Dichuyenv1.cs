@@ -174,7 +174,6 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Roll());
         }
-
         // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
