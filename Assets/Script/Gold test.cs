@@ -44,6 +44,6 @@ public class GoldManager : MonoBehaviour
 
     private void UpdateGoldText()
     {
-        goldText.text = "Gold: " + goldAmount; // Cập nhật văn bản
+        goldText.text = " " + goldAmount; // Cập nhật văn bản
     }
 }

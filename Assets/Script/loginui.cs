@@ -67,7 +67,7 @@ public class LoginManager : MonoBehaviour
                 }
 
                 // Chuyển đến màn hình mới
-                SceneManager.LoadScene("TEST Database"); // Thay "TEST Database" bằng tên của cảnh bạn muốn chuyển đến
+                SceneManager.LoadScene("HUD"); // Thay "TEST Database" bằng tên của cảnh bạn muốn chuyển đến
             }
             else
             {

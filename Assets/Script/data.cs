@@ -3,17 +3,20 @@ using System.Threading.Tasks;
 using Firebase.Database;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;  // Để sử dụng Image và fillAmount
 
 public class CharacterEditManager : MonoBehaviour
 {
-    public TMP_InputField healthInput;     // Input field cho máu
-    public TMP_InputField energyInput;     // Input field cho năng lượng
-    public TMP_InputField goldInput;       // Input field cho vàng
-    public TMP_InputField diamondInput;    // Input field cho kim cương
+    // Tạm thời bỏ qua TMP_InputField cho health và feedbackText
+    // public TMP_InputField healthInput;     // Input field cho máu
+    public Image healthImage;      // Image hiển thị health (dưới dạng thanh trạng thái)
+    public Image energyImage;      // Image hiển thị energy (dưới dạng thanh trạng thái)
+
+    public TextMeshProUGUI goldText;       // Text hiển thị gold (dưới dạng text)
     public TMP_InputField positionXInput;  // Input field cho tọa độ X
     public TMP_InputField positionYInput;  // Input field cho tọa độ Y
     public TMP_InputField positionZInput;  // Input field cho tọa độ Z
-    public TextMeshProUGUI feedbackText;   // Text để hiển thị thông báo
+    public TextMeshProUGUI diamondText;    // Text hiển thị kim cương
 
     private DatabaseReference databaseReference;
     private string username;
@@ -28,11 +31,13 @@ public class CharacterEditManager : MonoBehaviour
         if (string.IsNullOrEmpty(username))
         {
             Debug.LogError("Username không được tìm thấy trong PlayerPrefs!");
-            feedbackText.text = "Vui lòng đăng nhập trước.";
+            // feedbackText.text = "Vui lòng đăng nhập trước."; // Tạm thời bỏ qua
             return; // Dừng nếu không có username
         }
 
-        await LoadCharacterData(); // Gọi phương thức để tải dữ liệu
+        // Tải dữ liệu từ Firebase và cũng đọc lại giá trị lưu trữ từ PlayerPrefs
+        await LoadCharacterData();
+        LoadHealthAndEnergyFromPlayerPrefs();  // Đọc lại giá trị health và energy
     }
 
     private async Task LoadCharacterData()
@@ -55,34 +60,37 @@ public class CharacterEditManager : MonoBehaviour
 
                     if (characterData != null)
                     {
-                        // Điền dữ liệu vào input fields
-                        healthInput.text = characterData.health.ToString();
-                        energyInput.text = characterData.energy.ToString();
-                        goldInput.text = characterData.gold.ToString();
-                        diamondInput.text = characterData.diamond.ToString();
+                        // Tạm thời bỏ qua việc điền vào healthInput và feedbackText
+                        // healthInput.text = characterData.health.ToString();
+                        goldText.text = characterData.gold.ToString();   // Hiển thị gold dưới dạng text
+                        diamondText.text = characterData.diamond.ToString(); // Hiển thị kim cương dưới dạng text
                         positionXInput.text = characterData.position.x.ToString();
                         positionYInput.text = characterData.position.y.ToString();
                         positionZInput.text = characterData.position.z.ToString();
+
+                        // Hiển thị health và energy dưới dạng thanh trạng thái
+                        healthImage.fillAmount = characterData.health / 100f;   // Giả sử max health là 100
+                        energyImage.fillAmount = characterData.energy / 100f;   // Giả sử max energy là 100
                     }
                     else
                     {
                         Debug.LogWarning("Dữ liệu nhân vật không hợp lệ!");
-                        feedbackText.text = "Dữ liệu nhân vật không hợp lệ!";
+                        // feedbackText.text = "Dữ liệu nhân vật không hợp lệ!"; // Tạm thời bỏ qua
                     }
                 }
                 else
                 {
-                    feedbackText.text = "Không tìm thấy dữ liệu nhân vật!";
+                    // feedbackText.text = "Không tìm thấy dữ liệu nhân vật!"; // Tạm thời bỏ qua
                 }
             }
             else
             {
-                feedbackText.text = "Không tìm thấy dữ liệu nhân vật!";
+                // feedbackText.text = "Không tìm thấy dữ liệu nhân vật!"; // Tạm thời bỏ qua
             }
         }
         catch (Exception ex)
         {
-            feedbackText.text = "Lỗi khi tải dữ liệu: " + ex.Message;
+            // feedbackText.text = "Lỗi khi tải dữ liệu: " + ex.Message; // Tạm thời bỏ qua
             Debug.LogError("Lỗi khi tải dữ liệu: " + ex);
         }
     }
@@ -96,11 +104,11 @@ public class CharacterEditManager : MonoBehaviour
     {
         try
         {
-            // Lấy dữ liệu từ input fields
-            float health = float.Parse(healthInput.text);
-            float energy = float.Parse(energyInput.text);
-            int gold = int.Parse(goldInput.text);
-            int diamond = int.Parse(diamondInput.text);
+            // Lấy dữ liệu từ các thanh trạng thái Image
+            float health = healthImage.fillAmount * 100f;  // Health lấy từ fillAmount (tính ra giá trị)
+            float energy = energyImage.fillAmount * 100f;  // Energy lấy từ fillAmount (tính ra giá trị)
+            int gold = int.Parse(goldText.text);            // Gold lấy từ goldText (hiển thị text)
+            int diamond = int.Parse(diamondText.text);     // Diamond từ diamondText (hiển thị text)
             float positionX = float.Parse(positionXInput.text);
             float positionY = float.Parse(positionYInput.text);
             float positionZ = float.Parse(positionZInput.text);
@@ -122,17 +130,44 @@ public class CharacterEditManager : MonoBehaviour
             var task = databaseReference.Child("characters").Child(username).SetRawJsonValueAsync(jsonData);
             await task;
 
-            feedbackText.text = "Dữ liệu nhân vật đã được cập nhật thành công!";
+            // Lưu giá trị fillAmount của Health và Energy vào PlayerPrefs
+            SaveHealthAndEnergyToPlayerPrefs();
+
+            // feedbackText.text = "Dữ liệu nhân vật đã được cập nhật thành công!"; // Tạm thời bỏ qua
         }
         catch (FormatException ex)
         {
-            feedbackText.text = "Dữ liệu đầu vào không hợp lệ!";
+            // feedbackText.text = "Dữ liệu đầu vào không hợp lệ!"; // Tạm thời bỏ qua
             Debug.LogError("Lỗi định dạng đầu vào: " + ex);
         }
         catch (Exception ex)
         {
-            feedbackText.text = "Lỗi khi lưu dữ liệu: " + ex.Message;
+            // feedbackText.text = "Lỗi khi lưu dữ liệu: " + ex.Message; // Tạm thời bỏ qua
             Debug.LogError("Lỗi khi lưu dữ liệu: " + ex);
+        }
+    }
+
+    // Lưu giá trị health và energy vào PlayerPrefs
+    private void SaveHealthAndEnergyToPlayerPrefs()
+    {
+        PlayerPrefs.SetFloat("HealthFillAmount", healthImage.fillAmount);
+        PlayerPrefs.SetFloat("EnergyFillAmount", energyImage.fillAmount);
+        PlayerPrefs.Save();
+    }
+
+    // Tải lại giá trị health và energy từ PlayerPrefs
+    private void LoadHealthAndEnergyFromPlayerPrefs()
+    {
+        if (PlayerPrefs.HasKey("HealthFillAmount"))
+        {
+            float savedHealth = PlayerPrefs.GetFloat("HealthFillAmount");
+            healthImage.fillAmount = savedHealth;
+        }
+
+        if (PlayerPrefs.HasKey("EnergyFillAmount"))
+        {
+            float savedEnergy = PlayerPrefs.GetFloat("EnergyFillAmount");
+            energyImage.fillAmount = savedEnergy;
         }
     }
 }
