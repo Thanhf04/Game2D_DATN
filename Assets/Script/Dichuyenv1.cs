@@ -10,6 +10,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float speed = 5f;
     private Rigidbody2D rb;
     public float jump = 10f;
+    private int jumpCount = 0;
     private bool isGrounded;
     private bool isRunning;
     private bool isRoll;
@@ -136,17 +137,16 @@ public class Dichuyennv1 : MonoBehaviour
     }
 
     // Nhảy
-    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-    {
-        rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-        isGrounded = false;
-        isJump = true;
-        anim.SetBool("isJump", true);
-        playJump.Play();
-        playWalk.Stop();
-    }
-
-        // Tấn công
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jump);
+            isGrounded = false;
+            isJump = true;
+            anim.SetBool("isJump", true);
+            playJump.Play();
+            playWalk.Stop();
+            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
+        }
     if (Input.GetKeyDown(KeyCode.F) && !isRoll)
     {
         StartCoroutine(Roll());
@@ -303,6 +303,7 @@ public class Dichuyennv1 : MonoBehaviour
             isJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isAttack2", false);
+            jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
         }
     }
 
