@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,24 +20,31 @@ public class Boss_Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (maxHealth < 0)
+        if (maxHealth <= 0)
         {
             Die();
         }
-        animator.SetBool("Death", false);
         HealthBoss.value = maxHealth;
     }
     public void TakeDamage(int damage)
     {
-        if (maxHealth > 0)
+        if (maxHealth <= 0)
         {
+
             return;
         }
+        animator.SetBool("Hit", true);
+        StartCoroutine(ResetHitAnimation());
         maxHealth -= damage;
     }
     public void Die()
     {
         animator.SetBool("Death", true);
-        Destroy(Boss, 2f);
+        Destroy(gameObject, 2f);
+    }
+    private IEnumerator ResetHitAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);  // Đợi 0.1 giây (hoặc tùy chỉnh theo hoạt hình)
+        animator.SetBool("Hit", false);  // Tắt hoạt hình bị trúng đòn
     }
 }

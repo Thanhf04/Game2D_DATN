@@ -81,6 +81,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill3CooldownText;
 
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -109,59 +110,62 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Điều khiển di chuyển
         if (isGrounded)
-    {
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        isRunning = moveInput != 0;
-        anim.SetBool("isRunning", isRunning);
-    }
+        {
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+            isRunning = moveInput != 0;
+            anim.SetBool("isRunning", isRunning);
+        }
         else
-    {
-        isRunning = false;
-        anim.SetBool("isRunning", false);
-    }
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
+        }
 
-    // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-    if (moveInput != 0 && isGrounded)
-    {
-        transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-        if (!playWalk.isPlaying)
+        // Đổi hướng nhân vật và bật âm thanh khi di chuyển
+        if (moveInput != 0 && isGrounded)
         {
             transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
             if (!playWalk.isPlaying)
             {
-                playWalk.Play();
-            }
-            if (playAttack.isPlaying)
-            {
-                playAttack.Stop();
-
+                transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+                if (!playWalk.isPlaying)
+                {
+                    playWalk.Play();
+                }
+                if (playAttack.isPlaying)
+                {
+                    playAttack.Stop();
+                }
             }
         }
-    }
         else if (playWalk.isPlaying)
         {
             playWalk.Stop();
-
         }
 
-    // Nhảy
-    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-    {
-        rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-        isGrounded = false;
-        isJump = true;
-        anim.SetBool("isJump", true);
-        playJump.Play();
-        playWalk.Stop();
-    }
+        // Nhảy
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            isGrounded = false;
+            isJump = true;
+            anim.SetBool("isJump", true);
+            playJump.Play();
+            playWalk.Stop();
+        }
 
         // Tấn công
-    if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-    {
-        StartCoroutine(Roll());
-    }
+        if (Input.GetMouseButtonDown(0) && !isRoll) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        {
+            StartCoroutine(Attack());
+        }
+        //lan
+        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        {
+            StartCoroutine(Roll());
+        }
 
-    // Kỹ năng tấn công
+        // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (skill1Timer <= 0 && currentMana >= 20)
@@ -196,9 +200,9 @@ public class Dichuyennv1 : MonoBehaviour
 
         CheckLevelUp();
     }
+
     void CheckLevelUp()
     {
-
         if (upgradePoints >= level + 5)
         {
             level++;
@@ -276,7 +280,6 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-
     private IEnumerator Attack()
     {
         anim.SetBool("isAttack", true);
@@ -296,7 +299,11 @@ public class Dichuyennv1 : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < rollDuration)
         {
-            float newPosX = Mathf.Lerp(originalPosition, targetPosition, (elapsedTime / rollDuration));
+            float newPosX = Mathf.Lerp(
+                originalPosition,
+                targetPosition,
+                (elapsedTime / rollDuration)
+            );
             rb.MovePosition(new Vector2(newPosX, rb.position.y));
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -330,7 +337,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentMana >= 20) // Kiểm tra nếu mana đủ
         {
-            GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
+            GameObject bullet = Instantiate(
+                fireBulletPrefab,
+                firePoint.position,
+                firePoint.rotation
+            );
             Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
@@ -339,7 +350,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
-
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float time)
     {
@@ -353,7 +363,11 @@ public class Dichuyennv1 : MonoBehaviour
         {
             if (currentFireBreath == null)
             {
-                currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
+                currentFireBreath = Instantiate(
+                    fireBreathPrefab,
+                    firePoint2.position,
+                    firePoint2.rotation
+                );
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
@@ -374,7 +388,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentMana >= 10) // Kiểm tra nếu mana đủ
         {
-            GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
+            GameObject fireHand = Instantiate(
+                fireHandPrefab,
+                firePoint3.position,
+                firePoint3.rotation
+            );
             fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
             Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
             if (rbFireHand == null)
@@ -391,11 +409,11 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
-{
-    yield return new WaitForSeconds(time);
-    Destroy(fireHand);
-}
+    private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(fireHand);
+    }
 
     public void TakeDamage(int amount)
     {
@@ -418,7 +436,6 @@ private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
     {
         statsPanel.SetActive(!statsPanel.activeSelf);
     }
-
 
     void IncreaseHealth()
     {
