@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerDamage : MonoBehaviour
 {
@@ -9,12 +9,25 @@ public class PlayerDamage : MonoBehaviour
 
     public void Attack()
     {
+        if (attackPoint == null)
+        {
+            Debug.LogWarning("Attack point chưa được gán.");
+        }
+
         Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, attackRadius, Boss);
         if (hit)
         {
-            hit.GetComponent<Boss_Health>().TakeDamage(10);
-            Debug.Log("-10");
+            Boss_Health bossHealth = hit.GetComponent<Boss_Health>();
+            if (bossHealth != null)
+            {
+                bossHealth.TakeDamage(10);
+            }
+            else
+            {
+                Debug.LogWarning("Đối tượng không có Boss_Health.");
+            }
         }
+
     }
     private void OnDrawGizmosSelected()
     {
