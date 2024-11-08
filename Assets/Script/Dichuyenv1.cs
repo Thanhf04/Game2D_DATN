@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -109,59 +108,63 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Điều khiển di chuyển
         if (isGrounded)
-    {
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        isRunning = moveInput != 0;
-        anim.SetBool("isRunning", isRunning);
-    }
+        {
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+            isRunning = moveInput != 0;
+            anim.SetBool("isRunning", isRunning);
+        }
         else
-    {
-        isRunning = false;
-        anim.SetBool("isRunning", false);
-    }
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
+        }
 
-    // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-    if (moveInput != 0 && isGrounded)
-    {
-        transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-        if (!playWalk.isPlaying)
+        // Đổi hướng nhân vật và bật âm thanh khi di chuyển
+        if (moveInput != 0 && isGrounded)
         {
             transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
             if (!playWalk.isPlaying)
             {
-                playWalk.Play();
-            }
-            if (playAttack.isPlaying)
-            {
-                playAttack.Stop();
+                transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+                if (!playWalk.isPlaying)
+                {
+                    playWalk.Play();
+                }
+                if (playAttack.isPlaying)
+                {
+                    playAttack.Stop();
 
+                }
             }
         }
-    }
         else if (playWalk.isPlaying)
         {
             playWalk.Stop();
 
         }
 
-    // Nhảy
-    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-    {
-        rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-        isGrounded = false;
-        isJump = true;
-        anim.SetBool("isJump", true);
-        playJump.Play();
-        playWalk.Stop();
-    }
+        // Nhảy
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            isGrounded = false;
+            isJump = true;
+            anim.SetBool("isJump", true);
+            playJump.Play();
+            playWalk.Stop();
+        }
 
         // Tấn công
-    if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-    {
-        StartCoroutine(Roll());
-    }
+        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        {
+            StartCoroutine(Roll());
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(Attack());
+        }
 
-    // Kỹ năng tấn công
+        // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (skill1Timer <= 0 && currentMana >= 20)
@@ -391,11 +394,11 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
-{
-    yield return new WaitForSeconds(time);
-    Destroy(fireHand);
-}
+    private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(fireHand);
+    }
 
     public void TakeDamage(int amount)
     {
