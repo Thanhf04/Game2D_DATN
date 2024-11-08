@@ -432,7 +432,7 @@ MonoBehaviour:
   attackRadius: 2.01
   Player:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   damageBoss: 5
 --- !u!114 &5698770433756648368
 MonoBehaviour:
