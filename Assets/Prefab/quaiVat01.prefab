@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 6536235380910947185}
   - component: {fileID: 576949319175013950}
   - component: {fileID: -2749323619561142915}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: quaiVat01
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -239,7 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6861254357843087506}
   - component: {fileID: 7873382059504427450}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
