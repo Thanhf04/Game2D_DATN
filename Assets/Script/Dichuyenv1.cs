@@ -9,6 +9,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float speed = 5f;
     private Rigidbody2D rb;
     public float jump = 10f;
+    private int jumpCount = 0; // Đếm số lần nhảy
     private bool isGrounded;
     private bool isRunning;
     private bool isRoll;
@@ -143,15 +144,16 @@ public class Dichuyennv1 : MonoBehaviour
             playWalk.Stop();
         }
 
-        // Nhảy
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+       // Nhảy
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
-            rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            rb.velocity = new Vector2(rb.velocity.x, jump);
             isGrounded = false;
             isJump = true;
             anim.SetBool("isJump", true);
             playJump.Play();
             playWalk.Stop();
+            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
         }
 
         // Tấn công
@@ -313,7 +315,7 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+   private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
         {
@@ -321,6 +323,7 @@ public class Dichuyennv1 : MonoBehaviour
             isJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isAttack2", false);
+            jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
         }
     }
 

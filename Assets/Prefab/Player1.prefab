@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4254627694868371400}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 5300070000238474641}
   - component: {fileID: 7899522872482523845}
   - component: {fileID: 7283868024721800759}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: dame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4465536761040421246}
   - component: {fileID: 2089550142351316844}
   - component: {fileID: 4866966573315625893}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Player1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -373,7 +373,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3383032005956999423}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2439803248784321156}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

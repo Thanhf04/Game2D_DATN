@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
+    // Các tham số không còn cần thiết
     public TMP_InputField usernameInput; // Input field cho username
     public TMP_InputField passwordInput; // Input field cho password
     public TextMeshProUGUI feedbackText; // Text để hiển thị thông báo
@@ -16,14 +17,16 @@ public class LoginManager : MonoBehaviour
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
 
+    // Khởi tạo Firebase khi bắt đầu
     private async void Start()
     {
-        // Khởi tạo Firebase
+        // Kiểm tra và khắc phục các phụ thuộc của Firebase
         await FirebaseApp.CheckAndFixDependenciesAsync();
         auth = FirebaseAuth.DefaultInstance;
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
+    // Phương thức đăng nhập người dùng
     public async void LoginUser()
     {
         string username = usernameInput.text;
@@ -46,6 +49,7 @@ public class LoginManager : MonoBehaviour
 
         try
         {
+            // Đăng nhập người dùng bằng email và password
             AuthResult result = await auth.SignInWithEmailAndPasswordAsync(email, password);
             FirebaseUser user = result.User;
             await user.ReloadAsync(); // Tải lại thông tin người dùng
@@ -65,9 +69,14 @@ public class LoginManager : MonoBehaviour
                     // Lưu dữ liệu nhân vật vào Firebase nếu chưa tồn tại
                     await SaveCharacterData(username);
                 }
+                else
+                {
+                    // Nếu nhân vật đã tồn tại, tải dữ liệu từ Firebase
+                    await LoadCharacterData(username);
+                }
 
-                // Chuyển đến màn hình mới
-                SceneManager.LoadScene("TEST Database"); // Thay "TEST Database" bằng tên của cảnh bạn muốn chuyển đến
+                // Chuyển đến màn hình chính
+                SceneManager.LoadScene("Player1"); // Thay "Player1" bằng tên của cảnh bạn muốn chuyển đến
             }
             else
             {
@@ -80,6 +89,7 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    // Phương thức tìm email của người dùng theo username
     private async Task<string> FindEmailByUsername(string username)
     {
         if (databaseReference == null)
@@ -110,25 +120,27 @@ public class LoginManager : MonoBehaviour
         return null;
     }
 
+    // Kiểm tra xem dữ liệu nhân vật đã tồn tại hay chưa
     private async Task<bool> CheckCharacterExists(string username)
     {
         var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
         return snapshot.Exists; // Trả về true nếu dữ liệu nhân vật tồn tại
     }
 
+    // Lưu dữ liệu nhân vật lên Firebase
     private async Task SaveCharacterData(string username)
     {
         // Tạo một đối tượng CharacterData
         CharacterData characterData = new CharacterData
         {
             username = username,
-            avatar = "path/to/avatar.png", // Đường dẫn thực tế tới avatar
-            health = 0f,
-            energy = 0f,
-            gold = 0,
-            diamond = 0,
+            health = 100f,  // Sức khỏe khởi tạo
+            energy = 100f,  // Năng lượng khởi tạo
+            gold = 0,       // Gold là kiểu int
+            diamond = 0,    // Diamond là kiểu int
             position = new Vector3(0, 0, 0), // Vị trí khởi tạo
-            skillID = "skill_01" // ID skill
+            skillID = "skill_01", // ID skill
+            scene = "Player1" // Lưu thông tin cảnh mà nhân vật đang đứng
         };
 
         string jsonData = JsonUtility.ToJson(characterData);
@@ -153,9 +165,56 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    // Tải dữ liệu nhân vật từ Firebase
+    private async Task LoadCharacterData(string username)
+    {
+        try
+        {
+            var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+            if (snapshot.Exists)
+            {
+                var characterData = JsonUtility.FromJson<CharacterData>(snapshot.GetRawJsonValue());
+
+                // Lưu thông tin cảnh (có thể dùng nếu cần phải tải lại cảnh)
+                if (!string.IsNullOrEmpty(characterData.scene))
+                {
+                    string currentScene = characterData.scene;
+                    SceneManager.LoadScene(currentScene);  // Tải lại cảnh mà nhân vật đang đứng
+                }
+                else
+                {
+                    Debug.LogWarning("Cảnh không được chỉ định trong dữ liệu nhân vật.");
+                }
+            }
+            else
+            {
+                UpdateFeedback("Không tìm thấy dữ liệu nhân vật.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Lỗi khi tải dữ liệu nhân vật: " + ex.Message);
+        }
+    }
+
+    // Phương thức để cập nhật thông báo trên UI
     private void UpdateFeedback(string message)
     {
         feedbackText.text = message;
         Debug.Log(message);
     }
+}
+
+// Đưa lớp CharacterData vào một file riêng biệt hoặc đảm bảo không trùng với các lớp khác
+[System.Serializable]
+public class CharacterData
+{
+    public string username;
+    public float health;
+    public float energy;
+    public int gold;      // Gold là kiểu int
+    public int diamond;   // Diamond là kiểu int
+    public Vector3 position;
+    public string skillID;
+    public string scene; // Thêm trường scene để lưu tên cảnh
 }
