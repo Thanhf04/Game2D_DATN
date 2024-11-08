@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
@@ -80,6 +81,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill3CooldownText;
 
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -104,8 +106,16 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Update()
     {
+
         float moveInput = Input.GetAxis("Horizontal");
 
+        if (NPC.isOpenShop)
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            return;
+        }
         // Điều khiển di chuyển
         if (isGrounded)
         {
@@ -113,8 +123,9 @@ public class Dichuyennv1 : MonoBehaviour
             isRunning = moveInput != 0;
             anim.SetBool("isRunning", isRunning);
         }
-        else
+        else if (!isGrounded || !NPC.isOpenShop)
         {
+
             isRunning = false;
             anim.SetBool("isRunning", false);
         }
@@ -133,14 +144,12 @@ public class Dichuyennv1 : MonoBehaviour
                 if (playAttack.isPlaying)
                 {
                     playAttack.Stop();
-
                 }
             }
         }
         else if (playWalk.isPlaying)
         {
             playWalk.Stop();
-
         }
 
         // Nhảy
@@ -155,13 +164,15 @@ public class Dichuyennv1 : MonoBehaviour
         }
 
         // Tấn công
+
+        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        {
+            StartCoroutine(Attack());
+        }
+        //lan
         if (Input.GetKeyDown(KeyCode.F) && !isRoll)
         {
             StartCoroutine(Roll());
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(Attack());
         }
 
         // Kỹ năng tấn công
@@ -199,9 +210,9 @@ public class Dichuyennv1 : MonoBehaviour
 
         CheckLevelUp();
     }
+
     void CheckLevelUp()
     {
-
         if (upgradePoints >= level + 5)
         {
             level++;
@@ -279,7 +290,6 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-
     private IEnumerator Attack()
     {
         anim.SetBool("isAttack", true);
@@ -299,7 +309,11 @@ public class Dichuyennv1 : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < rollDuration)
         {
-            float newPosX = Mathf.Lerp(originalPosition, targetPosition, (elapsedTime / rollDuration));
+            float newPosX = Mathf.Lerp(
+                originalPosition,
+                targetPosition,
+                (elapsedTime / rollDuration)
+            );
             rb.MovePosition(new Vector2(newPosX, rb.position.y));
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -333,7 +347,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentMana >= 20) // Kiểm tra nếu mana đủ
         {
-            GameObject bullet = Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);
+            GameObject bullet = Instantiate(
+                fireBulletPrefab,
+                firePoint.position,
+                firePoint.rotation
+            );
             Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
@@ -342,7 +360,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
-
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float time)
     {
@@ -356,7 +373,11 @@ public class Dichuyennv1 : MonoBehaviour
         {
             if (currentFireBreath == null)
             {
-                currentFireBreath = Instantiate(fireBreathPrefab, firePoint2.position, firePoint2.rotation);
+                currentFireBreath = Instantiate(
+                    fireBreathPrefab,
+                    firePoint2.position,
+                    firePoint2.rotation
+                );
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
@@ -377,7 +398,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentMana >= 10) // Kiểm tra nếu mana đủ
         {
-            GameObject fireHand = Instantiate(fireHandPrefab, firePoint3.position, firePoint3.rotation);
+            GameObject fireHand = Instantiate(
+                fireHandPrefab,
+                firePoint3.position,
+                firePoint3.rotation
+            );
             fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
             Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
             if (rbFireHand == null)
@@ -415,13 +440,17 @@ public class Dichuyennv1 : MonoBehaviour
         Debug.Log("Player is dead");
         Destroy(gameObject);
     }
+    // kiểm tra âm thanh
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
 
     // Các phương thức UI tăng/giảm máu và mana
     void ToggleStatsPanel()
     {
         statsPanel.SetActive(!statsPanel.activeSelf);
     }
-
 
     void IncreaseHealth()
     {
