@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Fusion;
 
-public class Dichuyennv1 : MonoBehaviour
+public class Dichuyennv1 : NetworkBehaviour
 {
     // Các biến điều khiển nhân vật
     public float speed = 5f;

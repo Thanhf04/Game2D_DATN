@@ -23,7 +23,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.ProvideInput = true;
 
-        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
+        var scene = SceneRef.FromIndex(4);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
         {
@@ -41,6 +41,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         );
     }
+
     private void OnGUI()
     {
         if (networkRunner == null)
@@ -56,110 +57,101 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void OnConnectedToServer(NetworkRunner runner)
-    {
-        
-    }
+    public void OnConnectedToServer(NetworkRunner runner) { }
 
     public void OnConnectFailed(
         NetworkRunner runner,
         NetAddress remoteAddress,
         NetConnectFailedReason reason
-    )
-    {
-        
-    }
+    ) { }
 
     public void OnConnectRequest(
         NetworkRunner runner,
         NetworkRunnerCallbackArgs.ConnectRequest request,
         byte[] token
-    )
-    {
-        
-    }
+    ) { }
 
     public void OnCustomAuthenticationResponse(
         NetworkRunner runner,
         Dictionary<string, object> data
-    )
-    {
-        
-    }
+    ) { }
 
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
-    {
-        
-    }
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
 
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
-    {
-        
-    }
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
-        if(Input.GetKey(KeyCode.A)){
+       
+        // Handle horizontal movement
+        if (Input.GetKey(KeyCode.A)) // Move left
+        {
             data.direction += Vector3.left;
         }
-        if(Input.GetKey(KeyCode.D)){
+        if (Input.GetKey(KeyCode.D)) // Move right
+        {
             data.direction += Vector3.right;
         }
+
+        // Handle jump input (e.g., Space key)
+        data.isJumping = Input.GetKey(KeyCode.Space); // Check if space key is pressed for jumping
+        
+        data.isAttacking = Input.GetKey(KeyCode.K);
+        if(data.isAttacking = Input.GetKey(KeyCode.K)){
+            Debug.Log("danhadjdsayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+        }
+        data.isRolling = Input.GetKey(KeyCode.F);
+
+        // Set the input data to be sent over the network
         input.Set(data);
     }
 
-    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
-    {
-        
-    }
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-        
-    }
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-        
-    }
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-       // Khi người chơi tham gia, chuyển đến scene Player2
+        // Khi người chơi tham gia, chuyển đến scene Player2
         if (networkRunner.IsServer)
         {
-            // Chuyển đến scene "Player2" sau khi người chơi join vào
-            SceneManager.LoadScene("Player2");
-
-            // Đảm bảo rằng scene mới đã được tải xong
             StartCoroutine(WaitForSceneLoadAndSpawn(player));
         }
     }
 
     private IEnumerator WaitForSceneLoadAndSpawn(PlayerRef player)
-{
-    // Chờ đợi một khoảng thời gian để scene "Player2" tải xong
-    yield return new WaitForSeconds(1);  // Thời gian có thể điều chỉnh để đảm bảo scene đã tải xong
-
-    // Kiểm tra nếu player đã có trong dictionary, tránh việc thêm lại nhân vật
-    if (!spawnedCharacters.ContainsKey(player))
     {
-        // Sau khi scene đã tải xong, spawn nhân vật cho player
-        Vector3 playerPos = new Vector3((player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * 3.1f, 0f);
-        NetworkObject networkObject = networkRunner.Spawn(networkPrefabRef, playerPos, Quaternion.identity, player);
-        spawnedCharacters.Add(player, networkObject);
-    }
-    else
-    {
-        Debug.LogWarning("Player already spawned: " + player);
-    }
-}
+        // Wait for a short period to ensure the scene has loaded
+        yield return new WaitForSeconds(1);
 
+        // Check if the player has already spawned a character
+        if (!spawnedCharacters.ContainsKey(player))
+        {
+            Vector3 playerPos = new Vector3(
+                (player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * 3.1f,
+                0f
+            );
+            NetworkObject networkObject = networkRunner.Spawn(
+                networkPrefabRef,
+                playerPos,
+                Quaternion.identity,
+                player
+            );
+            spawnedCharacters.Add(player, networkObject);
+        }
+        else
+        {
+            Debug.LogWarning("Player already spawned: " + player);
+        }
+    }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        if(spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)){
+        if (spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+        {
             runner.Despawn(networkObject);
             spawnedCharacters.Remove(player);
         }
@@ -170,20 +162,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         PlayerRef player,
         ReliableKey key,
         float progress
-    )
-    {
-        
-    }
+    ) { }
 
     public void OnReliableDataReceived(
         NetworkRunner runner,
         PlayerRef player,
         ReliableKey key,
         ArraySegment<byte> data
-    )
-    {
-        
-    }
+    ) { }
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
@@ -194,23 +180,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void OnSceneLoadStart(NetworkRunner runner)
-    {
-        
-    }
+    public void OnSceneLoadStart(NetworkRunner runner) { }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
-    {
-        
-    }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-        
-    }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
 
-    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
-    {
-        
-    }
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
 }

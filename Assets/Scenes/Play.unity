@@ -526,7 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkPrefabRef:
-    RawGuidValue: 8afeedf601350934c86fec0beb2519a9
+    RawGuidValue: cda2461bb2802844b956afec9db9328e
 --- !u!1 &1058225755
 GameObject:
   m_ObjectHideFlags: 0
