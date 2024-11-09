@@ -1,90 +1,148 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Threading.Tasks;  // Thêm dòng này
 using Firebase.Database;
-using TMPro; // Thêm thư viện TextMeshPro
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class PlayerDataManager : MonoBehaviour
+
+public class Player1 : MonoBehaviour
 {
-    // Các tham chiếu đến UI components sử dụng TMP_Text
-    public TMP_Text goldText;      // Hiển thị gold, sử dụng TMP_Text thay vì Text
-    public TMP_Text diamondText;   // Hiển thị diamond, sử dụng TMP_Text thay vì Text
-    public Image healthImage;      // Hiển thị health (Image)
-    public Image energyImage;      // Hiển thị energy (Image)
+    public Image healthBar;            // Image hiển thị thanh health
+    public Image energyBar;            // Image hiển thị thanh energy
+    public TextMeshProUGUI goldText;   // Hiển thị gold
+    public TextMeshProUGUI diamondText; // Hiển thị diamond
+    public TextMeshProUGUI expText;    // Hiển thị exp
+    public TextMeshProUGUI enemyPointsText; // Hiển thị điểm enemy
+    public TextMeshProUGUI levelText;  // Hiển thị level
+    public TextMeshProUGUI damageText; // Hiển thị damage (sát thương)
 
     private DatabaseReference databaseReference;
+    private string username;
 
     private void Start()
     {
-        // Khởi tạo Firebase
+        username = PlayerPrefs.GetString("username", "");  // Lấy username từ PlayerPrefs
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        LoadCharacterData();
     }
 
-    // Phương thức lưu dữ liệu người chơi lên Firebase
-    public async Task SavePlayerData(string username)
+    private async void LoadCharacterData()
     {
-        // Lấy các giá trị từ UI
-        int gold = int.Parse(goldText.text);      // Giả sử giá trị gold là số nguyên từ TMP_Text
-        int diamond = int.Parse(diamondText.text); // Giả sử giá trị diamond là số nguyên từ TMP_Text
-
-        // Kiểm tra lại giá trị fillAmount của health và energy
-        float health = healthImage.fillAmount * 100f; // Giả sử health được lưu dưới dạng phần trăm (0-100)
-        float energy = energyImage.fillAmount * 100f; // Giả sử energy được lưu dưới dạng phần trăm (0-100)
-
-        // In giá trị health và energy ra console để kiểm tra
-        Debug.Log("Health FillAmount: " + healthImage.fillAmount);
-        Debug.Log("Energy FillAmount: " + energyImage.fillAmount);
-        Debug.Log("Health: " + health + "%");
-        Debug.Log("Energy: " + energy + "%");
-
-        // In giá trị username để kiểm tra xem có bị trống hoặc sai không
-        Debug.Log("Username: " + username);
-
-        // Tạo đối tượng chứa dữ liệu người chơi
-        PlayerData playerData = new PlayerData
+        if (string.IsNullOrEmpty(username))
         {
-            username = username,
-            gold = gold,
-            diamond = diamond,
-            health = health,
-            energy = energy
-        };
+            Debug.LogError("Username không hợp lệ.");
+            return;
+        }
 
-        // Chuyển đối tượng PlayerData thành JSON
-        string jsonData = JsonUtility.ToJson(playerData);
+        var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+        if (snapshot.Exists)
+        {
+            var characterData = snapshot.Value as Dictionary<string, object>;
+            if (characterData != null)
+            {
+                float healthMax = Convert.ToSingle(characterData["healthMax"]);
+                float healthCurrent = Convert.ToSingle(characterData["healthCurrent"]);
+                float energyMax = Convert.ToSingle(characterData["energyMax"]);
+                float energyCurrent = Convert.ToSingle(characterData["energyCurrent"]);
 
-        // In ra dữ liệu JSON để kiểm tra xem nó đúng không
-        Debug.Log("Dữ liệu JSON: " + jsonData);
+                // Cập nhật thanh health
+                healthBar.fillAmount = healthCurrent / healthMax;
+
+                // Cập nhật thanh energy
+                energyBar.fillAmount = energyCurrent / energyMax;
+
+                goldText.text = "Gold: " + characterData["gold"].ToString();
+                diamondText.text = "Diamond: " + characterData["diamond"].ToString();
+                expText.text = "EXP: " + characterData["exp"].ToString();
+                enemyPointsText.text = "Enemy Points: " + characterData["enemyPoints"].ToString();
+                levelText.text = "Level: " + characterData["level"].ToString();
+                damageText.text = "Damage: " + characterData["damage"].ToString();
+            }
+        }
+        else
+        {
+            Debug.LogError("Dữ liệu nhân vật không tồn tại.");
+        }
+    }
+
+    // Hàm này được gọi khi nhân vật nhận sát thương
+    public async void TakeDamage(float damage)
+    {
+        var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+        if (snapshot.Exists)
+        {
+            var characterData = snapshot.Value as Dictionary<string, object>;
+            float healthCurrent = Convert.ToSingle(characterData["healthCurrent"]);
+            healthCurrent -= damage;
+
+            if (healthCurrent <= 0)
+            {
+                healthCurrent = 0;
+                Debug.Log("Nhân vật đã chết!");
+            }
+
+            // Cập nhật trực tiếp vào Firebase
+            await databaseReference.Child("characters").Child(username).Child("healthCurrent").SetValueAsync(healthCurrent);
+
+            // Cập nhật thanh health
+            healthBar.fillAmount = healthCurrent / Convert.ToSingle(characterData["healthMax"]);
+
+            // Cập nhật lại UI Health
+            TextMeshProUGUI healthText = GameObject.Find("HealthText").GetComponent<TextMeshProUGUI>();
+            healthText.text = "Health: " + healthCurrent;
+
+            // Lưu lại giá trị mới vào Firebase
+            await SaveCharacterData(characterData);  // Lưu lại các thay đổi
+        }
+    }
+
+    // Hàm này được gọi khi nhân vật nhận năng lượng (energy)
+    public async void UseEnergy(float energyUsed)
+    {
+        var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+        if (snapshot.Exists)
+        {
+            var characterData = snapshot.Value as Dictionary<string, object>;
+            float energyCurrent = Convert.ToSingle(characterData["energyCurrent"]);
+            energyCurrent -= energyUsed;
+
+            if (energyCurrent < 0)
+                energyCurrent = 0;
+
+            // Cập nhật trực tiếp vào Firebase
+            await databaseReference.Child("characters").Child(username).Child("energyCurrent").SetValueAsync(energyCurrent);
+
+            // Cập nhật thanh energy
+            energyBar.fillAmount = energyCurrent / Convert.ToSingle(characterData["energyMax"]);
+
+            // Cập nhật lại UI Energy
+            TextMeshProUGUI energyText = GameObject.Find("EnergyText").GetComponent<TextMeshProUGUI>();
+            energyText.text = "Energy: " + energyCurrent;
+
+            // Lưu lại giá trị mới vào Firebase
+            await SaveCharacterData(characterData);  // Lưu lại các thay đổi
+        }
+    }
+
+    // Lưu lại dữ liệu nhân vật lên Firebase
+    private async Task SaveCharacterData(Dictionary<string, object> characterData)
+    {
+        // Cập nhật các giá trị mới trong characterData
+        characterData["healthCurrent"] = healthBar.fillAmount * Convert.ToSingle(characterData["healthMax"]);
+        characterData["energyCurrent"] = energyBar.fillAmount * Convert.ToSingle(characterData["energyMax"]);
 
         try
         {
-            // Lưu dữ liệu vào Firebase (dưới mục "players/{username}")
-            var task = databaseReference.Child("players").Child(username).SetRawJsonValueAsync(jsonData);
-            await task;
-
-            if (task.IsCompleted)
-            {
-                Debug.Log("Dữ liệu người chơi đã được lưu lên Firebase!");
-            }
-            else
-            {
-                Debug.LogError("Có lỗi xảy ra khi lưu dữ liệu lên Firebase.");
-            }
+            // Lưu lại thông tin vào Firebase
+            await databaseReference.Child("characters").Child(username).SetValueAsync(characterData);
+            Debug.Log("Dữ liệu đã được lưu lên Firebase.");
         }
         catch (Exception ex)
         {
-            Debug.LogError("Lỗi khi lưu dữ liệu: " + ex.Message);
+            Debug.LogError("Có lỗi khi lưu dữ liệu lên Firebase: " + ex.Message);
         }
     }
-}
-
-[System.Serializable]
-public class PlayerData
-{
-    public string username;
-    public int gold;
-    public int diamond;
-    public float health;  // Health dưới dạng phần trăm (0-100)
-    public float energy;  // Energy dưới dạng phần trăm (0-100)
 }

@@ -2841,6 +2841,7 @@ GameObject:
   - component: {fileID: 733921823}
   - component: {fileID: 733921822}
   - component: {fileID: 733921821}
+  - component: {fileID: 733921824}
   m_Layer: 5
   m_Name: "Btn_ \u0110\u0103ng K\xFD"
   m_TagString: Untagged
@@ -2950,6 +2951,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733921819}
   m_CullTransparentMesh: 1
+--- !u!114 &733921824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733921819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f4a0e5a74fb7f6459754998979aa8e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPanel: {fileID: 2032794040}
+  newPanel: {fileID: 985715932}
+  toggleButton: {fileID: 733921821}
 --- !u!1 &777425214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3329,7 +3345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &985715933
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6879,7 +6895,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2032794041
 RectTransform:
   m_ObjectHideFlags: 0

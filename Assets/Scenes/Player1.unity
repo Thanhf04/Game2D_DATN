@@ -9955,7 +9955,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.404882, y: 1.5299997, z: -10}
+  m_LocalPosition: {x: -18.400476, y: 1.5299997, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10311,6 +10311,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3803709565108677252, guid: cda2461bb2802844b956afec9db9328e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2104314054}
+    - targetCorrespondingSourceObject: {fileID: 3803709565108677252, guid: cda2461bb2802844b956afec9db9328e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2104314055}
   m_SourcePrefab: {fileID: 100100000, guid: cda2461bb2802844b956afec9db9328e, type: 3}
 --- !u!1 &544184999 stripped
 GameObject:
@@ -80488,7 +80491,7 @@ Transform:
   m_GameObject: {fileID: 1617019410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.404882, y: 1.5299997, z: -10}
+  m_LocalPosition: {x: -18.400476, y: 1.5299997, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -82664,10 +82667,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c5de86aec297d448eb4fe78b65b280, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
+  energyBar: {fileID: 0}
   goldText: {fileID: 1467482243}
   diamondText: {fileID: 1467482243}
-  healthImage: {fileID: 504082133}
-  energyImage: {fileID: 991967771}
+  expText: {fileID: 0}
+  enemyPointsText: {fileID: 0}
+  levelText: {fileID: 0}
+  damageText: {fileID: 0}
+--- !u!114 &2104314055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544184999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e785f75e18b6f74d94dc9ee065547db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 1467482243}
 --- !u!224 &2117355689 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5674514921065682607, guid: 4f0ad2a25f8cd3e4db3c9d1ee993fb0b, type: 3}
