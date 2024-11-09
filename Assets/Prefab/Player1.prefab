@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4254627694868371400}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 4465536761040421246}
   - component: {fileID: 2089550142351316844}
   - component: {fileID: 4866966573315625893}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Player1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ MonoBehaviour:
   attackPoint: {fileID: 2791560443141962137}
   Boss:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   attackRadius: 1.99
 --- !u!114 &7216610387543578351
 MonoBehaviour:
@@ -426,7 +426,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3383032005956999423}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -550,7 +550,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2439803248784321156}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skill2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
