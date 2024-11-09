@@ -6,18 +6,27 @@ TagManager:
   tags:
   - NenDat
   - enemy
+  - Bantay
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
+<<<<<<< HEAD
   - 
   - player
   - enemy
   - playerdame
   - enemydame
+=======
+  - Boss
+  - 
+  - 
+  - 
+  - 
+>>>>>>> 51eb560f9bcade5b1959fa1cf96f887e476339db
   - 
   - 
   - 

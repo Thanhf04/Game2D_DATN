@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerDamage : MonoBehaviour
 {
@@ -6,14 +6,26 @@ public class PlayerDamage : MonoBehaviour
     public LayerMask Boss;
     public float attackRadius = 1f;
     Animator animator;
+    Boss_Health health;
 
     public void Attack()
     {
+        if (attackPoint == null)
+        {
+            Debug.LogWarning("Attack point chưa được gán.");
+        }
+
         Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, attackRadius, Boss);
         if (hit)
         {
-            hit.GetComponent<Boss_Health>().TakeDamage(10);
+            health = hit.GetComponent<Boss_Health>();
+            if (health != null)
+            {
+                health.TakeDamage(10);
+            }
+
         }
+
     }
     private void OnDrawGizmosSelected()
     {

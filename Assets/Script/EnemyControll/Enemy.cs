@@ -1,26 +1,26 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
     public int maxHealth = 100; // Sức khỏe tối đa của quái
-    public int currentHealth;
+    public Slider HealthSlider;
 
     void Start()
     {
-        currentHealth = maxHealth; // Khởi tạo sức khỏe hiện tại
+        HealthSlider.value = maxHealth;
     }
 
     public void TakeDamage(int amount)
     {
-        currentHealth -= amount; // Giảm sức khỏe khi nhận sát thương
+        maxHealth -= amount; // Giảm sức khỏe khi nhận sát thương
 
-        if (currentHealth <= 0)
+        if (maxHealth <= 0)
         {
             Die(); // Gọi hàm chết nếu sức khỏe bằng 0
         }
+        HealthSlider.value = maxHealth;
     }
 
     void Die()
