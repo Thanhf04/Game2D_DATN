@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1198582901629427095}
   m_Layer: 6
   m_Name: Death_Boss
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,8 +84,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -672402153
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -1183191301, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -105,7 +105,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455433669806504168}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d89d270ea126ee478e3e56f89f70ecf, type: 3}
   m_Name: 
@@ -124,7 +124,7 @@ MonoBehaviour:
   skillSpawnPoint4: {fileID: 5711506301075245079}
   skillSpawnPoint5: {fileID: 5894874490420761783}
   attackRange: 5
-  chaseRange: 5
+  chaseRange: 10
 --- !u!95 &5072912259093638273
 Animator:
   serializedVersion: 5
@@ -651,7 +651,7 @@ RectTransform:
   m_Father: {fileID: 7997857296941195381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -788,7 +788,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -383707971
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &1024870812605523286

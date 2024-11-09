@@ -70,13 +70,4 @@ public class UI_Shop : MonoBehaviour
             }
         }
     }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
 }
