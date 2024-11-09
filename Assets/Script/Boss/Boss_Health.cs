@@ -39,12 +39,13 @@ public class Boss_Health : MonoBehaviour
     }
     public void Die()
     {
+
         animator.SetBool("Death", true);
         Destroy(gameObject, 2f);
     }
     private IEnumerator ResetHitAnimation()
     {
-        yield return new WaitForSeconds(0.5f);  // Đợi 0.1 giây (hoặc tùy chỉnh theo hoạt hình)
-        animator.SetBool("Hit", false);  // Tắt hoạt hình bị trúng đòn
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("Hit", false);
     }
 }
