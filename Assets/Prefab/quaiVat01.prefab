@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 6536235380910947185}
   - component: {fileID: 576949319175013950}
   - component: {fileID: -2749323619561142915}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: quaiVat01
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.43}
+  m_Size: {x: 1.40625, y: 0.9375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -117,7 +117,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &3972872128120661881
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -150,18 +150,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.02227974, y: 0.000536263}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.03125, y: 1.125}
-    newSize: {x: 0.32, y: 0.43}
+    newSize: {x: 1.40625, y: 0.9375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.43}
+  m_Size: {x: 0.8547163, y: 1.1307436}
   m_EdgeRadius: 0
 --- !u!114 &746688815301652275
 MonoBehaviour:
@@ -175,11 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55605fb16d50a0e459f958edee3a1566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: 0
-  end: 0
+  start: -16
+  end: -2
   isRight: 0
-  speed: 0
-  attackRange: 0.5
+  speed: 2
+  attackRange: 0.8
   chaseRange: 5
 --- !u!95 &6536235380910947185
 Animator:
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 0
+  currentHealth: 100
 --- !u!114 &-2749323619561142915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6861254357843087506}
   - component: {fileID: 7873382059504427450}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
