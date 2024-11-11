@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
@@ -9,6 +9,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float speed = 5f;
     private Rigidbody2D rb;
     public float jump = 10f;
+    private int jumpCount = 0; // Đếm số lần nhảy
     private bool isGrounded;
     private bool isRunning;
     private bool isRoll;
@@ -106,8 +107,16 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Update()
     {
+
         float moveInput = Input.GetAxis("Horizontal");
 
+        if (NPC.isOpenShop)
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            return;
+        }
         // Điều khiển di chuyển
         if (isGrounded)
         {
@@ -115,8 +124,9 @@ public class Dichuyennv1 : MonoBehaviour
             isRunning = moveInput != 0;
             anim.SetBool("isRunning", isRunning);
         }
-        else
+        else if (!isGrounded || !NPC.isOpenShop)
         {
+
             isRunning = false;
             anim.SetBool("isRunning", false);
         }
@@ -143,19 +153,21 @@ public class Dichuyennv1 : MonoBehaviour
             playWalk.Stop();
         }
 
-        // Nhảy
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+       // Nhảy
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
-            rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            rb.velocity = new Vector2(rb.velocity.x, jump);
             isGrounded = false;
             isJump = true;
             anim.SetBool("isJump", true);
             playJump.Play();
             playWalk.Stop();
+            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
         }
 
         // Tấn công
-        if (Input.GetMouseButtonDown(0) && !isRoll) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+
+        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
         {
             StartCoroutine(Attack());
         }
@@ -164,7 +176,6 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Roll());
         }
-
         // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -313,7 +324,7 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+   private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
         {
@@ -321,6 +332,7 @@ public class Dichuyennv1 : MonoBehaviour
             isJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isAttack2", false);
+            jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
         }
     }
 
@@ -429,6 +441,11 @@ public class Dichuyennv1 : MonoBehaviour
     {
         Debug.Log("Player is dead");
         Destroy(gameObject);
+    }
+    // kiểm tra âm thanh
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 
     // Các phương thức UI tăng/giảm máu và mana

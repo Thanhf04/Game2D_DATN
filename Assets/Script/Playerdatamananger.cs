@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;  // Thêm dòng này
+using System.Threading.Tasks;
 using Firebase.Database;
-using TMPro;
+using TMPro; // Thêm thư viện TextMeshPro
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-
+using System.Collections.Generic;  // Đảm bảo thêm dòng này
 
 public class Player1 : MonoBehaviour
 {

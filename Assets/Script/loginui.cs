@@ -16,6 +16,7 @@ public class LoginManager : MonoBehaviour
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
 
+    // Khởi tạo Firebase khi bắt đầu
     private async void Start()
     {
         // Kiểm tra và khắc phục các phụ thuộc của Firebase
@@ -24,6 +25,7 @@ public class LoginManager : MonoBehaviour
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
+    // Phương thức đăng nhập người dùng
     public async void LoginUser()
     {
         string username = usernameInput.text;
@@ -67,6 +69,11 @@ public class LoginManager : MonoBehaviour
                 {
                     await SaveCharacterData(username);  // Lưu dữ liệu nhân vật nếu chưa tồn tại
                 }
+                else
+                {
+                    // Nếu nhân vật đã tồn tại, tải dữ liệu từ Firebase
+                    await LoadCharacterData(username);
+                }
 
                 // Chuyển đến màn hình chính
                 SceneManager.LoadScene("Player1");
@@ -83,6 +90,7 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    // Phương thức tìm email của người dùng theo username
     private async Task<string> FindEmailByUsername(string username)
     {
         if (databaseReference == null)
@@ -112,30 +120,26 @@ public class LoginManager : MonoBehaviour
         return null;
     }
 
+    // Kiểm tra xem dữ liệu nhân vật đã tồn tại hay chưa
     private async Task<bool> CheckCharacterExists(string username)
     {
         var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
         return snapshot.Exists;
     }
 
+    // Lưu dữ liệu nhân vật lên Firebase
     private async Task SaveCharacterData(string username)
     {
         CharacterData characterData = new CharacterData
         {
             username = username,
-            healthMax = 100f,           // Health tối đa
-            healthCurrent = 100f,       // Health hiện tại (ban đầu là max)
-            energyMax = 100f,           // Energy tối đa
-            energyCurrent = 100f,       // Energy hiện tại (ban đầu là max)
-            gold = 0,
-            diamond = 0,
-            exp = 0,                    // EXP mặc định
-            enemyPoints = 0,            // Điểm enemy mặc định
-            level = 1,                  // Level mặc định là 1
-            damage = 10f,               // Damage mặc định
-            position = new Vector3(0, 0, 0),
-            skillID = "skill_01",
-            scene = "Player1"           // Cảnh mặc định
+            health = 100f,  // Sức khỏe khởi tạo
+            energy = 100f,  // Năng lượng khởi tạo
+            gold = 0,       // Gold là kiểu int
+            diamond = 0,    // Diamond là kiểu int
+            position = new Vector3(0, 0, 0), // Vị trí khởi tạo
+            skillID = "skill_01", // ID skill
+            scene = "Player1" // Lưu thông tin cảnh mà nhân vật đang đứng
         };
 
         string jsonData = JsonUtility.ToJson(characterData);
@@ -159,6 +163,39 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    // Tải dữ liệu nhân vật từ Firebase
+    private async Task LoadCharacterData(string username)
+    {
+        try
+        {
+            var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+            if (snapshot.Exists)
+            {
+                var characterData = JsonUtility.FromJson<CharacterData>(snapshot.GetRawJsonValue());
+
+                // Lưu thông tin cảnh (có thể dùng nếu cần phải tải lại cảnh)
+                if (!string.IsNullOrEmpty(characterData.scene))
+                {
+                    string currentScene = characterData.scene;
+                    SceneManager.LoadScene(currentScene);  // Tải lại cảnh mà nhân vật đang đứng
+                }
+                else
+                {
+                    Debug.LogWarning("Cảnh không được chỉ định trong dữ liệu nhân vật.");
+                }
+            }
+            else
+            {
+                UpdateFeedback("Không tìm thấy dữ liệu nhân vật.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Lỗi khi tải dữ liệu nhân vật: " + ex.Message);
+        }
+    }
+
+    // Phương thức để cập nhật thông báo trên UI
     private void UpdateFeedback(string message)
     {
         feedbackText.text = message;
@@ -166,21 +203,16 @@ public class LoginManager : MonoBehaviour
     }
 }
 
+// Đưa lớp CharacterData vào một file riêng biệt hoặc đảm bảo không trùng với các lớp khác
 [System.Serializable]
 public class CharacterData
 {
     public string username;
-    public float healthMax;
-    public float healthCurrent;
-    public float energyMax;
-    public float energyCurrent;
-    public int gold;
-    public int diamond;
-    public float exp;
-    public int enemyPoints;
-    public int level;
-    public float damage;  // Thêm sát thương (damage) của nhân vật
+    public float health;
+    public float energy;
+    public int gold;      // Gold là kiểu int
+    public int diamond;   // Diamond là kiểu int
     public Vector3 position;
     public string skillID;
-    public string scene;
+    public string scene; // Thêm trường scene để lưu tên cảnh
 }

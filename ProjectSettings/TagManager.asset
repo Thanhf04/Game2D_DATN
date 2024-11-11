@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - NenDat
   - enemy
+  - Bantay
   layers:
   - Default
   - TransparentFX
@@ -44,17 +44,11 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: bg
-    uniqueID: 3622565143
+    uniqueID: 2191701983
     locked: 0
-  - name: panel
-    uniqueID: 3177119189
+  - name: ui
+    uniqueID: 1558343171
     locked: 0
-  - name: player
-    uniqueID: 1221899139
-    locked: 0
-  - name: wallbehindd
-    uniqueID: 4045894953
-    locked: 0
-  - name: decor
-    uniqueID: 3125957001
+  - name: New Layer 3
+    uniqueID: 411314933
     locked: 0
