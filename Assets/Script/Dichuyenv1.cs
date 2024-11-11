@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -41,15 +42,23 @@ public class Dichuyennv1 : MonoBehaviour
     public AudioSource playJump;
 
     // Các biến máu và mana
+    public Slider healthSlider;
+    public Slider manaSlider;
+    public Slider expSlider;
     public int maxHealth = 100;
     public int currentHealth;
     public int maxMana = 100;
     public int currentMana;
+    public float expMax = 100;
+    public float expCurrent = 0;
+    public TextMeshProUGUI textLevel;
+    public TextMeshProUGUI textExp;
     public int damageAmount = 10;
     private GameObject currentFireBreath;
 
     // Các biến level và điểm nâng
     public int level = 1;
+    public float currentLevel;
     public int upgradePoints = 5;
 
     // Các biến UI
@@ -91,8 +100,7 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
         isJump = false;
         music.Play();
-        currentHealth = maxHealth;
-        currentMana = maxMana;
+
 
         // Khởi tạo UI
         statsPanel.SetActive(false);
@@ -102,6 +110,12 @@ public class Dichuyennv1 : MonoBehaviour
         increaseManaButton.onClick.AddListener(IncreaseMana);
         decreaseManaButton.onClick.AddListener(DecreaseMana);
 
+        SetSlider();
+        currentHealth = maxHealth;
+        currentMana = maxMana;
+        expSlider.value = expCurrent;
+        textExp.SetText(expCurrent + "%");
+        currentLevel = level;
         UpdateStatsText();
     }
 
@@ -153,7 +167,7 @@ public class Dichuyennv1 : MonoBehaviour
             playWalk.Stop();
         }
 
-       // Nhảy
+        // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -209,17 +223,24 @@ public class Dichuyennv1 : MonoBehaviour
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
 
-        CheckLevelUp();
     }
 
-    void CheckLevelUp()
+
+    public void LevelSlider(float amount)
     {
-        if (upgradePoints >= level + 5)
+        expCurrent += amount;
+        textExp.SetText(expCurrent + "%");
+        if (expCurrent >= expMax)
         {
+            expCurrent = 0;
+            textExp.SetText(expCurrent + "%");
             level++;
+            textLevel.SetText("Lv" + level);
             upgradePoints++;
             UpdateStatsText();
+
         }
+        expSlider.value = expCurrent;
     }
 
     void UpdateSkillCooldowns()
@@ -263,7 +284,6 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentMana >= 20) // Kiểm tra nếu mana đủ
         {
             ShootFireBullet();
-            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
             skill1Timer = skill1Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -274,7 +294,6 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
         {
             BreathFire();
-            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
             skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -285,7 +304,6 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
         {
             FireHand();
-            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -324,7 +342,7 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
     }
 
-   private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
         {
@@ -358,7 +376,8 @@ public class Dichuyennv1 : MonoBehaviour
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
             StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            //currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            manaSlider.value = currentMana -= 20;
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
@@ -383,7 +402,8 @@ public class Dichuyennv1 : MonoBehaviour
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
-                currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                // currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                manaSlider.value = currentMana -= 30;
                 UpdateStatsText(); // Cập nhật giao diện người dùng
             }
         }
@@ -417,6 +437,7 @@ public class Dichuyennv1 : MonoBehaviour
             rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
             StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
+            manaSlider.value = currentMana;
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
@@ -435,6 +456,7 @@ public class Dichuyennv1 : MonoBehaviour
         {
             Die();
         }
+        healthSlider.value = currentHealth;
     }
 
     void Die()
@@ -459,7 +481,8 @@ public class Dichuyennv1 : MonoBehaviour
         if (upgradePoints > 0)
         {
             maxHealth += 100;
-            currentHealth += 100;
+            //currentHealth += 100;
+            healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
         }
@@ -470,7 +493,8 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentHealth > 0 && upgradePoints < level + 5)
         {
             maxHealth -= 100;
-            currentHealth -= 100;
+            healthSlider.maxValue = maxHealth;
+            //currentHealth -= 100;
             upgradePoints++;
             UpdateStatsText();
         }
@@ -480,8 +504,9 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (upgradePoints > 0)
         {
-            maxMana += 50;
-            currentMana += 50;
+            maxMana += 100;
+            manaSlider.maxValue = maxMana;
+            //currentMana += 50;
             upgradePoints--;
             UpdateStatsText();
         }
@@ -491,8 +516,9 @@ public class Dichuyennv1 : MonoBehaviour
     {
         if (currentMana > 0 && upgradePoints < level + 5)
         {
-            maxMana -= 10;
-            currentMana -= 10;
+            maxMana -= 100;
+            manaSlider.maxValue = maxMana;
+            //currentMana -= 10;
             upgradePoints++;
             UpdateStatsText();
         }
@@ -501,8 +527,14 @@ public class Dichuyennv1 : MonoBehaviour
     void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
-        manaText.text = ((maxMana - 100) / 10).ToString();
+        manaText.text = ((maxMana - 100) / 100).ToString();
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
+    }
+    public void SetSlider()
+    {
+        healthSlider.maxValue = maxHealth;
+        manaSlider.maxValue = maxMana;
+        expSlider.maxValue = expMax;
     }
 }
