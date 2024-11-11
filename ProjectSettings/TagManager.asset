@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - enemy
-  - Bantay
   layers:
   - Default
   - TransparentFX
@@ -13,11 +12,18 @@ TagManager:
   - 
   - Water
   - UI
+<<<<<<< HEAD
+=======
+  - Boss
+>>>>>>> 40f3c54ea8d63f3737b3ff5e6fdce89a0df7f0d7
   - 
   - 
   - 
   - 
+<<<<<<< HEAD
   - 
+=======
+>>>>>>> 40f3c54ea8d63f3737b3ff5e6fdce89a0df7f0d7
   - 
   - 
   - 
@@ -44,6 +50,7 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: bg
+<<<<<<< HEAD
     uniqueID: 2191701983
     locked: 0
   - name: ui
@@ -51,4 +58,22 @@ TagManager:
     locked: 0
   - name: New Layer 3
     uniqueID: 411314933
+=======
+    uniqueID: 1459229879
+    locked: 0
+  - name: backup
+    uniqueID: 2176428387
+    locked: 0
+  - name: panel
+    uniqueID: 1920381647
+    locked: 0
+  - name: player
+    uniqueID: 839029679
+    locked: 0
+  - name: wallbehindd
+    uniqueID: 3371354987
+    locked: 0
+  - name: decor
+    uniqueID: 4012727827
+>>>>>>> 40f3c54ea8d63f3737b3ff5e6fdce89a0df7f0d7
     locked: 0

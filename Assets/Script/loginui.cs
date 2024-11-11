@@ -76,7 +76,7 @@ public class LoginManager : MonoBehaviour
                 }
 
                 // Chuyển đến màn hình chính
-                SceneManager.LoadScene("Player1");
+                SceneManager.LoadScene("Player");
             }
             else
             {
