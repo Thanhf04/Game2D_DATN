@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public int currentHealth;
     public Slider HealthSlider;
     Dichuyennv1 dichuyennv1;
+    public GameObject prefabsItem;
 
     void Start()
     {
@@ -36,10 +37,17 @@ public class Enemy : MonoBehaviour
         {
             dichuyennv1.LevelSlider(50);
         }
+        DropItem();
         // Xử lý cái chết của quái vật, như là biến mất hoặc phát animation chết
         Destroy(gameObject); // Xóa quái vật
     }
-
+    void DropItem()
+    {
+        if (prefabsItem != null)
+        {
+            Instantiate(prefabsItem, transform.position, Quaternion.identity);
+        }
+    }
     internal void TakeDamage(float damage)
     {
         throw new NotImplementedException();
