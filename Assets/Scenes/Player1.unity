@@ -1316,9 +1316,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: quaiVat01
       objectReference: {fileID: 0}
+    - target: {fileID: 3254978284742475283, guid: aea83b32754dd164083c5222e2793f3a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5012219680554389600, guid: aea83b32754dd164083c5222e2793f3a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8176242989606000389, guid: aea83b32754dd164083c5222e2793f3a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2869,11 +2873,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4110531235810862269, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4110531235810862269, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6370669641489958439, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -72229,7 +72233,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1267125675}
+      - m_Target: {fileID: 1169886877}
         m_TargetAssemblyTypeName: Boss_Health, Assembly-CSharp
         m_MethodName: ClosePanel
         m_Mode: 1
@@ -73063,6 +73067,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2ea3950d0e979499289ec2d263a070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1169886877 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7206985786808564181, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
+  m_PrefabInstance: {fileID: 364688228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a588221f583b824ebee4a0fad971de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1179328778
 GameObject:
   m_ObjectHideFlags: 0
@@ -73466,17 +73481,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1267125675 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8506431407222573692, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
-  m_PrefabInstance: {fileID: 7462925229915785166}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a588221f583b824ebee4a0fad971de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1305239813
 GameObject:
   m_ObjectHideFlags: 0
@@ -79921,21 +79925,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7379808862616306625, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_Name
       value: Elite_monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 7379808862616306625, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7848322691208232323, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_LocalPosition.x

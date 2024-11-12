@@ -29,6 +29,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2181330120576706613}
+  - {fileID: 8900087283311627971}
   m_Father: {fileID: 6168589572593785658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
@@ -69,7 +70,7 @@ RectTransform:
   m_Father: {fileID: 4484033341897115453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -200,6 +201,81 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &4356215831049766077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8900087283311627971}
+  - component: {fileID: 2319476780699256064}
+  - component: {fileID: 3029243418922942339}
+  m_Layer: 6
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8900087283311627971
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4356215831049766077}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4484033341897115453}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 75, y: 0}
+  m_SizeDelta: {x: 20, y: 20}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2319476780699256064
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4356215831049766077}
+  m_CullTransparentMesh: 1
+--- !u!114 &3029243418922942339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4356215831049766077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b1ea3ead03f2d334a94a73ec3158a26e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5672471732662660950
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,15 +468,14 @@ GameObject:
   - component: {fileID: 3582688213973200550}
   - component: {fileID: 5698770433756648368}
   - component: {fileID: 5999959650235669395}
-  - component: {fileID: 7102899498951528710}
   - component: {fileID: 4457631731095402921}
   m_Layer: 6
   m_Name: Elite_monster
-  m_TagString: enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7848322691208232323
 Transform:
   m_ObjectHideFlags: 0
@@ -456,8 +531,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2118538909
-  m_SortingLayer: 2
+  m_SortingLayerID: 1459229879
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -505,7 +580,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthBoss: {fileID: 3381873287412989487}
   Boss: {fileID: 7379808862616306625}
-  maxHealth: 100
+  maxHealth: 10
+  currentHealth: 0
   prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
   PanelSkillBoss: {fileID: 0}
 --- !u!114 &3582688213973200550
@@ -538,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d89d270ea126ee478e3e56f89f70ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
+  moveSpeed: 1
   patrolPoints: []
   skillCooldown: 3
   skill1: {fileID: 0}
@@ -598,19 +674,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.45, y: 5.75}
   m_EdgeRadius: 0
---- !u!114 &7102899498951528710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7379808862616306625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 174d43a526938b245b105cd9b3b6ca32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Coin: 100
 --- !u!50 &4457631731095402921
 Rigidbody2D:
   serializedVersion: 4
