@@ -2869,15 +2869,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 455433669806504168, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1591768505843918318, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -74.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1591768505843918318, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4110531235810862269, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4110531235810862269, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6370669641489958439, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3945,7 +3953,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.296003, y: 1.2600002, z: -10}
+  m_LocalPosition: {x: -22.318602, y: 1.2600002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -70063,6 +70071,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2104314052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &674392970 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 743062531409065910, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
+  m_PrefabInstance: {fileID: 364688228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691185711
 GameObject:
   m_ObjectHideFlags: 0
@@ -72233,7 +72252,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1169886877}
+      - m_Target: {fileID: 1175413733}
         m_TargetAssemblyTypeName: Boss_Health, Assembly-CSharp
         m_MethodName: ClosePanel
         m_Mode: 1
@@ -73067,17 +73086,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2ea3950d0e979499289ec2d263a070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1169886877 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7206985786808564181, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
-  m_PrefabInstance: {fileID: 364688228}
+--- !u!1 &1175413730 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 656746829506403266, guid: ae05d27e08116a94eb52ae1792dcd486, type: 3}
+  m_PrefabInstance: {fileID: 4444296158100972962}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &1175413733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175413730}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a588221f583b824ebee4a0fad971de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HealthBoss: {fileID: 674392970}
+  Boss: {fileID: 1472134229}
+  maxHealth: 100
+  currentHealth: 0
+  prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
+  PanelSkillBoss: {fileID: 904890824}
 --- !u!1 &1179328778
 GameObject:
   m_ObjectHideFlags: 0
@@ -74512,6 +74543,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1812347326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1472134229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 455433669806504168, guid: fb1e24f92f0870a419ccc5d5ef9c73c2, type: 3}
+  m_PrefabInstance: {fileID: 364688228}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1473510214
 GameObject:
   m_ObjectHideFlags: 0
@@ -76137,7 +76173,7 @@ Transform:
   m_GameObject: {fileID: 1617019410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.296003, y: 1.2600002, z: -10}
+  m_LocalPosition: {x: -22.318602, y: 1.2600002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -79492,7 +79528,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackRadius: 1.5
-  dame: 10
 --- !u!114 &2104314054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79848,7 +79883,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 656746829506403266, guid: ae05d27e08116a94eb52ae1792dcd486, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1175413733}
   m_SourcePrefab: {fileID: 100100000, guid: ae05d27e08116a94eb52ae1792dcd486, type: 3}
 --- !u!1001 &4518336282280895158
 PrefabInstance:
@@ -79925,9 +79963,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7379808862616306625, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_Name
       value: Elite_monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379808862616306625, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7848322691208232323, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -79973,6 +80023,14 @@ PrefabInstance:
       propertyPath: PanelSkillBoss
       value: 
       objectReference: {fileID: 904890824}
+    - target: {fileID: 8900087283311627971, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -75.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8900087283311627971, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
