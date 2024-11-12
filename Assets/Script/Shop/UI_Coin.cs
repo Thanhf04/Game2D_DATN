@@ -31,13 +31,13 @@ public class UI_Coin : MonoBehaviour
     }
     private void Start()
     {
-        UI_Coin.Instance.AddCoins(100);
+        AddCoins(100);
         Debug.Log("Add coins");
     }
     public void AddCoins(int amount)
     {
         curentCoins = curentCoins + amount;
-        CoinChanged?.Invoke(amount);
+        CoinChanged?.Invoke(curentCoins);
 
     }
     public bool SubTractCoins(int mount, Model_Shop.ItemType itemType)

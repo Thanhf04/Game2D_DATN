@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Fusion;
 
-public class Dichuyennv1 : NetworkBehaviour
+public class Dichuyennv1 : MonoBehaviour
 {
     // Các biến điều khiển nhân vật
     public float speed = 5f;
@@ -69,8 +69,11 @@ public class Dichuyennv1 : NetworkBehaviour
     public Button decreaseHealthButton;
     public Button increaseManaButton;
     public Button decreaseManaButton;
+    public Button increaseDamethButton;
+    public Button decreaseDamethButton;
     public Text healthText;
     public Text manaText;
+    public Text damaText;
     public Text levelText;
     public Text pointsText;
 
@@ -110,6 +113,9 @@ public class Dichuyennv1 : NetworkBehaviour
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
         decreaseManaButton.onClick.AddListener(DecreaseMana);
+        increaseDamethButton.onClick.AddListener(IncreaseDame);
+        decreaseDamethButton.onClick.AddListener(DecreaseDamage);
+        
 
         SetSlider();
         currentHealth = maxHealth;
@@ -434,9 +440,9 @@ public class Dichuyennv1 : NetworkBehaviour
             }
             playAttack_Fire3.Play();
             rbFireHand.gravityScale = 1f;
-            Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-            rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
-            StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
+            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
+            StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana;
             UpdateStatsText(); // Cập nhật giao diện người dùng
@@ -522,6 +528,24 @@ public class Dichuyennv1 : NetworkBehaviour
             //currentMana -= 10;
             upgradePoints++;
             UpdateStatsText();
+
+        }
+    }
+
+    void IncreaseDame(){
+        if (upgradePoints > 0){
+            damageAmount += 10;
+            upgradePoints--;
+            UpdateStatsText();
+        }
+    }
+
+    void DecreaseDamage(){
+        if (damageAmount > 0 && upgradePoints < level + 5)
+        {
+            damageAmount -= 10;
+            upgradePoints++;
+            UpdateStatsText();
         }
     }
 
@@ -529,6 +553,7 @@ public class Dichuyennv1 : NetworkBehaviour
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
+        damaText.text = ((damageAmount - 10) / 10).ToString();
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
     }

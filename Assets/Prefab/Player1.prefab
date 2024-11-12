@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2089550142351316844}
   - component: {fileID: 4866966573315625893}
   - component: {fileID: 7842102436117497400}
-  - component: {fileID: -7993505865401256367}
+  - component: {fileID: 3282237602445015055}
   m_Layer: 3
   m_Name: Player1
   m_TagString: Player
@@ -264,7 +264,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-7993505865401256367
+--- !u!114 &3282237602445015055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,9 +280,9 @@ MonoBehaviour:
   jump: 10
   rollDistance: 3
   rollDuration: 0.5
-  fireBulletPrefab: {fileID: 4509918167353025313, guid: 29790e7c0c9d02d4ea434afc39f84a09, type: 3}
-  fireBreathPrefab: {fileID: 145168369768779599, guid: b597eea7cbd9b0c4aabe0b7ea2438fbb, type: 3}
-  fireHandPrefab: {fileID: 145019903025749688, guid: 27c6fc8a7487cec4a9f70709ce87f1e0, type: 3}
+  fireBulletPrefab: {fileID: 0}
+  fireBreathPrefab: {fileID: 0}
+  fireHandPrefab: {fileID: 0}
   firePoint: {fileID: 0}
   firePoint2: {fileID: 0}
   firePoint3: {fileID: 0}

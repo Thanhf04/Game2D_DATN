@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NenDat
   - enemy
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -19,12 +20,7 @@ TagManager:
   - playerdame
   - enemydame
   - Boss
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -65,4 +61,7 @@ TagManager:
     locked: 0
   - name: decor
     uniqueID: 4012727827
+    locked: 0
+  - name: selectedcharacter
+    uniqueID: 1036554337
     locked: 0
