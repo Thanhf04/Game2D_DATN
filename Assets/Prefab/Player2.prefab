@@ -89,10 +89,11 @@ GameObject:
   - component: {fileID: 951672710614894829}
   - component: {fileID: 2735054901737079564}
   - component: {fileID: 6427747226249073471}
-  - component: {fileID: 7016334563658066030}
   - component: {fileID: 6030870304320891003}
   - component: {fileID: 3949489446781756763}
   - component: {fileID: 3352385703871057486}
+  - component: {fileID: 7695993367990930007}
+  - component: {fileID: 8202795022006371033}
   m_Layer: 3
   m_Name: Player2
   m_TagString: Player
@@ -155,7 +156,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1001786169
-  m_SortingLayer: 4
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -948956004, guid: 3915257be6222c04c84eb477769e3f2f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -206,20 +207,9 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 7016334563658066030}
   - {fileID: 3949489446781756763}
---- !u!114 &7016334563658066030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5136669374345426054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e1bc95f623705c46b6f590decd4b120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - {fileID: 7695993367990930007}
+  - {fileID: 8202795022006371033}
 --- !u!50 &6030870304320891003
 Rigidbody2D:
   serializedVersion: 4
@@ -314,3 +304,39 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.65625, y: 1.1875}
   m_EdgeRadius: 0
+--- !u!114 &7695993367990930007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5136669374345426054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1bc95f623705c46b6f590decd4b120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpForce: 15
+  attackRange: 1
+  attackDamage: 10
+  rollSpeed: 15
+  rollDuration: 0.5
+--- !u!114 &8202795022006371033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5136669374345426054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 2735054901737079564}
+  TotalWords: 1
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 0000000072d2d927f6f10fc820e23b685928a8ce0d286c404e865f4328a981077af3fe2ef09d878ea2c7f8a798ae24641c8df28b
+  TriggerHashes: 00000000
