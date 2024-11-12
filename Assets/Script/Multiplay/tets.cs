@@ -1,20 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Fusion;
 using Fusion.Sockets;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
+public class tets : MonoBehaviour, INetworkRunnerCallbacks
 {
     private NetworkRunner networkRunner;
 
     [SerializeField]
-    private NetworkPrefabRef networkPrefabRef;
+    private GameObject player1Character; // Nhân vật đầu tiên
+
+    [SerializeField]
+    private GameObject player2Character; // Nhân vật thứ hai
 
     [SerializeField]
     private Button hostImageButton;
@@ -24,13 +26,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField]
     private TMP_InputField roomCodeInputField;
-    
-    private Dictionary<PlayerRef, NetworkObject> spawnedCharacters =
-        new Dictionary<PlayerRef, NetworkObject>();
+
+    private Dictionary<PlayerRef, GameObject> playerCharacterMap =
+        new Dictionary<PlayerRef, GameObject>();
 
     private void Start()
     {
-        // Thêm sự kiện cho các nút
         hostImageButton.onClick.AddListener(() => StartGame(GameMode.Host));
         joinButton.onClick.AddListener(JoinGame);
     }
@@ -39,7 +40,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         const string chars = "0123456789";
         var random = new System.Random();
-        var result = new StringBuilder(length);
+        var result = new System.Text.StringBuilder(length);
 
         for (int i = 0; i < length; i++)
         {
@@ -54,22 +55,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.ProvideInput = true;
 
-        var scene = SceneRef.FromIndex(1);
-        var sceneInfo = new NetworkSceneInfo();
-        if (scene.IsValid)
-        {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
-        }
-
-        // Tạo mã phòng ngẫu nhiên và sử dụng làm tên phiên
+        // Tạo mã phòng ngẫu nhiên
         string sessionCode = GenerateRandomSessionCode();
 
         await networkRunner.StartGame(
-            new StartGameArgs()
+            new StartGameArgs
             {
                 GameMode = mode,
                 SessionName = sessionCode,
-                Scene = scene,
                 SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
             }
         );
@@ -88,16 +81,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.ProvideInput = true;
 
-        // Bắt đầu NetworkRunner trong chế độ Client
         yield return networkRunner.StartGame(
-            new StartGameArgs
-            {
-                GameMode = GameMode.Client,
-                SessionName = roomCode // Dùng mã phòng người dùng nhập
-            }
+            new StartGameArgs { GameMode = GameMode.Client, SessionName = roomCode }
         );
 
-        // Kiểm tra xem kết nối thành công không
         if (!networkRunner.IsConnectedToServer)
         {
             Debug.LogWarning("Failed to join room with code: " + roomCode);
@@ -131,33 +118,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        var data = new NetworkInputData();
-
-        // Handle horizontal movement
-        if (Input.GetKey(KeyCode.A)) // Move left
-        {
-            data.direction += Vector3.left;
-        }
-        if (Input.GetKey(KeyCode.D)) // Move right
-        {
-            data.direction += Vector3.right;
-        }
-
-        // Handle jump input (e.g., Space key)
-        data.isJumping = Input.GetKey(KeyCode.Space); // Check if space key is pressed for jumping
-
-        data.isAttacking = Input.GetKey(KeyCode.K);
-        if (data.isAttacking = Input.GetKey(KeyCode.K))
-        {
-            Debug.Log("danhadjdsayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-        }
-        data.isRolling = Input.GetKey(KeyCode.F);
-
-        // Set the input data to be sent over the network
-        input.Set(data);
-    }
+    public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
@@ -167,45 +128,39 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        // Khi người chơi tham gia, chuyển đến scene Player2
-        if (networkRunner.IsServer)
+        /// Chọn nhân vật cho host và client
+        if (runner.ActivePlayers.Count() == 1) 
         {
-            StartCoroutine(WaitForSceneLoadAndSpawn(player));
+            GameObject selectedCharacter = player1Character;  // Host chọn nhân vật đầu tiên
+            SpawnPlayerCharacter(player, selectedCharacter);
+        }
+        else if (runner.ActivePlayers.Count() == 2)
+        {
+            GameObject selectedCharacter = player2Character;  // Client chọn nhân vật thứ hai
+            SpawnPlayerCharacter(player, selectedCharacter);
         }
     }
 
-    private IEnumerator WaitForSceneLoadAndSpawn(PlayerRef player)
+    private void SpawnPlayerCharacter(PlayerRef player, GameObject characterPrefab)
     {
-        // Wait for a short period to ensure the scene has loaded
-        yield return new WaitForSeconds(1);
+        Vector3 spawnPosition = new Vector3(0, 0, 0); // Tùy chỉnh vị trí spawn
+        GameObject characterInstance = Instantiate(
+            characterPrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+        playerCharacterMap.Add(player, characterInstance);
 
-        // Check if the player has already spawned a character
-        if (!spawnedCharacters.ContainsKey(player))
-        {
-            Vector3 playerPos = new Vector3(
-                (player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * 3.1f,
-                0f
-            );
-            NetworkObject networkObject = networkRunner.Spawn(
-                networkPrefabRef,
-                playerPos,
-                Quaternion.identity,
-                player
-            );
-            spawnedCharacters.Add(player, networkObject);
-        }
-        else
-        {
-            Debug.LogWarning("Player already spawned: " + player);
-        }
+        // Cung cấp quyền điều khiển cho người chơi
+        characterInstance.GetComponent<Player>().SetPlayerControl(player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        if (spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+        if (playerCharacterMap.TryGetValue(player, out GameObject character))
         {
-            runner.Despawn(networkObject);
-            spawnedCharacters.Remove(player);
+            Destroy(character);
+            playerCharacterMap.Remove(player);
         }
     }
 
@@ -225,7 +180,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        // Khi scene đã tải xong, spawn nhân vật cho player
         foreach (var player in runner.ActivePlayers)
         {
             OnPlayerJoined(runner, player);
