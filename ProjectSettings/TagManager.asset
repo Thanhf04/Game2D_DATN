@@ -7,6 +7,8 @@ TagManager:
   - Boss
   - enemy
   - Man2
+  - NenDat
+  - Bantay
   layers:
   - Default
   - TransparentFX
@@ -64,4 +66,7 @@ TagManager:
     locked: 0
   - name: Skill
     uniqueID: 3798540117
+    locked: 0
+  - name: Die + reset
+    uniqueID: 3538186337
     locked: 0

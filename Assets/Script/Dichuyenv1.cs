@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Fusion;
+using UnityEngine.SceneManagement;
 
 public class Dichuyennv1 : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isJump;
     private bool isStatsPanelOpen = false;
     private Animator anim;
+
+    //panel die
+    public GameObject gameOverPanel;
+    public Button tryAgainButton;
+    public Button resetButton;
+    public Button mainMenuButton;
+    
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -126,6 +134,14 @@ isJump = false;
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
+
+        gameOverPanel.SetActive(false);
+
+        // Gán các sự kiện cho các nút
+        tryAgainButton.onClick.AddListener(OnTryAgain);
+        resetButton.onClick.AddListener(OnReset);
+        mainMenuButton.onClick.AddListener(OnMainMenu);
+
     }
 
     void Update()
@@ -457,8 +473,34 @@ fireBreathPrefab,
     void Die()
     {
         Debug.Log("Player is dead");
-        Destroy(gameObject);
+        ShowGameOverPanel();
     }
+    void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f; // Tạm dừng game
+    }
+    void OnTryAgain()
+    {
+        // Tải lại cảnh hiện tại để chơi lại
+        Time.timeScale = 1f; // Tiếp tục game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnReset()
+    {
+        Time.timeScale = 1f; // Tiếp tục game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnMainMenu()
+    {
+        // Quay lại menu chính
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Play"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
+    }
+
+
     // kiểm tra âm thanh
     private bool IsPointerOverUI()
     {

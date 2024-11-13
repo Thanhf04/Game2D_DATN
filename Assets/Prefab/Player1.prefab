@@ -278,6 +278,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   jump: 10
+  gameOverPanel: {fileID: 0}
+  tryAgainButton: {fileID: 0}
+  resetButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
   rollDistance: 3
   rollDuration: 0.5
   fireBulletPrefab: {fileID: 0}
@@ -308,6 +312,7 @@ MonoBehaviour:
   textLevel: {fileID: 0}
   textExp: {fileID: 0}
   damageAmount: 10
+  damageTrap: 20
   level: 1
   currentLevel: 0
   upgradePoints: 5
@@ -317,8 +322,11 @@ MonoBehaviour:
   decreaseHealthButton: {fileID: 0}
   increaseManaButton: {fileID: 0}
   decreaseManaButton: {fileID: 0}
+  increaseDamethButton: {fileID: 0}
+  decreaseDamethButton: {fileID: 0}
   healthText: {fileID: 0}
   manaText: {fileID: 0}
+  damaText: {fileID: 0}
   levelText: {fileID: 0}
   pointsText: {fileID: 0}
   skill1Cooldown: 2
