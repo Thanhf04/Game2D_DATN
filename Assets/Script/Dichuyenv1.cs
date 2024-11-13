@@ -32,7 +32,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float bulletLifeTime = 2f;
 
     // Các biến âm thanh
-    public AudioSource music;
+    [SerializeField] public AudioSource music;
     public AudioSource playWalk;
     public AudioSource playAttack;
     public AudioSource playAttack2;
@@ -51,7 +51,7 @@ public class Dichuyennv1 : MonoBehaviour
     public int currentMana;
     public float expMax = 100;
     public float expCurrent = 0;
-    public TextMeshProUGUI textLevel;
+    [SerializeField] public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
     private GameObject currentFireBreath;
