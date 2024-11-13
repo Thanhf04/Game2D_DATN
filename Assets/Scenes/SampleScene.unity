@@ -2456,7 +2456,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1558343171
+  m_SortingLayerID: 1485715357
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &563462485
@@ -5259,7 +5259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1466683530
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6029,6 +6029,7 @@ GameObject:
   - component: {fileID: 1593042419}
   - component: {fileID: 1593042418}
   - component: {fileID: 1593042417}
+  - component: {fileID: 1593042422}
   - component: {fileID: 1593042421}
   m_Layer: 5
   m_Name: "BTN_\u0110\u0103ng Nh\u1EADp"
@@ -6165,7 +6166,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 350654682}
   passwordInput: {fileID: 1075372558}
-  feedbackText: {fileID: 1137033035}
+  feedbackText: {fileID: 1448138337}
+--- !u!114 &1593042422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593042416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657e336d3fccfb04c8ea4151d713922c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1601090521
 GameObject:
   m_ObjectHideFlags: 0
@@ -7325,7 +7338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2032794041
 RectTransform:
   m_ObjectHideFlags: 0

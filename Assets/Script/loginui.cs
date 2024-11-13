@@ -1,218 +1,181 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using UnityEngine;
+using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using TMPro;
-using UnityEngine;
-using Firebase;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
-public class LoginManager : MonoBehaviour
+public class LoginUI : MonoBehaviour
 {
     public TMP_InputField usernameInput;  // Input field cho username
-    public TMP_InputField passwordInput;  // Input field cho password
-    public TextMeshProUGUI feedbackText;  // Text để hiển thị thông báo
+    public TMP_InputField passwordInput;  // Input field cho mật khẩu
+    public TextMeshProUGUI feedbackText;  // Text để hiển thị phản hồi
+    public GameObject player; // Thêm GameObject cho nhân vật, khai báo ở đây
 
-    private FirebaseAuth auth;
-    private DatabaseReference databaseReference;
+    private FirebaseAuth auth;            // FirebaseAuth instance
+    private DatabaseReference databaseReference;  // Firebase Database instance
 
-    // Khởi tạo Firebase khi bắt đầu
     private async void Start()
     {
-        // Kiểm tra và khắc phục các phụ thuộc của Firebase
-        await FirebaseApp.CheckAndFixDependenciesAsync();
-        auth = FirebaseAuth.DefaultInstance;
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        // Kiểm tra và thiết lập Firebase
+        await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        {
+            if (task.Result == DependencyStatus.Available)
+            {
+                auth = FirebaseAuth.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+                Debug.Log("Firebase initialized successfully.");
+            }
+            else
+            {
+                UpdateFeedback("Firebase không khởi tạo được!");
+                Debug.LogError("Firebase initialization failed: " + task.Result);
+            }
+        });
     }
 
-    // Phương thức đăng nhập người dùng
+    // Hàm đăng nhập
     public async void LoginUser()
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
 
-        // Kiểm tra tính hợp lệ của các trường
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            UpdateFeedback("Vui lòng điền tất cả các trường.");
+            UpdateFeedback("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
-        // Tìm email của người dùng theo username
         string email = await FindEmailByUsername(username);
         if (string.IsNullOrEmpty(email))
         {
-            UpdateFeedback("Không tìm thấy người dùng với tên đăng nhập này.");
+            UpdateFeedback("Không tìm thấy tài khoản với tên đăng nhập này.");
             return;
         }
 
         try
         {
-            // Đăng nhập người dùng bằng email và password
-            Debug.Log("Đăng nhập với email: " + email);
+            // Đăng nhập Firebase
             AuthResult result = await auth.SignInWithEmailAndPasswordAsync(email, password);
             FirebaseUser user = result.User;
-            await user.ReloadAsync();  // Tải lại thông tin người dùng
 
-            // Kiểm tra email có xác minh chưa
-            if (user.IsEmailVerified)
+            if (user != null)
             {
-                UpdateFeedback("Đăng nhập thành công!");
-
-                // Lưu tên người dùng vào PlayerPrefs
-                PlayerPrefs.SetString("username", username);
-                PlayerPrefs.Save();
-
-                // Kiểm tra xem dữ liệu nhân vật đã tồn tại hay chưa
-                bool characterExists = await CheckCharacterExists(username);
-                if (!characterExists)
+                if (user.IsEmailVerified)
                 {
-                    await SaveCharacterData(username);  // Lưu dữ liệu nhân vật nếu chưa tồn tại
+                    UpdateFeedback("Đăng nhập thành công!");
+                    PlayerPrefs.SetString("username", username);
+                    PlayerPrefs.Save();
+
+                    // Tải dữ liệu người chơi từ Firebase sau khi đăng nhập thành công
+                    await LoadPlayerDataFromFirebase(username);  // Load data từ Firebase
+
+                    // Chuyển cảnh sau khi load dữ liệu
+                    SceneManager.LoadScene("Player1");
                 }
                 else
                 {
-                    // Nếu nhân vật đã tồn tại, tải dữ liệu từ Firebase
-                    await LoadCharacterData(username);
+                    UpdateFeedback("Email chưa được xác minh.");
                 }
-
-                // Chuyển đến màn hình chính
-                SceneManager.LoadScene("Player");
-            }
-            else
-            {
-                UpdateFeedback("Email chưa được xác minh. Vui lòng kiểm tra hộp thư của bạn.");
             }
         }
-        catch (Exception ex)
+        catch (FirebaseException firebaseEx)
         {
-            Debug.LogError("Đăng nhập gặp lỗi: " + ex.Message);
-            UpdateFeedback("Đăng nhập gặp lỗi: " + ex.Message);
+            UpdateFeedback($"Firebase Error: {firebaseEx.Message}");
+            Debug.LogError($"Firebase Error: {firebaseEx.Message}");
+        }
+        catch (System.Exception ex)
+        {
+            UpdateFeedback($"Đăng nhập gặp lỗi: {ex.Message}");
+            Debug.LogError($"Error: {ex.Message}");
         }
     }
 
-    // Phương thức tìm email của người dùng theo username
+    // Tìm email dựa trên username từ Firebase Realtime Database
     private async Task<string> FindEmailByUsername(string username)
     {
-        if (databaseReference == null)
-        {
-            Debug.LogError("DatabaseReference is null! Please check Firebase setup.");
-            return null;
-        }
-
         var userRef = databaseReference.Child("users");
-
         var snapshot = await userRef.OrderByChild("Username").EqualTo(username).GetValueAsync();
-        if (snapshot != null && snapshot.Exists)
+
+        if (snapshot.Exists)
         {
             foreach (var user in snapshot.Children)
             {
                 if (user.Child("Email").Value != null)
                 {
-                    Debug.Log("Tìm thấy email: " + user.Child("Email").Value.ToString());
                     return user.Child("Email").Value.ToString();
                 }
             }
         }
-        else
-        {
-            Debug.LogWarning("Không tìm thấy người dùng với tên đăng nhập: " + username);
-        }
         return null;
     }
 
-    // Kiểm tra xem dữ liệu nhân vật đã tồn tại hay chưa
-    private async Task<bool> CheckCharacterExists(string username)
+    // Lưu dữ liệu người chơi lên Firebase
+    public async Task SavePlayerDataToFirebase(string username)
     {
-        var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
-        return snapshot.Exists;
-    }
+        // Giả sử bạn đã có các giá trị này từ game
+        int damage = 10;
+        int diamond = 100;
+        Vector3 position = new Vector3(1, 1, 1);
+        int gold = 50;
+        int exp = 200;
+        int energyCurrent = 80;
+        int energyMax = 100;
+        int healthMax = 100;
+        int healthCurrent = 75;
 
-    // Lưu dữ liệu nhân vật lên Firebase
-    private async Task SaveCharacterData(string username)
-    {
-        CharacterData characterData = new CharacterData
+        // Tạo đối tượng PlayerData
+        var playerDict = new Dictionary<string, object>
         {
-            username = username,
-            health = 100f,  // Sức khỏe khởi tạo
-            energy = 100f,  // Năng lượng khởi tạo
-            gold = 0,       // Gold là kiểu int
-            diamond = 0,    // Diamond là kiểu int
-            position = new Vector3(0, 0, 0), // Vị trí khởi tạo
-            skillID = "skill_01", // ID skill
-            scene = "Player1" // Lưu thông tin cảnh mà nhân vật đang đứng
+            { "Damage", damage },
+            { "Diamond", diamond },
+            { "PositionX", position.x },
+            { "PositionY", position.y },
+            { "PositionZ", position.z },
+            { "Gold", gold },
+            { "Exp", exp },
+            { "EnergyCurrent", energyCurrent },
+            { "EnergyMax", energyMax },
+            { "HealthMax", healthMax },
+            { "HealthCurrent", healthCurrent }
         };
 
-        string jsonData = JsonUtility.ToJson(characterData);
-        try
-        {
-            var task = databaseReference.Child("characters").Child(username).SetRawJsonValueAsync(jsonData);
-            await task;
-
-            if (task.IsCompleted)
-            {
-                Debug.Log("Dữ liệu nhân vật đã được lưu lên Firebase!");
-            }
-            else
-            {
-                Debug.LogError("Có lỗi xảy ra khi lưu dữ liệu lên Firebase.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Lỗi khi lưu dữ liệu: " + ex.Message);
-        }
+        // Lưu vào Firebase Realtime Database
+        await databaseReference.Child("players").Child(username).SetValueAsync(playerDict);
+        Debug.Log("Player data saved to Firebase.");
     }
 
-    // Tải dữ liệu nhân vật từ Firebase
-    private async Task LoadCharacterData(string username)
+    // Tải dữ liệu người chơi từ Firebase
+    public async Task LoadPlayerDataFromFirebase(string username)
     {
-        try
-        {
-            var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
-            if (snapshot.Exists)
-            {
-                var characterData = JsonUtility.FromJson<CharacterData>(snapshot.GetRawJsonValue());
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
 
-                // Lưu thông tin cảnh (có thể dùng nếu cần phải tải lại cảnh)
-                if (!string.IsNullOrEmpty(characterData.scene))
-                {
-                    string currentScene = characterData.scene;
-                    SceneManager.LoadScene(currentScene);  // Tải lại cảnh mà nhân vật đang đứng
-                }
-                else
-                {
-                    Debug.LogWarning("Cảnh không được chỉ định trong dữ liệu nhân vật.");
-                }
-            }
-            else
-            {
-                UpdateFeedback("Không tìm thấy dữ liệu nhân vật.");
-            }
-        }
-        catch (Exception ex)
+        if (snapshot.Exists)
         {
-            Debug.LogError("Lỗi khi tải dữ liệu nhân vật: " + ex.Message);
+            // Lấy dữ liệu từ snapshot
+            int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
+            int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
+            int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
+
+            // Hiển thị thông tin trong game hoặc gán lại giá trị cho các biến
+            Debug.Log($"Player Data Loaded: {username}, Health: {health}, Energy: {energy}, EXP: {exp}");
+
+            // Cập nhật lại UI hoặc các biến trong game (ví dụ, gán giá trị cho slider, text)
+        }
+        else
+        {
+            Debug.LogWarning("No data found for player: " + username);
         }
     }
 
-    // Phương thức để cập nhật thông báo trên UI
+    // Cập nhật thông báo phản hồi
     private void UpdateFeedback(string message)
     {
-        feedbackText.text = message;
-        Debug.Log(message);
+        feedbackText.text = message;  // Hiển thị thông điệp trên UI
+        Debug.Log(message);  // In thông điệp ra Console của Unity
     }
-}
-
-// Đưa lớp CharacterData vào một file riêng biệt hoặc đảm bảo không trùng với các lớp khác
-[System.Serializable]
-public class CharacterData
-{
-    public string username;
-    public float health;
-    public float energy;
-    public int gold;      // Gold là kiểu int
-    public int diamond;   // Diamond là kiểu int
-    public Vector3 position;
-    public string skillID;
-    public string scene; // Thêm trường scene để lưu tên cảnh
 }
