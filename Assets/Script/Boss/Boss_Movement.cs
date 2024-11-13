@@ -190,8 +190,8 @@ public class Boss_Movement : MonoBehaviour
     }
     private IEnumerator ResetAttackAnimation()
     {
-        yield return new WaitForSeconds(1.2f);  // Đợi 0.1 giây (hoặc tùy chỉnh theo hoạt hình)
-        animator.SetBool("AttackBasic", false);  // Tắt hoạt hình bị trúng đòn
+        yield return new WaitForSeconds(2f);
+        animator.SetBool("AttackBasic", false);
     }
     private IEnumerator StartAttack()
     {

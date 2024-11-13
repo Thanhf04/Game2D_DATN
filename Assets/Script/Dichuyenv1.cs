@@ -1,7 +1,9 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Fusion;
 
 public class Dichuyennv1 : MonoBehaviour
 {
@@ -14,8 +16,8 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isRunning;
     private bool isRoll;
     private bool isJump;
-    private Animator anim;
     private bool isStatsPanelOpen = false;
+    private Animator anim;
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -42,15 +44,24 @@ public class Dichuyennv1 : MonoBehaviour
     public AudioSource playJump;
 
     // Các biến máu và mana
+    public Slider healthSlider;
+    public Slider manaSlider;
+    public Slider expSlider;
     public int maxHealth = 100;
     public int currentHealth;
     public int maxMana = 100;
     public int currentMana;
+    public float expMax = 100;
+    public float expCurrent = 0;
+    public TextMeshProUGUI textLevel;
+    public TextMeshProUGUI textExp;
     public int damageAmount = 10;
+    public int damageTrap = 20;
     private GameObject currentFireBreath;
 
     // Các biến level và điểm nâng
     public int level = 1;
+    public float currentLevel;
     public int upgradePoints = 5;
 
     // Các biến UI
@@ -60,8 +71,11 @@ public class Dichuyennv1 : MonoBehaviour
     public Button decreaseHealthButton;
     public Button increaseManaButton;
     public Button decreaseManaButton;
+    public Button increaseDamethButton;
+    public Button decreaseDamethButton;
     public Text healthText;
     public Text manaText;
+    public Text damaText;
     public Text levelText;
     public Text pointsText;
 
@@ -90,27 +104,36 @@ public class Dichuyennv1 : MonoBehaviour
         anim = GetComponent<Animator>();
         isRunning = false;
         isRoll = false;
-        isJump = false;
+isJump = false;
         music.Play();
-        currentHealth = maxHealth;
-        currentMana = maxMana;
+
 
         // Khởi tạo UI
         statsPanel.SetActive(false);
         openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
-decreaseHealthButton.onClick.AddListener(DecreaseHealth);
+        decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
         decreaseManaButton.onClick.AddListener(DecreaseMana);
+        increaseDamethButton.onClick.AddListener(IncreaseDame);
+        decreaseDamethButton.onClick.AddListener(DecreaseDamage);
+        
 
+        SetSlider();
+        currentHealth = maxHealth;
+        currentMana = maxMana;
+        expSlider.value = expCurrent;
+        textExp.SetText(expCurrent + "%");
+        currentLevel = level;
         UpdateStatsText();
     }
 
     void Update()
-{
-    float moveInput = Input.GetAxis("Horizontal");
+    {
 
-    // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
+        float moveInput = Input.GetAxis("Horizontal");
+
+        // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
     if (NPC.isOpenShop || isStatsPanelOpen)
     {
         isRunning = false;
@@ -118,14 +141,12 @@ decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         playWalk.Stop();
         return;
     }
-
-    // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
+        // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
     rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
     isRunning = moveInput != 0;
     anim.SetBool("isRunning", isRunning);
 
-    // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-    if (moveInput != 0)
+        if (moveInput != 0)
     {
         transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
         if (!playWalk.isPlaying && isGrounded)
@@ -141,64 +162,80 @@ decreaseHealthButton.onClick.AddListener(DecreaseHealth);
     {
         playWalk.Stop();
     }
-
-    // Nhảy
-    if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2))
-    {
-        rb.velocity = new Vector2(rb.velocity.x, jump);
-        isGrounded = false;
-        isJump = true;
-        anim.SetBool("isJump", true);
-        playJump.Play();
-        playWalk.Stop();
-        jumpCount++;
-    }
-
-    // Tấn công và các thao tác khác
-    if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI() && !isStatsPanelOpen)
-    {
-        StartCoroutine(Attack());
-    }
-    if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-    {
-        StartCoroutine(Roll());
-    }
-
-    // Kỹ năng tấn công
-    if (Input.GetKeyDown(KeyCode.Q) && skill1Timer <= 0 && currentMana >= 20)
-    {
-        Skill1();
-    }
-    if (Input.GetKeyDown(KeyCode.E) && skill2Timer <= 0 && currentMana >= 30)
-    {
-        Skill2();
-    }
-    if (Input.GetKeyDown(KeyCode.R) && skill3Timer <= 0 && currentMana >= 30)
-    {
-        Skill3();
-    }
-
-    // Cập nhật các timer hồi chiêu và UI
-    UpdateSkillCooldowns();
-
-    // Cập nhật vị trí của lửa nếu đang phun lửa
-    if (currentFireBreath != null)
-    {
-        currentFireBreath.transform.position = firePoint2.position;
-        currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-    }
-
-    // Kiểm tra tăng cấp
-    CheckLevelUp();
-}
-    void CheckLevelUp()
-    {
-        if (upgradePoints >= level + 5)
+        // Nhảy
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
+            rb.velocity = new Vector2(rb.velocity.x, jump);
+            isGrounded = false;
+            isJump = true;
+            anim.SetBool("isJump", true);
+            playJump.Play();
+            playWalk.Stop();
+            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
+        }
+
+        // Tấn công
+
+        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        {
+            StartCoroutine(Attack());
+        }
+        //lan
+        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        {
+    StartCoroutine(Roll());
+        }
+        // Kỹ năng tấn công
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (skill1Timer <= 0 && currentMana >= 20)
+            {
+                Skill1();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (skill2Timer <= 0 && currentMana >= 30)
+            {
+                Skill2();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (skill3Timer <= 0 && currentMana >= 30)
+            {
+                Skill3();
+            }
+        }
+
+        // Cập nhật các timer hồi chiêu
+        UpdateSkillCooldowns();
+
+        // Cập nhật vị trí của lửa nếu đang phun lửa
+        if (currentFireBreath != null)
+        {
+            currentFireBreath.transform.position = firePoint2.position;
+            currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        }
+
+    }
+
+
+    public void LevelSlider(float amount)
+    {
+        expCurrent += amount;
+        textExp.SetText(expCurrent + "%");
+        if (expCurrent >= expMax)
+        {
+            expCurrent = 0;
+            textExp.SetText(expCurrent + "%");
             level++;
+            textLevel.SetText("Lv" + level);
             upgradePoints++;
             UpdateStatsText();
+
         }
+        expSlider.value = expCurrent;
     }
 
     void UpdateSkillCooldowns()
@@ -207,7 +244,7 @@ decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         {
             skill1Timer -= Time.deltaTime;
             skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString(); // Hiển thị thời gian còn lại
-skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
+            skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
         }
         else
         {
@@ -242,7 +279,6 @@ skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ả
         if (currentMana >= 20) // Kiểm tra nếu mana đủ
         {
             ShootFireBullet();
-            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
             skill1Timer = skill1Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -253,9 +289,8 @@ skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ả
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
         {
             BreathFire();
-            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
             skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
-            UpdateStatsText(); // Cập nhật giao diện người dùng
+    UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
 
@@ -264,7 +299,6 @@ skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ả
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
         {
             FireHand();
-            currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -303,11 +337,11 @@ skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ả
         isRoll = false;
     }
 
-   private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
         {
-isGrounded = true;
+            isGrounded = true;
             isJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isAttack2", false);
@@ -337,7 +371,8 @@ isGrounded = true;
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
             StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            //currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            manaSlider.value = currentMana -= 20;
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
@@ -355,14 +390,15 @@ isGrounded = true;
             if (currentFireBreath == null)
             {
                 currentFireBreath = Instantiate(
-                    fireBreathPrefab,
+fireBreathPrefab,
                     firePoint2.position,
                     firePoint2.rotation
                 );
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
-                currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                // currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                manaSlider.value = currentMana -= 30;
                 UpdateStatsText(); // Cập nhật giao diện người dùng
             }
         }
@@ -376,26 +412,33 @@ isGrounded = true;
     }
 
     void FireHand()
-{
-    if (currentMana >= 10) // Kiểm tra nếu mana đủ
     {
-        GameObject fireHand = Instantiate(
-            fireHandPrefab,
-            firePoint3.position,
-            firePoint3.rotation
-        );
-        fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-        playAttack_Fire3.Play();
-        
-        // Không thiết lập vận tốc để fireHand đứng yên
-        currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
-        UpdateStatsText(); // Cập nhật giao diện người dùng
-        StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+        if (currentMana >= 10) // Kiểm tra nếu mana đủ
+        {
+            GameObject fireHand = Instantiate(
+                fireHandPrefab,
+                firePoint3.position,
+                firePoint3.rotation
+            );
+            fireHand.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+            Rigidbody2D rbFireHand = fireHand.GetComponent<Rigidbody2D>();
+            if (rbFireHand == null)
+            {
+                rbFireHand = fireHand.AddComponent<Rigidbody2D>();
+            }
+            playAttack_Fire3.Play();
+            rbFireHand.gravityScale = 1f;
+            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
+            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
+            StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
+            currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
+            manaSlider.value = currentMana;
+            UpdateStatsText(); // Cập nhật giao diện người dùng
+        }
     }
-}
 
     private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
-{
+    {
         yield return new WaitForSeconds(time);
         Destroy(fireHand);
     }
@@ -408,6 +451,7 @@ isGrounded = true;
         {
             Die();
         }
+        healthSlider.value = currentHealth;
     }
 
     void Die()
@@ -433,7 +477,8 @@ isGrounded = true;
         if (upgradePoints > 0)
         {
             maxHealth += 100;
-            currentHealth += 100;
+            //currentHealth += 100;
+            healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
         }
@@ -444,7 +489,8 @@ isGrounded = true;
         if (currentHealth > 0 && upgradePoints < level + 5)
         {
             maxHealth -= 100;
-            currentHealth -= 100;
+healthSlider.maxValue = maxHealth;
+            //currentHealth -= 100;
             upgradePoints++;
             UpdateStatsText();
         }
@@ -455,7 +501,8 @@ isGrounded = true;
         if (upgradePoints > 0)
         {
             maxMana += 100;
-            currentMana += 100;
+            manaSlider.maxValue = maxMana;
+            //currentMana += 50;
             upgradePoints--;
             UpdateStatsText();
         }
@@ -465,20 +512,55 @@ isGrounded = true;
     {
         if (currentMana > 0 && upgradePoints < level + 5)
         {
-            maxMana -= 10;
-            currentMana -= 10;
+            maxMana -= 100;
+            manaSlider.maxValue = maxMana;
+            //currentMana -= 10;
+            upgradePoints++;
+            UpdateStatsText();
+
+        }
+    }
+
+    void IncreaseDame(){
+        if (upgradePoints > 0){
+            damageAmount += 10;
+            upgradePoints--;
+            UpdateStatsText();
+        }
+    }
+
+    void DecreaseDamage(){
+        if (damageAmount > 0 && upgradePoints < level + 5)
+        {
+            damageAmount -= 10;
             upgradePoints++;
             UpdateStatsText();
         }
     }
 
-
     void UpdateStatsText()
-{
-    healthText.text = ((maxHealth - 100) / 100).ToString();
-    manaText.text = ((maxMana - 100) / 100).ToString(); 
-    levelText.text = "Level: " + level;
-    pointsText.text = "Points: " + upgradePoints;
-}
+    {
+        healthText.text = ((maxHealth - 100) / 100).ToString();
+        manaText.text = ((maxMana - 100) / 100).ToString();
+        damaText.text = ((damageAmount - 10) / 10).ToString();
+        levelText.text = "Level: " + level;
+        pointsText.text = "Points: " + upgradePoints;
+    }
+    public void SetSlider()
+    {
+        healthSlider.maxValue = maxHealth;
+        manaSlider.maxValue = maxMana;
+        expSlider.maxValue = expMax;
+    }
 
+    public void TakeDamageTrap(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
 }

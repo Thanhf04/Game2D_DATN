@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Boss
+  - enemy
+  - Man2
   layers:
   - Default
   - TransparentFX
@@ -40,4 +43,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: New Layer 1
+    uniqueID: 3178437571
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 3859166013
+    locked: 0
+  - name: New Layer 3
+    uniqueID: 309729147
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 3111009065
+    locked: 0
+  - name: New Layer 5
+    uniqueID: 2297791599
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 3691226593
+    locked: 0
+  - name: Skill
+    uniqueID: 3798540117
     locked: 0

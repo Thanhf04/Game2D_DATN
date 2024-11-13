@@ -8,7 +8,6 @@ public class UI_Shop : MonoBehaviour
     private Transform container;
     private Transform ShopItem;
     private InventoryManager inventoryManager;
-
     private Dictionary<Model_Shop.ItemType, ConsumableClass> itemTypeToConsumable;
 
 
@@ -29,8 +28,8 @@ public class UI_Shop : MonoBehaviour
     }
     private void Start()
     {
-        CreateItemButton(Model_Shop.ItemType.HP_1, Model_Shop.GetSprite(Model_Shop.ItemType.HP_1), "Bình hồi HP", Model_Shop.GetCost(Model_Shop.ItemType.HP_1), 0);
-        CreateItemButton(Model_Shop.ItemType.MP_1, Model_Shop.GetSprite(Model_Shop.ItemType.MP_1), "Bình hồi MP", Model_Shop.GetCost(Model_Shop.ItemType.MP_1), 70);
+        CreateItemButton(Model_Shop.ItemType.HP_1, Model_Shop.GetSprite(Model_Shop.ItemType.HP_1), "Bình hồi HP", Model_Shop.GetCost(Model_Shop.ItemType.HP_1), 75);
+        CreateItemButton(Model_Shop.ItemType.MP_1, Model_Shop.GetSprite(Model_Shop.ItemType.MP_1), "Bình hồi MP", Model_Shop.GetCost(Model_Shop.ItemType.MP_1), 130);
     }
     private void CreateItemButton(Model_Shop.ItemType itemType, Sprite itemSprite, string itemName, int itemPrice, int positionIndex)
     {
