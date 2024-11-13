@@ -33,8 +33,14 @@ public class newTrap : MonoBehaviour
         transform.Rotate(0,0,tocDoXoay);
     }
     private void OnCollisionEnter2D(Collision2D collision){
-        if(collision.gameObject.CompareTag("Player")){
-            SceneManager.LoadScene("Player1");
+        if (collision.collider.CompareTag("Player"))
+        {
+            // Gây sát thương cho người chơi nếu vùng sát thương chạm
+            Dichuyennv1 playerHealth = collision.collider.GetComponent<Dichuyennv1>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(20); // Gây 20 sát thương
+            }
         }
     }
 }

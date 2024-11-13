@@ -15,6 +15,7 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isRunning;
     private bool isRoll;
     private bool isJump;
+    private bool isStatsPanelOpen = false;
     private Animator anim;
 
     // Các biến liên quan đến lăn (roll)
@@ -54,6 +55,7 @@ public class Dichuyennv1 : MonoBehaviour
     [SerializeField] public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
+    public int damageTrap = 20;
     private GameObject currentFireBreath;
 
     // Các biến level và điểm nâng
@@ -62,14 +64,17 @@ public class Dichuyennv1 : MonoBehaviour
     public int upgradePoints = 5;
 
     // Các biến UI
-    public GameObject statsPanel;
+    [SerializeField] public GameObject statsPanel;
     public Button openPanelButton;
     public Button increaseHealthButton;
     public Button decreaseHealthButton;
     public Button increaseManaButton;
     public Button decreaseManaButton;
+    public Button increaseDamethButton;
+    public Button decreaseDamethButton;
     public Text healthText;
     public Text manaText;
+    public Text damaText;
     public Text levelText;
     public Text pointsText;
 
@@ -99,9 +104,8 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
-        music.Play();
 
-
+        StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
         openPanelButton.onClick.AddListener(ToggleStatsPanel);
@@ -109,6 +113,9 @@ public class Dichuyennv1 : MonoBehaviour
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
         decreaseManaButton.onClick.AddListener(DecreaseMana);
+        increaseDamethButton.onClick.AddListener(IncreaseDame);
+        decreaseDamethButton.onClick.AddListener(DecreaseDamage);
+
 
         SetSlider();
         currentHealth = maxHealth;
@@ -124,49 +131,35 @@ public class Dichuyennv1 : MonoBehaviour
 
         float moveInput = Input.GetAxis("Horizontal");
 
-        if (NPC.isOpenShop)
+        // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
+        if (NPC.isOpenShop || isStatsPanelOpen)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
             return;
         }
-        // Điều khiển di chuyển
-        if (isGrounded)
-        {
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-            isRunning = moveInput != 0;
-            anim.SetBool("isRunning", isRunning);
-        }
-        else if (!isGrounded || !NPC.isOpenShop)
-        {
+        // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        isRunning = moveInput != 0;
+        anim.SetBool("isRunning", isRunning);
 
-            isRunning = false;
-            anim.SetBool("isRunning", false);
-        }
-
-        // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-        if (moveInput != 0 && isGrounded)
+        if (moveInput != 0)
         {
             transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-            if (!playWalk.isPlaying)
+            if (!playWalk.isPlaying && isGrounded)
             {
-                transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-                if (!playWalk.isPlaying)
-                {
-                    playWalk.Play();
-                }
-                if (playAttack.isPlaying)
-                {
-                    playAttack.Stop();
-                }
+                playWalk.Play();
+            }
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
             }
         }
         else if (playWalk.isPlaying)
         {
             playWalk.Stop();
         }
-
         // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
@@ -433,9 +426,9 @@ public class Dichuyennv1 : MonoBehaviour
             }
             playAttack_Fire3.Play();
             rbFireHand.gravityScale = 1f;
-            Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-            rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
-            StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
+            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
+            StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana;
             UpdateStatsText(); // Cập nhật giao diện người dùng
@@ -474,6 +467,7 @@ public class Dichuyennv1 : MonoBehaviour
     void ToggleStatsPanel()
     {
         statsPanel.SetActive(!statsPanel.activeSelf);
+        isStatsPanelOpen = statsPanel.activeSelf;
     }
 
     void IncreaseHealth()
@@ -521,6 +515,27 @@ public class Dichuyennv1 : MonoBehaviour
             //currentMana -= 10;
             upgradePoints++;
             UpdateStatsText();
+
+        }
+    }
+
+    void IncreaseDame()
+    {
+        if (upgradePoints > 0)
+        {
+            damageAmount += 10;
+            upgradePoints--;
+            UpdateStatsText();
+        }
+    }
+
+    void DecreaseDamage()
+    {
+        if (damageAmount > 0 && upgradePoints < level + 5)
+        {
+            damageAmount -= 10;
+            upgradePoints++;
+            UpdateStatsText();
         }
     }
 
@@ -528,6 +543,7 @@ public class Dichuyennv1 : MonoBehaviour
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
+        damaText.text = ((damageAmount - 10) / 10).ToString();
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
     }
@@ -536,5 +552,27 @@ public class Dichuyennv1 : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         manaSlider.maxValue = maxMana;
         expSlider.maxValue = expMax;
+    }
+
+    public void TakeDamageTrap(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    public void StartSound()
+    {
+        music.Play();
+        playWalk.Stop();
+        playAttack.Stop();
+        playAttack2.Stop();
+        playAttack_Fire1.Stop();
+        playAttack_Fire2.Stop();
+        playAttack_Fire3.Stop();
+        playJump.Stop();
     }
 }
