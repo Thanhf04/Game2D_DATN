@@ -55,6 +55,7 @@ public class Dichuyennv1 : MonoBehaviour
     public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
+    public int damageTrap = 20;
     private GameObject currentFireBreath;
 
     // Các biến level và điểm nâng
@@ -562,5 +563,16 @@ public class Dichuyennv1 : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         manaSlider.maxValue = maxMana;
         expSlider.maxValue = expMax;
+    }
+
+    public void TakeDamageTrap(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 }
