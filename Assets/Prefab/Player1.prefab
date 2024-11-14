@@ -568,8 +568,82 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!1 &1684744978740438256
+  m_Constraints: 0
+--- !u!114 &3282237602445015055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3803709565108677252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e74d9fb1ba59141b37e1f7cd83b57b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  jump: 10
+  gameOverPanel: {fileID: 0}
+  tryAgainButton: {fileID: 0}
+  resetButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  rollDistance: 3
+  rollDuration: 0.5
+  fireBulletPrefab: {fileID: 0}
+  fireBreathPrefab: {fileID: 0}
+  fireHandPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  firePoint2: {fileID: 0}
+  firePoint3: {fileID: 0}
+  bulletSpeed: 10
+  bulletLifeTime: 2
+  music: {fileID: 0}
+  playWalk: {fileID: 0}
+  playAttack: {fileID: 0}
+  playAttack2: {fileID: 0}
+  playAttack_Fire1: {fileID: 0}
+  playAttack_Fire2: {fileID: 0}
+  playAttack_Fire3: {fileID: 0}
+  playJump: {fileID: 0}
+  healthSlider: {fileID: 0}
+  manaSlider: {fileID: 0}
+  expSlider: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 0
+  maxMana: 100
+  currentMana: 0
+  expMax: 100
+  expCurrent: 0
+  textLevel: {fileID: 0}
+  textExp: {fileID: 0}
+  damageAmount: 10
+  damageTrap: 20
+  level: 1
+  currentLevel: 0
+  upgradePoints: 5
+  statsPanel: {fileID: 0}
+  openPanelButton: {fileID: 0}
+  increaseHealthButton: {fileID: 0}
+  decreaseHealthButton: {fileID: 0}
+  increaseManaButton: {fileID: 0}
+  decreaseManaButton: {fileID: 0}
+  increaseDamethButton: {fileID: 0}
+  decreaseDamethButton: {fileID: 0}
+  healthText: {fileID: 0}
+  manaText: {fileID: 0}
+  damaText: {fileID: 0}
+  levelText: {fileID: 0}
+  pointsText: {fileID: 0}
+  skill1Cooldown: 2
+  skill2Cooldown: 3
+  skill3Cooldown: 5
+  skill1Image: {fileID: 0}
+  skill2Image: {fileID: 0}
+  skill3Image: {fileID: 0}
+  skill1CooldownText: {fileID: 0}
+  skill2CooldownText: {fileID: 0}
+  skill3CooldownText: {fileID: 0}
+--- !u!1 &4832698970306523118
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
