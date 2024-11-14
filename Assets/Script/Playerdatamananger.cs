@@ -1,90 +1,186 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using UnityEngine;
+using Firebase;
 using Firebase.Database;
-using TMPro; // Thêm thư viện TextMeshPro
-using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class PlayerDataManager : MonoBehaviour
+public class PlayerDataTest : MonoBehaviour
 {
-    // Các tham chiếu đến UI components sử dụng TMP_Text
-    public TMP_Text goldText;      // Hiển thị gold, sử dụng TMP_Text thay vì Text
-    public TMP_Text diamondText;   // Hiển thị diamond, sử dụng TMP_Text thay vì Text
-    public Image healthImage;      // Hiển thị health (Image)
-    public Image energyImage;      // Hiển thị energy (Image)
+    public TMP_Text healthText;  // Hiển thị giá trị health
+    public TMP_Text energyText;  // Hiển thị giá trị energy
+    public TMP_Text expText;     // Hiển thị giá trị exp
+    public TMP_Text diamondText; // Hiển thị giá trị diamond
+    public TMP_Text goldText;    // Hiển thị giá trị gold
+    public Slider healthSlider;  // Slider cho health
+    public Slider energySlider;  // Slider cho energy
+    public Slider expSlider;     // Slider cho exp
+    public GameObject player;    // Nhân vật trong game
 
     private DatabaseReference databaseReference;
+    private string username;
+    private Vector3 lastSavedPosition;
 
     private void Start()
     {
-        // Khởi tạo Firebase
+        // Khởi tạo Firebase Database
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // Lấy username từ PlayerPrefs
+        username = PlayerPrefs.GetString("username", "");
+
+        // Gán các listener cho các slider
+        healthSlider.onValueChanged.AddListener(UpdateHealth);
+        energySlider.onValueChanged.AddListener(UpdateEnergy);
+        expSlider.onValueChanged.AddListener(UpdateExp);
+
+        // Tải dữ liệu người chơi từ Firebase
+        if (!string.IsNullOrEmpty(username))
+        {
+            LoadPlayerDataFromFirebase(username);
+        }
+        else
+        {
+            Debug.LogWarning("Username is empty. Cannot load player data.");
+        }
+
+        lastSavedPosition = player.transform.position;  // Khởi tạo vị trí ban đầu
     }
 
-    // Phương thức lưu dữ liệu người chơi lên Firebase
-    public async Task SavePlayerData(string username)
+    private void UpdateHealth(float value)
     {
-        // Lấy các giá trị từ UI
-        int gold = int.Parse(goldText.text);      // Giả sử giá trị gold là số nguyên từ TMP_Text
-        int diamond = int.Parse(diamondText.text); // Giả sử giá trị diamond là số nguyên từ TMP_Text
+        healthText.text = "Health: " + value.ToString("F0");
+        SavePlayerData("HealthCurrent", (int)value);
+    }
 
-        // Kiểm tra lại giá trị fillAmount của health và energy
-        float health = healthImage.fillAmount * 100f; // Giả sử health được lưu dưới dạng phần trăm (0-100)
-        float energy = energyImage.fillAmount * 100f; // Giả sử energy được lưu dưới dạng phần trăm (0-100)
+    private void UpdateEnergy(float value)
+    {
+        energyText.text = "Energy: " + value.ToString("F0");
+        SavePlayerData("EnergyCurrent", (int)value);
+    }
 
-        // In giá trị health và energy ra console để kiểm tra
-        Debug.Log("Health FillAmount: " + healthImage.fillAmount);
-        Debug.Log("Energy FillAmount: " + energyImage.fillAmount);
-        Debug.Log("Health: " + health + "%");
-        Debug.Log("Energy: " + energy + "%");
+    private void UpdateExp(float value)
+    {
+        expText.text = "EXP: " + value.ToString("F0");
+        SavePlayerData("Exp", (int)value);
+    }
 
-        // In giá trị username để kiểm tra xem có bị trống hoặc sai không
-        Debug.Log("Username: " + username);
+    private void UpdateDiamond(float value)
+    {
+        diamondText.text = "Diamond: " + value.ToString("F0");
+        SavePlayerData("Diamond", (int)value);
+    }
 
-        // Tạo đối tượng chứa dữ liệu người chơi
-        PlayerData playerData = new PlayerData
+    private void UpdateGold(float value)
+    {
+        goldText.text = "Gold: " + value.ToString("F0");
+        SavePlayerData("Gold", (int)value);
+    }
+
+    private async void SavePlayerData(string field, int value)
+    {
+        if (string.IsNullOrEmpty(username)) return;
+
+        // Lưu dữ liệu vào Firebase
+        await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
+        Debug.Log($"{field} saved to Firebase: {value}");
+    }
+
+    // Lưu vị trí của người chơi (Position) vào Firebase
+    private async void SavePlayerPosition(Vector3 position)
+    {
+        if (string.IsNullOrEmpty(username)) return;
+
+        // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
+        var positionDict = new Dictionary<string, object>
         {
-            username = username,
-            gold = gold,
-            diamond = diamond,
-            health = health,
-            energy = energy
+            { "PositionX", position.x },
+            { "PositionY", position.y },
+            { "PositionZ", position.z }
         };
 
-        // Chuyển đối tượng PlayerData thành JSON
-        string jsonData = JsonUtility.ToJson(playerData);
+        // Lưu thông tin vị trí vào Firebase
+        await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
+        Debug.Log("Player position saved to Firebase: " + position);
+    }
 
-        // In ra dữ liệu JSON để kiểm tra xem nó đúng không
-        Debug.Log("Dữ liệu JSON: " + jsonData);
+    // Tải lại vị trí của người chơi từ Firebase
+    private async void LoadPlayerPositionFromFirebase(string username)
+    {
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
 
-        try
+        if (snapshot.Exists)
         {
-            // Lưu dữ liệu vào Firebase (dưới mục "players/{username}")
-            var task = databaseReference.Child("players").Child(username).SetRawJsonValueAsync(jsonData);
-            await task;
+            // Lấy giá trị Position từ Firebase
+            float positionX = float.Parse(snapshot.Child("Position").Child("PositionX").Value.ToString());
+            float positionY = float.Parse(snapshot.Child("Position").Child("PositionY").Value.ToString());
+            float positionZ = float.Parse(snapshot.Child("Position").Child("PositionZ").Value.ToString());
 
-            if (task.IsCompleted)
-            {
-                Debug.Log("Dữ liệu người chơi đã được lưu lên Firebase!");
-            }
-            else
-            {
-                Debug.LogError("Có lỗi xảy ra khi lưu dữ liệu lên Firebase.");
-            }
+            // Cập nhật vị trí của nhân vật trong game
+            player.transform.position = new Vector3(positionX, positionY, positionZ);
+            Debug.Log("Player position loaded from Firebase: " + player.transform.position);
         }
-        catch (Exception ex)
+        else
         {
-            Debug.LogError("Lỗi khi lưu dữ liệu: " + ex.Message);
+            Debug.LogWarning("No position data found for player: " + username);
         }
     }
-}
 
-[System.Serializable]
-public class PlayerData
-{
-    public string username;
-    public int gold;
-    public int diamond;
-    public float health;  // Health dưới dạng phần trăm (0-100)
-    public float energy;  // Energy dưới dạng phần trăm (0-100)
+    private async void LoadPlayerDataFromFirebase(string username)
+    {
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
+
+        if (snapshot.Exists)
+        {
+            // Lấy và cập nhật giá trị Health
+            int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
+            healthSlider.value = health;
+            healthText.text = "Health: " + health.ToString();
+
+            // Lấy và cập nhật giá trị Energy
+            int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
+            energySlider.value = energy;
+            energyText.text = "Energy: " + energy.ToString();
+
+            // Lấy và cập nhật giá trị EXP
+            int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
+            expSlider.value = exp;
+            expText.text = "EXP: " + exp.ToString();
+
+            // Lấy và cập nhật giá trị Diamond
+            int diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
+            diamondText.text = "Diamond: " + diamond.ToString();
+
+            // Lấy và cập nhật giá trị Gold
+            int gold = int.Parse(snapshot.Child("Gold").Value.ToString());
+            goldText.text = "Gold: " + gold.ToString();
+
+            // Lấy và cập nhật vị trí của người chơi từ Firebase
+            LoadPlayerPositionFromFirebase(username);
+
+            Debug.Log("Player data loaded from Firebase.");
+        }
+        else
+        {
+            Debug.LogWarning("No data found for player: " + username);
+        }
+    }
+
+    private void Update()
+    {
+        // Kiểm tra nếu người chơi đã di chuyển, lưu vị trí mới vào Firebase
+        if (player != null)
+        {
+            Vector3 currentPosition = player.transform.position;
+
+            // Kiểm tra sự thay đổi vị trí
+            if (Vector3.Distance(currentPosition, lastSavedPosition) > 0.1f) // Chỉ lưu khi có thay đổi vị trí
+            {
+                SavePlayerPosition(currentPosition);
+                lastSavedPosition = currentPosition; // Cập nhật vị trí đã lưu
+            }
+        }
+    }
 }
