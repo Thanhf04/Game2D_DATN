@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +20,32 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject[] slots;
     public bool isMoving;
 
+    // use item
+    [Header("Use Item")]
+    Dichuyennv1 dichuyennv1;
+    [SerializeField] private Button Btn_Health;
+    [SerializeField] private Button Btn_Mana;
+    [SerializeField] private ItemClass healthItem;
+    [SerializeField] private ItemClass manaItem;
+    [SerializeField] public Slider healthSlider;
+    [SerializeField] public Slider manaSlider;
+    [SerializeField] private TextMeshProUGUI healthButtonText; // Tham chiếu đến TextMeshPro trên nút Health
+    [SerializeField] private TextMeshProUGUI manaButtonText;   // Tham chiếu đến TextMeshPro trên nút Mana
+    private float itemCooldownTime = 2f;
+    private bool isHealthOnCooldown = false;
+    private bool isManaOnCooldown = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        //use item 
+        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+        Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
+        Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
+        healthButtonText.text = "";
+        manaButtonText.text = "";
+        //
         slots = new GameObject[slotsHolder.transform.childCount];
         items = new SlotClass[slots.Length];
 
@@ -101,6 +125,15 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity() + "";
+                    //use item
+                    if (items[i].GetItem() == healthItem) // Nếu item là healthItem
+                    {
+                        UpdateButtonQuantity(Btn_Health, items[i].GetItem());
+                    }
+                    else if (items[i].GetItem() == manaItem) // Nếu item là manaItem
+                    {
+                        UpdateButtonQuantity(Btn_Mana, items[i].GetItem());
+                    }
                 }
 
             }
@@ -296,6 +329,123 @@ public class InventoryManager : MonoBehaviour
         RefreshUI();
         return;
     }
+    // use item
+    public void UseHealth(ItemClass item)
+    {
+        SlotClass slot = ContainsItem(item);
+        if (slot != null && slot.GetQuantity() > 0)
+        {
+            if (item is ConsumableClass consumable)
+            {
+                if (dichuyennv1.currentHealth < dichuyennv1.maxHealth)
+                {
+                    dichuyennv1.currentHealth = Mathf.Min(dichuyennv1.currentHealth + 50, dichuyennv1.maxHealth);
+                    healthSlider.value = dichuyennv1.currentHealth;
+                    Debug.Log("Hồi máu");
+                    RemoveItem(item, 1);
+                    UpdateButtonQuantity(Btn_Health, item);
+                    RefreshUI();
+                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
+                }
+                else
+                {
+                    Debug.Log("Máu đã đầy");
+                }
+            }
 
+            RefreshUI();
+        }
+        else
+        {
+            Debug.Log("Không còn item hoặc không tìm thấy trong túi!");
+        }
+    }
+    public void UseMana(ItemClass item)
+    {
+        SlotClass slot = ContainsItem(item);
+        if (slot != null && slot.GetQuantity() > 0)
+        {
+            if (item is ConsumableClass consumable)
+            {
+                if (dichuyennv1.currentMana < dichuyennv1.maxMana)
+                {
+                    dichuyennv1.currentMana = Mathf.Min(dichuyennv1.currentMana + 50, dichuyennv1.maxMana);
+                    manaSlider.value = dichuyennv1.currentMana;
+                    Debug.Log("Hồi mana");
+                    RemoveItem(item, 1);
+                    UpdateButtonQuantity(Btn_Mana, item);
+                    RefreshUI();
+                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
 
+                }
+                else
+                {
+                    Debug.Log("Mana đã đầy");
+                }
+            }
+            RefreshUI();
+        }
+        else
+        {
+            Debug.Log("Không còn " + manaItem.name + " để sử dụng");
+        }
+    }
+    private void UpdateButtonQuantity(Button button, ItemClass item)
+    {
+        // Kiểm tra số lượng còn lại của item
+        SlotClass slot = ContainsItem(item);
+
+        TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (slot != null)
+        {
+            // Lấy số lượng còn lại
+            int quantity = slot.GetQuantity();
+
+            if (buttonText != null)
+            {
+                // Cập nhật số lượng item trên button
+                if (quantity > 0)
+                {
+                    buttonText.text = quantity.ToString(); // Hiển thị số lượng còn lại
+                }
+
+            }
+        }
+        else
+        {
+            // Nếu không tìm thấy item, đặt số lượng là 0
+            if (buttonText != null)
+            {
+                buttonText.text = "0"; // Đặt số lượng là 0 khi item không có trong túi
+            }
+        }
+    }
+    private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
+    {
+        float remainingTime = itemCooldownTime;
+
+        // Trong khi còn thời gian hồi chiêu
+        while (remainingTime > 0)
+        {
+            remainingTime -= Time.deltaTime;  // Giảm thời gian còn lại
+            button.interactable = false; // Tắt tương tác với nút
+            buttonText.text = Mathf.Ceil(remainingTime).ToString(); // Cập nhật thời gian còn lại lên nút
+
+            yield return null; // Chờ đến frame tiếp theo
+        }
+
+        // Sau khi hết thời gian hồi chiêu
+        button.interactable = true; // Bật lại nút
+        buttonText.text = ""; // Hoặc có thể là "Use" tùy vào tình huống
+
+        if (isHealth)
+        {
+            isHealthOnCooldown = false;
+        }
+        else
+        {
+            isManaOnCooldown = false;
+        }
+    }
 }
