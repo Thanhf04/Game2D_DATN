@@ -1137,6 +1137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 1809391342242533066, guid: cda2461bb2802844b956afec9db9328e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3554322544792035224, guid: cda2461bb2802844b956afec9db9328e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1188,7 +1192,7 @@ PrefabInstance:
     - target: {fileID: 5950434622929812240, guid: cda2461bb2802844b956afec9db9328e, type: 3}
       propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 519420031}
+      objectReference: {fileID: 0}
     - target: {fileID: 6715688059317841379, guid: cda2461bb2802844b956afec9db9328e, type: 3}
       propertyPath: m_SortingLayer
       value: 3
@@ -4000,7 +4004,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.540491, y: 3.6600003, z: -10}
+  m_LocalPosition: {x: -11.12001, y: 3.6600003, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -129300,7 +129304,7 @@ Transform:
   m_GameObject: {fileID: 1617019410}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.540491, y: 3.6600003, z: -10}
+  m_LocalPosition: {x: -11.12001, y: 3.6600003, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -131890,7 +131894,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.9140015, y: -12.000015}
+  m_AnchoredPosition: {x: -4.9140015, y: -12.0000305}
   m_SizeDelta: {x: -832, y: -336}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2051315847
@@ -132269,7 +132273,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 912734991840198027, guid: 4baae2b3ad8f0064f994b0728f81d843, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1662982461298453155, guid: 4baae2b3ad8f0064f994b0728f81d843, type: 3}
       propertyPath: m_AnchorMax.x
