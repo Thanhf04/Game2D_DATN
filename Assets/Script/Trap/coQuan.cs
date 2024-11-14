@@ -7,7 +7,6 @@ public class coQuan : MonoBehaviour
     // Start is called before the first frame update
     public GameObject door;
     
-
     private void OnCollisionEnter2D(Collision2D other){
         if(other.gameObject.CompareTag("Player")){
             door.SetActive(false);
