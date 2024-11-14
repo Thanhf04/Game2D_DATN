@@ -196,10 +196,10 @@ public class Dichuyennv1 : MonoBehaviour
             StartCoroutine(Attack());
         }
         //lan
-        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-        {
-            StartCoroutine(Roll());
-        }
+        // if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        // {
+        //     StartCoroutine(Roll());
+        // }
         // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -496,7 +496,7 @@ public class Dichuyennv1 : MonoBehaviour
     {
         // Quay lại menu chính
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Play"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
+        SceneManager.LoadScene("SampleScene"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
     }
 
 
