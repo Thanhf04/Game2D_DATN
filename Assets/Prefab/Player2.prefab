@@ -318,8 +318,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 15
+  _Health: 100
+  _Mana: 50
+  _Damage: 10
   attackRange: 1
-  attackDamage: 10
   rollSpeed: 15
   rollDuration: 0.5
 --- !u!114 &8202795022006371033

@@ -7,6 +7,8 @@ TagManager:
   - Boss
   - enemy
   - Man2
+  - enemy
+  - NenDat
   layers:
   - Default
   - TransparentFX
@@ -64,4 +66,6 @@ TagManager:
     locked: 0
   - name: Skill
     uniqueID: 3798540117
+  - name: bg
+    uniqueID: 1485715357
     locked: 0
