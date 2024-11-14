@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Fusion;
 
 public class Dichuyennv1 : MonoBehaviour
 {
@@ -34,7 +33,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float bulletLifeTime = 2f;
 
     // Các biến âm thanh
-    public AudioSource music;
+    [SerializeField] public AudioSource music;
     public AudioSource playWalk;
     public AudioSource playAttack;
     public AudioSource playAttack2;
@@ -53,7 +52,7 @@ public class Dichuyennv1 : MonoBehaviour
     public int currentMana;
     public float expMax = 100;
     public float expCurrent = 0;
-    public TextMeshProUGUI textLevel;
+    [SerializeField] public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
     public int damageTrap = 20;
@@ -65,7 +64,7 @@ public class Dichuyennv1 : MonoBehaviour
     public int upgradePoints = 5;
 
     // Các biến UI
-    public GameObject statsPanel;
+    [SerializeField] public GameObject statsPanel;
     public Button openPanelButton;
     public Button increaseHealthButton;
     public Button decreaseHealthButton;
@@ -104,10 +103,9 @@ public class Dichuyennv1 : MonoBehaviour
         anim = GetComponent<Animator>();
         isRunning = false;
         isRoll = false;
-isJump = false;
-        music.Play();
+        isJump = false;
 
-
+        StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
         openPanelButton.onClick.AddListener(ToggleStatsPanel);
@@ -117,7 +115,7 @@ isJump = false;
         decreaseManaButton.onClick.AddListener(DecreaseMana);
         increaseDamethButton.onClick.AddListener(IncreaseDame);
         decreaseDamethButton.onClick.AddListener(DecreaseDamage);
-        
+
 
         SetSlider();
         currentHealth = maxHealth;
@@ -134,34 +132,34 @@ isJump = false;
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
-    if (NPC.isOpenShop || isStatsPanelOpen)
-    {
-        isRunning = false;
-        anim.SetBool("isRunning", false);
-        playWalk.Stop();
-        return;
-    }
+        if (NPC.isOpenShop || isStatsPanelOpen)
+        {
+            isRunning = false;
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            return;
+        }
         // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
-    rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-    isRunning = moveInput != 0;
-    anim.SetBool("isRunning", isRunning);
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        isRunning = moveInput != 0;
+        anim.SetBool("isRunning", isRunning);
 
         if (moveInput != 0)
-    {
-        transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-        if (!playWalk.isPlaying && isGrounded)
         {
-            playWalk.Play();
+            transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+            if (!playWalk.isPlaying && isGrounded)
+            {
+                playWalk.Play();
+            }
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
+            }
         }
-        if (playAttack.isPlaying)
+        else if (playWalk.isPlaying)
         {
-            playAttack.Stop();
+            playWalk.Stop();
         }
-    }
-    else if (playWalk.isPlaying)
-    {
-        playWalk.Stop();
-    }
         // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
@@ -183,7 +181,7 @@ isJump = false;
         //lan
         if (Input.GetKeyDown(KeyCode.F) && !isRoll)
         {
-    StartCoroutine(Roll());
+            StartCoroutine(Roll());
         }
         // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
@@ -290,7 +288,7 @@ isJump = false;
         {
             BreathFire();
             skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
-    UpdateStatsText(); // Cập nhật giao diện người dùng
+            UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
 
@@ -390,7 +388,7 @@ isJump = false;
             if (currentFireBreath == null)
             {
                 currentFireBreath = Instantiate(
-fireBreathPrefab,
+                    fireBreathPrefab,
                     firePoint2.position,
                     firePoint2.rotation
                 );
@@ -489,7 +487,7 @@ fireBreathPrefab,
         if (currentHealth > 0 && upgradePoints < level + 5)
         {
             maxHealth -= 100;
-healthSlider.maxValue = maxHealth;
+            healthSlider.maxValue = maxHealth;
             //currentHealth -= 100;
             upgradePoints++;
             UpdateStatsText();
@@ -521,15 +519,18 @@ healthSlider.maxValue = maxHealth;
         }
     }
 
-    void IncreaseDame(){
-        if (upgradePoints > 0){
+    void IncreaseDame()
+    {
+        if (upgradePoints > 0)
+        {
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
         }
     }
 
-    void DecreaseDamage(){
+    void DecreaseDamage()
+    {
         if (damageAmount > 0 && upgradePoints < level + 5)
         {
             damageAmount -= 10;
@@ -562,5 +563,16 @@ healthSlider.maxValue = maxHealth;
         {
             Die();
         }
+    }
+    public void StartSound()
+    {
+        music.Play();
+        playWalk.Stop();
+        playAttack.Stop();
+        playAttack2.Stop();
+        playAttack_Fire1.Stop();
+        playAttack_Fire2.Stop();
+        playAttack_Fire3.Stop();
+        playJump.Stop();
     }
 }

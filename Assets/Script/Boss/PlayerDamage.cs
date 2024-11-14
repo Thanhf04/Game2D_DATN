@@ -8,8 +8,10 @@ public class PlayerDamage : MonoBehaviour
     Animator animator;
     Boss_Health health;
     Dichuyennv1 dichuyennv1;
-    public int dame = 10;
-
+    private void Start()
+    {
+        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+    }
     public void Attack()
     {
         if (attackPoint == null)
@@ -23,7 +25,7 @@ public class PlayerDamage : MonoBehaviour
             health = hit.GetComponent<Boss_Health>();
             if (health != null)
             {
-                health.TakeDamage(dame);
+                health.TakeDamage(dichuyennv1.damageAmount);
             }
         }
     }

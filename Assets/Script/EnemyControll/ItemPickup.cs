@@ -3,9 +3,12 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     public int Coin;
-    private void OnMouseDown()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Pickup();
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Pickup();
+        }
     }
     void Pickup()
     {
