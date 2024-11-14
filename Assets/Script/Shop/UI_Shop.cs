@@ -8,7 +8,6 @@ public class UI_Shop : MonoBehaviour
     private Transform container;
     private Transform ShopItem;
     private InventoryManager inventoryManager;
-
     private Dictionary<Model_Shop.ItemType, ConsumableClass> itemTypeToConsumable;
 
 

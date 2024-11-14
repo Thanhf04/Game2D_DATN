@@ -2456,7 +2456,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1485715357
+  m_SortingLayerID: 158109861
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &563462485
@@ -6167,6 +6167,7 @@ MonoBehaviour:
   usernameInput: {fileID: 350654682}
   passwordInput: {fileID: 1075372558}
   feedbackText: {fileID: 1448138337}
+  player: {fileID: 0}
 --- !u!114 &1593042422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6755,8 +6756,8 @@ Transform:
   m_GameObject: {fileID: 1736898147}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0168, y: -0.04, z: 0}
-  m_LocalScale: {x: 1.2611815, y: 1.0407927, z: 1}
+  m_LocalPosition: {x: 0.0269, y: -0.04, z: 0}
+  m_LocalScale: {x: 1.3927041, y: 1.0407927, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

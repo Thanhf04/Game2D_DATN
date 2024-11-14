@@ -15,7 +15,7 @@ public class Damage : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(dichuyennv1.damageAmount); // Gây sát thương
+                enemy.TakeDamage(10); // Gây sát thương
                 Debug.Log("Gây damage cho quái vật!");
             }
             else
