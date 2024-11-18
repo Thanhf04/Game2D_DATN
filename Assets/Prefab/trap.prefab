@@ -170,7 +170,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611498763
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 77c5b49850782fd489db466cb21d8c01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -215,9 +215,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.014273584, y: 0}
+  m_Offset: {x: -0.014273584, y: -0.011816859}
   serializedVersion: 2
-  m_Radius: 0.8872326
+  m_Radius: 0.43425238
 --- !u!58 &5057322048904370181
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -250,9 +250,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0144069195, y: -0.007877827}
   serializedVersion: 2
-  m_Radius: 0.8872326
+  m_Radius: 0.43166232
 --- !u!114 &496082428212790164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,6 +266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tocDoXoay: 5
-  tocDoDiChuyen: 5
+  tocDoDiChuyen: 2
   diemA: {fileID: 7321547541127287030}
   diemB: {fileID: 135618150352633431}
