@@ -66,3 +66,6 @@ TagManager:
   - name: New Layer 7
     uniqueID: 2821573655
     locked: 0
+  - name: Skill
+    uniqueID: 1892988639
+    locked: 0
