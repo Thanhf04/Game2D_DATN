@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Coin : MonoBehaviour
 {
     private int StartingCoins = 0;
     private int curentCoins = 0;
     private UI_Shop ui_Shop;
+    public GameObject panelNotification;
+    public GameObject panelShop;
+    public Button btn_Close;
     public delegate void CoinChangedDelegate(int newCoinCount);
     public CoinChangedDelegate CoinChanged;
 
@@ -54,10 +58,14 @@ public class UI_Coin : MonoBehaviour
         if (curentCoins <= 0)
         {
             Debug.Log("You don't have money");
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
             return false;
         }
         else
         {
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
             Debug.Log("Buy Item Fail");
             return false;
         }
@@ -65,6 +73,11 @@ public class UI_Coin : MonoBehaviour
     public int GetCurrentCoins()
     {
         return curentCoins;
+    }
+    public void ClosePanel()
+    {
+        panelNotification.SetActive(false);
+        panelShop.SetActive(true);
     }
 
 }
