@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Fusion;
+using UnityEngine.SceneManagement;
 
 public class Dichuyennv1 : MonoBehaviour
 {
@@ -16,7 +17,24 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isRunning;
     private bool isRoll;
     private bool isJump;
+    private bool isStatsPanelOpen = false;
     private Animator anim;
+    public Text notificationText;
+
+    //panel die
+    public GameObject gameOverPanel;
+    public Button tryAgainButton;
+    public Button resetButton;
+    public Button mainMenuButton;
+    
+    //Panel chỉ số player
+    public GameObject ChisoPanel;
+    public Button ChisoButton;
+    public Text healthInfoText;
+    public Text manaInfoText;
+    public Text damageInfoText;
+    public Button exitButton;
+
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -33,7 +51,7 @@ public class Dichuyennv1 : MonoBehaviour
     public float bulletLifeTime = 2f;
 
     // Các biến âm thanh
-    public AudioSource music;
+    [SerializeField] public AudioSource music;
     public AudioSource playWalk;
     public AudioSource playAttack;
     public AudioSource playAttack2;
@@ -52,9 +70,10 @@ public class Dichuyennv1 : MonoBehaviour
     public int currentMana;
     public float expMax = 100;
     public float expCurrent = 0;
-    public TextMeshProUGUI textLevel;
+    [SerializeField] public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
+    public int damageTrap = 20;
     private GameObject currentFireBreath;
 
     // Các biến level và điểm nâng
@@ -63,7 +82,7 @@ public class Dichuyennv1 : MonoBehaviour
     public int upgradePoints = 5;
 
     // Các biến UI
-    public GameObject statsPanel;
+    [SerializeField] public GameObject statsPanel;
     public Button openPanelButton;
     public Button increaseHealthButton;
     public Button decreaseHealthButton;
@@ -103,9 +122,8 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
-        music.Play();
 
-
+        StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
         openPanelButton.onClick.AddListener(ToggleStatsPanel);
@@ -115,7 +133,7 @@ public class Dichuyennv1 : MonoBehaviour
         decreaseManaButton.onClick.AddListener(DecreaseMana);
         increaseDamethButton.onClick.AddListener(IncreaseDame);
         decreaseDamethButton.onClick.AddListener(DecreaseDamage);
-        
+
 
         SetSlider();
         currentHealth = maxHealth;
@@ -124,6 +142,21 @@ public class Dichuyennv1 : MonoBehaviour
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
+        notificationText.text = "";
+
+        gameOverPanel.SetActive(false);
+
+        // Gán các sự kiện cho các nút
+        tryAgainButton.onClick.AddListener(OnTryAgain);
+        resetButton.onClick.AddListener(OnReset);
+        mainMenuButton.onClick.AddListener(OnMainMenu);
+
+        //panel Chỉ số player
+        ChisoPanel.SetActive(false);
+        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        exitButton.onClick.AddListener(ClosePanel);
+
+
     }
 
     void Update()
@@ -131,49 +164,35 @@ public class Dichuyennv1 : MonoBehaviour
 
         float moveInput = Input.GetAxis("Horizontal");
 
-        if (NPC.isOpenShop)
+        // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
+        if (NPC.isOpenShop || isStatsPanelOpen)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
             return;
         }
-        // Điều khiển di chuyển
-        if (isGrounded)
-        {
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-            isRunning = moveInput != 0;
-            anim.SetBool("isRunning", isRunning);
-        }
-        else if (!isGrounded || !NPC.isOpenShop)
-        {
+        // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        isRunning = moveInput != 0;
+        anim.SetBool("isRunning", isRunning);
 
-            isRunning = false;
-            anim.SetBool("isRunning", false);
-        }
-
-        // Đổi hướng nhân vật và bật âm thanh khi di chuyển
-        if (moveInput != 0 && isGrounded)
+        if (moveInput != 0)
         {
             transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-            if (!playWalk.isPlaying)
+            if (!playWalk.isPlaying && isGrounded)
             {
-                transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-                if (!playWalk.isPlaying)
-                {
-                    playWalk.Play();
-                }
-                if (playAttack.isPlaying)
-                {
-                    playAttack.Stop();
-                }
+                playWalk.Play();
+            }
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
             }
         }
         else if (playWalk.isPlaying)
         {
             playWalk.Stop();
         }
-
         // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
@@ -193,10 +212,10 @@ public class Dichuyennv1 : MonoBehaviour
             StartCoroutine(Attack());
         }
         //lan
-        if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-        {
-            StartCoroutine(Roll());
-        }
+        // if (Input.GetKeyDown(KeyCode.F) && !isRoll)
+        // {
+        //     StartCoroutine(Roll());
+        // }
         // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -442,7 +461,7 @@ public class Dichuyennv1 : MonoBehaviour
             rbFireHand.gravityScale = 1f;
             // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
             // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
-            // StartCoroutine(DestroyFireHandAfterTime(fireHand, 3f));
+            StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana;
             UpdateStatsText(); // Cập nhật giao diện người dùng
@@ -469,8 +488,34 @@ public class Dichuyennv1 : MonoBehaviour
     void Die()
     {
         Debug.Log("Player is dead");
-        Destroy(gameObject);
+        ShowGameOverPanel();
     }
+    void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f; // Tạm dừng game
+    }
+    void OnTryAgain()
+    {
+        // Tải lại cảnh hiện tại để chơi lại
+        Time.timeScale = 1f; // Tiếp tục game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnReset()
+    {
+        Time.timeScale = 1f; // Tiếp tục game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnMainMenu()
+    {
+        // Quay lại menu chính
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("SampleScene"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
+    }
+
+
     // kiểm tra âm thanh
     private bool IsPointerOverUI()
     {
@@ -481,27 +526,32 @@ public class Dichuyennv1 : MonoBehaviour
     void ToggleStatsPanel()
     {
         statsPanel.SetActive(!statsPanel.activeSelf);
+        isStatsPanelOpen = statsPanel.activeSelf;
     }
 
-    void IncreaseHealth()
+void IncreaseHealth()
     {
         if (upgradePoints > 0)
         {
             maxHealth += 100;
-            //currentHealth += 100;
+            currentHealth = Mathf.Min(maxHealth, currentHealth + 100);
             healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
+        }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
 
     void DecreaseHealth()
     {
-        if (currentHealth > 0 && upgradePoints < level + 5)
+        if (currentHealth > 1 && upgradePoints < level + 5)
         {
-            maxHealth -= 100;
+            maxHealth = Mathf.Max(100, maxHealth - 100);
             healthSlider.maxValue = maxHealth;
-            //currentHealth -= 100;
+            currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
             upgradePoints++;
             UpdateStatsText();
         }
@@ -512,35 +562,45 @@ public class Dichuyennv1 : MonoBehaviour
         if (upgradePoints > 0)
         {
             maxMana += 100;
+            currentMana = Mathf.Min(maxMana, currentMana + 50);
             manaSlider.maxValue = maxMana;
-            //currentMana += 50;
             upgradePoints--;
             UpdateStatsText();
+        }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
 
     void DecreaseMana()
     {
-        if (currentMana > 0 && upgradePoints < level + 5)
+        if (currentMana > 1 && upgradePoints < level + 5)
         {
-            maxMana -= 100;
+            maxMana = Mathf.Max(100, maxMana - 100);
             manaSlider.maxValue = maxMana;
-            //currentMana -= 10;
+            currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
             upgradePoints++;
             UpdateStatsText();
-
         }
     }
 
-    void IncreaseDame(){
-        if (upgradePoints > 0){
+    void IncreaseDame()
+    {
+        if (upgradePoints > 0)
+        {
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
         }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
+        }
     }
 
-    void DecreaseDamage(){
+    void DecreaseDamage()
+    {
         if (damageAmount > 0 && upgradePoints < level + 5)
         {
             damageAmount -= 10;
@@ -557,10 +617,71 @@ public class Dichuyennv1 : MonoBehaviour
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
     }
+
+    void ShowNotification(string message)
+    {
+        notificationText.text = message;  // Hiển thị thông báo
+        Invoke("ClearNotification", 2f);  // Xóa thông báo sau 2 giây
+    }
+
+    void ClearNotification()
+    {
+        notificationText.text = "";  // Xóa thông báo
+    }
+
     public void SetSlider()
     {
         healthSlider.maxValue = maxHealth;
         manaSlider.maxValue = maxMana;
         expSlider.maxValue = expMax;
     }
+
+    public void TakeDamageTrap(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    public void StartSound()
+    {
+        music.Play();
+        playWalk.Stop();
+        playAttack.Stop();
+        playAttack2.Stop();
+        playAttack_Fire1.Stop();
+        playAttack_Fire2.Stop();
+        playAttack_Fire3.Stop();
+        playJump.Stop();
+    }
+    
+    void ToggleStatsDisplay()
+{
+    // Hiển thị hoặc ẩn bảng Chỉ Số
+    bool isActive = ChisoPanel.activeSelf;
+    ChisoPanel.SetActive(!isActive);
+
+    // Cập nhật thông tin nếu bảng hiển thị
+    if (!isActive)
+    {
+        UpdateStatsDisplay();
+    }
+}
+void UpdateStatsDisplay()
+{
+    // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+    healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+    manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+    damageInfoText.text = $"Sát thương:  {damageAmount}";
+}
+void ClosePanel()
+{
+    ChisoPanel.SetActive(false); 
+    
+}
+
+
 }

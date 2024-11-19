@@ -7,41 +7,51 @@ public class Boss_Health : MonoBehaviour
     [SerializeField] private Slider HealthBoss;
     [SerializeField] private GameObject Boss;
     public int maxHealth = 100;
-
+    public int currentHealth;
     Animator animator;
+    public GameObject prefabsItem;
+    public GameObject PanelSkillBoss;
+    Dichuyennv1 dichuyennv1;
 
     // Start is called before the first frame update
     void Start()
     {
         HealthBoss.maxValue = maxHealth;
-        animator = GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (maxHealth <= 0)
-        {
-            Die();
-        }
         HealthBoss.value = maxHealth;
+        currentHealth = maxHealth;
+        animator = GetComponent<Animator>();
+        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
     }
     public void TakeDamage(int damage)
     {
-        if (maxHealth <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-
-            return;
+            Die();
         }
         animator.SetBool("Hit", true);
         StartCoroutine(ResetHitAnimation());
-        maxHealth -= damage;
+        HealthBoss.value = currentHealth;
+
     }
     public void Die()
     {
-
+        dichuyennv1.LevelSlider(100);
         animator.SetBool("Death", true);
         Destroy(gameObject, 2f);
+        PanelSkillBoss.SetActive(true);
+        DropItem();
+    }
+    public void DropItem()
+    {
+        if (prefabsItem != null)
+        {
+            Instantiate(prefabsItem, transform.position, Quaternion.identity);
+        }
+    }
+    public void ClosePanel()
+    {
+        PanelSkillBoss.SetActive(false);
     }
     private IEnumerator ResetHitAnimation()
     {

@@ -3,11 +3,15 @@
 public class PlayerDamage : MonoBehaviour
 {
     public Transform attackPoint;
-    public LayerMask Boss;
+    public LayerMask Object;
     public float attackRadius = 1f;
     Animator animator;
     Boss_Health health;
-
+    Dichuyennv1 dichuyennv1;
+    private void Start()
+    {
+        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+    }
     public void Attack()
     {
         if (attackPoint == null)
@@ -15,18 +19,17 @@ public class PlayerDamage : MonoBehaviour
             Debug.LogWarning("Attack point chưa được gán.");
         }
 
-        Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, attackRadius, Boss);
+        Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, attackRadius, Object);
         if (hit)
         {
             health = hit.GetComponent<Boss_Health>();
             if (health != null)
             {
-                health.TakeDamage(10);
+                health.TakeDamage(dichuyennv1.damageAmount);
             }
-
         }
-
     }
+
     private void OnDrawGizmosSelected()
     {
         if (attackPoint == null)
