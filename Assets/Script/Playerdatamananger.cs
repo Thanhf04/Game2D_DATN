@@ -116,14 +116,18 @@ public class PlayerDataTest : MonoBehaviour
 
     private void UpdateGold(int value)
     {
-        goldText.text = " " + value.ToString();
-        SavePlayerData("Gold", value); // Lưu giá trị Gold vào Firebase
+        gold = value;  // Cập nhật giá trị gold
+        goldText.text = " " + gold.ToString();  // Cập nhật UI
+        Debug.Log($"Gold value changed: {gold}");
+        SavePlayerData("Gold", gold); // Lưu giá trị Gold vào Firebase
     }
 
     private void UpdateDiamond(int value)
     {
-        diamondText.text = " " + value.ToString();
-        SavePlayerData("Diamond", value); // Lưu giá trị Diamond vào Firebase
+        diamond = value;  // Cập nhật giá trị diamond
+        diamondText.text = " " + diamond.ToString();  // Cập nhật UI
+        Debug.Log($"Diamond value changed: {diamond}");
+        SavePlayerData("Diamond", diamond); // Lưu giá trị Diamond vào Firebase
     }
 
     // Lưu dữ liệu người chơi vào Firebase
@@ -168,17 +172,25 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
-    // Lưu thông tin từ inventoryCanvas (giả sử bạn có các thông tin về túi đồ)
+    // Lưu thông tin Inventory vào Firebase
     private async void SaveInventoryData()
     {
         if (string.IsNullOrEmpty(username)) return;
 
-        // Lấy dữ liệu từ inventoryCanvas (ví dụ: các vật phẩm trong túi đồ)
-        List<string> inventoryItems = new List<string> { "Item1", "Item2", "Item3" }; // Ví dụ, lấy các item từ inventoryCanvas
-
         try
         {
-            // Lưu thông tin túi đồ vào Firebase
+            // Lấy tất cả các Canvas con (item) trong inventoryCanvas
+            List<string> inventoryItems = new List<string>();
+            foreach (Transform item in inventoryCanvas.transform)
+            {
+                if (item.gameObject.activeSelf) // Chỉ lưu những item đang được kích hoạt
+                {
+                    // Lấy tên hoặc ID của item để lưu trữ
+                    inventoryItems.Add(item.gameObject.name);
+                }
+            }
+
+            // Lưu thông tin inventory vào Firebase
             await databaseReference.Child("players").Child(username).Child("Inventory").SetValueAsync(inventoryItems);
             Debug.Log("Inventory data saved to Firebase.");
         }
@@ -188,104 +200,43 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
-    // Tải lại tất cả dữ liệu người chơi từ Firebase
-    private async Task LoadPlayerDataFromFirebase(string username)
+    // Tải lại thông tin Inventory từ Firebase
+    private async Task LoadInventoryDataFromFirebase(string username)
     {
-        // Kiểm tra xem username có hợp lệ không
-        if (string.IsNullOrEmpty(username))
-        {
-            Debug.LogWarning("Username is null or empty.");
-            return;
-        }
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
 
-        // Kiểm tra nếu databaseReference đã được khởi tạo
-        if (databaseReference == null)
+        if (snapshot.Exists)
         {
-            Debug.LogError("Database reference is null. Firebase may not have been initialized properly.");
-            return;
-        }
-
-        try
-        {
-            var playerRef = databaseReference.Child("players").Child(username);
-            var snapshot = await playerRef.GetValueAsync();
-
-            // Kiểm tra xem snapshot có tồn tại dữ liệu không
-            if (snapshot.Exists)
+            if (snapshot.Child("Inventory").Exists)
             {
-                // Lấy và cập nhật giá trị Health
-                if (snapshot.Child("HealthCurrent").Value != null)
+                // Lấy danh sách các item từ inventory
+                List<object> inventoryItems = (List<object>)snapshot.Child("Inventory").Value;
+
+                // In ra danh sách các item để kiểm tra
+                foreach (var item in inventoryItems)
                 {
-                    int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
-                    healthSlider.value = health;
-                    healthText.text = "Health: " + health.ToString();
-                }
-                else
-                {
-                    Debug.LogWarning("Health data not found for player: " + username);
+                    Debug.Log("Inventory Item: " + item.ToString());
+                    // Bạn có thể tạo lại các Canvas hoặc Item từ Firebase ở đây
+                    // Ví dụ, tạo lại Canvas cho từng item trong inventory
+                    GameObject itemCanvas = new GameObject(item.ToString()); // Tạo một Canvas mới cho item
+                    itemCanvas.transform.SetParent(inventoryCanvas.transform); // Đặt item vào Inventory
+
+                    // Bạn có thể thêm các thành phần như Image, Text vào itemCanvas tùy thuộc vào yêu cầu
                 }
 
-                // Lấy và cập nhật giá trị Energy
-                if (snapshot.Child("EnergyCurrent").Value != null)
-                {
-                    int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
-                    energySlider.value = energy;
-                    energyText.text = "Energy: " + energy.ToString();
-                }
-                else
-                {
-                    Debug.LogWarning("Energy data not found for player: " + username);
-                }
-
-                // Lấy và cập nhật giá trị EXP
-                if (snapshot.Child("Exp").Value != null)
-                {
-                    int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
-                    expSlider.value = exp;
-                    expText.text = "EXP: " + exp.ToString();
-                }
-                else
-                {
-                    Debug.LogWarning("Exp data not found for player: " + username);
-                }
-
-                // Lấy và cập nhật giá trị Gold
-                if (snapshot.Child("Gold").Value != null)
-                {
-                    int gold = int.Parse(snapshot.Child("Gold").Value.ToString());
-                    this.gold = gold; // Cập nhật giá trị Gold
-                    goldText.text = "Gold: " + gold.ToString(); // Hiển thị Gold
-                }
-                else
-                {
-                    Debug.LogWarning("Gold data not found for player: " + username);
-                }
-
-                // Lấy và cập nhật giá trị Diamond
-                if (snapshot.Child("Diamond").Value != null)
-                {
-                    int diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
-                    this.diamond = diamond; // Cập nhật giá trị Diamond
-                    diamondText.text = "Diamond: " + diamond.ToString(); // Hiển thị Diamond
-                }
-                else
-                {
-                    Debug.LogWarning("Diamond data not found for player: " + username);
-                }
-
-                Debug.Log("Player data loaded from Firebase.");
+                Debug.Log("Inventory loaded from Firebase.");
             }
             else
             {
-                Debug.LogWarning("No data found for player: " + username);
+                Debug.LogWarning("No inventory data found for player: " + username);
             }
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError("Error loading player data: " + ex.Message);
+            Debug.LogWarning("No data found for player: " + username);
         }
     }
-
 
     // Tải vị trí của người chơi từ Firebase
     private async Task LoadPlayerPositionFromFirebase(string username)
@@ -306,11 +257,10 @@ public class PlayerDataTest : MonoBehaviour
                     float positionZ = float.Parse(positionChild.Child("PositionZ").Value.ToString());
 
                     // Debug: In ra các giá trị vị trí
-                    Debug.Log($"Loaded position: X={positionX}, Y={positionY}, Z={positionZ}");
+                    Debug.Log($"Position loaded from Firebase: {positionX}, {positionY}, {positionZ}");
 
-                    // Cập nhật vị trí của nhân vật trong game
+                    // Cập nhật vị trí của người chơi
                     player.transform.position = new Vector3(positionX, positionY, positionZ);
-                    Debug.Log("Player position loaded from Firebase: " + player.transform.position);
                 }
             }
             else
@@ -324,32 +274,35 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
-    // Tải dữ liệu từ InventoryCanvas (giả sử bạn có các item trong inventory)
-    private async Task LoadInventoryDataFromFirebase(string username)
+    // Phương thức tải dữ liệu người chơi từ Firebase (thêm vào nếu cần)
+    private async Task LoadPlayerDataFromFirebase(string username)
     {
         var playerRef = databaseReference.Child("players").Child(username);
         var snapshot = await playerRef.GetValueAsync();
 
         if (snapshot.Exists)
         {
-            if (snapshot.Child("Inventory").Exists)
-            {
-                // Lấy danh sách các item từ inventory
-                List<object> inventoryItems = (List<object>)snapshot.Child("Inventory").Value;
+            // Đọc các dữ liệu như Health, Energy, Exp, Gold, Diamond từ Firebase
+            if (snapshot.Child("HealthCurrent").Exists)
+                healthSlider.value = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
 
-                // In ra danh sách các item để kiểm tra
-                foreach (var item in inventoryItems)
-                {
-                    Debug.Log("Inventory Item: " + item.ToString());
-                }
+            if (snapshot.Child("EnergyCurrent").Exists)
+                energySlider.value = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
 
-                // Nếu bạn có một hệ thống UI cho inventory, bạn có thể cập nhật UI ở đây
-                // Ví dụ: update inventory UI hoặc tạo item trong game
-            }
-            else
-            {
-                Debug.LogWarning("No inventory data found for player: " + username);
-            }
+            if (snapshot.Child("Exp").Exists)
+                expSlider.value = int.Parse(snapshot.Child("Exp").Value.ToString());
+
+            if (snapshot.Child("Gold").Exists)
+                gold = int.Parse(snapshot.Child("Gold").Value.ToString());
+
+            if (snapshot.Child("Diamond").Exists)
+                diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
+
+            // Cập nhật UI cho Gold và Diamond
+            goldText.text = gold.ToString();
+            diamondText.text = diamond.ToString();
+
+            Debug.Log("Player data loaded from Firebase.");
         }
         else
         {

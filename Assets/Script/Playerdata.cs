@@ -1,82 +1,106 @@
 ﻿using UnityEngine;
 using Firebase;
 using Firebase.Database;
-using Firebase.Extensions;
-using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public class TestSavePlayerData : MonoBehaviour
+public class ResetPlayerData : MonoBehaviour
 {
-    public TextMeshProUGUI feedbackText; // Feedback text để hiển thị kết quả
+    // Public để bạn kéo thả vào Inspector
+    public Button resetButton;     // Nút reset
+    public Slider healthSlider;    // Slider health
+    public Slider energySlider;    // Slider energy
+    public GameObject player;      // GameObject nhân vật
+    public DatabaseReference databaseReference;
 
-    private FirebaseDatabase database;
-    private string username = "testUser";  // Tên người chơi để lưu dữ liệu
+    // Các giá trị mặc định để reset
+    public int startingHealth = 100;   // Giá trị health ban đầu
+    public int startingEnergy = 100;    // Giá trị energy ban đầu
+    public Vector3 resetPosition = new Vector3(-17.33f, 0.71f, 0.00f);  // Vị trí reset
 
-    void Start()
+    private string username;
+
+    private async void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            database = FirebaseDatabase.GetInstance(app);
-        });
-    }
-
-    // Hàm để lưu dữ liệu test lên Firebase
-    public void SaveTestData()
-    {
-        var playerData = new System.Collections.Generic.Dictionary<string, object>
+        // Kiểm tra và khởi tạo Firebase
+        await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
-            { "diamond", 100 },
-            { "gold", 50 },
-            { "exp", 30 },
-            { "healthMax", 200 },
-            { "energyMax", 100 },
-            { "position", new System.Collections.Generic.Dictionary<string, object>
-                {
-                    { "x", 10f },
-                    { "y", 0f },
-                    { "z", 5f }
-                }
-            }
-        };
-
-        database.RootReference.Child("users").Child(username).Child("PlayerData").SetValueAsync(playerData)
-            .ContinueWithOnMainThread(task => {
-                if (task.IsCompleted)
-                {
-                    feedbackText.text = "Dữ liệu đã được lưu thành công!";
-                    Debug.Log("Dữ liệu đã được lưu thành công!");
-                }
-                else
-                {
-                    feedbackText.text = "Lỗi khi lưu dữ liệu!";
-                    Debug.LogError("Lỗi khi lưu dữ liệu: " + task.Exception);
-                }
-            });
-    }
-
-    // Hàm để tải dữ liệu người chơi
-    public void LoadTestData()
-    {
-        var userRef = database.RootReference.Child("users").Child(username).Child("PlayerData");
-
-        userRef.GetValueAsync().ContinueWithOnMainThread(task => {
-            if (task.IsCompleted)
+            if (task.Result == DependencyStatus.Available)
             {
-                if (task.Result.Exists)
-                {
-                    feedbackText.text = "Dữ liệu đã tải thành công!";
-                    Debug.Log("Dữ liệu tải thành công.");
-                }
-                else
-                {
-                    feedbackText.text = "Không có dữ liệu!";
-                    Debug.Log("Không tìm thấy dữ liệu.");
-                }
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                Debug.Log("Firebase khởi tạo thành công.");
             }
             else
             {
-                feedbackText.text = "Lỗi khi tải dữ liệu!";
-                Debug.LogError("Lỗi khi tải dữ liệu: " + task.Exception);
+                Debug.LogError("Firebase không thể khởi tạo: " + task.Result);
             }
         });
+
+        // Lấy username từ PlayerPrefs
+        username = PlayerPrefs.GetString("username", "");
+
+        // Gán sự kiện cho nút reset
+        resetButton.onClick.AddListener(ResetPlayerDataToDefaults);
+    }
+
+    // Hàm reset các giá trị về giá trị ban đầu
+    private void ResetPlayerDataToDefaults()
+    {
+        // Reset các giá trị về giá trị ban đầu
+        healthSlider.value = startingHealth;
+        energySlider.value = startingEnergy;
+
+        // Reset vị trí nhân vật về vị trí mới (-17.33, 0.71, 0.00)
+        player.transform.position = resetPosition;
+
+        // Lưu các giá trị mới vào Firebase
+        SavePlayerData("HealthCurrent", startingHealth);
+        SavePlayerData("EnergyCurrent", startingEnergy);
+
+        // Lưu vị trí mới vào Firebase
+        SavePlayerPosition(resetPosition);
+    }
+
+    // Lưu dữ liệu người chơi vào Firebase
+    private async void SavePlayerData(string field, int value)
+    {
+        if (string.IsNullOrEmpty(username)) return;
+
+        try
+        {
+            // Lưu dữ liệu vào Firebase
+            await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
+            Debug.Log($"{field} saved to Firebase: {value}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error saving {field}: {ex.Message}");
+        }
+    }
+
+    // Lưu vị trí của người chơi vào Firebase
+    private async void SavePlayerPosition(Vector3 position)
+    {
+        if (string.IsNullOrEmpty(username)) return;
+
+        try
+        {
+            // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
+            var positionDict = new Dictionary<string, object>
+            {
+                { "PositionX", position.x },
+                { "PositionY", position.y },
+                { "PositionZ", position.z }
+            };
+
+            // Lưu thông tin vị trí vào Firebase
+            await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
+            Debug.Log("Player position saved to Firebase: " + position);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error saving player position: {ex.Message}");
+        }
     }
 }

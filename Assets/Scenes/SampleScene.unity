@@ -3572,7 +3572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &985715933
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6167,7 +6167,6 @@ MonoBehaviour:
   usernameInput: {fileID: 350654682}
   passwordInput: {fileID: 1075372558}
   feedbackText: {fileID: 1448138337}
-  player: {fileID: 0}
 --- !u!114 &1593042422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7339,7 +7338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2032794041
 RectTransform:
   m_ObjectHideFlags: 0
