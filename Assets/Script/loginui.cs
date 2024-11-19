@@ -16,6 +16,7 @@ public class LoginUI : MonoBehaviour
 
     private FirebaseAuth auth;            // FirebaseAuth instance
     private DatabaseReference databaseReference;  // Firebase Database instance
+    private bool isFirebaseInitialized = false; // Biến cờ để kiểm tra Firebase đã khởi tạo chưa
 
     private async void Start()
     {
@@ -26,13 +27,13 @@ public class LoginUI : MonoBehaviour
             {
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-
-                Debug.Log("Firebase initialized successfully.");
+                isFirebaseInitialized = true;
+                Debug.Log("Firebase khởi tạo thành công.");
             }
             else
             {
                 UpdateFeedback("Firebase không khởi tạo được!");
-                Debug.LogError("Firebase initialization failed: " + task.Result);
+                Debug.LogError("Lỗi khởi tạo Firebase: " + task.Result);
             }
         });
     }
@@ -40,6 +41,20 @@ public class LoginUI : MonoBehaviour
     // Hàm đăng nhập
     public async void LoginUser()
     {
+        // Kiểm tra xem Firebase đã được khởi tạo chưa
+        if (!isFirebaseInitialized)
+        {
+            UpdateFeedback("Firebase chưa được khởi tạo. Vui lòng thử lại.");
+            return;
+        }
+
+        // Kiểm tra các trường nhập liệu có null không
+        if (usernameInput == null || passwordInput == null || feedbackText == null)
+        {
+            Debug.LogError("Các đối tượng UI chưa được gán đúng trong Inspector!");
+            return;
+        }
+
         string username = usernameInput.text;
         string password = passwordInput.text;
 
@@ -104,9 +119,10 @@ public class LoginUI : MonoBehaviour
         {
             foreach (var user in snapshot.Children)
             {
-                if (user.Child("Email").Value != null)
+                var emailValue = user.Child("Email").Value;
+                if (emailValue != null)
                 {
-                    return user.Child("Email").Value.ToString();
+                    return emailValue.ToString();
                 }
             }
         }
@@ -157,25 +173,38 @@ public class LoginUI : MonoBehaviour
         if (snapshot.Exists)
         {
             // Lấy dữ liệu từ snapshot
-            int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
-            int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
-            int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
+            var health = snapshot.Child("HealthCurrent").Value;
+            var energy = snapshot.Child("EnergyCurrent").Value;
+            var exp = snapshot.Child("Exp").Value;
 
-            // Hiển thị thông tin trong game hoặc gán lại giá trị cho các biến
-            Debug.Log($"Player Data Loaded: {username}, Health: {health}, Energy: {energy}, EXP: {exp}");
+            if (health != null && energy != null && exp != null)
+            {
+                int healthValue = int.Parse(health.ToString());
+                int energyValue = int.Parse(energy.ToString());
+                int expValue = int.Parse(exp.ToString());
 
-            // Cập nhật lại UI hoặc các biến trong game (ví dụ, gán giá trị cho slider, text)
+                Debug.Log($"Player Data Loaded: {username}, Health: {healthValue}, Energy: {energyValue}, EXP: {expValue}");
+
+                // Cập nhật lại UI hoặc các biến trong game (ví dụ, gán giá trị cho slider, text)
+            }
+            else
+            {
+                Debug.LogWarning("Một số dữ liệu người chơi bị thiếu.");
+            }
         }
         else
         {
-            Debug.LogWarning("No data found for player: " + username);
+            Debug.LogWarning("Không tìm thấy dữ liệu cho người chơi: " + username);
         }
     }
 
     // Cập nhật thông báo phản hồi
     private void UpdateFeedback(string message)
     {
-        feedbackText.text = message;  // Hiển thị thông điệp trên UI
+        if (feedbackText != null)
+        {
+            feedbackText.text = message;  // Hiển thị thông điệp trên UI
+        }
         Debug.Log(message);  // In thông điệp ra Console của Unity
     }
 }

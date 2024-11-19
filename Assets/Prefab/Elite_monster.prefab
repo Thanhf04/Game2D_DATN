@@ -532,7 +532,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1459229879
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -600,7 +600,7 @@ MonoBehaviour:
   attackRadius: 2.01
   Player:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   damageBoss: 5
 --- !u!114 &5698770433756648368
 MonoBehaviour:
