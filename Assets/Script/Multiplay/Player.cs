@@ -1,8 +1,7 @@
-using System.Collections;
 using Cinemachine;
 using Fusion;
-using Fusion.Addons;
 using Fusion.Addons.Physics;
+using System.Collections;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
@@ -97,6 +96,8 @@ public class Player : NetworkBehaviour
             wasJumpPressed = data.isJumping;
             HandleMovement(velocity.x, data.isAttacking);
         }
+        else if (playWalk.isPlaying) { playWalk.Stop(); }
+
     }
 
     private bool CanJump()
@@ -111,7 +112,7 @@ public class Player : NetworkBehaviour
         _rigidbody2D.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 
         playJump.Play();
-
+        playWalk.Stop();
         jumpCount++;
         isGrounded = false;
 
@@ -129,6 +130,7 @@ public class Player : NetworkBehaviour
         {
             playWalk.Stop();
         }
+
         _networkAnimator.Animator.SetBool("isRunning", velocityX != 0);
 
         if (attacking && !_networkAnimator.Animator.GetBool("isAttack"))

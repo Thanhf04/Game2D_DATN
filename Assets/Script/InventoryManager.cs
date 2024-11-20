@@ -40,7 +40,6 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         //use item 
-       
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -73,13 +72,13 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-       
+
         if (player == null)
         {
             player = FindObjectOfType<Player>();
             if (player == null)
             {
-                return; 
+                return;
             }
         }
         if (Input.GetMouseButtonDown(0))

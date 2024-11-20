@@ -2,10 +2,8 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Fusion;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class Dichuyennv1 : MonoBehaviour
 {
     // Các biến điều khiển nhân vật
@@ -26,7 +24,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Button tryAgainButton;
     public Button resetButton;
     public Button mainMenuButton;
-    
+
     //Panel chỉ số player
     public GameObject ChisoPanel;
     public Button ChisoButton;
@@ -34,7 +32,6 @@ public class Dichuyennv1 : MonoBehaviour
     public Text manaInfoText;
     public Text damageInfoText;
     public Button exitButton;
-
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -142,6 +139,7 @@ public class Dichuyennv1 : MonoBehaviour
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
+
         notificationText.text = "";
 
         gameOverPanel.SetActive(false);
@@ -151,7 +149,6 @@ public class Dichuyennv1 : MonoBehaviour
         resetButton.onClick.AddListener(OnReset);
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
-        //panel Chỉ số player
         ChisoPanel.SetActive(false);
         ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
@@ -529,7 +526,7 @@ public class Dichuyennv1 : MonoBehaviour
         isStatsPanelOpen = statsPanel.activeSelf;
     }
 
-void IncreaseHealth()
+    void IncreaseHealth()
     {
         if (upgradePoints > 0)
         {
@@ -657,31 +654,28 @@ void IncreaseHealth()
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-    
     void ToggleStatsDisplay()
-{
-    // Hiển thị hoặc ẩn bảng Chỉ Số
-    bool isActive = ChisoPanel.activeSelf;
-    ChisoPanel.SetActive(!isActive);
-
-    // Cập nhật thông tin nếu bảng hiển thị
-    if (!isActive)
     {
-        UpdateStatsDisplay();
+        // Hiển thị hoặc ẩn bảng Chỉ Số
+        bool isActive = ChisoPanel.activeSelf;
+        ChisoPanel.SetActive(!isActive);
+
+        // Cập nhật thông tin nếu bảng hiển thị
+        if (!isActive)
+        {
+            UpdateStatsDisplay();
+        }
     }
-}
-void UpdateStatsDisplay()
-{
-    // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-    healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-    manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-    damageInfoText.text = $"Sát thương:  {damageAmount}";
-}
-void ClosePanel()
-{
-    ChisoPanel.SetActive(false); 
-    
-}
+    void UpdateStatsDisplay()
+    {
+        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+        damageInfoText.text = $"Sát thương:  {damageAmount}";
+    }
+    void ClosePanel()
+    {
+        ChisoPanel.SetActive(false);
 
-
+    }
 }
