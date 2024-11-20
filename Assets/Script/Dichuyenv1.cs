@@ -19,6 +19,7 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isJump;
     private bool isStatsPanelOpen = false;
     private Animator anim;
+    public Text notificationText;
 
     //panel die
     public GameObject gameOverPanel;
@@ -26,6 +27,14 @@ public class Dichuyennv1 : MonoBehaviour
     public Button resetButton;
     public Button mainMenuButton;
     
+    //Panel chỉ số player
+    public GameObject ChisoPanel;
+    public Button ChisoButton;
+    public Text healthInfoText;
+    public Text manaInfoText;
+    public Text damageInfoText;
+    public Button exitButton;
+
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -133,6 +142,7 @@ public class Dichuyennv1 : MonoBehaviour
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
+        notificationText.text = "";
 
         gameOverPanel.SetActive(false);
 
@@ -140,6 +150,12 @@ public class Dichuyennv1 : MonoBehaviour
         tryAgainButton.onClick.AddListener(OnTryAgain);
         resetButton.onClick.AddListener(OnReset);
         mainMenuButton.onClick.AddListener(OnMainMenu);
+
+        //panel Chỉ số player
+        ChisoPanel.SetActive(false);
+        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        exitButton.onClick.AddListener(ClosePanel);
+
 
     }
 
@@ -513,25 +529,29 @@ public class Dichuyennv1 : MonoBehaviour
         isStatsPanelOpen = statsPanel.activeSelf;
     }
 
-    void IncreaseHealth()
+void IncreaseHealth()
     {
         if (upgradePoints > 0)
         {
             maxHealth += 100;
-            //currentHealth += 100;
+            currentHealth = Mathf.Min(maxHealth, currentHealth + 100);
             healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
+        }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
 
     void DecreaseHealth()
     {
-        if (currentHealth > 0 && upgradePoints < level + 5)
+        if (currentHealth > 1 && upgradePoints < level + 5)
         {
-            maxHealth -= 100;
+            maxHealth = Mathf.Max(100, maxHealth - 100);
             healthSlider.maxValue = maxHealth;
-            //currentHealth -= 100;
+            currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
             upgradePoints++;
             UpdateStatsText();
         }
@@ -542,23 +562,26 @@ public class Dichuyennv1 : MonoBehaviour
         if (upgradePoints > 0)
         {
             maxMana += 100;
+            currentMana = Mathf.Min(maxMana, currentMana + 50);
             manaSlider.maxValue = maxMana;
-            //currentMana += 50;
             upgradePoints--;
             UpdateStatsText();
+        }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
 
     void DecreaseMana()
     {
-        if (currentMana > 0 && upgradePoints < level + 5)
+        if (currentMana > 1 && upgradePoints < level + 5)
         {
-            maxMana -= 100;
+            maxMana = Mathf.Max(100, maxMana - 100);
             manaSlider.maxValue = maxMana;
-            //currentMana -= 10;
+            currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
             upgradePoints++;
             UpdateStatsText();
-
         }
     }
 
@@ -569,6 +592,10 @@ public class Dichuyennv1 : MonoBehaviour
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
+        }
+        else
+        {
+            ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
 
@@ -590,6 +617,18 @@ public class Dichuyennv1 : MonoBehaviour
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
     }
+
+    void ShowNotification(string message)
+    {
+        notificationText.text = message;  // Hiển thị thông báo
+        Invoke("ClearNotification", 2f);  // Xóa thông báo sau 2 giây
+    }
+
+    void ClearNotification()
+    {
+        notificationText.text = "";  // Xóa thông báo
+    }
+
     public void SetSlider()
     {
         healthSlider.maxValue = maxHealth;
@@ -618,4 +657,31 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
+    
+    void ToggleStatsDisplay()
+{
+    // Hiển thị hoặc ẩn bảng Chỉ Số
+    bool isActive = ChisoPanel.activeSelf;
+    ChisoPanel.SetActive(!isActive);
+
+    // Cập nhật thông tin nếu bảng hiển thị
+    if (!isActive)
+    {
+        UpdateStatsDisplay();
+    }
+}
+void UpdateStatsDisplay()
+{
+    // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+    healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+    manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+    damageInfoText.text = $"Sát thương:  {damageAmount}";
+}
+void ClosePanel()
+{
+    ChisoPanel.SetActive(false); 
+    
+}
+
+
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using Cinemachine;
 using Fusion;
 using Fusion.Addons;
 using Fusion.Addons.Physics;
@@ -8,27 +9,62 @@ public class Player : NetworkBehaviour
 {
     private NetworkRigidbody2D _rigidbody2D;
     private NetworkMecanimAnimator _networkAnimator;
-
-     private PlayerRef controllingPlayer;
-
+    private PlayerRef controllingPlayer;
+    private int jumpCount = 0;
     public float moveSpeed = 5f;
-    public float jumpForce = 10f;
+    public float jumpForce = 7f;
     private bool isGrounded = false;
 
-    // Health, mana, and damage
-    [Networked]
-    public int Health { get; set; } = 100;
+    public int Health = 100;
 
-    [Networked]
-    public int Mana { get; set; } = 50;
+    public int Mana = 100;
 
-    [Networked]
-    public int Damage { get; set; } = 10;
+    public int Damage = 10;
+
+    public int maxHealth = 100;
+    public int maxMana = 100;
+
 
     public float attackRange = 1f;
-    public float rollSpeed = 15f;
-    public float rollDuration = 0.5f;
-    private bool isRolling = false;
+    private CinemachineVirtualCamera vCam;
+
+    [SerializeField]
+    public AudioSource music;
+    public AudioSource playWalk;
+    public AudioSource playAttack;
+    public AudioSource playAttack2;
+    public AudioSource playAttack_Fire1;
+    public AudioSource playAttack_Fire2;
+    public AudioSource playAttack_Fire3;
+    public AudioSource playJump;
+    private bool wasJumpPressed = false;
+
+    void Start()
+    {
+        if (Object.HasInputAuthority)
+        {
+            vCam = FindObjectOfType<CinemachineVirtualCamera>();
+
+            if (vCam != null)
+            {
+                vCam.Follow = transform;
+                vCam.LookAt = transform;
+            }
+            Playmusic();
+        }
+    }
+
+    void Playmusic()
+    {
+        music.Play();
+        playWalk.Stop();
+        playAttack.Stop();
+        playAttack2.Stop();
+        playAttack_Fire1.Stop();
+        playAttack_Fire2.Stop();
+        playAttack_Fire3.Stop();
+        playJump.Stop();
+    }
 
     private void Awake()
     {
@@ -38,7 +74,7 @@ public class Player : NetworkBehaviour
 
     public void SetPlayerControl(PlayerRef player)
     {
-        controllingPlayer = player; // Gán người chơi điều khiển
+        controllingPlayer = player;
     }
 
     public override void FixedUpdateNetwork()
@@ -51,50 +87,48 @@ public class Player : NetworkBehaviour
                 _rigidbody2D.Rigidbody.velocity.y
             );
 
-            if (data.isJumping && isGrounded)
+            if (data.isJumping && !wasJumpPressed)
             {
-                Jump();
+                if (CanJump())
+                {
+                    Jump();
+                }
             }
-
-            HandleRolling(data.isRolling);
+            wasJumpPressed = data.isJumping;
             HandleMovement(velocity.x, data.isAttacking);
         }
     }
 
+    private bool CanJump()
+    {
+        Debug.Log(jumpCount);
+        return isGrounded || jumpCount < 2;
+    }
+
     private void Jump()
     {
+        _rigidbody2D.Rigidbody.velocity = new Vector2(_rigidbody2D.Rigidbody.velocity.x, 0);
         _rigidbody2D.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        playJump.Play();
+
+        jumpCount++;
         isGrounded = false;
-    }
 
-    private void HandleRolling(bool isRollingInput)
-    {
-        if (isRollingInput && !isRolling)
-        {
-            StartCoroutine(Roll());
-        }
-    }
-
-    private IEnumerator Roll()
-    {
-        isRolling = true;
-        _networkAnimator.Animator.SetBool("isRoll", isRolling);
-
-        Vector2 rollDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
-        _rigidbody2D.Rigidbody.velocity = new Vector2(
-            rollDirection.x * rollSpeed,
-            _rigidbody2D.Rigidbody.velocity.y
-        );
-
-        yield return new WaitForSeconds(rollDuration);
-
-        isRolling = false;
-        _networkAnimator.Animator.SetBool("isRoll", isRolling);
-        _rigidbody2D.Rigidbody.velocity = new Vector2(0, _rigidbody2D.Rigidbody.velocity.y);
+        // Đồng bộ trạng thái "đang nhảy"
+        _networkAnimator.Animator.SetBool("isJump", true);
     }
 
     private void HandleMovement(float velocityX, bool attacking)
     {
+        if (velocityX != 0 && !playWalk.isPlaying)
+        {
+            playWalk.Play();
+        }
+        else if (velocityX == 0 && playWalk.isPlaying)
+        {
+            playWalk.Stop();
+        }
         _networkAnimator.Animator.SetBool("isRunning", velocityX != 0);
 
         if (attacking && !_networkAnimator.Animator.GetBool("isAttack"))
@@ -108,9 +142,8 @@ public class Player : NetworkBehaviour
     private IEnumerator Attack()
     {
         _networkAnimator.Animator.SetBool("isAttack", true);
-
+        playAttack.Play();
         PerformAttack();
-
         yield return new WaitForSeconds(0.5f);
         _networkAnimator.Animator.SetBool("isAttack", false);
     }
@@ -170,6 +203,7 @@ public class Player : NetworkBehaviour
     {
         if (collision.gameObject.CompareTag("NenDat"))
         {
+            jumpCount = 0;
             isGrounded = false;
             _networkAnimator.Animator.SetBool("isJump", true);
         }

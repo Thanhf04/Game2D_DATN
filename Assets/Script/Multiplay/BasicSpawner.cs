@@ -54,7 +54,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         networkRunner = gameObject.AddComponent<NetworkRunner>();
         networkRunner.ProvideInput = true;
 
-        var scene = SceneRef.FromIndex(1);
+        var scene = SceneRef.FromIndex(2);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
         {
@@ -74,7 +74,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         );
 
-        Debug.Log("Room created with code: " + sessionCode);
     }
 
     void JoinGame()
@@ -96,16 +95,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 SessionName = roomCode // Dùng mã phòng người dùng nhập
             }
         );
-
-        // Kiểm tra xem kết nối thành công không
-        if (!networkRunner.IsConnectedToServer)
-        {
-            Debug.LogWarning("Failed to join room with code: " + roomCode);
-        }
-        else
-        {
-            Debug.Log("Successfully joined room with code: " + roomCode);
-        }
     }
 
     public void OnConnectedToServer(NetworkRunner runner) { }
@@ -136,26 +125,20 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         var data = new NetworkInputData();
 
         // Handle horizontal movement
-        if (Input.GetKey(KeyCode.A)) // Move left
+        if (Input.GetKey(KeyCode.A)) 
         {
             data.direction += Vector3.left;
         }
-        if (Input.GetKey(KeyCode.D)) // Move right
+        if (Input.GetKey(KeyCode.D)) 
         {
             data.direction += Vector3.right;
         }
 
-        // Handle jump input (e.g., Space key)
-        data.isJumping = Input.GetKey(KeyCode.Space); // Check if space key is pressed for jumping
+        data.isJumping = Input.GetKey(KeyCode.Space); 
 
         data.isAttacking = Input.GetKey(KeyCode.K);
-        if (data.isAttacking = Input.GetKey(KeyCode.K))
-        {
-            Debug.Log("danhadjdsayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-        }
-        data.isRolling = Input.GetKey(KeyCode.F);
+        
 
-        // Set the input data to be sent over the network
         input.Set(data);
     }
 
@@ -183,8 +166,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (!spawnedCharacters.ContainsKey(player))
         {
             Vector3 playerPos = new Vector3(
-                (player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * 3.1f,
-                0f
+                (player.RawEncoded % networkRunner.Config.Simulation.PlayerCount) * -5f,
+                5f
             );
             NetworkObject networkObject = networkRunner.Spawn(
                 networkPrefabRef,
