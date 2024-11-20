@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
 
     // use item
     [Header("Use Item")]
-    Dichuyennv1 dichuyennv1;
+    Player player;
     [SerializeField] private Button Btn_Health;
     [SerializeField] private Button Btn_Mana;
     [SerializeField] private ItemClass healthItem;
@@ -40,7 +40,7 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         //use item 
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -73,6 +73,15 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
+
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>();
+            if (player == null)
+            {
+                return;
+            }
+        }
         if (Input.GetMouseButtonDown(0))
         {
             if (isMoving)
@@ -337,27 +346,18 @@ public class InventoryManager : MonoBehaviour
         {
             if (item is ConsumableClass consumable)
             {
-                if (dichuyennv1.currentHealth < dichuyennv1.maxHealth)
+                if (player.Health < player.maxHealth)
                 {
-                    dichuyennv1.currentHealth = Mathf.Min(dichuyennv1.currentHealth + 50, dichuyennv1.maxHealth);
-                    healthSlider.value = dichuyennv1.currentHealth;
-                    Debug.Log("Hồi máu");
+                    player.Health = Mathf.Min(player.Health + 50, player.maxHealth);
+                    healthSlider.value = player.Health;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Health, item);
                     RefreshUI();
                     StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
                 }
-                else
-                {
-                    Debug.Log("Máu đã đầy");
-                }
             }
 
             RefreshUI();
-        }
-        else
-        {
-            Debug.Log("Không còn item hoặc không tìm thấy trong túi!");
         }
     }
     public void UseMana(ItemClass item)
@@ -367,27 +367,18 @@ public class InventoryManager : MonoBehaviour
         {
             if (item is ConsumableClass consumable)
             {
-                if (dichuyennv1.currentMana < dichuyennv1.maxMana)
+                if (player.Mana < player.maxMana)
                 {
-                    dichuyennv1.currentMana = Mathf.Min(dichuyennv1.currentMana + 50, dichuyennv1.maxMana);
-                    manaSlider.value = dichuyennv1.currentMana;
-                    Debug.Log("Hồi mana");
+                    player.Mana = Mathf.Min(player.Mana + 50, player.maxMana);
+                    manaSlider.value = player.Mana;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Mana, item);
                     RefreshUI();
                     StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
 
                 }
-                else
-                {
-                    Debug.Log("Mana đã đầy");
-                }
             }
             RefreshUI();
-        }
-        else
-        {
-            Debug.Log("Không còn " + manaItem.name + " để sử dụng");
         }
     }
     private void UpdateButtonQuantity(Button button, ItemClass item)

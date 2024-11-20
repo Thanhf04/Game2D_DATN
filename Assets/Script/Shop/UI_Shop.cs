@@ -9,10 +9,15 @@ public class UI_Shop : MonoBehaviour
     private Transform ShopItem;
     private InventoryManager inventoryManager;
     private Dictionary<Model_Shop.ItemType, ConsumableClass> itemTypeToConsumable;
+    [SerializeField] private UI_Coin uiCoin;
 
 
     private void Awake()
     {
+        if (uiCoin == null)
+        {
+            Debug.LogError("UI_Coin không được tìm thấy trong scene!");
+        }
         container = transform.Find("Container");
         ShopItem = container.Find("ShopItem");
         ShopItem.gameObject.SetActive(false);
@@ -54,9 +59,9 @@ public class UI_Shop : MonoBehaviour
 
     public void TryItem(Model_Shop.ItemType itemType)
     {
-        if (UI_Coin.Instance.SubTractCoins(Model_Shop.GetCost(itemType), itemType))
+        if (uiCoin.SubTractCoins(Model_Shop.GetCost(itemType), itemType))
         {
-            UI_Coin.Instance.CoinChanged?.Invoke(UI_Coin.Instance.GetCurrentCoins());
+            uiCoin.CoinChanged?.Invoke(uiCoin.GetCurrentCoins());
 
             // Thêm item vào inventory sau khi mua
             if (itemTypeToConsumable.TryGetValue(itemType, out ConsumableClass consumableItem))
@@ -69,4 +74,5 @@ public class UI_Shop : MonoBehaviour
             }
         }
     }
+
 }

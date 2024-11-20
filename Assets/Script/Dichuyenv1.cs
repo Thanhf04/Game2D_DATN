@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class Dichuyennv1 : MonoBehaviour
 {
     // Các biến điều khiển nhân vật
@@ -150,8 +149,6 @@ public class Dichuyennv1 : MonoBehaviour
         resetButton.onClick.AddListener(OnReset);
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
-
-        //panel Chỉ số player
         ChisoPanel.SetActive(false);
         ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
@@ -657,7 +654,6 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-
     void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
@@ -682,6 +678,4 @@ public class Dichuyennv1 : MonoBehaviour
         ChisoPanel.SetActive(false);
 
     }
-
-
 }
