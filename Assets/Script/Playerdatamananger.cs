@@ -1,312 +1,442 @@
-﻿using UnityEngine;
-using Firebase;
-using Firebase.Database;
-using TMPro;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿//using System.Collections;
+//using TMPro;
+//using UnityEngine;
+//using UnityEngine.UI;
 
-public class PlayerDataTest : MonoBehaviour
-{
-    public TMP_Text healthText; // Hiển thị giá trị health
-    public TMP_Text energyText; // Hiển thị giá trị energy
-    public TMP_Text expText;    // Hiển thị giá trị exp
-    public TMP_Text goldText;   // Hiển thị giá trị gold
-    public TMP_Text diamondText; // Hiển thị giá trị diamond
-    public Slider healthSlider; // Slider cho health
-    public Slider energySlider; // Slider cho energy
-    public Slider expSlider;    // Slider cho exp
-    public GameObject player;   // Nhân vật trong game
-    public GameObject inventoryCanvas;  // GameObject chứa UI cho inventory hoặc túi đồ
+//public class InventoryManager : MonoBehaviour
+//{
+//    [SerializeField] private GameObject slotsHolder;
+//    [SerializeField] private ItemClass itemToAdd;
+//    [SerializeField] private ItemClass itemToRemove;
+//    [SerializeField] private SlotClass[] items;
+//    [SerializeField] private SlotClass[] startingItems;
 
-    // Các biến để lưu trữ giá trị
-    public int gold = 0;         // Biến gold
-    public int diamond = 0;      // Biến diamond
+//    [SerializeField] private SlotClass movingSlot;
+//    [SerializeField] private SlotClass originalSlot;
+//    [SerializeField] private SlotClass tempSlot;
 
-    private DatabaseReference databaseReference;
-    private string username;
-    private Vector3 lastSavedPosition;
+//    public Image itemCursor;
 
-    private async void Start()
-    {
-        // Kiểm tra và khởi tạo Firebase
-        await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
-            {
-                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase khởi tạo thành công.");
-            }
-            else
-            {
-                Debug.LogError("Firebase không thể khởi tạo: " + task.Result);
-            }
-        });
+//    [SerializeField] private GameObject[] slots;
+//    public bool isMoving;
 
-        // Lấy username từ PlayerPrefs
-        username = PlayerPrefs.GetString("username", "");
+//    // use item
+//    [Header("Use Item")]
+//    Player player;
+//    [SerializeField] private Button Btn_Health;
+//    [SerializeField] private Button Btn_Mana;
+//    [SerializeField] private ItemClass healthItem;
+//    [SerializeField] private ItemClass manaItem;
+//    [SerializeField] public Slider healthSlider;
+//    [SerializeField] public Slider manaSlider;
+//    [SerializeField] private TextMeshProUGUI healthButtonText; // Tham chiếu đến TextMeshPro trên nút Health
+//    [SerializeField] private TextMeshProUGUI manaButtonText;   // Tham chiếu đến TextMeshPro trên nút Mana
+//    private float itemCooldownTime = 2f;
+//    private bool isHealthOnCooldown = false;
+//    private bool isManaOnCooldown = false;
 
-        // Gán các listener cho các slider
-        healthSlider.onValueChanged.AddListener(UpdateHealth);
-        energySlider.onValueChanged.AddListener(UpdateEnergy);
-        expSlider.onValueChanged.AddListener(UpdateExp);
 
-        // Lấy dữ liệu người chơi từ Firebase sau khi đăng nhập
-        if (!string.IsNullOrEmpty(username))
-        {
-            // Tải tất cả dữ liệu người chơi từ Firebase
-            await LoadPlayerDataFromFirebase(username);
+//    // Start is called before the first frame update
+//    void Start()
+//    {
+//        //use item 
 
-            // Tải vị trí người chơi từ Firebase sau khi tải các dữ liệu khác
-            await LoadPlayerPositionFromFirebase(username);
+//        Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
+//        Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
+//        healthButtonText.text = "";
+//        manaButtonText.text = "";
+//        //
+//        slots = new GameObject[slotsHolder.transform.childCount];
+//        items = new SlotClass[slots.Length];
 
-            // Tải dữ liệu từ inventoryCanvas nếu có
-            await LoadInventoryDataFromFirebase(username);
-        }
-        else
-        {
-            Debug.LogWarning("Username is empty. Cannot load player data.");
-        }
+//        for (int i = 0; i < slots.Length; i++)
+//        {
+//            slots[i] = slotsHolder.transform.GetChild(i).gameObject;
+//        }
 
-        // Lưu vị trí ban đầu của người chơi
-        lastSavedPosition = player.transform.position;
+//        for (int i = 0; i < items.Length; i++)
+//        {
+//            items[i] = new SlotClass();
+//        }
 
-        // Bắt đầu theo dõi sự thay đổi vị trí của nhân vật
-        StartCoroutine(CheckAndSavePlayerPosition());
-    }
+//        for (int i = 0; i < startingItems.Length; i++)
+//        {
+//            items[i] = startingItems[i];
+//        }
 
-    // Hàm kiểm tra và lưu vị trí nhân vật
-    private System.Collections.IEnumerator CheckAndSavePlayerPosition()
-    {
-        while (true)
-        {
-            // Kiểm tra nếu vị trí đã thay đổi
-            if (player.transform.position != lastSavedPosition)
-            {
-                // Lưu vị trí mới vào Firebase
-                SavePlayerPosition(player.transform.position);
+//        originalSlot = new SlotClass();
+//        movingSlot = new SlotClass();
+//        tempSlot = new SlotClass();
 
-                // Cập nhật vị trí đã lưu
-                lastSavedPosition = player.transform.position;
-            }
+//        RefreshUI();
+//    }
 
-            // Dừng trong một thời gian trước khi kiểm tra lại
-            yield return new WaitForSeconds(1f);  // Kiểm tra mỗi giây
-        }
-    }
+//    private void Update()
+//    {
 
-    // Cập nhật các giá trị khi slider thay đổi
-    private void UpdateHealth(float value)
-    {
-        healthText.text = " " + value.ToString("F0");
-        SavePlayerData("HealthCurrent", (int)value);
-    }
+//        if (player == null)
+//        {
+//            player = FindObjectOfType<Player>();
+//            if (player == null)
+//            {
+//                return;
+//            }
+//        }
+//        if (Input.GetMouseButtonDown(0))
+//        {
+//            if (isMoving)
+//            {
+//                EndMove();
+//            }
+//            else
+//            {
+//                BeginMove();
+//            }
+//        }
 
-    private void UpdateEnergy(float value)
-    {
-        energyText.text = ": " + value.ToString("F0");
-        SavePlayerData("EnergyCurrent", (int)value);
-    }
+//        if (Input.GetMouseButtonDown(1))
+//        {
+//            if (isMoving)
+//            {
+//                //EndMove();
+//            }
+//            else
+//            {
+//                BeginSplit();
+//            }
+//        }
 
-    private void UpdateExp(float value)
-    {
-        expText.text = ": " + value.ToString("F0");
-        SavePlayerData("Exp", (int)value);
-    }
+//        if (isMoving)
+//        {
+//            itemCursor.enabled = true;
+//            itemCursor.transform.position = Input.mousePosition;
+//            itemCursor.sprite = movingSlot.GetItem().itemIcon;
+//        }
+//        else
+//        {
+//            itemCursor.enabled = false;
+//            itemCursor.sprite = null;
+//        }
+//    }
 
-    private void UpdateGold(int value)
-    {
-        gold = value;  // Cập nhật giá trị gold
-        goldText.text = " " + gold.ToString();  // Cập nhật UI
-        Debug.Log($"Gold value changed: {gold}");
-        SavePlayerData("Gold", gold); // Lưu giá trị Gold vào Firebase
-    }
+//    private void RefreshUI()
+//    {
+//        for (int i = 0; i < slots.Length; i++)
+//        {
+//            try
+//            {
+//                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
+//                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].GetItem().itemIcon;
+//                if (!items[i].GetItem().isStackable)
+//                {
+//                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+//                }
+//                else
+//                {
+//                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity() + "";
+//                    //use item
+//                    if (items[i].GetItem() == healthItem) // Nếu item là healthItem
+//                    {
+//                        UpdateButtonQuantity(Btn_Health, items[i].GetItem());
+//                    }
+//                    else if (items[i].GetItem() == manaItem) // Nếu item là manaItem
+//                    {
+//                        UpdateButtonQuantity(Btn_Mana, items[i].GetItem());
+//                    }
+//                }
 
-    private void UpdateDiamond(int value)
-    {
-        diamond = value;  // Cập nhật giá trị diamond
-        diamondText.text = " " + diamond.ToString();  // Cập nhật UI
-        Debug.Log($"Diamond value changed: {diamond}");
-        SavePlayerData("Diamond", diamond); // Lưu giá trị Diamond vào Firebase
-    }
+//            }
+//            catch
+//            {
+//                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+//                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
+//                slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+//            }
+//        }
+//    }
 
-    // Lưu dữ liệu người chơi vào Firebase
-    private async void SavePlayerData(string field, int value)
-    {
-        if (string.IsNullOrEmpty(username)) return;
+//    public void AddItem(ItemClass item, int quantity)
+//    {
+//        SlotClass slot = ContainsItem(item);
+//        if (slot != null && slot.GetItem().isStackable)
+//        {
+//            slot.AddQuantity(quantity);
+//        }
+//        else
+//        {
+//            for (int i = 0; i < items.Length; i++)
+//            {
+//                if (items[i].GetItem() == null)
+//                {
+//                    items[i].AddItem(item, quantity);
+//                    break;
+//                }
+//            }
+//        }
 
-        try
-        {
-            // Lưu dữ liệu vào Firebase
-            await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
-            Debug.Log($"{field} saved to Firebase: {value}");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Error saving {field}: {ex.Message}");
-        }
-    }
+//        RefreshUI();
+//    }
 
-    // Lưu vị trí của người chơi vào Firebase
-    private async void SavePlayerPosition(Vector3 position)
-    {
-        if (string.IsNullOrEmpty(username)) return;
+//    public void RemoveItem(ItemClass item, int quanity)
+//    {
+//        SlotClass temp = ContainsItem(item);
+//        if (temp != null)
+//        {
+//            if (temp.GetQuantity() > 1)
+//            {
+//                temp.SubQuantity(quanity);
+//            }
+//            else
+//            {
+//                int slotToRemoveIndex = 0;
+//                for (int i = 0; i < items.Length; i++)
+//                {
+//                    if (items[i].GetItem() == item)
+//                    {
+//                        slotToRemoveIndex = i;
+//                        break;
+//                    }
+//                }
 
-        try
-        {
-            // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
-            var positionDict = new Dictionary<string, object>
-            {
-                { "PositionX", position.x },
-                { "PositionY", position.y },
-                { "PositionZ", position.z }
-            };
+//                items[slotToRemoveIndex].RemoveItem();
+//            }
+//        }
+//        else
+//        {
+//            return;
+//        }
 
-            // Lưu thông tin vị trí vào Firebase
-            await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
-            Debug.Log("Player position saved to Firebase: " + position);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Error saving player position: {ex.Message}");
-        }
-    }
 
-    // Lưu thông tin Inventory vào Firebase
-    private async void SaveInventoryData()
-    {
-        if (string.IsNullOrEmpty(username)) return;
 
-        try
-        {
-            // Lấy tất cả các Canvas con (item) trong inventoryCanvas
-            List<string> inventoryItems = new List<string>();
-            foreach (Transform item in inventoryCanvas.transform)
-            {
-                if (item.gameObject.activeSelf) // Chỉ lưu những item đang được kích hoạt
-                {
-                    // Lấy tên hoặc ID của item để lưu trữ
-                    inventoryItems.Add(item.gameObject.name);
-                }
-            }
+//        RefreshUI();
+//    }
 
-            // Lưu thông tin inventory vào Firebase
-            await databaseReference.Child("players").Child(username).Child("Inventory").SetValueAsync(inventoryItems);
-            Debug.Log("Inventory data saved to Firebase.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Error saving inventory data: {ex.Message}");
-        }
-    }
+//    private SlotClass ContainsItem(ItemClass item)
+//    {
+//        for (int i = 0; i < items.Length; i++)
+//        {
+//            if (items[i].GetItem() == item)
+//            {
+//                return items[i];
+//            }
+//        }
+//        return null;
+//    }
 
-    // Tải lại thông tin Inventory từ Firebase
-    private async Task LoadInventoryDataFromFirebase(string username)
-    {
-        var playerRef = databaseReference.Child("players").Child(username);
-        var snapshot = await playerRef.GetValueAsync();
+//    private SlotClass GetClosestSlot()
+//    {
+//        for (int i = 0; i < slots.Length; i++)
+//        {
+//            if (Vector2.Distance(slots[i].transform.position, Input.mousePosition) <= 64)
+//            {
+//                return items[i];
+//            }
+//        }
 
-        if (snapshot.Exists)
-        {
-            if (snapshot.Child("Inventory").Exists)
-            {
-                // Lấy danh sách các item từ inventory
-                List<object> inventoryItems = (List<object>)snapshot.Child("Inventory").Value;
+//        return null;
+//    }
 
-                // In ra danh sách các item để kiểm tra
-                foreach (var item in inventoryItems)
-                {
-                    Debug.Log("Inventory Item: " + item.ToString());
-                    // Bạn có thể tạo lại các Canvas hoặc Item từ Firebase ở đây
-                    // Ví dụ, tạo lại Canvas cho từng item trong inventory
-                    GameObject itemCanvas = new GameObject(item.ToString()); // Tạo một Canvas mới cho item
-                    itemCanvas.transform.SetParent(inventoryCanvas.transform); // Đặt item vào Inventory
+//    private void BeginMove()
+//    {
+//        originalSlot = GetClosestSlot();
 
-                    // Bạn có thể thêm các thành phần như Image, Text vào itemCanvas tùy thuộc vào yêu cầu
-                }
+//        if (originalSlot == null || originalSlot.GetItem() == null) return;
 
-                Debug.Log("Inventory loaded from Firebase.");
-            }
-            else
-            {
-                Debug.LogWarning("No inventory data found for player: " + username);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No data found for player: " + username);
-        }
-    }
+//        movingSlot.AddItem(
+//            originalSlot.GetItem(),
+//            originalSlot.GetQuantity());
+//        originalSlot.RemoveItem();
 
-    // Tải vị trí của người chơi từ Firebase
-    private async Task LoadPlayerPositionFromFirebase(string username)
-    {
-        var playerRef = databaseReference.Child("players").Child(username);
-        var snapshot = await playerRef.GetValueAsync();
+//        isMoving = true;
+//        RefreshUI();
+//        return;
+//    }
 
-        if (snapshot.Exists)
-        {
-            if (snapshot.Child("Position").Exists)
-            {
-                // Lấy giá trị Position từ Firebase
-                var positionChild = snapshot.Child("Position");
-                if (positionChild.Exists)
-                {
-                    float positionX = float.Parse(positionChild.Child("PositionX").Value.ToString());
-                    float positionY = float.Parse(positionChild.Child("PositionY").Value.ToString());
-                    float positionZ = float.Parse(positionChild.Child("PositionZ").Value.ToString());
+//    private void BeginSplit()
+//    {
+//        originalSlot = GetClosestSlot();
 
-                    // Debug: In ra các giá trị vị trí
-                    Debug.Log($"Position loaded from Firebase: {positionX}, {positionY}, {positionZ}");
+//        if (originalSlot == null || originalSlot.GetItem() == null) return;
+//        if (originalSlot.GetQuantity() <= 1)
+//        {
+//            return;
+//        }
 
-                    // Cập nhật vị trí của người chơi
-                    player.transform.position = new Vector3(positionX, positionY, positionZ);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("No position data found for player: " + username);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No data found for player: " + username);
-        }
-    }
+//        movingSlot.AddItem(originalSlot.GetItem(), Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
 
-    // Phương thức tải dữ liệu người chơi từ Firebase (thêm vào nếu cần)
-    private async Task LoadPlayerDataFromFirebase(string username)
-    {
-        var playerRef = databaseReference.Child("players").Child(username);
-        var snapshot = await playerRef.GetValueAsync();
+//        originalSlot.SubQuantity(Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
 
-        if (snapshot.Exists)
-        {
-            // Đọc các dữ liệu như Health, Energy, Exp, Gold, Diamond từ Firebase
-            if (snapshot.Child("HealthCurrent").Exists)
-                healthSlider.value = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
+//        isMoving = true;
+//        RefreshUI();
+//        return;
+//    }
 
-            if (snapshot.Child("EnergyCurrent").Exists)
-                energySlider.value = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
+//    private void EndMove()
+//    {
+//        originalSlot = GetClosestSlot();
 
-            if (snapshot.Child("Exp").Exists)
-                expSlider.value = int.Parse(snapshot.Child("Exp").Value.ToString());
+//        if (originalSlot == null)
+//        {
+//            AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
+//        }
+//        else
+//        {
+//            if (originalSlot.GetItem() != null)
+//            {
+//                //If slot is the same item
+//                if (originalSlot.GetItem() == movingSlot.GetItem())
+//                {
+//                    //If slot item is stackable
+//                    if (originalSlot.GetItem().isStackable)
+//                    {
+//                        int itemMaxStack = originalSlot.GetItem().maxStackQuantity; //Apple: 20
+//                        int count = originalSlot.GetQuantity() + movingSlot.GetQuantity();// 25
 
-            if (snapshot.Child("Gold").Exists)
-                gold = int.Parse(snapshot.Child("Gold").Value.ToString());
+//                        if (count > itemMaxStack)
+//                        {
+//                            int remain = count - itemMaxStack; //5
+//                            originalSlot.SetQuantity(itemMaxStack);
+//                            movingSlot.SetQuantity(remain);
 
-            if (snapshot.Child("Diamond").Exists)
-                diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
+//                            isMoving = true;
+//                            RefreshUI();
+//                            return;
+//                        }
+//                        else
+//                        {
+//                            originalSlot.AddQuantity(movingSlot.GetQuantity());
+//                            movingSlot.RemoveItem();
+//                        }
+//                    }
+//                    else
+//                    {
+//                        return;
+//                    }
+//                }
+//                else
+//                {
+//                    //Swap
+//                    tempSlot.AddItem(originalSlot.GetItem(), originalSlot.GetQuantity());
+//                    originalSlot.AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
+//                    movingSlot.AddItem(tempSlot.GetItem(), tempSlot.GetQuantity());
+//                    tempSlot.RemoveItem();
 
-            // Cập nhật UI cho Gold và Diamond
-            goldText.text = gold.ToString();
-            diamondText.text = diamond.ToString();
+//                    RefreshUI();
+//                    return;
+//                }
+//            }
+//            else
+//            {
+//                originalSlot.AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
+//                movingSlot.RemoveItem();
+//            }
+//        }
 
-            Debug.Log("Player data loaded from Firebase.");
-        }
-        else
-        {
-            Debug.LogWarning("No data found for player: " + username);
-        }
-    }
-}
+
+
+//        isMoving = false;
+//        RefreshUI();
+//        return;
+//    }
+//    // use item
+//    public void UseHealth(ItemClass item)
+//    {
+//        SlotClass slot = ContainsItem(item);
+//        if (slot != null && slot.GetQuantity() > 0)
+//        {
+//            if (item is ConsumableClass consumable)
+//            {
+//                if (player.Health < player.maxHealth)
+//                {
+//                    player.Health = Mathf.Min(player.Health + 50, player.maxHealth);
+//                    healthSlider.value = player.Health;
+//                    RemoveItem(item, 1);
+//                    UpdateButtonQuantity(Btn_Health, item);
+//                    RefreshUI();
+//                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
+//                }
+//            }
+
+//            RefreshUI();
+//        }
+//    }
+//    public void UseMana(ItemClass item)
+//    {
+//        SlotClass slot = ContainsItem(item);
+//        if (slot != null && slot.GetQuantity() > 0)
+//        {
+//            if (item is ConsumableClass consumable)
+//            {
+//                if (player.Mana < player.maxMana)
+//                {
+//                    player.Mana = Mathf.Min(player.Mana + 50, player.maxMana);
+//                    manaSlider.value = player.Mana;
+//                    RemoveItem(item, 1);
+//                    UpdateButtonQuantity(Btn_Mana, item);
+//                    RefreshUI();
+//                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
+
+//                }
+//            }
+//            RefreshUI();
+//        }
+//    }
+//    private void UpdateButtonQuantity(Button button, ItemClass item)
+//    {
+//        // Kiểm tra số lượng còn lại của item
+//        SlotClass slot = ContainsItem(item);
+
+//        TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
+
+//        if (slot != null)
+//        {
+//            // Lấy số lượng còn lại
+//            int quantity = slot.GetQuantity();
+
+//            if (buttonText != null)
+//            {
+//                // Cập nhật số lượng item trên button
+//                if (quantity > 0)
+//                {
+//                    buttonText.text = quantity.ToString(); // Hiển thị số lượng còn lại
+//                }
+
+//            }
+//        }
+//        else
+//        {
+//            // Nếu không tìm thấy item, đặt số lượng là 0
+//            if (buttonText != null)
+//            {
+//                buttonText.text = "0"; // Đặt số lượng là 0 khi item không có trong túi
+//            }
+//        }
+//    }
+//    private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
+//    {
+//        float remainingTime = itemCooldownTime;
+
+//        // Trong khi còn thời gian hồi chiêu
+//        while (remainingTime > 0)
+//        {
+//            remainingTime -= Time.deltaTime;  // Giảm thời gian còn lại
+//            button.interactable = false; // Tắt tương tác với nút
+//            buttonText.text = Mathf.Ceil(remainingTime).ToString(); // Cập nhật thời gian còn lại lên nút
+
+//            yield return null; // Chờ đến frame tiếp theo
+//        }
+
+//        // Sau khi hết thời gian hồi chiêu
+//        button.interactable = true; // Bật lại nút
+//        buttonText.text = ""; // Hoặc có thể là "Use" tùy vào tình huống
+
+//        if (isHealth)
+//        {
+//            isHealthOnCooldown = false;
+//        }
+//        else
+//        {
+//            isManaOnCooldown = false;
+//        }
+//    }
+//}

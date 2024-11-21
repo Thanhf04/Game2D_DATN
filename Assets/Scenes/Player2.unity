@@ -565,18 +565,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-<<<<<<< HEAD
-<<<<<<< HEAD
-  m_SortingLayerID: 1485715357
-  m_SortingLayer: 1
-=======
-  m_SortingLayerID: 1656336775
-  m_SortingLayer: 0
->>>>>>> 46c4890579544b81f4f0f27d7c716966e9cf5208
-=======
-  m_SortingLayerID: 1485715357
-  m_SortingLayer: 0
->>>>>>> 70692370e06ef96d7b92779c067af2e7813914ad
+m_SortingLayerID: 1485715357
+m_SortingLayer: 0
+
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}

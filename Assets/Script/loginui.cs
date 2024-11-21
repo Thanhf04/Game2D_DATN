@@ -5,12 +5,14 @@ using Firebase.Database;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class LoginUI : MonoBehaviour
 {
     public TMP_InputField usernameInput;  // Input field cho username
     public TMP_InputField passwordInput;  // Input field cho mật khẩu
     public TextMeshProUGUI feedbackText;  // Text để hiển thị phản hồi
+    //public GameObject player; // Thêm GameObject cho nhân vật, khai báo ở đây
 
     private FirebaseAuth auth;            // FirebaseAuth instance
     private DatabaseReference databaseReference;  // Firebase Database instance
@@ -46,6 +48,13 @@ public class LoginUI : MonoBehaviour
             return;
         }
 
+        // Kiểm tra các trường nhập liệu có null không
+        if (usernameInput == null || passwordInput == null || feedbackText == null)
+        {
+            Debug.LogError("Các đối tượng UI chưa được gán đúng trong Inspector!");
+            return;
+        }
+
         string username = usernameInput.text;
         string password = passwordInput.text;
 
@@ -76,8 +85,11 @@ public class LoginUI : MonoBehaviour
                     PlayerPrefs.SetString("username", username);
                     PlayerPrefs.Save();
 
-                    // Chuyển cảnh sau khi đăng nhập thành công
-                    SceneManager.LoadScene("Player1"); // Chuyển đến màn hình chính
+                    // Tải dữ liệu người chơi từ Firebase sau khi đăng nhập thành công
+                    await LoadPlayerDataFromFirebase(username);  // Load data từ Firebase
+
+                    // Chuyển cảnh sau khi load dữ liệu
+                    SceneManager.LoadScene("Player1");
                 }
                 else
                 {
@@ -115,6 +127,75 @@ public class LoginUI : MonoBehaviour
             }
         }
         return null;
+    }
+
+    // Lưu dữ liệu người chơi lên Firebase
+    public async Task SavePlayerDataToFirebase(string username)
+    {
+        // Giả sử bạn đã có các giá trị này từ game
+        int damage = 10;
+        int diamond = 100;
+        Vector3 position = new Vector3(1, 1, 1);
+        int gold = 50;
+        int exp = 200;
+        int energyCurrent = 80;
+        int energyMax = 100;
+        int healthMax = 100;
+        int healthCurrent = 75;
+
+        // Tạo đối tượng PlayerData
+        var playerDict = new Dictionary<string, object>
+        {
+            { "Damage", damage },
+            { "Diamond", diamond },
+            { "PositionX", position.x },
+            { "PositionY", position.y },
+            { "PositionZ", position.z },
+            { "Gold", gold },
+            { "Exp", exp },
+            { "EnergyCurrent", energyCurrent },
+            { "EnergyMax", energyMax },
+            { "HealthMax", healthMax },
+            { "HealthCurrent", healthCurrent }
+        };
+
+        // Lưu vào Firebase Realtime Database
+        await databaseReference.Child("players").Child(username).SetValueAsync(playerDict);
+        Debug.Log("Player data saved to Firebase.");
+    }
+
+    // Tải dữ liệu người chơi từ Firebase
+    public async Task LoadPlayerDataFromFirebase(string username)
+    {
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
+
+        if (snapshot.Exists)
+        {
+            // Lấy dữ liệu từ snapshot
+            var health = snapshot.Child("HealthCurrent").Value;
+            var energy = snapshot.Child("EnergyCurrent").Value;
+            var exp = snapshot.Child("Exp").Value;
+
+            if (health != null && energy != null && exp != null)
+            {
+                int healthValue = int.Parse(health.ToString());
+                int energyValue = int.Parse(energy.ToString());
+                int expValue = int.Parse(exp.ToString());
+
+                Debug.Log($"Player Data Loaded: {username}, Health: {healthValue}, Energy: {energyValue}, EXP: {expValue}");
+
+                // Cập nhật lại UI hoặc các biến trong game (ví dụ, gán giá trị cho slider, text)
+            }
+            else
+            {
+                Debug.LogWarning("Một số dữ liệu người chơi bị thiếu.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Không tìm thấy dữ liệu cho người chơi: " + username);
+        }
     }
 
     // Cập nhật thông báo phản hồi
