@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 6536235380910947185}
   - component: {fileID: 576949319175013950}
   - component: {fileID: -2749323619561142915}
+  - component: {fileID: 2651525526747619469}
   m_Layer: 7
   m_Name: quaiVat01
   m_TagString: enemy
@@ -229,7 +230,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1459229879
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 4723107735738678597, guid: c1cdd26cc09ad224884556bc4d8296ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -365,10 +366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e43d751637e78498f8ce6e3032a716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
-  HealthSlider: {fileID: 3244921301216282683}
-  prefabsItem: {fileID: 4010455052967803832, guid: adf23443e7ca76f49b208ec93c31b83c, type: 3}
+  _maxHealth: 100
+  _currentHealth: 100
+  healthSlider: {fileID: 3244921301216282683}
 --- !u!114 &-2749323619561142915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,6 +382,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 1
+--- !u!114 &2651525526747619469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3254978284742475283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1048675307
+  ObjectInterest: 1
+  Flags: 327681
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 576949319175013950}
 --- !u!1 &6570680432585732643
 GameObject:
   m_ObjectHideFlags: 0

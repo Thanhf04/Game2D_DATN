@@ -1,10 +1,10 @@
 using System.Collections;
+using Fusion;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Fusion;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Button tryAgainButton;
     public Button resetButton;
     public Button mainMenuButton;
-    
+
     //Panel chỉ số player
     public GameObject ChisoPanel;
     public Button ChisoButton;
@@ -34,7 +34,6 @@ public class Dichuyennv1 : MonoBehaviour
     public Text manaInfoText;
     public Text damageInfoText;
     public Button exitButton;
-
 
     // Các biến liên quan đến lăn (roll)
     public float rollDistance = 3f;
@@ -51,7 +50,8 @@ public class Dichuyennv1 : MonoBehaviour
     public float bulletLifeTime = 2f;
 
     // Các biến âm thanh
-    [SerializeField] public AudioSource music;
+    [SerializeField]
+    public AudioSource music;
     public AudioSource playWalk;
     public AudioSource playAttack;
     public AudioSource playAttack2;
@@ -70,7 +70,9 @@ public class Dichuyennv1 : MonoBehaviour
     public int currentMana;
     public float expMax = 100;
     public float expCurrent = 0;
-    [SerializeField] public TextMeshProUGUI textLevel;
+
+    [SerializeField]
+    public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
     public int damageAmount = 10;
     public int damageTrap = 20;
@@ -82,7 +84,8 @@ public class Dichuyennv1 : MonoBehaviour
     public int upgradePoints = 5;
 
     // Các biến UI
-    [SerializeField] public GameObject statsPanel;
+    [SerializeField]
+    public GameObject statsPanel;
     public Button openPanelButton;
     public Button increaseHealthButton;
     public Button decreaseHealthButton;
@@ -113,8 +116,6 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill2CooldownText;
     public Text skill3CooldownText;
 
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -133,7 +134,6 @@ public class Dichuyennv1 : MonoBehaviour
         decreaseManaButton.onClick.AddListener(DecreaseMana);
         increaseDamethButton.onClick.AddListener(IncreaseDame);
         decreaseDamethButton.onClick.AddListener(DecreaseDamage);
-
 
         SetSlider();
         currentHealth = maxHealth;
@@ -155,13 +155,10 @@ public class Dichuyennv1 : MonoBehaviour
         ChisoPanel.SetActive(false);
         ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
-
-
     }
 
     void Update()
     {
-
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
@@ -248,9 +245,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentFireBreath.transform.position = firePoint2.position;
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
-
     }
-
 
     public void LevelSlider(float amount)
     {
@@ -264,7 +259,6 @@ public class Dichuyennv1 : MonoBehaviour
             textLevel.SetText("Lv" + level);
             upgradePoints++;
             UpdateStatsText();
-
         }
         expSlider.value = expCurrent;
     }
@@ -490,11 +484,13 @@ public class Dichuyennv1 : MonoBehaviour
         Debug.Log("Player is dead");
         ShowGameOverPanel();
     }
+
     void ShowGameOverPanel()
     {
         gameOverPanel.SetActive(true);
         Time.timeScale = 0f; // Tạm dừng game
     }
+
     void OnTryAgain()
     {
         // Tải lại cảnh hiện tại để chơi lại
@@ -515,7 +511,6 @@ public class Dichuyennv1 : MonoBehaviour
         SceneManager.LoadScene("SampleScene"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
     }
 
-
     // kiểm tra âm thanh
     private bool IsPointerOverUI()
     {
@@ -529,7 +524,7 @@ public class Dichuyennv1 : MonoBehaviour
         isStatsPanelOpen = statsPanel.activeSelf;
     }
 
-void IncreaseHealth()
+    void IncreaseHealth()
     {
         if (upgradePoints > 0)
         {
@@ -620,13 +615,13 @@ void IncreaseHealth()
 
     void ShowNotification(string message)
     {
-        notificationText.text = message;  // Hiển thị thông báo
-        Invoke("ClearNotification", 2f);  // Xóa thông báo sau 2 giây
+        notificationText.text = message; // Hiển thị thông báo
+        Invoke("ClearNotification", 2f); // Xóa thông báo sau 2 giây
     }
 
     void ClearNotification()
     {
-        notificationText.text = "";  // Xóa thông báo
+        notificationText.text = ""; // Xóa thông báo
     }
 
     public void SetSlider()
@@ -646,6 +641,7 @@ void IncreaseHealth()
             Die();
         }
     }
+
     public void StartSound()
     {
         music.Play();
@@ -657,31 +653,30 @@ void IncreaseHealth()
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-    
+
     void ToggleStatsDisplay()
-{
-    // Hiển thị hoặc ẩn bảng Chỉ Số
-    bool isActive = ChisoPanel.activeSelf;
-    ChisoPanel.SetActive(!isActive);
-
-    // Cập nhật thông tin nếu bảng hiển thị
-    if (!isActive)
     {
-        UpdateStatsDisplay();
+        // Hiển thị hoặc ẩn bảng Chỉ Số
+        bool isActive = ChisoPanel.activeSelf;
+        ChisoPanel.SetActive(!isActive);
+
+        // Cập nhật thông tin nếu bảng hiển thị
+        if (!isActive)
+        {
+            UpdateStatsDisplay();
+        }
     }
-}
-void UpdateStatsDisplay()
-{
-    // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-    healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-    manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-    damageInfoText.text = $"Sát thương:  {damageAmount}";
-}
-void ClosePanel()
-{
-    ChisoPanel.SetActive(false); 
-    
-}
 
+    void UpdateStatsDisplay()
+    {
+        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+        damageInfoText.text = $"Sát thương:  {damageAmount}";
+    }
 
+    void ClosePanel()
+    {
+        ChisoPanel.SetActive(false);
+    }
 }

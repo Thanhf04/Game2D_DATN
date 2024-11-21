@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkPrefabRef:
-    RawGuidValue: cda2461bb2802844b956afec9db9328e
+    RawGuidValue: 228517ab120b86742a0bffee13763592
   hostImageButton: {fileID: 264155412}
   joinButton: {fileID: 1516757175}
   roomCodeInputField: {fileID: 1501598719}

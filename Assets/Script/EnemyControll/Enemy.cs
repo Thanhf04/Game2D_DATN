@@ -1,55 +1,58 @@
-using System;
+using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : NetworkBehaviour
 {
-    public int maxHealth = 100; // Sức khỏe tối đa của quái
-    public int currentHealth;
-    public Slider HealthSlider;
-    Dichuyennv1 dichuyennv1;
-    public GameObject prefabsItem;
+    [Networked] public int maxHealth { get; set; } = 100;
+    [Networked] public int currentHealth { get; set; } = 100;
+    public Slider healthSlider;
+    public int damageAmount = 1;
 
-    void Start()
+    // Được gọi khi đối tượng được spawn
+    public override void Spawned()
     {
-        HealthSlider.maxValue = maxHealth;
-        HealthSlider.value = maxHealth;
-        currentHealth = maxHealth;
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
-    }
-
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount; // Giảm sức khỏe khi nhận sát thương
-
-        if (currentHealth <= 0)
+        if (healthSlider != null)
         {
-            Die(); // Gọi hàm chết nếu sức khỏe bằng 0
-
-
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
         }
-        HealthSlider.value = currentHealth;
     }
 
+    // Phương thức nhận sát thương
+    public void TakeDamage(int damage)
+    {
+        if (Object.HasStateAuthority)  // Chỉ Host mới thay đổi giá trị Networked properties
+        {
+            // Giảm máu khi nhận sát thương
+            currentHealth -= damage;
+
+            // Nếu máu <= 0, quái vật chết
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                Die();
+            }
+        }
+        UpdateHealthSlider();
+    }
+
+    // Cập nhật thanh máu
+    private void UpdateHealthSlider()
+    {
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+        }
+    }
+
+    // Xử lý cái chết của quái vật
     void Die()
     {
-        if (dichuyennv1 != null)
+        if (Object.HasStateAuthority)
         {
-            dichuyennv1.LevelSlider(50);
+            // Despawn quái vật khi chết
+            Runner.Despawn(Object);
         }
-        DropItem();
-        // Xử lý cái chết của quái vật, như là biến mất hoặc phát animation chết
-        Destroy(gameObject); // Xóa quái vật
-    }
-    void DropItem()
-    {
-        if (prefabsItem != null)
-        {
-            Instantiate(prefabsItem, transform.position, Quaternion.identity);
-        }
-    }
-    internal void TakeDamage(float damage)
-    {
-        throw new NotImplementedException();
     }
 }
