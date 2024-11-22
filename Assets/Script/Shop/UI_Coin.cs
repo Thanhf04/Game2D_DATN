@@ -1,70 +1,76 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Coin : MonoBehaviour
 {
-    private int StartingCoins = 0;
-    private int curentCoins = 0;
-    private UI_Shop ui_Shop;
+    [SerializeField] private int StartingCoins = 0; // Số coin bắt đầu
+    private int currentCoins = 0;
+
+    [Header("UI References")]
+    public GameObject panelNotification;
+    public GameObject panelShop;
+    public Button btn_Close;
+
     public delegate void CoinChangedDelegate(int newCoinCount);
     public CoinChangedDelegate CoinChanged;
 
-    public static UI_Coin _instance;
-    public static UI_Coin Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<UI_Coin>();
-                if (_instance == null)
-                {
-                    GameObject obj = new GameObject("Text_Coin");
-                    _instance = obj.AddComponent<UI_Coin>();
-                }
-            }
-            return _instance;
-        }
-    }
     private void Awake()
     {
-        curentCoins = StartingCoins;
+        currentCoins = StartingCoins;
+
+        // Gán sự kiện cho nút đóng
+        if (btn_Close != null)
+        {
+            btn_Close.onClick.AddListener(ClosePanel);
+        }
     }
+
     private void Start()
     {
         AddCoins(100);
-        Debug.Log("Add coins");
+        Debug.Log("Coins Initialized");
     }
+
     public void AddCoins(int amount)
     {
-        curentCoins = curentCoins + amount;
-        CoinChanged?.Invoke(curentCoins);
-
+        currentCoins += amount;
+        CoinChanged?.Invoke(currentCoins); // Gọi sự kiện khi thay đổi số coin
     }
-    public bool SubTractCoins(int mount, Model_Shop.ItemType itemType)
+
+    public bool SubTractCoins(int amount, Model_Shop.ItemType itemType)
     {
-        if (curentCoins >= mount)
+        if (currentCoins >= amount)
         {
-            curentCoins -= mount;
-            CoinChanged?.Invoke(curentCoins);
-            Debug.Log("Buy Item Success");
-            Debug.Log("Coin: " + curentCoins);
-            Debug.Log("Bought item: " + itemType);
+            currentCoins -= amount;
+            CoinChanged?.Invoke(currentCoins);
+
+            Debug.Log($"Buy Item Success | Coin: {currentCoins} | Item: {itemType}");
             return true;
         }
-        if (curentCoins <= 0)
+        else if (currentCoins <= 0)
         {
             Debug.Log("You don't have money");
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
             return false;
         }
         else
         {
-            Debug.Log("Buy Item Fail");
+            Debug.Log("Buy item fail");
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
             return false;
         }
     }
+
     public int GetCurrentCoins()
     {
-        return curentCoins;
+        return currentCoins;
     }
 
+    public void ClosePanel()
+    {
+        panelNotification.SetActive(false);
+        panelShop.SetActive(true);
+    }
 }

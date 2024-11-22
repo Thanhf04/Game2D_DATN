@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class Dichuyennv1 : MonoBehaviour
 {
     // Các biến điều khiển nhân vật
@@ -142,6 +141,7 @@ public class Dichuyennv1 : MonoBehaviour
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
+
         notificationText.text = "";
 
         gameOverPanel.SetActive(false);
@@ -151,7 +151,6 @@ public class Dichuyennv1 : MonoBehaviour
         resetButton.onClick.AddListener(OnReset);
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
-        //panel Chỉ số player
         ChisoPanel.SetActive(false);
         ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
@@ -653,7 +652,6 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-
     void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
@@ -666,7 +664,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsDisplay();
         }
     }
-
     void UpdateStatsDisplay()
     {
         // Cập nhật các dòng chữ trong bảng "Chỉ Số"
@@ -674,9 +671,9 @@ public class Dichuyennv1 : MonoBehaviour
         manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
         damageInfoText.text = $"Sát thương:  {damageAmount}";
     }
-
     void ClosePanel()
     {
         ChisoPanel.SetActive(false);
+
     }
 }

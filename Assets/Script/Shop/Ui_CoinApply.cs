@@ -1,26 +1,41 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Ui_CoinApply : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [Header("UI References")]
     public TextMeshProUGUI coinText;
     public Image coinImage;
-    void Start()
+
+    [Header("References")]
+    [SerializeField] private UI_Coin uiCoin; // Tham chiếu đến UI_Coin
+
+    private void Start()
     {
-        UI_Coin.Instance.CoinChanged += UpdateCoinUI;
-        UpdateCoinUI(UI_Coin.Instance.GetCurrentCoins());
+        if (uiCoin == null)
+        {
+            Debug.LogError("Ui_CoinApply: UI_Coin reference is missing!");
+            return;
+        }
+
+        uiCoin.CoinChanged += UpdateCoinUI;
+        UpdateCoinUI(uiCoin.GetCurrentCoins()); // Cập nhật giao diện lần đầu
     }
 
     private void UpdateCoinUI(int newCoinCount)
     {
-        coinText.text = newCoinCount.ToString();
+        if (coinText != null)
+        {
+            coinText.text = newCoinCount.ToString();
+        }
     }
 
-    // Update is called once per frame
     private void OnDestroy()
     {
-        UI_Coin.Instance.CoinChanged -= UpdateCoinUI;
+        if (uiCoin != null)
+        {
+            uiCoin.CoinChanged -= UpdateCoinUI;
+        }
     }
 }

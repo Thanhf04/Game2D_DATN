@@ -1,21 +1,63 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DeadZone : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log($"OnTriggerEnter triggered by {other.name} with tag {other.tag}"); // Debug toàn bộ thông tin về va chạm.
+    public GameObject gameOverPanel; // Panel Game Over
+    public Button tryAgainButton;    // Nút "Try Again"
+    public Button resetButton;       // Nút "Reset"
+    public Button mainMenuButton;    // Nút "Main Menu"
 
-        if (other.CompareTag("Player"))
+    void Start()
+    {
+        gameOverPanel.SetActive(false);
+        // Gán sự kiện cho các nút
+        tryAgainButton.onClick.AddListener(OnTryAgain);
+        resetButton.onClick.AddListener(OnReset);
+        mainMenuButton.onClick.AddListener(OnMainMenu);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Kiểm tra xem đối tượng va chạm có tag "Player" không
+        if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player đã rơi vào Dead Zone! Game Over!");
-            GameOver(other.gameObject);
+            Die(); // Gọi hàm Die để hiển thị GameOver Panel
+            collision.gameObject.SetActive(false); // Vô hiệu hóa Player
         }
     }
 
-    private void GameOver(GameObject player)
+    void OnTryAgain()
+    {
+        // Tải lại cảnh hiện tại để chơi lại
+        Time.timeScale = 1f; // Tiếp tục game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnReset()
+    {
+        // Reset lại trạng thái game
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnMainMenu()
+    {
+        // Quay lại menu chính
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("SampleScene"); // Thay "SampleScene" bằng tên cảnh menu chính
+    }
+
+    void Die()
     {
         Debug.Log("Player is dead");
-        Destroy(player); // Phá hủy Player
+        ShowGameOverPanel();
+    }
+
+    void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true); // Hiển thị panel Game Over
+        Time.timeScale = 0f;           // Tạm dừng game
     }
 }

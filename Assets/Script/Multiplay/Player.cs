@@ -1,7 +1,6 @@
 using System.Collections;
 using Cinemachine;
 using Fusion;
-using Fusion.Addons;
 using Fusion.Addons.Physics;
 using TMPro;
 using UnityEngine;
@@ -17,21 +16,16 @@ public class Player : NetworkBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
     private bool isGrounded = false;
-
+    
+  
+    public int MaxHealth = 100;
+    public int Health= 100;
+  
+    public int MaxMana = 100;
+   
+    public int Mana = 100;
     [Networked]
-    public int MaxHealth { get; set; } = 100;
-
-    [Networked]
-    public int Health { get; set; } = 100;
-
-    [Networked]
-    public int MaxMana { get; set; } = 100;
-
-    [Networked]
-    public int Mana { get; set; } = 100;
-
-    [Networked]
-    public int Damage { get; set; } = 10;
+    public int Damage {get;set;} = 10;
 
     public int UpgradePoints = 5;
     public float skill1Cooldown = 2f;
@@ -115,9 +109,8 @@ public class Player : NetworkBehaviour
                 vCam.Follow = transform;
                 vCam.LookAt = transform;
             }
+            Playmusic();
         }
-
-        Playmusic();
 
         if (tangchiso1 == null)
         {
@@ -129,6 +122,10 @@ public class Player : NetworkBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenu);
         gameOverPanel.SetActive(false);
 
+        ChisoPanel.SetActive(false);
+        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        exitButton.onClick.AddListener(ClosePanel);
+
         SetSlider();
         Health = MaxHealth;
         Mana = MaxMana;
@@ -137,11 +134,6 @@ public class Player : NetworkBehaviour
         currentLevel = level;
         tangchiso1.UpdateStatsText();
         tangchiso1.notificationText.text = "";
-
-
-        ChisoPanel.SetActive(false);
-        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
-        exitButton.onClick.AddListener(ClosePanel);
     }
 
     void Playmusic()
@@ -189,15 +181,27 @@ public class Player : NetworkBehaviour
 
             if (data.isSkill1 && !wasSkill1Pressed)
             {
-                Skill1();
+                if (skill1Timer <= 0 && Mana >= 20)
+                {
+                    Debug.Log("skill 1");
+                    Skill1();
+                }
             }
             if (data.isSkill2 && !wasSkill2Pressed)
             {
-                Skill2();
+                if (skill1Timer <= 0 && Mana >= 30)
+                {
+                    Debug.Log("Skill 2");
+                    Skill2();
+                }
             }
             if (data.isSkill3 && !wasSkill3Pressed)
             {
-                Skill3();
+                if (skill1Timer <= 0 && Mana >= 10)
+                {
+                    Debug.Log("Skill 3");
+                    Skill3();
+                }
             }
 
             wasSkill1Pressed = data.isSkill1;
@@ -206,18 +210,20 @@ public class Player : NetworkBehaviour
         }
     }
 
-    void Update(){
+    void Update()
+    {
         // Cập nhật vị trí của lửa nếu đang phun lửa
         if (currentFireBreath != null)
         {
             currentFireBreath.transform.position = firePoint2.position;
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
+        UpdateSkillCooldowns();
     }
 
     private bool CanJump()
     {
-        return isGrounded || jumpCount < 2;
+        return isGrounded || jumpCount < 1;
     }
 
     private void Jump()
@@ -395,7 +401,7 @@ public class Player : NetworkBehaviour
 
     void Skill3()
     {
-        if (Mana >= 30) // Kiểm tra nếu mana đủ
+        if (Mana >= 10) // Kiểm tra nếu mana đủ
         {
             FireHand();
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
@@ -416,8 +422,9 @@ public class Player : NetworkBehaviour
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
             StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-            //Mana -= 20; // Giảm mana khi sử dụng kỹ năng
-            manaSlider.value = Mana -= 20;
+            Mana -= 20; // Giảm mana khi sử dụng kỹ năng
+            Debug.Log("ShootFireBullet: " + Mana);
+            manaSlider.value = Mana;
             tangchiso1.UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
@@ -428,7 +435,7 @@ public class Player : NetworkBehaviour
         Destroy(bullet);
     }
 
-void BreathFire()
+    void BreathFire()
     {
         if (Mana >= 30) // Kiểm tra nếu mana đủ
         {
@@ -442,8 +449,9 @@ void BreathFire()
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
-                // currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
-                manaSlider.value = Mana -= 30;
+                Mana -= 30; // Giảm mana khi sử dụng kỹ năng
+                Debug.Log("BreathFire: " + Mana);
+                manaSlider.value = Mana;
                 tangchiso1.UpdateStatsText(); // Cập nhật giao diện người dùng
             }
         }
@@ -473,10 +481,9 @@ void BreathFire()
             }
             playAttack_Fire3.Play();
             rbFireHand.gravityScale = 1f;
-            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
             StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             Mana -= 10; // Giảm mana khi sử dụng kỹ năng
+            Debug.Log("FireHand: " + Mana);
             manaSlider.value = Mana;
             tangchiso1.UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -500,24 +507,24 @@ void BreathFire()
         Time.timeScale = 0f; // Tạm dừng game
     }
 
-    void OnTryAgain()
+    public void OnTryAgain()
     {
         // Tải lại cảnh hiện tại để chơi lại
         Time.timeScale = 1f; // Tiếp tục game
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void OnReset()
+    public void OnReset()
     {
         Time.timeScale = 1f; // Tiếp tục game
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void OnMainMenu()
+    public void OnMainMenu()
     {
         // Quay lại menu chính
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
+        SceneManager.LoadScene(1); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
     }
 
     public void SetSlider()

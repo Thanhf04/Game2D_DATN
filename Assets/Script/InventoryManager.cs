@@ -43,7 +43,6 @@ public class InventoryManager : NetworkBehaviour
     void Start()
     {
         //use item 
-       
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -359,48 +358,48 @@ public class InventoryManager : NetworkBehaviour
         return;
     }
     // use item
-    public void UseHealth(ItemClass item)
+   public void UseHealth(ItemClass item)
+{
+    SlotClass slot = ContainsItem(item);
+    if (slot != null && slot.GetQuantity() > 0)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+        if (item is ConsumableClass consumable)
         {
-            if (item is ConsumableClass consumable)
+            if (player.Health < player.MaxHealth)
             {
-                if (player.Health < player.MaxHealth)
-                {
-                    player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
-                    healthSlider.value = player.Health;
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Health, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
-                }
+                player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
+                healthSlider.value = player.Health;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Health, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
-
-            RefreshUI();
         }
+
+        RefreshUI();
     }
-    public void UseMana(ItemClass item)
+}
+   public void UseMana(ItemClass item)
+{
+    SlotClass slot = ContainsItem(item);
+    if (slot != null && slot.GetQuantity() > 0)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+        if (item is ConsumableClass consumable)
         {
-            if (item is ConsumableClass consumable)
+            if (player.Mana < player.MaxMana)
             {
-                if (player.Mana < player.MaxMana)
-                {
-                    player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
-                    manaSlider.value = player.Mana;
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Mana, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
-
-                }
+                player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
+                manaSlider.value = player.Mana;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Mana, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
             }
-            RefreshUI();
         }
+
+        RefreshUI();
     }
+}
     private void UpdateButtonQuantity(Button button, ItemClass item)
     {
         // Kiểm tra số lượng còn lại của item
