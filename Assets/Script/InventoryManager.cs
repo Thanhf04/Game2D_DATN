@@ -80,7 +80,6 @@ public class InventoryManager : MonoBehaviour
             if (player == null)
             {
                 return;
-                return;
             }
         }
         if (Input.GetMouseButtonDown(0))

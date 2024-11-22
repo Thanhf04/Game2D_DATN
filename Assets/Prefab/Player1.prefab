@@ -3987,7 +3987,7 @@ PrefabInstance:
     - target: {fileID: 3355201228835575433, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
       propertyPath: uiCoin
       value: 
-      objectReference: {fileID: 7519279819703254033}
+      objectReference: {fileID: 8178148302127561651}
     - target: {fileID: 4982103821628124399, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -4091,9 +4091,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5176422106641906698, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
       insertIndex: -1
       addedObject: {fileID: 688306527856423666}
-    - targetCorrespondingSourceObject: {fileID: 5176422106641906698, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7519279819703254033}
   m_SourcePrefab: {fileID: 100100000, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
 --- !u!224 &6589733685503861014 stripped
 RectTransform:
@@ -4120,22 +4117,6 @@ MonoBehaviour:
   Shop: {fileID: 8746070358873757041}
   BtnOpenShop: {fileID: 8011012299224924700}
   BtnCloseShop: {fileID: 8905285360811132308}
---- !u!114 &7519279819703254033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8746070358873757041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b52b9a88b9b8f9546914b3aa15e1a072, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartingCoins: 0
-  panelNotification: {fileID: 9189007519000541869}
-  panelShop: {fileID: 8746070358873757041}
-  btn_Close: {fileID: 2789359167661397139}
 --- !u!114 &8905285360811132308 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4982103821628124399, guid: 89d4846f323c29448bc7def23191fd86, type: 3}
@@ -4448,7 +4429,7 @@ PrefabInstance:
     - target: {fileID: 7567743117805841434, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
       propertyPath: uiCoin
       value: 
-      objectReference: {fileID: 7519279819703254033}
+      objectReference: {fileID: 8178148302127561651}
     - target: {fileID: 7580816032908945382, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -4476,7 +4457,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1175681843686610845, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8178148302127561651}
   m_SourcePrefab: {fileID: 100100000, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
 --- !u!114 &50341388188801143 stripped
 MonoBehaviour:
@@ -4538,6 +4522,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6523370756218277614 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1175681843686610845, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
+  m_PrefabInstance: {fileID: 5392910245278177651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8178148302127561651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6523370756218277614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52b9a88b9b8f9546914b3aa15e1a072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartingCoins: 0
+  panelNotification: {fileID: 9189007519000541869}
+  panelShop: {fileID: 8746070358873757041}
+  btn_Close: {fileID: 2789359167661397139}
 --- !u!114 &8065223221535033573 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2682485675622470038, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
