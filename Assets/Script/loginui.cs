@@ -89,7 +89,7 @@ public class LoginUI : MonoBehaviour
                     await LoadPlayerDataFromFirebase(username);  // Load data từ Firebase
 
                     // Chuyển cảnh sau khi load dữ liệu
-                    SceneManager.LoadScene("Player1");
+                    SceneManager.LoadScene("Home");
                 }
                 else
                 {

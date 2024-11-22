@@ -40,7 +40,6 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         //use item 
-
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -74,11 +73,13 @@ public class InventoryManager : MonoBehaviour
     private void Update()
     {
 
+
         if (player == null)
         {
             player = FindObjectOfType<Player>();
             if (player == null)
             {
+                return;
                 return;
             }
         }
@@ -107,7 +108,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         if (isMoving)
-        {
+{
             itemCursor.enabled = true;
             itemCursor.transform.position = Input.mousePosition;
             itemCursor.sprite = movingSlot.GetItem().itemIcon;
@@ -201,7 +202,7 @@ public class InventoryManager : MonoBehaviour
                 items[slotToRemoveIndex].RemoveItem();
             }
         }
-        else
+else
         {
             return;
         }
@@ -310,7 +311,7 @@ public class InventoryManager : MonoBehaviour
                     }
                     else
                     {
-                        return;
+return;
                     }
                 }
                 else
@@ -346,9 +347,9 @@ public class InventoryManager : MonoBehaviour
         {
             if (item is ConsumableClass consumable)
             {
-                if (player.Health < player.maxHealth)
+                if (player.Health < player.MaxHealth)
                 {
-                    player.Health = Mathf.Min(player.Health + 50, player.maxHealth);
+                    player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
                     healthSlider.value = player.Health;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Health, item);
@@ -367,9 +368,9 @@ public class InventoryManager : MonoBehaviour
         {
             if (item is ConsumableClass consumable)
             {
-                if (player.Mana < player.maxMana)
+                if (player.Mana < player.MaxMana)
                 {
-                    player.Mana = Mathf.Min(player.Mana + 50, player.maxMana);
+                    player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
                     manaSlider.value = player.Mana;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Mana, item);
@@ -405,7 +406,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            // Nếu không tìm thấy item, đặt số lượng là 0
+// Nếu không tìm thấy item, đặt số lượng là 0
             if (buttonText != null)
             {
                 buttonText.text = "0"; // Đặt số lượng là 0 khi item không có trong túi
