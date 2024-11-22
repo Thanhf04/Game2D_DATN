@@ -4396,10 +4396,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2068581614570739773, guid: 70c83d682f0488645b2da764020a8858, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2286649552812251611, guid: 70c83d682f0488645b2da764020a8858, type: 3}
       propertyPath: m_Name
       value: Notification_canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 6193265454772809232, guid: 70c83d682f0488645b2da764020a8858, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5670590778307426948}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

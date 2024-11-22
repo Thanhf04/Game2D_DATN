@@ -40,17 +40,17 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
-        if (Object.HasInputAuthority)
-        {
-            vCam = FindObjectOfType<CinemachineVirtualCamera>();
+        //if (Object.HasInputAuthority)
+        //{
+        //    vCam = FindObjectOfType<CinemachineVirtualCamera>();
 
-            if (vCam != null)
-            {
-                vCam.Follow = transform;
-                vCam.LookAt = transform;
-            }
-            Playmusic();
-        }
+        //    if (vCam != null)
+        //    {
+        //        vCam.Follow = transform;
+        //        vCam.LookAt = transform;
+        //    }
+        //    Playmusic();
+        //}
     }
 
     void Playmusic()
