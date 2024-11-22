@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Bantay
   - NenDat
   - enemy
   - Boss
@@ -64,4 +65,10 @@ TagManager:
     locked: 0
   - name: New Layer 7
     uniqueID: 1222731409
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 748597489
+    locked: 0
+  - name: New Layer 9
+    uniqueID: 1094700221
     locked: 0
