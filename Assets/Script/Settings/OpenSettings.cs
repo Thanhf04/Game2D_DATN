@@ -7,6 +7,7 @@ public class OpenSettings : MonoBehaviour
     public void Open()
     {
         PanelSettings.SetActive(true);
+        Debug.Log("fuickkkkkkkk");
     }
     public void Close()
     {

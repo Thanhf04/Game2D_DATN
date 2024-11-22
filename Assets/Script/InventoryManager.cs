@@ -73,11 +73,13 @@ public class InventoryManager : MonoBehaviour
     private void Update()
     {
 
+
         if (player == null)
         {
             player = FindObjectOfType<Player>();
             if (player == null)
             {
+                return;
                 return;
             }
         }
@@ -345,9 +347,9 @@ return;
         {
             if (item is ConsumableClass consumable)
             {
-                if (player.Health < player.maxHealth)
+                if (player.Health < player.MaxHealth)
                 {
-                    player.Health = Mathf.Min(player.Health + 50, player.maxHealth);
+                    player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
                     healthSlider.value = player.Health;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Health, item);
@@ -366,9 +368,9 @@ return;
         {
             if (item is ConsumableClass consumable)
             {
-                if (player.Mana < player.maxMana)
+                if (player.Mana < player.MaxMana)
                 {
-                    player.Mana = Mathf.Min(player.Mana + 50, player.maxMana);
+                    player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
                     manaSlider.value = player.Mana;
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Mana, item);

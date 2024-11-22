@@ -12,7 +12,7 @@ public class LoginUI : MonoBehaviour
     public TMP_InputField usernameInput;  // Input field cho username
     public TMP_InputField passwordInput;  // Input field cho mật khẩu
     public TextMeshProUGUI feedbackText;  // Text để hiển thị phản hồi
-    public GameObject player; // Thêm GameObject cho nhân vật, khai báo ở đây
+    //public GameObject player; // Thêm GameObject cho nhân vật, khai báo ở đây
 
     private FirebaseAuth auth;            // FirebaseAuth instance
     private DatabaseReference databaseReference;  // Firebase Database instance

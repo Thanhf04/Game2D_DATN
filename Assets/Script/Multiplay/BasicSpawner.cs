@@ -137,6 +137,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         data.isJumping = Input.GetKey(KeyCode.Space); 
 
         data.isAttacking = Input.GetKey(KeyCode.K);
+
+        data.isSkill1 = Input.GetKey(KeyCode.Q);
+        data.isSkill2 = Input.GetKey(KeyCode.E);
+        data.isSkill3 = Input.GetKey(KeyCode.R);
+        
+
         input.Set(data);
     }
 
