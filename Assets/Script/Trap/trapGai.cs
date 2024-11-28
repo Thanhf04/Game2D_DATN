@@ -9,10 +9,10 @@ public class trapGai : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            Dichuyennv1 playerHealth = collision.GetComponent<Dichuyennv1>();
+            NewPlayer playerHealth = collision.GetComponent<NewPlayer>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10); // Gây 10 sát thương
+                // playerHealth.TakeDamage(10); // Gây 10 sát thương
             }
         }
     }
