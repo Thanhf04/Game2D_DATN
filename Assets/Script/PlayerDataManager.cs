@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Photon.Pun;  // Đảm bảo Photon.Pun đã được sử dụng
 
 public class PlayerDataTest : MonoBehaviour
 {
@@ -28,7 +29,8 @@ public class PlayerDataTest : MonoBehaviour
 
     private DatabaseReference databaseReference;
     private string username;
-    private Vector3 lastSavedPosition;
+    private Vector3 lastSavedPosition; // Biến để lưu vị trí đã lưu
+    private Vector3 position;         // Biến để lưu vị trí nhân vật (thêm dòng này)
 
     private async void Start()
     {
@@ -60,9 +62,6 @@ public class PlayerDataTest : MonoBehaviour
             // Tải tất cả dữ liệu người chơi từ Firebase
             await LoadPlayerDataFromFirebase(username);
 
-            // Tải vị trí người chơi từ Firebase sau khi tải các dữ liệu khác
-            await LoadPlayerPositionFromFirebase(username);
-
             // Tải dữ liệu từ inventoryCanvas nếu có
             await LoadInventoryDataFromFirebase(username);
         }
@@ -71,11 +70,15 @@ public class PlayerDataTest : MonoBehaviour
             Debug.LogWarning("Username is empty. Cannot load player data.");
         }
 
-        // Lưu vị trí ban đầu của người chơi
-        lastSavedPosition = player.transform.position;
+        // Spawn nhân vật qua Photon (sử dụng vị trí mặc định từ Firebase hoặc vị trí đã tải)
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            position = new Vector3(-15, 5, 0); // Vị trí mặc định, có thể thay bằng vị trí tải từ Firebase.
+            PhotonNetwork.Instantiate("Player1", position, Quaternion.identity); // Chắc chắn rằng PhotonNetwork được kết nối
+        }
 
-        // Bắt đầu theo dõi sự thay đổi vị trí của nhân vật
-        StartCoroutine(CheckAndSavePlayerPosition());
+        // Sau khi Photon spawn nhân vật, tải vị trí từ Firebase (nếu có)
+        await LoadPlayerPositionFromFirebase(username);
     }
 
     // Hàm kiểm tra và lưu vị trí nhân vật
@@ -171,26 +174,6 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
-    // Lưu thông tin từ inventoryCanvas (giả sử bạn có các thông tin về túi đồ)
-    private async void SaveInventoryData()
-    {
-        if (string.IsNullOrEmpty(username)) return;
-
-        // Lấy dữ liệu từ inventoryCanvas (ví dụ: các vật phẩm trong túi đồ)
-        List<string> inventoryItems = new List<string> { "Item1", "Item2", "Item3" }; // Ví dụ, lấy các item từ inventoryCanvas
-
-        try
-        {
-            // Lưu thông tin túi đồ vào Firebase
-            await databaseReference.Child("players").Child(username).Child("Inventory").SetValueAsync(inventoryItems);
-            Debug.Log("Inventory data saved to Firebase.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Error saving inventory data: {ex.Message}");
-        }
-    }
-
     // Tải lại tất cả dữ liệu người chơi từ Firebase
     private async Task LoadPlayerDataFromFirebase(string username)
     {
@@ -212,7 +195,7 @@ public class PlayerDataTest : MonoBehaviour
             // Lấy và cập nhật giá trị EXP
             int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
             expSlider.value = exp;
-            expText.text = "EXP: " + exp.ToString();
+            expText.text = " " + exp.ToString();
 
             // Lấy và cập nhật giá trị Gold
             int gold = int.Parse(snapshot.Child("Gold").Value.ToString());

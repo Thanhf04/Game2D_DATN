@@ -47,13 +47,20 @@ public class UI_Coin : MonoBehaviour
             Debug.Log($"Buy Item Success | Coin: {currentCoins} | Item: {itemType}");
             return true;
         }
-
-        // Trường hợp không đủ tiền
-        Debug.Log(currentCoins <= 0 ? "You don't have money" : "Buy Item Fail");
-        panelNotification?.SetActive(true);
-        panelShop?.SetActive(false);
-
-        return false;
+        else if (currentCoins <= 0)
+        {
+            Debug.Log("You don't have money");
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
+            return false;
+        }
+        else
+        {
+            Debug.Log("Buy item fail");
+            panelNotification.SetActive(true);
+            panelShop.SetActive(false);
+            return false;
+        }
     }
 
     public int GetCurrentCoins()
@@ -63,7 +70,7 @@ public class UI_Coin : MonoBehaviour
 
     public void ClosePanel()
     {
-        panelNotification?.SetActive(false);
-        panelShop?.SetActive(true);
+        panelNotification.SetActive(false);
+        panelShop.SetActive(true);
     }
 }

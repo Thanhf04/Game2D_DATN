@@ -22,7 +22,6 @@ public class InventoryManager : MonoBehaviour
 
     // use item
     [Header("Use Item")]
-    Player player;
     [SerializeField] private Button Btn_Health;
     [SerializeField] private Button Btn_Mana;
     [SerializeField] private ItemClass healthItem;
@@ -34,6 +33,8 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
+    NewPlayer player1;
+
 
 
     // Start is called before the first frame update
@@ -68,20 +69,35 @@ public class InventoryManager : MonoBehaviour
         tempSlot = new SlotClass();
 
         RefreshUI();
+
+        // StartCoroutine(WaitForPlayerSpawn());
     }
+
+
+    // IEnumerator WaitForPlayerSpawn()
+    // {
+    //     while (player1 == null)
+    //     {
+    //         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+    //         if (playerObj != null)
+    //         {
+    //             var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
+
+    //             // Kiểm tra quyền sở hữu (Ownership)
+    //             if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
+    //             {
+    //                 player1 = playerObj.GetComponent<Player>();
+    //             }
+    //         }
+    //         yield return null;
+    //     }
+    // }
 
     private void Update()
     {
-
-
-        if (player == null)
+       if (player1 == null)
         {
-            player = FindObjectOfType<Player>();
-            if (player == null)
-            {
-                return;
-                return;
-            }
+            return;
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -108,7 +124,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         if (isMoving)
-{
+        {
             itemCursor.enabled = true;
             itemCursor.transform.position = Input.mousePosition;
             itemCursor.sprite = movingSlot.GetItem().itemIcon;
@@ -202,7 +218,7 @@ public class InventoryManager : MonoBehaviour
                 items[slotToRemoveIndex].RemoveItem();
             }
         }
-else
+        else
         {
             return;
         }
@@ -311,7 +327,7 @@ else
                     }
                     else
                     {
-return;
+                        return;
                     }
                 }
                 else
@@ -340,48 +356,49 @@ return;
         return;
     }
     // use item
-    public void UseHealth(ItemClass item)
+   public void UseHealth(ItemClass item)
+{
+    SlotClass slot = ContainsItem(item);
+    if (slot != null && slot.GetQuantity() > 0)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+        if (item is ConsumableClass consumable)
         {
-            if (item is ConsumableClass consumable)
+            if (player1.currentHealth < player1.maxHealth)
             {
-                if (player.Health < player.MaxHealth)
-                {
-                    player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
-                    healthSlider.value = player.Health;
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Health, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
-                }
+                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
+                healthSlider.value = player1.currentHealth;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Health, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
-
-            RefreshUI();
         }
+
+        RefreshUI();
     }
-    public void UseMana(ItemClass item)
+}
+   public void UseMana(ItemClass item)
+{
+    SlotClass slot = ContainsItem(item);
+    if (slot != null && slot.GetQuantity() > 0)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
-        {
-            if (item is ConsumableClass consumable)
-            {
-                if (player.Mana < player.MaxMana)
-                {
-                    player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
-                    manaSlider.value = player.Mana;
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Mana, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
 
-                }
+        if (item is ConsumableClass consumable)
+        {
+            if (player1.currentMana < player1.maxMana)
+            {
+                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
+                manaSlider.value = player1.currentMana;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Mana, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
             }
-            RefreshUI();
         }
+
+        RefreshUI();
     }
+}
     private void UpdateButtonQuantity(Button button, ItemClass item)
     {
         // Kiểm tra số lượng còn lại của item
@@ -406,7 +423,7 @@ return;
         }
         else
         {
-// Nếu không tìm thấy item, đặt số lượng là 0
+            // Nếu không tìm thấy item, đặt số lượng là 0
             if (buttonText != null)
             {
                 buttonText.text = "0"; // Đặt số lượng là 0 khi item không có trong túi
