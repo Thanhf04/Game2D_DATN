@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: IncreaseMana
         m_Mode: 1
@@ -303,7 +303,6 @@ GameObject:
   - component: {fileID: 3347434192705114505}
   - component: {fileID: 6733730044605390775}
   - component: {fileID: 8620127652148440073}
-  - component: {fileID: 9066497104996325342}
   m_Layer: 5
   m_Name: HeThongTangDiem
   m_TagString: Untagged
@@ -395,25 +394,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &9066497104996325342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 912734991840198027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8404184df0a865346bf92c8346bea5fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statsPanel: {fileID: 7348879242824606803}
-  notificationText: {fileID: 8906300603276441517}
-  healthText: {fileID: 124860745045757283}
-  manaText: {fileID: 6486781238879922641}
-  damaText: {fileID: 1188244896161699621}
-  levelText: {fileID: 6175074575673625085}
-  pointsText: {fileID: 2001268081176284528}
 --- !u!1 &1880868737300486900
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +514,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: IncreaseDame
         m_Mode: 1
@@ -666,7 +646,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: DecreaseHealth
         m_Mode: 1
@@ -1066,7 +1046,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: IncreaseHealth
         m_Mode: 1
@@ -1411,7 +1391,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: DecreaseMana
         m_Mode: 1
@@ -1996,7 +1976,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: ToggleStatsPanel
         m_Mode: 1
@@ -2128,7 +2108,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9066497104996325342}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: tangchiso, Assembly-CSharp
         m_MethodName: DecreaseDamage
         m_Mode: 1

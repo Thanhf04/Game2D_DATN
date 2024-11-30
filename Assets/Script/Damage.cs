@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
-    private Player player;
+    private NewPlayer player;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -11,13 +11,13 @@ public class Damage : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(player.Damage); 
+                enemy.TakeDamage(player.damageAmount);
             }
         }
     }
 
     void Start()
     {
-        player = GetComponentInParent<Player>();
+        player = GetComponentInParent<NewPlayer>();
     }
 }

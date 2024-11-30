@@ -1,10 +1,10 @@
-﻿using Fusion;
+
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryManager : NetworkBehaviour
+public class InventoryManager : MonoBehaviour
 {
     [SerializeField] private GameObject slotsHolder;
     [SerializeField] private ItemClass itemToAdd;
@@ -23,7 +23,6 @@ public class InventoryManager : NetworkBehaviour
 
     // use item
     [Header("Use Item")]
-    Player player;
     [SerializeField] private Button Btn_Health;
     [SerializeField] private Button Btn_Mana;
     [SerializeField] private ItemClass healthItem;
@@ -35,8 +34,8 @@ public class InventoryManager : NetworkBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
+    NewPlayer player1;
 
-    private Player player1;
 
 
     // Start is called before the first frame update
@@ -72,35 +71,35 @@ public class InventoryManager : NetworkBehaviour
 
         RefreshUI();
 
-        StartCoroutine(WaitForPlayerSpawn());
+        // StartCoroutine(WaitForPlayerSpawn());
     }
 
 
-    IEnumerator WaitForPlayerSpawn()
-    {
-        while (player1 == null)
-        {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
-            {
-                var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
+    // IEnumerator WaitForPlayerSpawn()
+    // {
+    //     while (player1 == null)
+    //     {
+    //         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+    //         if (playerObj != null)
+    //         {
+    //             var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
 
-                // Kiểm tra quyền sở hữu (Ownership)
-                if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
-                {
-                    player1 = playerObj.GetComponent<Player>();
-                }
-            }
-            yield return null;
-        }
-    }
+    //             // Kiểm tra quyền sở hữu (Ownership)
+    //             if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
+    //             {
+    //                 player1 = playerObj.GetComponent<Player>();
+    //             }
+    //         }
+    //         yield return null;
+    //     }
+    // }
 
     private void Update()
     {
         if (player1 == null)
         {
-            player = FindObjectOfType<Player>();
-            if (player == null)
+            player1 = FindObjectOfType<NewPlayer>();
+            if (player1 == null)
             {
                 return;
             }
@@ -366,26 +365,21 @@ public class InventoryManager : NetworkBehaviour
     // use item
     public void UseHealth(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+        if (item is ConsumableClass consumable)
         {
-
-            if (item is ConsumableClass consumable)
+            if (player1.currentHealth < player1.maxHealth)
             {
-                if (player1.Health < player1.MaxHealth)
-                {
-                    player1.Health = Mathf.Min(player1.Health + 50, player1.MaxHealth);
-                    healthSlider.value = player1.Health;
-                    Debug.Log("Use HP");
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Health, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
-                }
-                else
-                {
-                    Debug.Log("Máu của bạn đã đầy!");
-                }
+                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
+                healthSlider.value = player1.currentHealth;
+                Debug.Log("Use HP");
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Health, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
+            }
+            else
+            {
+                Debug.Log("Máu của bạn đã đầy!");
             }
             RefreshUI();
         }
@@ -396,25 +390,18 @@ public class InventoryManager : NetworkBehaviour
     }
     public void UseMana(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+
+
+        if (item is ConsumableClass consumable)
         {
-            if (item is ConsumableClass consumable)
+            if (player1.currentMana < player1.maxMana)
             {
-                if (player1.Mana < player1.MaxMana)
-                {
-                    player1.Mana = Mathf.Min(player1.Mana + 50, player1.MaxMana);
-                    manaSlider.value = player1.Mana;
-                    Debug.Log("Use Mana");
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Mana, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
-                }
-                else
-                {
-                    Debug.Log("Năng lượng của bạn đã đầy!");
-                }
+                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
+                manaSlider.value = player1.currentMana;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Mana, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
             }
 
 
