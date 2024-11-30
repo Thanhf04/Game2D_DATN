@@ -42,8 +42,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     public Slider healthSlider;
     public Slider manaSlider;
     public Slider expSlider;
-
-
+    
     [Header("Stats")]
     public int maxHealth = 100;
     public int currentHealth = 100;
@@ -136,10 +135,6 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         currentHealth = maxHealth;
         currentMana = maxMana;
         expSlider.value = expCurrent;
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;
-        manaSlider.maxValue = maxMana;
-        manaSlider.value = currentMana;
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
@@ -217,47 +212,6 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             Playmusic();
-        }
-        // Lấy input
-        float moveInput = Input.GetAxis("Horizontal");
-        rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
-
-        // Chạy và xoay nhân vật
-        isRunning = moveInput != 0;
-        anim.SetBool("isRunning", isRunning);
-
-        if (moveInput != 0)
-        {
-            // Xoay nhân vật theo hướng di chuyển
-            if (moveInput > 0)
-            {
-                // Quay sang phải
-                transform.localScale = new Vector3(1, 1, 1);
-            }
-            else
-            {
-                // Quay sang trái
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-
-            // Đồng bộ hóa việc quay mặt của nhân vật với các client khác
-            photonView.RPC("UpdateCharacterRotation", RpcTarget.Others, transform.localScale.x);
-
-            // Chạy âm thanh bước chân
-            if (!playWalk.isPlaying && isGrounded)
-            {
-                playWalk.Play();
-            }
-
-            // Dừng âm thanh tấn công nếu đang phát
-            if (playAttack.isPlaying)
-            {
-                playAttack.Stop();
-            }
-        }
-        else if (playWalk.isPlaying)
-        {
-            playWalk.Stop();
         }
     }
 
@@ -339,6 +293,48 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         {
             currentFireBreath.transform.position = firePoint2.position;
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        }
+
+
+        float moveInput = Input.GetAxis("Horizontal");
+        rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
+
+        // Chạy và xoay nhân vật
+        isRunning = moveInput != 0;
+        anim.SetBool("isRunning", isRunning);
+
+        if (moveInput != 0)
+        {
+            // Xoay nhân vật theo hướng di chuyển
+            if (moveInput > 0)
+            {
+                // Quay sang phải
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                // Quay sang trái
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+
+            // Đồng bộ hóa việc quay mặt của nhân vật với các client khác
+            photonView.RPC("UpdateCharacterRotation", RpcTarget.Others, transform.localScale.x);
+
+            // Chạy âm thanh bước chân
+            if (!playWalk.isPlaying && isGrounded)
+            {
+                playWalk.Play();
+            }
+
+            // Dừng âm thanh tấn công nếu đang phát
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
+            }
+        }
+        else if (playWalk.isPlaying)
+        {
+            playWalk.Stop();
         }
     }
 
@@ -602,33 +598,20 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         isStatsPanelOpen = statsPanel.activeSelf;
     }
 
-    public void IncreaseHealth()
+    void IncreaseHealth()
     {
         if (upgradePoints > 0)
         {
-            maxHealth += 100;
-            currentHealth = Mathf.Min(maxHealth, currentHealth + 100);
-            healthSlider.maxValue = maxHealth;
-            upgradePoints--;
-            UpdateStatsText();
-
-            // Gọi RPC để đồng bộ thay đổi sức khỏe cho tất cả các máy
-            photonView.RPC("RPC_UpdateHealth", RpcTarget.AllBuffered, maxHealth, currentHealth);
+            maxHealth += 100; // Tăng sức khỏe tối đa
+            currentHealth = Mathf.Min(maxHealth, currentHealth + 100); // Đảm bảo máu hiện tại không vượt quá maxHealth
+            healthSlider.maxValue = maxHealth; // Cập nhật thanh máu
+            upgradePoints--; // Giảm điểm nâng cấp
+            UpdateStatsText(); // Cập nhật UI
         }
         else
         {
-            ShowNotification("Bạn đã hết điểm nâng cấp!");
+            ShowNotification("Bạn đã hết điểm nâng cấp!"); // Thông báo hết điểm nâng cấp
         }
-    }
-
-    [PunRPC]
-    void RPC_UpdateHealth(int newMaxHealth, int newCurrentHealth)
-    {
-        maxHealth = newMaxHealth;
-        currentHealth = newCurrentHealth;
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;  // Cập nhật thanh máu
-        UpdateStatsText();
     }
 
     void DecreaseHealth()
