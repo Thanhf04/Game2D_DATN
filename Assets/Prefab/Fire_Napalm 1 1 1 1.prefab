@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3250800742354314343}
   - component: {fileID: 1641779823558070032}
   - component: {fileID: 5376173763073764709}
+  - component: {fileID: 2358509816105444344}
   m_Layer: 0
   m_Name: Fire_Napalm 1 1 1 1
   m_TagString: Untagged
@@ -180,3 +181,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &2358509816105444344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145019903025749688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ebb9a39674259d448ecf0eb4a2dacfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageSkill: 10

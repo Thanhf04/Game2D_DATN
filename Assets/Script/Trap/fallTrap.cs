@@ -60,7 +60,7 @@ public class fallTrap : MonoBehaviour
         if (collision.collider.CompareTag("Player") && daRoi)
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            Player playerHealth = collision.collider.GetComponent<Player>();
+            NewPlayer playerHealth = collision.collider.GetComponent<NewPlayer>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(20); // Gây 20 sát thương

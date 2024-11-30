@@ -36,7 +36,7 @@ public class newTrap : MonoBehaviour
         if (collision.collider.CompareTag("Player"))
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            Player playerHealth = collision.collider.GetComponent<Player>();
+            NewPlayer playerHealth = collision.collider.GetComponent<NewPlayer>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(1); // Gây 20 sát thương
