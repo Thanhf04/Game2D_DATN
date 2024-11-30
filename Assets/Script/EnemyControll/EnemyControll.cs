@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-    public float start,
-        end;
+    public float start,end;
     public bool isRight;
     public float speed;
     public float attackRange = 2.0f;
@@ -23,34 +22,30 @@ public class EnemyControl : MonoBehaviour
     {
         if (player == null)
         {
-            player = GameObject.FindWithTag("Player"); // Tìm lại player nếu player chưa được spawn
+            player = GameObject.FindWithTag("Player"); 
             if (player == null)
             {
-                return; // Nếu không tìm thấy player, không làm gì cả
+                return; 
             }
         }
 
-        // Quái vật đã tìm thấy người chơi, tiếp tục xử lý logic sau đây
         float quai = transform.position.x;
         Vector3 playerPosition = player.transform.position;
 
-        // Kiểm tra nếu người chơi đang trong phạm vi đuổi theo hoặc phạm vi tấn công
         float distanceToPlayer = Vector3.Distance(transform.position, playerPosition);
 
         if (distanceToPlayer <= attackRange)
         {
-            Debug.Log("Tấn công người chơi");
-            AttackPlayer(); // Tấn công khi ở gần người chơi
+            AttackPlayer(); 
         }
         else if (distanceToPlayer <= chaseRange)
         {
-            Debug.Log("Đuổi theo người chơi");
-            ChasePlayer(playerPosition); // Đuổi theo người chơi khi còn xa
+            ChasePlayer(playerPosition); 
         }
         else
         {
-            animator.SetBool("isAttacking", false); // Ngừng animation tấn công khi người chơi ra khỏi phạm vi
-            Patrol(quai); // Tiếp tục di chuyển tuần tra nếu người chơi không trong phạm vi
+            animator.SetBool("isAttacking", false); 
+            Patrol(quai); 
         }
     }
 

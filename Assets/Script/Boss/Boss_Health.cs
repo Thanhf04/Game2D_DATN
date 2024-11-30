@@ -10,8 +10,8 @@ public class Boss_Health : MonoBehaviour
     public int currentHealth;
     Animator animator;
     public GameObject prefabsItem;
-    public GameObject PanelSkillBoss;
-    Dichuyennv1 dichuyennv1;
+    public GameObject Panel_KillBoss;
+    Player Player;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class Boss_Health : MonoBehaviour
         HealthBoss.value = maxHealth;
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+        Player = FindObjectOfType<Player>();
     }
     public void TakeDamage(int damage)
     {
@@ -36,10 +36,10 @@ public class Boss_Health : MonoBehaviour
     }
     public void Die()
     {
-        dichuyennv1.LevelSlider(100);
+        //Player.LevelSlider(100);
         animator.SetBool("Death", true);
         Destroy(gameObject, 2f);
-        PanelSkillBoss.SetActive(true);
+        Panel_KillBoss.SetActive(true);
         DropItem();
     }
     public void DropItem()
@@ -51,7 +51,7 @@ public class Boss_Health : MonoBehaviour
     }
     public void ClosePanel()
     {
-        PanelSkillBoss.SetActive(false);
+        Panel_KillBoss.SetActive(false);
     }
     private IEnumerator ResetHitAnimation()
     {

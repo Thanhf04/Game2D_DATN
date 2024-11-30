@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class damageEnemy : MonoBehaviour
 {
-    public int damageAmount = 10; // Sát thương gây ra khi va chạm
+    public int damageAmount = 1; // Sát thương gây ra khi va chạm
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Dichuyennv1 playerHealth = other.GetComponent<Dichuyennv1>();
+            Player playerHealth = other.GetComponent<Player>();
             if (playerHealth != null)
             {
-                Debug.Log("kill palyer");
                 playerHealth.TakeDamage(damageAmount); // Gây sát thương cho người chơi
             }
         }

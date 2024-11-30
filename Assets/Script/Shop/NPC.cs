@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
-    private Dichuyennv1 dichuyennv1;
     [SerializeField] private GameObject Shop;
     // [SerializeField] private GameObject Panel;
     [SerializeField] private Button BtnOpenShop;

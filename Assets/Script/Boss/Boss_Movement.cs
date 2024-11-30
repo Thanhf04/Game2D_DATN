@@ -31,75 +31,62 @@ public class Boss_Movement : MonoBehaviour
     private bool facingRight = true;
 
     private Transform player;
-
-    private bool isAttacking = false;  // Kiểm tra xem quái vật có đang tấn công hay không
+    private bool isAttacking = false;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        skillCooldownTimer = skillCooldown;
-
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void Update()
     {
-        if (IsPlayerInChaseRange())
+        if (isAttacking) return;
+        if (IsPlayerInChaseRange() && !IsPlayerInAttackRange())
         {
             ChasePlayer();
         }
-        else
+        else if (!IsPlayerInChaseRange())
         {
             Patrol();
         }
-
         skillCooldownTimer -= Time.deltaTime;
-
-        // Kiểm tra cooldown skill và tấn công nếu có thể
         if (skillCooldownTimer <= 0f && IsPlayerInAttackRange())
         {
             UseSkill();
             skillCooldownTimer = skillCooldown;
         }
-
         if (IsPlayerInAttackRange())
         {
-            // Tấn công chỉ khi cooldown đã hết và animation chưa được phát
-            animator.SetBool("AttackBasic", true);
-            isAttacking = true;
-            StartCoroutine(StartAttack());
-            StartCoroutine(ResetAttackAnimation());
+            StartCoroutine(StartAttack()); // Gọi tấn công
         }
-        else if (!IsPlayerInAttackRange())
-        {
-            // Tắt animation tấn công khi không còn trong phạm vi tấn công
-            animator.SetBool("AttackBasic", false);
-            isAttacking = false;
-        }
-
-
     }
 
     void Patrol()
     {
         if (patrolPoints.Length == 0) return;
-
         Transform targetPoint = patrolPoints[currentPatrolIndex];
-        transform.position = Vector2.MoveTowards(transform.position, targetPoint.position, moveSpeed * Time.deltaTime);
         Vector2 direction = targetPoint.position - transform.position;
-
-        if (direction.x > 0 && !facingRight)
+        animator.SetBool("Walk", true);
+        if (animator.GetBool("Walk"))
         {
-            Flip();
+            transform.position = Vector2.MoveTowards(transform.position, targetPoint.position, moveSpeed * Time.deltaTime);
+            if (direction.x > 0 && !facingRight)
+            {
+                Flip();
+            }
+            else if (direction.x < 0 && facingRight)
+            {
+                Flip();
+            }
+            if (Vector2.Distance(transform.position, targetPoint.position) < 0.1f)
+            {
+                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            }
         }
-        else if (direction.x < 0 && facingRight)
+        else
         {
-            Flip();
-        }
-
-        if (Vector2.Distance(transform.position, targetPoint.position) < 0.1f)
-        {
-            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            animator.SetBool("Walk", false);
         }
     }
 
@@ -118,7 +105,7 @@ public class Boss_Movement : MonoBehaviour
         if (player != null)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
-
+            animator.SetBool("Walk", true);
             if (player.position.x > transform.position.x && !facingRight)
             {
                 Flip();
@@ -130,11 +117,9 @@ public class Boss_Movement : MonoBehaviour
         }
     }
 
-    // Hàm để sử dụng một skill ngẫu nhiên khi gặp người chơi
     void UseSkill()
     {
-        int randomSkill = Random.Range(1, 6); // Chọn ngẫu nhiên từ skill 1 đến skill 5
-
+        int randomSkill = Random.Range(1, 6);
         switch (randomSkill)
         {
             case 1:
@@ -154,8 +139,6 @@ public class Boss_Movement : MonoBehaviour
                 break;
         }
     }
-
-    // Hàm để khởi tạo và thiết lập hướng di chuyển cho mỗi skill
     void SpawnAndMoveSkill(GameObject skillPrefab, Transform spawnPoint, float bulletSpeed, float skillLifetime)
     {
         if (skillPrefab != null && spawnPoint != null)
@@ -166,17 +149,14 @@ public class Boss_Movement : MonoBehaviour
             if (rbSkill != null)
             {
                 Vector2 direction = facingRight ? Vector2.right : Vector2.left;
-
                 if (!facingRight)
                 {
                     Vector3 scale = skillInstance.transform.localScale;
                     scale.x *= -1;
                     skillInstance.transform.localScale = scale;
                 }
-
                 rbSkill.velocity = direction * bulletSpeed;
             }
-
             Destroy(skillInstance, skillLifetime);
         }
     }
@@ -188,14 +168,17 @@ public class Boss_Movement : MonoBehaviour
         scale.x *= -1;
         transform.localScale = scale;
     }
-    private IEnumerator ResetAttackAnimation()
-    {
-        yield return new WaitForSeconds(2f);
-        animator.SetBool("AttackBasic", false);
-    }
     private IEnumerator StartAttack()
     {
-        animator.SetBool("AttackBasic", true);
-        yield return new WaitForSeconds(1f);
+        {
+            if (isAttacking) yield break; // Ngăn không cho gọi nhiều lần
+            isAttacking = true;
+            animator.SetBool("Walk", false);
+            animator.SetTrigger("Attack");
+            yield return new WaitForSeconds(6f);
+            animator.SetBool("Idle", true);
+            isAttacking = false;
+        }
     }
+
 }

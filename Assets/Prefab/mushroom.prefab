@@ -559,10 +559,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e43d751637e78498f8ce6e3032a716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentHealth: 100
   maxHealth: 100
-  currentHealth: 100
-  HealthSlider: {fileID: 3537243832446458229}
-  prefabsItem: {fileID: 0}
+  healthSlider: {fileID: 0}
 --- !u!95 &754269614285079369
 Animator:
   serializedVersion: 5

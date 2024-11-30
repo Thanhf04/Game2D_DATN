@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Fusion;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : NetworkBehaviour
 {
     [SerializeField] private GameObject slotsHolder;
     [SerializeField] private ItemClass itemToAdd;
@@ -34,6 +35,8 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
+
+    private Player player1;
 
 
     // Start is called before the first frame update
@@ -68,19 +71,41 @@ public class InventoryManager : MonoBehaviour
         tempSlot = new SlotClass();
 
         RefreshUI();
+
+        StartCoroutine(WaitForPlayerSpawn());
+    }
+
+
+    IEnumerator WaitForPlayerSpawn()
+    {
+        while (player1 == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
+
+                // Kiểm tra quyền sở hữu (Ownership)
+                if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
+                {
+                    player1 = playerObj.GetComponent<Player>();
+                }
+            }
+            yield return null;
+        }
     }
 
     private void Update()
     {
-
-
-        if (player == null)
+        if (player1 == null)
         {
             player = FindObjectOfType<Player>();
             if (player == null)
             {
                 return;
             }
+
+            return;
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -344,20 +369,29 @@ public class InventoryManager : MonoBehaviour
         SlotClass slot = ContainsItem(item);
         if (slot != null && slot.GetQuantity() > 0)
         {
+
             if (item is ConsumableClass consumable)
             {
-                if (player.Health < player.MaxHealth)
+                if (player1.Health < player1.MaxHealth)
                 {
-                    player.Health = Mathf.Min(player.Health + 50, player.MaxHealth);
-                    healthSlider.value = player.Health;
+                    player1.Health = Mathf.Min(player1.Health + 50, player1.MaxHealth);
+                    healthSlider.value = player1.Health;
+                    Debug.Log("Use HP");
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Health, item);
                     RefreshUI();
                     StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
                 }
+                else
+                {
+                    Debug.Log("Máu của bạn đã đầy!");
+                }
             }
-
             RefreshUI();
+        }
+        else
+        {
+            Debug.Log("Không tìm thấy vật phẩm");
         }
     }
     public void UseMana(ItemClass item)
@@ -367,18 +401,28 @@ public class InventoryManager : MonoBehaviour
         {
             if (item is ConsumableClass consumable)
             {
-                if (player.Mana < player.MaxMana)
+                if (player1.Mana < player1.MaxMana)
                 {
-                    player.Mana = Mathf.Min(player.Mana + 50, player.MaxMana);
-                    manaSlider.value = player.Mana;
+                    player1.Mana = Mathf.Min(player1.Mana + 50, player1.MaxMana);
+                    manaSlider.value = player1.Mana;
+                    Debug.Log("Use Mana");
                     RemoveItem(item, 1);
                     UpdateButtonQuantity(Btn_Mana, item);
                     RefreshUI();
                     StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
-
+                }
+                else
+                {
+                    Debug.Log("Năng lượng của bạn đã đầy!");
                 }
             }
+
+
             RefreshUI();
+        }
+        else
+        {
+            Debug.Log("Không tìm thấy vật phẩm");
         }
     }
     private void UpdateButtonQuantity(Button button, ItemClass item)

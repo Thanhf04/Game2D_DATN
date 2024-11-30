@@ -39,7 +39,7 @@ public class newTrap : MonoBehaviour
             Player playerHealth = collision.collider.GetComponent<Player>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(20); // Gây 20 sát thương
+                playerHealth.TakeDamage(1); // Gây 20 sát thương
             }
         }
     }
