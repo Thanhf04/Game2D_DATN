@@ -2,20 +2,16 @@
 
 public class HealthBarControl : MonoBehaviour
 {
-    private Transform parentTransform;
+    public Transform enemy; // Đối tượng quái vật
 
-    void Start()
+    void LateUpdate()
     {
-        // Lấy transform của đối tượng cha (thường là quái vật)
-        parentTransform = transform.parent;
-    }
+        // Lấy scale hiện tại của quái vật
+        Vector3 enemyScale = enemy.localScale;
 
-    void Update()
-    {
-        if (parentTransform != null)
-        {
-            // Đảm bảo thanh máu không bị xoay khi quái vật lật
-            transform.rotation = Quaternion.identity;  // Đặt rotation của thanh máu về zero
-        }
+        // Cố định scale của thanh máu theo hướng X
+        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(enemyScale.x),
+                                           transform.localScale.y,
+                                           transform.localScale.z);
     }
 }
