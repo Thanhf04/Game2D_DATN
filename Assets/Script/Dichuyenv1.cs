@@ -155,16 +155,11 @@ public class Dichuyennv1 : MonoBehaviour
         ChisoPanel.SetActive(false);
         ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
-
-
     }
 
     void Update()
     {
-
         float moveInput = Input.GetAxis("Horizontal");
-
-        // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (NPC.isOpenShop || isStatsPanelOpen)
         {
             isRunning = false;
@@ -172,11 +167,9 @@ public class Dichuyennv1 : MonoBehaviour
             playWalk.Stop();
             return;
         }
-        // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         isRunning = moveInput != 0;
         anim.SetBool("isRunning", isRunning);
-
         if (moveInput != 0)
         {
             transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
@@ -193,7 +186,6 @@ public class Dichuyennv1 : MonoBehaviour
         {
             playWalk.Stop();
         }
-        // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -327,7 +319,7 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Skill3()
     {
-        if (currentMana >= 30) // Kiểm tra nếu mana đủ
+        if (currentMana >= 10) // Kiểm tra nếu mana đủ
         {
             FireHand();
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
@@ -402,7 +394,7 @@ public class Dichuyennv1 : MonoBehaviour
             rbBullet.velocity = transform.localScale.x * Vector2.right * bulletSpeed;
             playAttack_Fire1.Play();
             StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
-            //currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
+            currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana -= 20;
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -428,7 +420,7 @@ public class Dichuyennv1 : MonoBehaviour
                 currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
                 StartCoroutine(DestroyFireBreathAfterTime(currentFireBreath, 1.5f));
                 playAttack_Fire2.Play();
-                // currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
+                currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
                 manaSlider.value = currentMana -= 30;
                 UpdateStatsText(); // Cập nhật giao diện người dùng
             }
@@ -459,8 +451,6 @@ public class Dichuyennv1 : MonoBehaviour
             }
             playAttack_Fire3.Play();
             rbFireHand.gravityScale = 1f;
-            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
             StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana;
@@ -682,6 +672,4 @@ void ClosePanel()
     ChisoPanel.SetActive(false); 
     
 }
-
-
 }
