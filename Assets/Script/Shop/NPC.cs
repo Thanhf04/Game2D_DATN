@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
@@ -8,16 +8,17 @@ public class NPC : MonoBehaviour
     [SerializeField] private Button BtnOpenShop;
     [SerializeField] private Button BtnCloseShop;
     public static bool isOpenShop = false;
-
+    PanelManager panelManager;
 
     public void OpenShop()
     {
-        isOpenShop = true;
+        //panelManager.Instance.OpenPanel(Shop);
         Shop.SetActive(true);
         //  Panel.SetActive(false);
     }
     public void CloseShop()
     {
+        //panelManager.Instance.ClosePanel(Shop);
         isOpenShop = false;
         Shop.SetActive(false);
         //  Panel.SetActive(false);

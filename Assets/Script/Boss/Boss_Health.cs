@@ -23,6 +23,11 @@ public class Boss_Health : MonoBehaviour
         Player1 = FindObjectOfType<NewPlayer>();
 
     }
+    private void Update()
+    {
+        Player1 = FindObjectOfType<NewPlayer>();
+
+    }
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -37,7 +42,7 @@ public class Boss_Health : MonoBehaviour
     }
     public void Die()
     {
-        //Player.LevelSlider(100);
+        Player1.LevelSlider(100);
         animator.SetBool("Death", true);
         Destroy(gameObject, 2f);
         Panel_KillBoss.SetActive(true);
@@ -49,10 +54,6 @@ public class Boss_Health : MonoBehaviour
         {
             Instantiate(prefabsItem, transform.position, Quaternion.identity);
         }
-    }
-    public void ClosePanel()
-    {
-        Panel_KillBoss.SetActive(false);
     }
     private IEnumerator ResetHitAnimation()
     {

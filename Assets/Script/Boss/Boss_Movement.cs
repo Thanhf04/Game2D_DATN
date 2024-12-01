@@ -32,15 +32,18 @@ public class Boss_Movement : MonoBehaviour
 
     private Transform player;
     private bool isAttacking = false;
+    NewPlayer player1;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+
     }
 
     void Update()
     {
+        player = FindObjectOfType<NewPlayer>().transform;
         if (isAttacking) return;
         if (IsPlayerInChaseRange() && !IsPlayerInAttackRange())
         {

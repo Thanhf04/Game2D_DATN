@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +19,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        player = FindObjectOfType<NewPlayer>();
         UpdateHealthSlider();
     }
 
@@ -40,12 +40,21 @@ public class Enemy : MonoBehaviour
         if (healthSlider != null)
         {
             healthSlider.value = currentHealth;
+            healthSlider.interactable = false;
         }
     }
 
     void Die()
     {
-        player.LevelSlider(50);
+        if (player != null)
+        {
+            player.LevelSlider(50);
+            Debug.Log("Gọi LevelSlider thành công");
+        }
+        else
+        {
+            Debug.LogError("Không thể gọi LevelSlider vì player là null");
+        }
         Destroy(gameObject);
         DropItem();
 

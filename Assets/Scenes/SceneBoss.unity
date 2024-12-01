@@ -3897,11 +3897,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2181330120576706613, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4179456450177716154, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -3917,7 +3917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7379808862616306625, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7848322691208232323, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_LocalPosition.x

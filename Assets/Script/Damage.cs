@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
@@ -20,5 +20,9 @@ public class Damage : MonoBehaviour
     void Start()
     {
         player = GetComponentInParent<NewPlayer>();
+        if (player == null)
+        {
+            Debug.LogError("Không tìm thấy NewPlayer trong đối tượng cha của Damage.");
+        }
     }
 }

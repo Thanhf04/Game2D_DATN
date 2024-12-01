@@ -234,6 +234,9 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         healthSlider.maxValue = maxHealth;
         manaSlider.maxValue = maxMana;
         expSlider.maxValue = expMax;
+        healthSlider.interactable = false;
+        manaSlider.interactable = false;
+        expSlider.interactable = false;
     }
 
     void Update()
@@ -348,16 +351,18 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public void LevelSlider(float amount)
+    public void LevelSlider(int amount)
     {
         expCurrent += amount;
         textExp.SetText(expCurrent + "%");
         if (expCurrent >= expMax)
         {
+
             expCurrent = 0;
             textExp.SetText(expCurrent + "%");
             level++;
             textLevel.SetText("Lv" + level);
+            expMax = Mathf.FloorToInt(expMax * 0.9f);
             upgradePoints++;
             UpdateStatsText();
         }
