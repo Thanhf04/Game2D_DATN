@@ -8,7 +8,10 @@ public class ItemPickup : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Pickup();
+            uiCoin.AddCoins(Coin); ;
+            Debug.Log("Item pick up");
+            Debug.Log("Coin:" + Coin);
+            Destroy(gameObject);
         }
     }
     void Pickup()

@@ -10,21 +10,25 @@ public class JoinGame : MonoBehaviourPunCallbacks
     public TMP_InputField code;
     private string maphong;
 
-    public void CreateRoom(){
+    public void CreateRoom()
+    {
         maphong = Random.Range(100000, 999999).ToString();
-        PhotonNetwork.CreateRoom(maphong, new RoomOptions() { MaxPlayers = 2, IsVisible = true, 
-        IsOpen = true },TypedLobby.Default,null);
+        PhotonNetwork.CreateRoom(maphong, new RoomOptions() { MaxPlayers = 2, IsVisible = true, IsOpen = true }, TypedLobby.Default, null);
         Debug.Log(maphong);
     }
 
-    public void JoinRoom(){
-        if(code.text!= ""){
+    public void JoinRoom()
+    {
+        if (code.text != "")
+        {
             PhotonNetwork.JoinRoom(code.text);
         }
     }
 
     public override void OnJoinedRoom()
     {
+        // Lưu mã phòng vào PlayerPrefs
+        PlayerPrefs.SetString("RoomCode", maphong);
         PhotonNetwork.LoadLevel(3);
     }
 }

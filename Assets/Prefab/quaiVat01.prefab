@@ -369,6 +369,7 @@ MonoBehaviour:
   currentHealth: 100
   healthSlider: {fileID: 3244921301216282683}
   damageAmount: 1
+  prefabsItem: {fileID: 4010455052967803832, guid: adf23443e7ca76f49b208ec93c31b83c, type: 3}
 --- !u!114 &-2749323619561142915
 MonoBehaviour:
   m_ObjectHideFlags: 0

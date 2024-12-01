@@ -13,6 +13,7 @@ public class Damage : MonoBehaviour
             {
                 enemy.TakeDamage(player.damageAmount);
             }
+
         }
     }
 

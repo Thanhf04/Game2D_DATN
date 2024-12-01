@@ -4,10 +4,12 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth  = 100;
+    public int maxHealth = 100;
     public int currentHealth = 100;
     public Slider healthSlider;
     public int damageAmount = 1;
+    public GameObject prefabsItem;
+    NewPlayer player;
 
     // Được gọi khi đối tượng được spawn
 
@@ -43,6 +45,17 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        player.LevelSlider(50);
         Destroy(gameObject);
+        DropItem();
+
+
+    }
+    public void DropItem()
+    {
+        if (prefabsItem != null)
+        {
+            Instantiate(prefabsItem, transform.position, Quaternion.identity);
+        }
     }
 }

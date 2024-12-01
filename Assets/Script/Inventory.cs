@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public Canvas inventoryPanel; // Tham chiếu đến Canvas của bạn
+    public GameObject inventoryPanel; // Tham chiếu đến Canvas của bạn
     public Button toggleButton;     // Tham chiếu đến Button
 
     private bool isInventoryVisible = false;

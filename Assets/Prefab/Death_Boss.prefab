@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthBoss: {fileID: 743062531409065910}
   Boss: {fileID: 455433669806504168}
-  maxHealth: 10
+  maxHealth: 1
   currentHealth: 0
   prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
   Panel_KillBoss: {fileID: 0}
