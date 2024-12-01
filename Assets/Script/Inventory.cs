@@ -30,6 +30,6 @@ public class Inventory : MonoBehaviour
     void ToggleInventory()
     {
         isInventoryVisible = !isInventoryVisible;
-        inventoryPanel.gameObject.SetActive(isInventoryVisible);
+        PanelManager.Instance.OpenPanel(inventoryPanel);
     }
 }

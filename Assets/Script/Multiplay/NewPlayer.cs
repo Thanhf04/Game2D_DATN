@@ -123,7 +123,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         Playmusic();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -707,11 +707,11 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         Destroy(notificationText, 2f); // Xóa thông báo sau 2 giây
     }
 
-    void ToggleStatsDisplay()
+    public void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
         bool isActive = ChisoPanel.activeSelf;
-        ChisoPanel.SetActive(!isActive);
+        PanelManager.Instance.OpenPanel(ChisoPanel);
         Debug.Log("co ne");
         // Cập nhật thông tin nếu bảng hiển thị
         if (!isActive)
@@ -730,7 +730,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
 
     void ClosePanel()
     {
-        ChisoPanel.SetActive(false);
+        PanelManager.Instance.ClosePanel(ChisoPanel);
     }
 
     [PunRPC]
