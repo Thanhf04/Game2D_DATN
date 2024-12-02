@@ -1,10 +1,10 @@
-﻿//using System.Collections;
-//using TMPro;
-//using UnityEngine;
-//using UnityEngine.UI;
+﻿// using System.Collections;
+// using TMPro;
+// using UnityEngine;
+// using UnityEngine.UI;
 
-//public class InventoryManager : MonoBehaviour
-//{
+// public class InventoryManager : MonoBehaviour
+// {
 //    [SerializeField] private GameObject slotsHolder;
 //    [SerializeField] private ItemClass itemToAdd;
 //    [SerializeField] private ItemClass itemToRemove;
@@ -439,4 +439,4 @@
 //            isManaOnCooldown = false;
 //        }
 //    }
-//}
+// }

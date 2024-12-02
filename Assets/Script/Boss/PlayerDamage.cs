@@ -7,10 +7,10 @@ public class PlayerDamage : MonoBehaviour
     public float attackRadius = 1f;
     Animator animator;
     Boss_Health health;
-    Dichuyennv1 dichuyennv1;
+    NewPlayer player1;
     private void Start()
     {
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+        player1 = FindObjectOfType<NewPlayer>();
     }
     public void Attack()
     {
@@ -25,7 +25,7 @@ public class PlayerDamage : MonoBehaviour
             health = hit.GetComponent<Boss_Health>();
             if (health != null)
             {
-                health.TakeDamage(dichuyennv1.damageAmount);
+                health.TakeDamage(player1.damageAmount);
             }
         }
     }

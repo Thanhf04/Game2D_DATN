@@ -23,15 +23,17 @@ public class fallTrap : MonoBehaviour
         damageCollider = GetComponent<BoxCollider2D>();
         damageCollider.enabled = false; // Vô hiệu hóa lúc đầu
 
+        
+    }
+
+    void Update()
+    {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;
         }
-    }
 
-    void Update()
-    {
         if (playerTransform != null && !daRoi)
         {
             float distance = Vector2.Distance(transform.position, playerTransform.position);
@@ -58,7 +60,7 @@ public class fallTrap : MonoBehaviour
         if (collision.collider.CompareTag("Player") && daRoi)
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            Dichuyennv1 playerHealth = collision.collider.GetComponent<Dichuyennv1>();
+            NewPlayer playerHealth = collision.collider.GetComponent<NewPlayer>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(20); // Gây 20 sát thương
