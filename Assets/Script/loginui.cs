@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Firebase;
+﻿using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using TMPro;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoginUI : MonoBehaviour
 {

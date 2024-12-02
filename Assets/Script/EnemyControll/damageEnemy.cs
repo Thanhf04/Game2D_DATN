@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class damageEnemy : MonoBehaviour
@@ -8,21 +7,21 @@ public class damageEnemy : MonoBehaviour
     Enemy enemy;
     NewPlayer playerHealth;
 
-   void Start()
-{
-    if (transform.childCount > 0)
+    void Start()
     {
-        enemy = gameObject.GetComponent<Enemy>();
-        if (enemy == null)
+        if (transform.childCount > 0)
         {
-            Debug.LogError("The child object does not have an Enemy component!");
+            enemy = gameObject.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.LogError("The child object does not have an Enemy component!");
+            }
+        }
+        else
+        {
+            Debug.LogError("This object has no children!");
         }
     }
-    else
-    {
-        Debug.LogError("This object has no children!");
-    }
-}
 
 
     void Update()
@@ -56,8 +55,6 @@ public class damageEnemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("day ne");
-
             if (playerHealth == null)
             {
                 playerHealth = other.GetComponent<NewPlayer>();

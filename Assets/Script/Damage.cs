@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
-    private Dichuyennv1 player;
+    private NewPlayer player;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -11,13 +11,18 @@ public class Damage : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(player.damageAmount); 
+                enemy.TakeDamage(player.damageAmount);
             }
+
         }
     }
 
     void Start()
     {
-        player = GetComponentInParent<Dichuyennv1>();
+        player = GetComponentInParent<NewPlayer>();
+        if (player == null)
+        {
+            Debug.LogError("Không tìm thấy NewPlayer trong đối tượng cha của Damage.");
+        }
     }
 }

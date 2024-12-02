@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,7 +37,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     public float bulletSpeed = 10f;
     public float bulletLifeTime = 2f;
 
-   [Header("UI Elements")]
+    [Header("UI Elements")]
     public Slider healthSlider;
     public Slider manaSlider;
     public Slider expSlider;
@@ -94,7 +93,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     public TMP_Text damageInfoText;
     public Button exitButton;
 
-    public Text notificationText;
+    public TextMeshProUGUI notificationText;
 
     public float skill1Cooldown = 2f;
     public float skill2Cooldown = 3f;
@@ -123,7 +122,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         Playmusic();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -213,6 +212,8 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         {
             Playmusic();
         }
+        // Lấy input
+
     }
 
     // RPC để đồng bộ hóa hướng quay nhân vật
@@ -228,6 +229,9 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         healthSlider.maxValue = maxHealth;
         manaSlider.maxValue = maxMana;
         expSlider.maxValue = expMax;
+        healthSlider.interactable = false;
+        manaSlider.interactable = false;
+        expSlider.interactable = false;
     }
 
     void Update()
@@ -244,6 +248,47 @@ public class NewPlayer : MonoBehaviourPunCallbacks
             playWalk.Stop();
             jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
         }
+        // fixed update
+        // float moveInput = Input.GetAxis("Horizontal");
+        // rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
+
+        // // Chạy và xoay nhân vật
+        // isRunning = moveInput != 0;
+        // anim.SetBool("isRunning", isRunning);
+
+        // if (moveInput != 0)
+        // {
+        //     // Xoay nhân vật theo hướng di chuyển
+        //     if (moveInput > 0)
+        //     {
+        //         // Quay sang phải
+        //         transform.localScale = new Vector3(1, 1, 1);
+        //     }
+        //     else
+        //     {
+        //         // Quay sang trái
+        //         transform.localScale = new Vector3(-1, 1, 1);
+        //     }
+
+        //     // Đồng bộ hóa việc quay mặt của nhân vật với các client khác
+        //     photonView.RPC("UpdateCharacterRotation", RpcTarget.Others, transform.localScale.x);
+
+        //     // Chạy âm thanh bước chân
+        //     if (!playWalk.isPlaying && isGrounded)
+        //     {
+        //         playWalk.Play();
+        //     }
+
+        //     // Dừng âm thanh tấn công nếu đang phát
+        //     if (playAttack.isPlaying)
+        //     {
+        //         playAttack.Stop();
+        //     }
+        // }
+        // else if (playWalk.isPlaying)
+        // {
+        //     playWalk.Stop();
+        // }
 
         // Tấn công
         if (Input.GetMouseButtonDown(0) && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
@@ -296,17 +341,17 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         }
 
 
-        float moveInput = Input.GetAxis("Horizontal");
-        rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
+        float moveInput1 = Input.GetAxis("Horizontal");
+        rd2d.velocity = new Vector2(moveInput1 * speed, rd2d.velocity.y);
 
         // Chạy và xoay nhân vật
-        isRunning = moveInput != 0;
+        isRunning = moveInput1 != 0;
         anim.SetBool("isRunning", isRunning);
 
-        if (moveInput != 0)
+        if (moveInput1 != 0)
         {
             // Xoay nhân vật theo hướng di chuyển
-            if (moveInput > 0)
+            if (moveInput1 > 0)
             {
                 // Quay sang phải
                 transform.localScale = new Vector3(1, 1, 1);
@@ -343,16 +388,18 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public void LevelSlider(float amount)
+    public void LevelSlider(int amount)
     {
         expCurrent += amount;
         textExp.SetText(expCurrent + "%");
         if (expCurrent >= expMax)
         {
+
             expCurrent = 0;
             textExp.SetText(expCurrent + "%");
             level++;
             textLevel.SetText("Lv" + level);
+            expMax = Mathf.FloorToInt(expMax * 0.9f);
             upgradePoints++;
             UpdateStatsText();
         }
@@ -681,14 +728,14 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     void ShowNotification(string message)
     {
         notificationText.text = message; // Hiển thị thông báo
-        Invoke("ClearNotification", 2f); // Xóa thông báo sau 2 giây
+        Destroy(notificationText, 2f); // Xóa thông báo sau 2 giây
     }
 
-    void ToggleStatsDisplay()
+    public void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
         bool isActive = ChisoPanel.activeSelf;
-        ChisoPanel.SetActive(!isActive);
+        PanelManager.Instance.OpenPanel(ChisoPanel);
         Debug.Log("co ne");
         // Cập nhật thông tin nếu bảng hiển thị
         if (!isActive)
@@ -707,7 +754,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
 
     void ClosePanel()
     {
-        ChisoPanel.SetActive(false);
+        PanelManager.Instance.ClosePanel(ChisoPanel);
     }
 
     [PunRPC]

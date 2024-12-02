@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class fallTrap : MonoBehaviour
@@ -23,7 +21,7 @@ public class fallTrap : MonoBehaviour
         damageCollider = GetComponent<BoxCollider2D>();
         damageCollider.enabled = false; // Vô hiệu hóa lúc đầu
 
-        
+
     }
 
     void Update()
