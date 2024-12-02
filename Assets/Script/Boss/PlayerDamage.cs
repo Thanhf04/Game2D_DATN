@@ -7,10 +7,10 @@ public class PlayerDamage : MonoBehaviour
     public float attackRadius = 1f;
     Animator animator;
     Boss_Health health;
-    NewPlayer player1;
+    Dichuyennv1 player1;
     private void Start()
     {
-        player1 = FindObjectOfType<NewPlayer>();
+        player1 = FindObjectOfType<Dichuyennv1>();
     }
     public void Attack()
     {

@@ -33,7 +33,7 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
-    NewPlayer player1;
+    Dichuyennv1 player1;
 
 
 
