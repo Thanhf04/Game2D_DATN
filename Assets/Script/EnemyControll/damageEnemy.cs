@@ -5,7 +5,7 @@ using UnityEngine;
 public class damageEnemy : MonoBehaviour
 {
     Enemy enemy;
-    NewPlayer playerHealth;
+    Dichuyennv1 playerHealth;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class damageEnemy : MonoBehaviour
     {
         if (playerHealth == null)
         {
-            playerHealth = FindObjectOfType<NewPlayer>();
+            playerHealth = FindObjectOfType<Dichuyennv1>();
         }
         StartCoroutine(WaitForPlayerSpawn());
     }
@@ -43,7 +43,7 @@ public class damageEnemy : MonoBehaviour
                 var playerPhotonView = playerObj.GetComponent<PhotonView>();
                 if (playerPhotonView != null && playerPhotonView.IsMine)
                 {
-                    playerHealth = playerObj.GetComponent<NewPlayer>();
+                    playerHealth = playerObj.GetComponent<Dichuyennv1>();
                     break;
                 }
             }
@@ -57,7 +57,7 @@ public class damageEnemy : MonoBehaviour
         {
             if (playerHealth == null)
             {
-                playerHealth = other.GetComponent<NewPlayer>();
+                playerHealth = other.GetComponent<Dichuyennv1>();
                 if (playerHealth == null)
                 {
                     Debug.LogError("playerHealth is null!");

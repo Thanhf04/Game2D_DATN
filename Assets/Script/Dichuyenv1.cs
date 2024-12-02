@@ -28,9 +28,9 @@ public class Dichuyennv1 : MonoBehaviour
     //Panel chỉ số player
     public GameObject ChisoPanel;
     public Button ChisoButton;
-    public Text healthInfoText;
-    public Text manaInfoText;
-    public Text damageInfoText;
+    public TMP_Text healthInfoText;
+    public TMP_Text manaInfoText;
+    public TMP_Text damageInfoText;
     public Button exitButton;
 
     // Các biến liên quan đến lăn (roll)
@@ -141,7 +141,7 @@ public class Dichuyennv1 : MonoBehaviour
         currentLevel = level;
         UpdateStatsText();
 
-        notificationText.text = "";
+        // notificationText.text = "";
 
         gameOverPanel.SetActive(false);
 

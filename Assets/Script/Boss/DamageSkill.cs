@@ -7,7 +7,7 @@ public class DamageSkill : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            NewPlayer playerHealth = collision.GetComponent<NewPlayer>();
+            Dichuyennv1 playerHealth = collision.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(damageSkill);

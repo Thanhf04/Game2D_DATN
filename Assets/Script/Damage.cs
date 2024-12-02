@@ -2,7 +2,7 @@
 
 public class Damage : MonoBehaviour
 {
-    private NewPlayer player;
+    private Dichuyennv1 player;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -19,7 +19,7 @@ public class Damage : MonoBehaviour
 
     void Start()
     {
-        player = GetComponentInParent<NewPlayer>();
+        player = GetComponentInParent<Dichuyennv1>();
         if (player == null)
         {
             Debug.LogError("Không tìm thấy NewPlayer trong đối tượng cha của Damage.");
