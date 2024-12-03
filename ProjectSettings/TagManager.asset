@@ -5,14 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Boss
+  - NenDat
+  - enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
-  - 
+  - boss
   - 
   - 
   - 

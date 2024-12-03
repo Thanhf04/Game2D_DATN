@@ -17,7 +17,7 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isJump;
     private bool isStatsPanelOpen = false;
     private Animator anim;
-    public Text notificationText;
+    public TextMeshProUGUI notificationText;
 
     //panel die
     public GameObject gameOverPanel;
@@ -91,9 +91,9 @@ public class Dichuyennv1 : MonoBehaviour
     public Button decreaseManaButton;
     public Button increaseDamethButton;
     public Button decreaseDamethButton;
-    public Text healthText;
-    public Text manaText;
-    public Text damaText;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI manaText;
+    public TextMeshProUGUI damaText;
     public Text levelText;
     public Text pointsText;
 
