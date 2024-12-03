@@ -125,7 +125,7 @@ public class Dichuyennv1 : MonoBehaviour
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        // openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -151,7 +151,7 @@ public class Dichuyennv1 : MonoBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
         ChisoPanel.SetActive(false);
-        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        // ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
     }
 
@@ -516,11 +516,11 @@ public class Dichuyennv1 : MonoBehaviour
     }
 
     // Các phương thức UI tăng/giảm máu và mana
-    void ToggleStatsPanel()
-    {
-        statsPanel.SetActive(!statsPanel.activeSelf);
-        isStatsPanelOpen = statsPanel.activeSelf;
-    }
+    public void ToggleStatsPanel()
+  {
+      //statsPanel.SetActive(!statsPanel.activeSelf);
+      PanelManager.Instance.OpenPanel(statsPanel);
+  }
 
     void IncreaseHealth()
     {
@@ -651,18 +651,19 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-    void ToggleStatsDisplay()
-    {
-        // Hiển thị hoặc ẩn bảng Chỉ Số
-        bool isActive = ChisoPanel.activeSelf;
-        ChisoPanel.SetActive(!isActive);
+    public void ToggleStatsDisplay()
+{
+    // Hiển thị hoặc ẩn bảng Chỉ Số
+    bool isActive = ChisoPanel.activeSelf;
+    //ChisoPanel.SetActive(!isActive);
+    PanelManager.Instance.OpenPanel(ChisoPanel);
 
-        // Cập nhật thông tin nếu bảng hiển thị
-        if (!isActive)
-        {
-            UpdateStatsDisplay();
-        }
+    // Cập nhật thông tin nếu bảng hiển thị
+    if (!isActive)
+    {
+        UpdateStatsDisplay();
     }
+}
     void UpdateStatsDisplay()
     {
         // Cập nhật các dòng chữ trong bảng "Chỉ Số"
