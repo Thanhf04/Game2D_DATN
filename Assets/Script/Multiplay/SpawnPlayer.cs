@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using Firebase;
-using Firebase.Database;
-using TMPro;
-using UnityEngine.UI;
-using System.Threading.Tasks;
-
+using UnityEngine;
 public class SpawnPlayer : MonoBehaviour
 {
     private Vector3 position;
@@ -18,7 +10,6 @@ public class SpawnPlayer : MonoBehaviour
         position = new Vector3(-15, 5, 0);
         PhotonNetwork.Instantiate("Player1", position, Quaternion.identity);
     }
-
     // Update is called once per frame
     void Update()
     {

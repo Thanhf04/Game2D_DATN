@@ -70,7 +70,7 @@ RectTransform:
   m_Father: {fileID: 4484033341897115453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 8561158351635875286}
   - component: {fileID: 8506431407222573692}
   - component: {fileID: 3582688213973200550}
-  - component: {fileID: 5698770433756648368}
+  - component: {fileID: 4179456450177716154}
   - component: {fileID: 5999959650235669395}
   - component: {fileID: 4457631731095402921}
   m_Layer: 6
@@ -475,7 +475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7848322691208232323
 Transform:
   m_ObjectHideFlags: 0
@@ -531,8 +531,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1459229879
-  m_SortingLayer: 0
+  m_SortingLayerID: 1222731409
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -583,7 +583,7 @@ MonoBehaviour:
   maxHealth: 10
   currentHealth: 0
   prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
-  PanelSkillBoss: {fileID: 0}
+  Panel_KillBoss: {fileID: 0}
 --- !u!114 &3582688213973200550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,9 +600,9 @@ MonoBehaviour:
   attackRadius: 2.01
   Player:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   damageBoss: 5
---- !u!114 &5698770433756648368
+--- !u!114 &4179456450177716154
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -614,8 +614,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d89d270ea126ee478e3e56f89f70ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  patrolPoints: []
+  moveSpeed: 2
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
   skillCooldown: 3
   skill1: {fileID: 0}
   skill2: {fileID: 0}
@@ -627,8 +629,8 @@ MonoBehaviour:
   skillSpawnPoint3: {fileID: 0}
   skillSpawnPoint4: {fileID: 0}
   skillSpawnPoint5: {fileID: 0}
-  attackRange: 8
-  chaseRange: 8
+  attackRange: 5
+  chaseRange: 6
 --- !u!61 &5999959650235669395
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,19 +37,23 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     public float bulletSpeed = 10f;
     public float bulletLifeTime = 2f;
 
+    [Header("UI Elements")]
     public Slider healthSlider;
     public Slider manaSlider;
     public Slider expSlider;
+    
+    [Header("Stats")]
     public int maxHealth = 100;
-    public int currentHealth;
+    public int currentHealth = 100;
     public int maxMana = 100;
-    public int currentMana;
+    public int currentMana = 100;
+    public int damageAmount = 10;
+    public int upgradePoints = 5;
     public float expMax = 100;
     public float expCurrent = 0;
 
     public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
-    public int damageAmount = 10;
     public int damageTrap = 20;
     private GameObject currentFireBreath;
 
@@ -77,7 +80,6 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     // Các biến level và điểm nâng
     public int level = 1;
     public float currentLevel;
-    public int upgradePoints = 5;
 
     private CinemachineVirtualCamera vCam;
 
@@ -91,7 +93,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     public TMP_Text damageInfoText;
     public Button exitButton;
 
-    public Text notificationText;
+    public TextMeshProUGUI notificationText;
 
     public float skill1Cooldown = 2f;
     public float skill2Cooldown = 3f;
@@ -113,11 +115,6 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     {
         // Lấy Animator trên GameObject
         anim = GetComponent<Animator>();
-        // Kiểm tra quyền sở hữu (nếu không phải nhân vật của mình, vô hiệu input)
-        if (!photonView.IsMine)
-        {
-            rd2d.isKinematic = true; // Ngừng tính toán vật lý
-        }
 
         isRunning = false;
         isJump = false;
@@ -125,7 +122,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         Playmusic();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -173,35 +170,134 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
+        // Kiểm tra quyền sở hữu (nếu không phải nhân vật của mình, vô hiệu input)
+        if (PhotonNetwork.IsConnected)
+        {
+            // Kiểm tra nếu camera chưa được gán
+            if (vCam == null)
+            {
+                // Tìm xem có CinemachineVirtualCamera nào trong scene chưa
+                vCam = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
+
+                if (vCam == null)
+                {
+                    // Nếu không tìm thấy, tạo mới CinemachineVirtualCamera cho máy này
+                    GameObject cameraObj = new GameObject("PlayerVirtualCamera");
+                    vCam = cameraObj.AddComponent<Cinemachine.CinemachineVirtualCamera>();
+                }
+            }
+
+            // Chỉ máy sở hữu nhân vật mới cần điều khiển camera
+            if (photonView.IsMine)
+            {
+                vCam.Follow = transform; // Camera theo dõi nhân vật của máy sở hữu
+                vCam.LookAt = transform; // Camera nhìn vào nhân vật của máy sở hữu
+
+                // Đảm bảo rằng camera di chuyển theo nhân vật
+                vCam.gameObject.SetActive(true);
+            }
+            else
+            {
+                // Đảm bảo camera vẫn ở đúng vị trí của nhân vật trên các máy khác
+                vCam.Follow = transform; // Camera vẫn theo dõi vị trí của nhân vật
+                vCam.LookAt = transform; // Camera nhìn vào nhân vật
+
+                // Tắt camera trên các máy không sở hữu nhân vật (chỉ cần để nó không di chuyển)
+                vCam.gameObject.SetActive(false);
+            }
+        }
+
+        // Nếu là Master Client, phát nhạc
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Playmusic();
+        }
         // Lấy input
-        float moveInput = Input.GetAxis("Horizontal");
-        rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
 
-        // Chạy và xoay nhân vật
-        isRunning = moveInput != 0;
-        anim.SetBool("isRunning", isRunning);
+    }
 
-        if (moveInput != 0)
+    // RPC để đồng bộ hóa hướng quay nhân vật
+    [PunRPC]
+    void UpdateCharacterRotation(float scaleX)
+    {
+        // Cập nhật hướng quay nhân vật cho các máy khác
+        transform.localScale = new Vector3(scaleX, 1, 1);
+    }
+
+    public void SetSlider()
+    {
+        healthSlider.maxValue = maxHealth;
+        manaSlider.maxValue = maxMana;
+        expSlider.maxValue = expMax;
+        healthSlider.interactable = false;
+        manaSlider.interactable = false;
+        expSlider.interactable = false;
+    }
+
+    void Update()
+    {
+        if (!photonView.IsMine)
+            return;
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
-            // Xoay nhân vật theo hướng di chuyển
-            transform.localScale = moveInput > 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-
-            // Chạy âm thanh bước chân
-            if (!playWalk.isPlaying && isGrounded)
-            {
-                playWalk.Play();
-            }
-
-            // Dừng âm thanh tấn công nếu đang phát
-            if (playAttack.isPlaying)
-            {
-                playAttack.Stop();
-            }
-        }
-        else if (playWalk.isPlaying)
-        {
+            rd2d.velocity = new Vector2(rd2d.velocity.x, jump);
+            isGrounded = false;
+            isJump = true;
+            anim.SetBool("isJump", true);
+            playJump.Play();
             playWalk.Stop();
+            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
         }
+        // fixed update
+        // float moveInput = Input.GetAxis("Horizontal");
+        // rd2d.velocity = new Vector2(moveInput * speed, rd2d.velocity.y);
+
+        // // Chạy và xoay nhân vật
+        // isRunning = moveInput != 0;
+        // anim.SetBool("isRunning", isRunning);
+
+        // if (moveInput != 0)
+        // {
+        //     // Xoay nhân vật theo hướng di chuyển
+        //     if (moveInput > 0)
+        //     {
+        //         // Quay sang phải
+        //         transform.localScale = new Vector3(1, 1, 1);
+        //     }
+        //     else
+        //     {
+        //         // Quay sang trái
+        //         transform.localScale = new Vector3(-1, 1, 1);
+        //     }
+
+        //     // Đồng bộ hóa việc quay mặt của nhân vật với các client khác
+        //     photonView.RPC("UpdateCharacterRotation", RpcTarget.Others, transform.localScale.x);
+
+        //     // Chạy âm thanh bước chân
+        //     if (!playWalk.isPlaying && isGrounded)
+        //     {
+        //         playWalk.Play();
+        //     }
+
+        //     // Dừng âm thanh tấn công nếu đang phát
+        //     if (playAttack.isPlaying)
+        //     {
+        //         playAttack.Stop();
+        //     }
+        // }
+        // else if (playWalk.isPlaying)
+        // {
+        //     playWalk.Stop();
+        // }
+
+        // Tấn công
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        {
+            StartCoroutine(Attack());
+        }
+
+        // notificationText.text = "";
+
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -243,48 +339,48 @@ public class NewPlayer : MonoBehaviourPunCallbacks
             currentFireBreath.transform.position = firePoint2.position;
             currentFireBreath.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         }
-    }
 
-    public void SetSlider()
-    {
-        healthSlider.maxValue = maxHealth;
-        manaSlider.maxValue = maxMana;
-        expSlider.maxValue = expMax;
-    }
 
-    void Update()
-    {
-        if (PhotonNetwork.IsMasterClient)
+        float moveInput1 = Input.GetAxis("Horizontal");
+        rd2d.velocity = new Vector2(moveInput1 * speed, rd2d.velocity.y);
+
+        // Chạy và xoay nhân vật
+        isRunning = moveInput1 != 0;
+        anim.SetBool("isRunning", isRunning);
+
+        if (moveInput1 != 0)
         {
-            vCam = FindObjectOfType<CinemachineVirtualCamera>();
-
-            if (vCam != null)
+            // Xoay nhân vật theo hướng di chuyển
+            if (moveInput1 > 0)
             {
-                vCam.Follow = transform;
-                vCam.LookAt = transform;
+                // Quay sang phải
+                transform.localScale = new Vector3(1, 1, 1);
             }
-            Playmusic();
+            else
+            {
+                // Quay sang trái
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+
+            // Đồng bộ hóa việc quay mặt của nhân vật với các client khác
+            photonView.RPC("UpdateCharacterRotation", RpcTarget.Others, transform.localScale.x);
+
+            // Chạy âm thanh bước chân
+            if (!playWalk.isPlaying && isGrounded)
+            {
+                playWalk.Play();
+            }
+
+            // Dừng âm thanh tấn công nếu đang phát
+            if (playAttack.isPlaying)
+            {
+                playAttack.Stop();
+            }
         }
-        if (!photonView.IsMine)
-            return;
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
+        else if (playWalk.isPlaying)
         {
-            rd2d.velocity = new Vector2(rd2d.velocity.x, jump);
-            isGrounded = false;
-            isJump = true;
-            anim.SetBool("isJump", true);
-            playJump.Play();
             playWalk.Stop();
-            jumpCount++; // Tăng số lần nhảy mỗi khi nhấn phím nhảy
         }
-
-        // Tấn công
-        if (Input.GetMouseButtonDown(0) && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
-        {
-            StartCoroutine(Attack());
-        }
-
-        // notificationText.text = "";
     }
 
     private bool IsPointerOverUI()
@@ -292,16 +388,18 @@ public class NewPlayer : MonoBehaviourPunCallbacks
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public void LevelSlider(float amount)
+    public void LevelSlider(int amount)
     {
         expCurrent += amount;
         textExp.SetText(expCurrent + "%");
         if (expCurrent >= expMax)
         {
+
             expCurrent = 0;
             textExp.SetText(expCurrent + "%");
             level++;
             textLevel.SetText("Lv" + level);
+            expMax = Mathf.FloorToInt(expMax * 0.9f);
             upgradePoints++;
             UpdateStatsText();
         }
@@ -551,15 +649,15 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     {
         if (upgradePoints > 0)
         {
-            maxHealth += 100;
-            currentHealth = Mathf.Min(maxHealth, currentHealth + 100);
-            healthSlider.maxValue = maxHealth;
-            upgradePoints--;
-            UpdateStatsText();
+            maxHealth += 100; // Tăng sức khỏe tối đa
+            currentHealth = Mathf.Min(maxHealth, currentHealth + 100); // Đảm bảo máu hiện tại không vượt quá maxHealth
+            healthSlider.maxValue = maxHealth; // Cập nhật thanh máu
+            upgradePoints--; // Giảm điểm nâng cấp
+            UpdateStatsText(); // Cập nhật UI
         }
         else
         {
-            ShowNotification("Bạn đã hết điểm nâng cấp!");
+            ShowNotification("Bạn đã hết điểm nâng cấp!"); // Thông báo hết điểm nâng cấp
         }
     }
 
@@ -630,14 +728,14 @@ public class NewPlayer : MonoBehaviourPunCallbacks
     void ShowNotification(string message)
     {
         notificationText.text = message; // Hiển thị thông báo
-        Invoke("ClearNotification", 2f); // Xóa thông báo sau 2 giây
+        Destroy(notificationText, 2f); // Xóa thông báo sau 2 giây
     }
 
-    void ToggleStatsDisplay()
+    public void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
         bool isActive = ChisoPanel.activeSelf;
-        ChisoPanel.SetActive(!isActive);
+        PanelManager.Instance.OpenPanel(ChisoPanel);
         Debug.Log("co ne");
         // Cập nhật thông tin nếu bảng hiển thị
         if (!isActive)
@@ -656,7 +754,7 @@ public class NewPlayer : MonoBehaviourPunCallbacks
 
     void ClosePanel()
     {
-        ChisoPanel.SetActive(false);
+        PanelManager.Instance.ClosePanel(ChisoPanel);
     }
 
     [PunRPC]

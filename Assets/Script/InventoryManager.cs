@@ -1,4 +1,5 @@
-﻿using System.Collections;
+
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
-    NewPlayer player1;
+    Dichuyennv1 player1;
 
 
 
@@ -95,8 +96,14 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-       if (player1 == null)
+        if (player1 == null)
         {
+            player1 = FindObjectOfType<Dichuyennv1>();
+            if (player1 == null)
+            {
+                return;
+            }
+
             return;
         }
         if (Input.GetMouseButtonDown(0))
@@ -356,10 +363,7 @@ public class InventoryManager : MonoBehaviour
         return;
     }
     // use item
-   public void UseHealth(ItemClass item)
-{
-    SlotClass slot = ContainsItem(item);
-    if (slot != null && slot.GetQuantity() > 0)
+    public void UseHealth(ItemClass item)
     {
         if (item is ConsumableClass consumable)
         {
@@ -367,21 +371,26 @@ public class InventoryManager : MonoBehaviour
             {
                 player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
                 healthSlider.value = player1.currentHealth;
+                Debug.Log("Use HP");
                 RemoveItem(item, 1);
                 UpdateButtonQuantity(Btn_Health, item);
                 RefreshUI();
                 StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
+            else
+            {
+                Debug.Log("Máu của bạn đã đầy!");
+            }
+            RefreshUI();
         }
-
-        RefreshUI();
+        else
+        {
+            Debug.Log("Không tìm thấy vật phẩm");
+        }
     }
-}
-   public void UseMana(ItemClass item)
-{
-    SlotClass slot = ContainsItem(item);
-    if (slot != null && slot.GetQuantity() > 0)
+    public void UseMana(ItemClass item)
     {
+
 
         if (item is ConsumableClass consumable)
         {
@@ -394,11 +403,15 @@ public class InventoryManager : MonoBehaviour
                 RefreshUI();
                 StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
             }
-        }
 
-        RefreshUI();
+
+            RefreshUI();
+        }
+        else
+        {
+            Debug.Log("Không tìm thấy vật phẩm");
+        }
     }
-}
     private void UpdateButtonQuantity(Button button, ItemClass item)
     {
         // Kiểm tra số lượng còn lại của item

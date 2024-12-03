@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5616185069445680557}
   - component: {fileID: 3884949121125485219}
   - component: {fileID: 2849320497657373788}
-  - component: {fileID: 1689229772877052504}
+  - component: {fileID: -3374678061978418750}
   m_Layer: 0
   m_Name: coins_enemy
   m_TagString: Untagged
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
---- !u!114 &1689229772877052504
+--- !u!114 &-3374678061978418750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
