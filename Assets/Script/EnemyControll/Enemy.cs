@@ -8,12 +8,12 @@ public class Enemy : MonoBehaviour
     public Slider healthSlider;
     public int damageAmount = 1;
     public GameObject prefabsItem;
-    Dichuyennv1 player;
-
-    // Được gọi khi đối tượng được spawn
+    private Dichuyennv1 player;
+    private NPCQuest npcQuest; // Tham chiếu đến NPCQuest
 
     void Start()
     {
+        npcQuest = FindObjectOfType<NPCQuest>(); // Tìm NPCQuest trong scene
         UpdateHealthSlider();
     }
 
@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
         player = FindObjectOfType<Dichuyennv1>();
         UpdateHealthSlider();
     }
-
 
     public void TakeDamage(int damage)
     {
@@ -46,25 +45,19 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        if (player != null)
+        if (npcQuest != null)
         {
-            player.LevelSlider(50);
-            Debug.Log("Gọi LevelSlider thành công");
+            npcQuest.KillMonster(); // Gọi hàm KillMonster trong NPCQuest khi quái vật chết
         }
-        else
-        {
-            Debug.LogError("Không thể gọi LevelSlider vì player là null");
-        }
-        Destroy(gameObject);
+        Destroy(gameObject); // Xóa con quái vật
         DropItem();
-
-
     }
+
     public void DropItem()
     {
         if (prefabsItem != null)
         {
-            Instantiate(prefabsItem, transform.position, Quaternion.identity);
+            Instantiate(prefabsItem, transform.position, Quaternion.identity); // Thả item khi quái chết
         }
     }
 }
