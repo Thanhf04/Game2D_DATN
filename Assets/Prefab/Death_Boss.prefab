@@ -84,8 +84,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1459229879
-  m_SortingLayer: 0
+  m_SortingLayerID: -1124656983
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -1183191301, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -110,8 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d89d270ea126ee478e3e56f89f70ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  patrolPoints: []
+  moveSpeed: 2
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
   skillCooldown: 3
   skill1: {fileID: 2849682760002890193, guid: ae1c6a6d38189a74881f23e63e2fd2bd, type: 3}
   skill2: {fileID: 960204871909738950, guid: 16bc90e179a97ed42bf45a1f9450489e, type: 3}
@@ -123,8 +125,8 @@ MonoBehaviour:
   skillSpawnPoint3: {fileID: 4038231714793285125}
   skillSpawnPoint4: {fileID: 5711506301075245079}
   skillSpawnPoint5: {fileID: 5894874490420761783}
-  attackRange: 5
-  chaseRange: 10
+  attackRange: 4
+  chaseRange: 6
 --- !u!95 &5072912259093638273
 Animator:
   serializedVersion: 5
@@ -232,10 +234,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthBoss: {fileID: 743062531409065910}
   Boss: {fileID: 455433669806504168}
-  maxHealth: 10
+  maxHealth: 1
   currentHealth: 0
   prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
-  PanelSkillBoss: {fileID: 0}
+  Panel_KillBoss: {fileID: 0}
 --- !u!114 &1198582901629427095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,10 +251,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPoint: {fileID: 2692094174893410938}
-  attackRadius: 2.17
+  attackRadius: 2.37
   Player:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   damageBoss: 5
 --- !u!1 &826274967730330792
 GameObject:
@@ -867,7 +869,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -383707971
+  m_SortingLayerID: -1124656983
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &1024870812605523286

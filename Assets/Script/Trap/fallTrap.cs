@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class fallTrap : MonoBehaviour
@@ -23,7 +21,7 @@ public class fallTrap : MonoBehaviour
         damageCollider = GetComponent<BoxCollider2D>();
         damageCollider.enabled = false; // Vô hiệu hóa lúc đầu
 
-        
+
     }
 
     void Update()
@@ -60,7 +58,7 @@ public class fallTrap : MonoBehaviour
         if (collision.collider.CompareTag("Player") && daRoi)
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            NewPlayer playerHealth = collision.collider.GetComponent<NewPlayer>();
+            Dichuyennv1 playerHealth = collision.collider.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(20); // Gây 20 sát thương

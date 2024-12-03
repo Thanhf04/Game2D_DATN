@@ -11,7 +11,7 @@ public class Boss_Health : MonoBehaviour
     Animator animator;
     public GameObject prefabsItem;
     public GameObject PanelSkillBoss;
-    NewPlayer Player1;
+    Dichuyennv1 Player1;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class Boss_Health : MonoBehaviour
         HealthBoss.value = maxHealth;
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
-        Player1 = FindObjectOfType<NewPlayer>();
+        Player1 = FindObjectOfType<Dichuyennv1>();
     }
     public void TakeDamage(int damage)
     {

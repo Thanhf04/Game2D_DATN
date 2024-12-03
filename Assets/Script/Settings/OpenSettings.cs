@@ -6,11 +6,10 @@ public class OpenSettings : MonoBehaviour
 
     public void Open()
     {
-        PanelSettings.SetActive(true);
-        Debug.Log("fuickkkkkkkk");
+        PanelManager.Instance.OpenPanel(PanelSettings);
     }
     public void Close()
     {
-        PanelSettings.SetActive(false);
+        PanelManager.Instance.ClosePanel(PanelSettings);
     }
 }

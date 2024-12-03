@@ -3,11 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Bantay
-  - NenDat
-  - enemy
-  - Boss
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -15,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - player1
+  - 
   - 
   - 
   - 
@@ -45,30 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: New Layer 1
-    uniqueID: 2798815135
+  - name: bg
+    uniqueID: 4160159769
     locked: 0
-  - name: New Layer 2
-    uniqueID: 450815175
+  - name: anhnen
+    uniqueID: 1588673645
     locked: 0
-  - name: New Layer 3
-    uniqueID: 1180496249
+  - name: player
+    uniqueID: 2843610995
     locked: 0
-  - name: New Layer 4
-    uniqueID: 1596491877
+  - name: behind
+    uniqueID: 4285133969
     locked: 0
-  - name: New Layer 5
-    uniqueID: 1485334603
-    locked: 0
-  - name: New Layer 6
-    uniqueID: 3170310313
-    locked: 0
-  - name: New Layer 7
-    uniqueID: 1222731409
-    locked: 0
-  - name: New Layer 8
-    uniqueID: 748597489
-    locked: 0
-  - name: New Layer 9
-    uniqueID: 1094700221
+  - name: decor
+    uniqueID: 2355752823
     locked: 0
