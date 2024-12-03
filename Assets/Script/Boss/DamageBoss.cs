@@ -13,11 +13,10 @@ public class DamageBoss : MonoBehaviour
 
         if (hit)
         {
-            NewPlayer playerHealth = hit.GetComponent<NewPlayer>();
+            Dichuyennv1 playerHealth = hit.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(damageBoss);
-                Debug.Log("dame");
             }
         }
     }

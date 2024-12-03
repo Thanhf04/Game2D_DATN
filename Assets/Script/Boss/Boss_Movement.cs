@@ -32,7 +32,7 @@ public class Boss_Movement : MonoBehaviour
 
     private Transform player;
     private bool isAttacking = false;
-    NewPlayer player1;
+    Dichuyennv1 player1;
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class Boss_Movement : MonoBehaviour
 
     void Update()
     {
-        player = FindObjectOfType<NewPlayer>().transform;
+        player = FindObjectOfType<Dichuyennv1>().transform;
         if (isAttacking) return;
         if (IsPlayerInChaseRange() && !IsPlayerInAttackRange())
         {

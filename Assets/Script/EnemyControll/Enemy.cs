@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public Slider healthSlider;
     public int damageAmount = 1;
     public GameObject prefabsItem;
-    NewPlayer player;
+    Dichuyennv1 player;
 
     // Được gọi khi đối tượng được spawn
 
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        player = FindObjectOfType<NewPlayer>();
+        player = FindObjectOfType<Dichuyennv1>();
         UpdateHealthSlider();
     }
 
