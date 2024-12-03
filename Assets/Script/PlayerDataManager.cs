@@ -212,7 +212,7 @@ public class PlayerDataTest : MonoBehaviour
             // Lấy và cập nhật giá trị EXP
             int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
             expSlider.value = exp;
-            expText.text = "EXP: " + exp.ToString();
+            expText.text = " " + exp.ToString();
 
             // Lấy và cập nhật giá trị Gold
             int gold = int.Parse(snapshot.Child("Gold").Value.ToString());

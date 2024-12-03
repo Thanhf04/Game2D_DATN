@@ -1,55 +1,70 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth = 100; // Sức khỏe tối đa của quái
-    public int currentHealth;
-    public Slider HealthSlider;
-    Dichuyennv1 dichuyennv1;
+    public int maxHealth = 100;
+    public int currentHealth = 100;
+    public Slider healthSlider;
+    public int damageAmount = 1;
     public GameObject prefabsItem;
+    Dichuyennv1 player;
+
+    // Được gọi khi đối tượng được spawn
 
     void Start()
     {
-        HealthSlider.maxValue = maxHealth;
-        HealthSlider.value = maxHealth;
-        currentHealth = maxHealth;
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
+        UpdateHealthSlider();
     }
 
-    public void TakeDamage(int amount)
+    void Update()
     {
-        currentHealth -= amount; // Giảm sức khỏe khi nhận sát thương
+        player = FindObjectOfType<Dichuyennv1>();
+        UpdateHealthSlider();
+    }
 
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            Die(); // Gọi hàm chết nếu sức khỏe bằng 0
-
-
+            currentHealth = 0;
+            Die();
         }
-        HealthSlider.value = currentHealth;
+        UpdateHealthSlider();
+    }
+
+    private void UpdateHealthSlider()
+    {
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+            healthSlider.interactable = false;
+        }
     }
 
     void Die()
     {
-        if (dichuyennv1 != null)
+        if (player != null)
         {
-            dichuyennv1.LevelSlider(50);
+            player.LevelSlider(50);
+            Debug.Log("Gọi LevelSlider thành công");
         }
+        else
+        {
+            Debug.LogError("Không thể gọi LevelSlider vì player là null");
+        }
+        Destroy(gameObject);
         DropItem();
-        // Xử lý cái chết của quái vật, như là biến mất hoặc phát animation chết
-        Destroy(gameObject); // Xóa quái vật
+
+
     }
-    void DropItem()
+    public void DropItem()
     {
         if (prefabsItem != null)
         {
             Instantiate(prefabsItem, transform.position, Quaternion.identity);
         }
-    }
-    internal void TakeDamage(float damage)
-    {
-        throw new NotImplementedException();
     }
 }

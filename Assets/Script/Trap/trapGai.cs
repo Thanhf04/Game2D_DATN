@@ -12,7 +12,7 @@ public class trapGai : MonoBehaviour
             Dichuyennv1 playerHealth = collision.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10); // Gây 10 sát thương
+                // playerHealth.TakeDamage(10); // Gây 10 sát thương
             }
         }
     }

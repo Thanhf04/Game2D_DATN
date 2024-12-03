@@ -1,20 +1,77 @@
+using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class damageEnemy : MonoBehaviour
 {
-    public int damageAmount = 10; // Sát thương gây ra khi va chạm
+    Enemy enemy;
+    Dichuyennv1 playerHealth;
+
+    void Start()
+    {
+        if (transform.childCount > 0)
+        {
+            enemy = gameObject.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.LogError("The child object does not have an Enemy component!");
+            }
+        }
+        else
+        {
+            Debug.LogError("This object has no children!");
+        }
+    }
+
+
+    void Update()
+    {
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<Dichuyennv1>();
+        }
+        StartCoroutine(WaitForPlayerSpawn());
+    }
+
+    IEnumerator WaitForPlayerSpawn()
+    {
+        while (playerHealth == null)
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var playerObj in players)
+            {
+                var playerPhotonView = playerObj.GetComponent<PhotonView>();
+                if (playerPhotonView != null && playerPhotonView.IsMine)
+                {
+                    playerHealth = playerObj.GetComponent<Dichuyennv1>();
+                    break;
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Dichuyennv1 playerHealth = other.GetComponent<Dichuyennv1>();
-            if (playerHealth != null)
+            if (playerHealth == null)
             {
-                Debug.Log("kill palyer");
-                playerHealth.TakeDamage(damageAmount); // Gây sát thương cho người chơi
+                playerHealth = other.GetComponent<Dichuyennv1>();
+                if (playerHealth == null)
+                {
+                    Debug.LogError("playerHealth is null!");
+                    return;
+                }
+            }
+
+            if (enemy != null)
+            {
+                playerHealth.TakeDamage(enemy.damageAmount); // Gây sát thương cho người chơi
+            }
+            else
+            {
+                Debug.LogError("Enemy is not assigned or is null!");
             }
         }
     }

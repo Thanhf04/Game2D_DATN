@@ -10,7 +10,7 @@ public class CoQuanNang : MonoBehaviour
 
     private Vector3 originalPosition; // Vị trí ban đầu của diemNang
     private Vector3 liftedPosition; // Vị trí nâng lên
-    private bool shouldLift = false;
+    private int playerCollisionCount = 0; // Số lượng va chạm với "Player"
 
     void Start()
     {
@@ -26,7 +26,7 @@ public class CoQuanNang : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player")) // Kiểm tra nếu người chơi va chạm với vùng này
         {
-            shouldLift = true;
+            playerCollisionCount++; // Tăng số lượng va chạm
         }
     }
 
@@ -34,7 +34,7 @@ public class CoQuanNang : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player")) // Kiểm tra nếu người chơi rời khỏi vùng va chạm
         {
-            shouldLift = false;
+            playerCollisionCount--; // Giảm số lượng va chạm
         }
     }
 
@@ -43,7 +43,7 @@ public class CoQuanNang : MonoBehaviour
         if (diemNang != null)
         {
             // Di chuyển đối tượng đến vị trí nâng lên hoặc vị trí ban đầu
-            if (shouldLift)
+            if (playerCollisionCount > 0)
             {
                 diemNang.transform.position = Vector3.MoveTowards(diemNang.transform.position, liftedPosition, liftSpeed * Time.deltaTime);
             }

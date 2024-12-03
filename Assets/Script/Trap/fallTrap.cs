@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class fallTrap : MonoBehaviour
@@ -23,15 +21,17 @@ public class fallTrap : MonoBehaviour
         damageCollider = GetComponent<BoxCollider2D>();
         damageCollider.enabled = false; // Vô hiệu hóa lúc đầu
 
+
+    }
+
+    void Update()
+    {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;
         }
-    }
 
-    void Update()
-    {
         if (playerTransform != null && !daRoi)
         {
             float distance = Vector2.Distance(transform.position, playerTransform.position);
