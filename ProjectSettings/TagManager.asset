@@ -4,21 +4,18 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Bantay
+  - NenDat
   - enemy
   - Boss
-  - enemy
-  - Man2
-  - enemy
-  - NenDat
-  - Bantay
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Boss
   - 
   - 
   - 
@@ -49,41 +46,29 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: New Layer 1
-    uniqueID: 1351790107
+    uniqueID: 2798815135
     locked: 0
   - name: New Layer 2
-    uniqueID: 3592996693
+    uniqueID: 450815175
     locked: 0
   - name: New Layer 3
-    uniqueID: 1221545225
+    uniqueID: 1180496249
     locked: 0
   - name: New Layer 4
-    uniqueID: 4184648995
+    uniqueID: 1596491877
     locked: 0
   - name: New Layer 5
-    uniqueID: 4012719263
+    uniqueID: 1485334603
     locked: 0
   - name: New Layer 6
-    uniqueID: 1439936263
+    uniqueID: 3170310313
     locked: 0
   - name: New Layer 7
-    uniqueID: 2821573655
+    uniqueID: 1222731409
     locked: 0
-  - name: Skill
-    uniqueID: 3798540117
+  - name: New Layer 8
+    uniqueID: 748597489
     locked: 0
-  - name: bg
-    uniqueID: 1485715357
-    locked: 0
-  - name: Die + reset
-    uniqueID: 3538186337
-    locked: 0
-  - name: aaaa
-    uniqueID: 2642224551
-    locked: 0
-  - name: ChiSo
-    uniqueID: 3896769355
-    locked: 0
-  - name: ButtonX
-    uniqueID: 4283322165
+  - name: New Layer 9
+    uniqueID: 1094700221
     locked: 0

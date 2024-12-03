@@ -4,46 +4,53 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-    public float start, end;
+    public float start,end;
     public bool isRight;
     public float speed;
-    public float attackRange = 2.0f; // Phạm vi tấn công
-    public float chaseRange = 5.0f; // Phạm vi đuổi theo
+    public float attackRange = 2.0f;
+    public float chaseRange = 5.0f;
 
-    private GameObject player; // Người chơi
-    private Animator animator; // Animator của quái
+    private GameObject player;
+    private Animator animator;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        animator = GetComponent<Animator>(); // Lấy Animator từ quái
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        var quai = transform.position.x;
-        var playerPosition = player.transform.position;
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player"); 
+            if (player == null)
+            {
+                return; 
+            }
+        }
 
-        // Kiểm tra nếu người chơi đang trong phạm vi đuổi theo hoặc phạm vi tấn công
+        float quai = transform.position.x;
+        Vector3 playerPosition = player.transform.position;
+
         float distanceToPlayer = Vector3.Distance(transform.position, playerPosition);
+
         if (distanceToPlayer <= attackRange)
         {
-            AttackPlayer(); // Tấn công khi ở gần người chơi
+            AttackPlayer(); 
         }
         else if (distanceToPlayer <= chaseRange)
         {
-            ChasePlayer(playerPosition); // Đuổi theo người chơi khi còn xa
+            ChasePlayer(playerPosition); 
         }
         else
         {
-            animator.SetBool("isAttacking", false); // Ngừng animation tấn công khi người chơi ra khỏi phạm vi
-            Patrol(quai); // Tiếp tục di chuyển tuần tra nếu người chơi không trong phạm vi
+            animator.SetBool("isAttacking", false); 
+            Patrol(quai); 
         }
     }
 
     void Patrol(float quai)
     {
-        // Di chuyển giữa start và end
         if (quai < start)
         {
             isRight = true;
@@ -57,20 +64,19 @@ public class EnemyControl : MonoBehaviour
         if (isRight)
         {
             v.x = Mathf.Abs(v.x);
-            transform.Translate(Vector3.right * speed * Time.deltaTime,0);
+            transform.Translate(Vector3.right * speed * Time.deltaTime, 0);
         }
         else
         {
             v.x = -Mathf.Abs(v.x);
-            transform.Translate(Vector3.left * speed * Time.deltaTime,0);
+            transform.Translate(Vector3.left * speed * Time.deltaTime, 0);
         }
         transform.localScale = v;
     }
 
     void ChasePlayer(Vector3 playerPosition)
     {
-        // Đuổi theo người chơi
-        animator.SetBool("isAttacking", false); 
+        animator.SetBool("isAttacking", false);
         Vector2 v = transform.localScale;
 
         if (playerPosition.x > transform.position.x)
@@ -97,17 +103,15 @@ public class EnemyControl : MonoBehaviour
 
     void AttackPlayer()
     {
-        // Kích hoạt animation tấn công khi ở gần người chơi
         animator.SetBool("isAttacking", true);
     }
 
     private void OnDrawGizmos()
     {
-        // Vẽ phạm vi đuổi theo và phạm vi tấn công để dễ kiểm tra trong Editor
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange); // Vẽ vòng tròn phạm vi tấn công
+        Gizmos.DrawWireSphere(transform.position, attackRange);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseRange); // Vẽ vòng tròn phạm vi đuổi theo
+        Gizmos.DrawWireSphere(transform.position, chaseRange);
     }
 }

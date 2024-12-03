@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8655713792906172242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3845215570955059188}
+  - component: {fileID: 8483033840362801253}
+  - component: {fileID: 5368108525101457077}
+  m_Layer: 0
+  m_Name: InventoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3845215570955059188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655713792906172242}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8483033840362801253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655713792906172242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9ad077c7b2a6741bfd75b3a9405ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotsHolder: {fileID: 0}
+  itemToAdd: {fileID: 11400000, guid: b8f4f1975cf90d046817031f98d42912, type: 2}
+  itemToRemove: {fileID: 11400000, guid: d6fc0a123101fe1478736bc20b331d59, type: 2}
+  items:
+  - item: {fileID: 11400000, guid: b8f4f1975cf90d046817031f98d42912, type: 2}
+    quanity: 10
+  - item: {fileID: 11400000, guid: d6fc0a123101fe1478736bc20b331d59, type: 2}
+    quanity: 10
+  - item: {fileID: 11400000, guid: e2fa8f911ea767d45acbb7d40552f2cb, type: 2}
+    quanity: 10
+  startingItems:
+  - item: {fileID: 11400000, guid: b8f4f1975cf90d046817031f98d42912, type: 2}
+    quanity: 11
+  - item: {fileID: 11400000, guid: d6fc0a123101fe1478736bc20b331d59, type: 2}
+    quanity: 1
+  - item: {fileID: 11400000, guid: e2fa8f911ea767d45acbb7d40552f2cb, type: 2}
+    quanity: 10
+  movingSlot:
+    item: {fileID: 0}
+    quanity: 0
+  originalSlot:
+    item: {fileID: 0}
+    quanity: 0
+  tempSlot:
+    item: {fileID: 0}
+    quanity: 0
+  itemCursor: {fileID: 0}
+  slots: []
+  isMoving: 0
+  Btn_Health: {fileID: 0}
+  Btn_Mana: {fileID: 0}
+  healthItem: {fileID: 11400000, guid: ee7d7ec93c23785448343e156e0731ef, type: 2}
+  manaItem: {fileID: 11400000, guid: a3242c22ae009f14cbd968da12a0dfbf, type: 2}
+  healthSlider: {fileID: 0}
+  manaSlider: {fileID: 0}
+  healthButtonText: {fileID: 0}
+  manaButtonText: {fileID: 0}
+--- !u!114 &5368108525101457077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655713792906172242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e43ea62cc97bfd47a764fa48fbe1047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryCanvas: {fileID: 0}
+  toggleButton: {fileID: 0}

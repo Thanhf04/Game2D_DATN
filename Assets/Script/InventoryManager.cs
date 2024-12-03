@@ -1,4 +1,5 @@
-﻿using System.Collections;
+
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,6 @@ public class InventoryManager : MonoBehaviour
 
     // use item
     [Header("Use Item")]
-    Dichuyennv1 dichuyennv1;
     [SerializeField] private Button Btn_Health;
     [SerializeField] private Button Btn_Mana;
     [SerializeField] private ItemClass healthItem;
@@ -34,13 +34,14 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
+    NewPlayer player1;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         //use item 
-        dichuyennv1 = FindObjectOfType<Dichuyennv1>();
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -69,10 +70,42 @@ public class InventoryManager : MonoBehaviour
         tempSlot = new SlotClass();
 
         RefreshUI();
+
+        // StartCoroutine(WaitForPlayerSpawn());
     }
+
+
+    // IEnumerator WaitForPlayerSpawn()
+    // {
+    //     while (player1 == null)
+    //     {
+    //         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+    //         if (playerObj != null)
+    //         {
+    //             var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
+
+    //             // Kiểm tra quyền sở hữu (Ownership)
+    //             if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
+    //             {
+    //                 player1 = playerObj.GetComponent<Player>();
+    //             }
+    //         }
+    //         yield return null;
+    //     }
+    // }
 
     private void Update()
     {
+        if (player1 == null)
+        {
+            player1 = FindObjectOfType<NewPlayer>();
+            if (player1 == null)
+            {
+                return;
+            }
+
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             if (isMoving)
@@ -332,62 +365,51 @@ public class InventoryManager : MonoBehaviour
     // use item
     public void UseHealth(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
+        if (item is ConsumableClass consumable)
         {
-            if (item is ConsumableClass consumable)
+            if (player1.currentHealth < player1.maxHealth)
             {
-                if (dichuyennv1.currentHealth < dichuyennv1.maxHealth)
-                {
-                    dichuyennv1.currentHealth = Mathf.Min(dichuyennv1.currentHealth + 50, dichuyennv1.maxHealth);
-                    healthSlider.value = dichuyennv1.currentHealth;
-                    Debug.Log("Hồi máu");
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Health, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
-                }
-                else
-                {
-                    Debug.Log("Máu đã đầy");
-                }
+                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
+                healthSlider.value = player1.currentHealth;
+                Debug.Log("Use HP");
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Health, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
-
+            else
+            {
+                Debug.Log("Máu của bạn đã đầy!");
+            }
             RefreshUI();
         }
         else
         {
-            Debug.Log("Không còn item hoặc không tìm thấy trong túi!");
+            Debug.Log("Không tìm thấy vật phẩm");
         }
     }
     public void UseMana(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item);
-        if (slot != null && slot.GetQuantity() > 0)
-        {
-            if (item is ConsumableClass consumable)
-            {
-                if (dichuyennv1.currentMana < dichuyennv1.maxMana)
-                {
-                    dichuyennv1.currentMana = Mathf.Min(dichuyennv1.currentMana + 50, dichuyennv1.maxMana);
-                    manaSlider.value = dichuyennv1.currentMana;
-                    Debug.Log("Hồi mana");
-                    RemoveItem(item, 1);
-                    UpdateButtonQuantity(Btn_Mana, item);
-                    RefreshUI();
-                    StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
 
-                }
-                else
-                {
-                    Debug.Log("Mana đã đầy");
-                }
+
+        if (item is ConsumableClass consumable)
+        {
+            if (player1.currentMana < player1.maxMana)
+            {
+                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
+                manaSlider.value = player1.currentMana;
+                RemoveItem(item, 1);
+                UpdateButtonQuantity(Btn_Mana, item);
+                RefreshUI();
+                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
             }
+
+
             RefreshUI();
         }
         else
         {
-            Debug.Log("Không còn " + manaItem.name + " để sử dụng");
+            Debug.Log("Không tìm thấy vật phẩm");
         }
     }
     private void UpdateButtonQuantity(Button button, ItemClass item)
