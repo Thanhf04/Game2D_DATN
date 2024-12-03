@@ -34,7 +34,7 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
-    NewPlayer player1;
+    Dichuyennv1 player1;
 
 
 
@@ -98,7 +98,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (player1 == null)
         {
-            player1 = FindObjectOfType<NewPlayer>();
+            player1 = FindObjectOfType<Dichuyennv1>();
             if (player1 == null)
             {
                 return;

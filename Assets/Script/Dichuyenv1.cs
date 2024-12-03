@@ -17,7 +17,7 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isJump;
     private bool isStatsPanelOpen = false;
     private Animator anim;
-    public Text notificationText;
+    public TextMeshProUGUI notificationText;
 
     //panel die
     public GameObject gameOverPanel;
@@ -91,9 +91,9 @@ public class Dichuyennv1 : MonoBehaviour
     public Button decreaseManaButton;
     public Button increaseDamethButton;
     public Button decreaseDamethButton;
-    public Text healthText;
-    public Text manaText;
-    public Text damaText;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI manaText;
+    public TextMeshProUGUI damaText;
     public Text levelText;
     public Text pointsText;
 
@@ -125,7 +125,7 @@ public class Dichuyennv1 : MonoBehaviour
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -151,7 +151,7 @@ public class Dichuyennv1 : MonoBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
         ChisoPanel.SetActive(false);
-        ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        //ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
     }
 
@@ -516,10 +516,11 @@ public class Dichuyennv1 : MonoBehaviour
     }
 
     // Các phương thức UI tăng/giảm máu và mana
-    void ToggleStatsPanel()
+    public void ToggleStatsPanel()
     {
-        statsPanel.SetActive(!statsPanel.activeSelf);
-        isStatsPanelOpen = statsPanel.activeSelf;
+        //statsPanel.SetActive(!statsPanel.activeSelf);
+        //isStatsPanelOpen = statsPanel.activeSelf;
+        PanelManager.Instance.OpenPanel(statsPanel);
     }
 
     void IncreaseHealth()
@@ -651,11 +652,12 @@ public class Dichuyennv1 : MonoBehaviour
         playAttack_Fire3.Stop();
         playJump.Stop();
     }
-    void ToggleStatsDisplay()
+    public void ToggleStatsDisplay()
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
         bool isActive = ChisoPanel.activeSelf;
-        ChisoPanel.SetActive(!isActive);
+        //ChisoPanel.SetActive(!isActive);
+        PanelManager.Instance.OpenPanel(ChisoPanel);
 
         // Cập nhật thông tin nếu bảng hiển thị
         if (!isActive)
@@ -670,9 +672,10 @@ public class Dichuyennv1 : MonoBehaviour
         manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
         damageInfoText.text = $"Sát thương:  {damageAmount}";
     }
-    void ClosePanel()
+    public void ClosePanel()
     {
-        ChisoPanel.SetActive(false);
+        PanelManager.Instance.ClosePanel(ChisoPanel);
+
 
     }
 }
