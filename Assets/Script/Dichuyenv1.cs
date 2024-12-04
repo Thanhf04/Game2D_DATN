@@ -121,7 +121,9 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
-
+        healthSlider.interactable = false;
+        manaSlider.interactable = false;
+        expSlider.interactable = false;
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
