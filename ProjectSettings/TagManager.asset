@@ -3,6 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< HEAD
   tags:
   - NenDat
   - Chest
@@ -13,6 +14,9 @@ TagManager:
   - Token
   - Armor
   - Apple
+=======
+  tags: []
+>>>>>>> 9646860d4402b2091451b68b17dab9712d308635
   layers:
   - Default
   - TransparentFX
@@ -50,6 +54,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+<<<<<<< HEAD
   - name: New Layer 1
     uniqueID: 1573394855
     locked: 0
@@ -74,3 +79,5 @@ TagManager:
   - name: New Layer 8
     uniqueID: 3558644961
     locked: 0
+=======
+>>>>>>> 9646860d4402b2091451b68b17dab9712d308635

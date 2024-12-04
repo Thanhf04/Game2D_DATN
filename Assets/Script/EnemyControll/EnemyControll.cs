@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-    public float start,end;
+    public float start; // Điểm bắt đầu tuần tra
+    public float end;   // Điểm kết thúc tuần tra
     public bool isRight;
     public float speed;
     public float attackRange = 2.0f;
@@ -47,6 +46,12 @@ public class EnemyControl : MonoBehaviour
             animator.SetBool("isAttacking", false); 
             Patrol(quai); 
         }
+    }
+
+    public void SetPatrolRange(float patrolStart, float patrolEnd)
+    {
+        start = patrolStart;
+        end = patrolEnd;
     }
 
     void Patrol(float quai)
@@ -113,5 +118,8 @@ public class EnemyControl : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, chaseRange);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(new Vector3(start, transform.position.y, 0), new Vector3(end, transform.position.y, 0));
     }
 }

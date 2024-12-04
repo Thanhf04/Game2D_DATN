@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class Dichuyennv1 : MonoBehaviour
 {
     //nhiemvu
@@ -17,6 +18,7 @@ public class Dichuyennv1 : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
     [SerializeField] private ItemClass appleItem;
     [SerializeField] private ItemClass armorItem;          // ItemClass đại diện cho Apple
+
 
     // Các biến điều khiển nhân vật
     public float speed = 5f;
@@ -140,6 +142,14 @@ public class Dichuyennv1 : MonoBehaviour
         // Khởi tạo UI
         statsPanel.SetActive(false);
         //openPanelButton.onClick.AddListener(ToggleStatsPanel);
+
+
+        //NPC
+        npcQuest = FindObjectOfType<NPCQuest>();
+        isQuest1Complete = false;
+        // isQuest3Complete = false;
+
+
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -175,11 +185,13 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame)
+
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
             return;
+
         }
         // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
@@ -202,6 +214,12 @@ public class Dichuyennv1 : MonoBehaviour
         {
             playWalk.Stop();
         }
+
+        if (Input.GetKeyDown(KeyCode.F) && currentChest != null) // Phím F
+        {
+            OpenChest(currentChest); // Gọi hàm mở rương
+        }
+
         // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
@@ -216,16 +234,10 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Tấn công
 
-        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI() && isQuest1Complete) // Phải hoàn thành nhiệm vụ 1 mới tấn công
         {
             StartCoroutine(Attack());
         }
-        //lan
-        // if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-        // {
-        //     StartCoroutine(Roll());
-        // }
-        // Kỹ năng tấn công
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (skill1Timer <= 0 && currentMana >= 20)
@@ -477,6 +489,7 @@ public class Dichuyennv1 : MonoBehaviour
         Destroy(fireHand);
     }
 
+
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
@@ -532,6 +545,7 @@ public class Dichuyennv1 : MonoBehaviour
         //statsPanel.SetActive(!statsPanel.activeSelf);
         //isStatsPanelOpen = statsPanel.activeSelf;
         PanelManager.Instance.OpenPanel(statsPanel);
+
     }
 
     void IncreaseHealth()
@@ -560,6 +574,7 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
+
     void IncreaseMana()
     {
         if (upgradePoints > 0)
@@ -586,6 +601,7 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
+
     void IncreaseDame()
     {
         if (upgradePoints > 0)
@@ -609,6 +625,7 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
+
     void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
@@ -693,6 +710,7 @@ public class Dichuyennv1 : MonoBehaviour
             npcQuest.FindSword();
             isQuest1Complete = true; // Đánh dấu nhiệm vụ đã hoàn thành
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -715,7 +733,6 @@ public class Dichuyennv1 : MonoBehaviour
         // Kiểm tra khi chạm vào táo
         if (other.CompareTag("Apple"))
         {
-            CompleteAppleQuest();
             CollectApple(other.gameObject);
         }
 
@@ -757,6 +774,7 @@ public class Dichuyennv1 : MonoBehaviour
         AddAppleToInventory();  // Thêm táo vào Inventory
         UpdateApple();          // Cập nhật nhiệm vụ (nếu cần)
         Destroy(apple);         // Hủy object táo trong game
+
     }
 
     private void CollectArmor(GameObject armor)
@@ -764,6 +782,7 @@ public class Dichuyennv1 : MonoBehaviour
         AddArmorToInventory(); // Thêm giáp vào Inventory
         UpdateArmor();         // Cập nhật nhiệm vụ giáp (nếu cần)
         Destroy(armor);        // Hủy object giáp trong game
+
     }
 
     public void UpdateApple()
@@ -789,6 +808,7 @@ public class Dichuyennv1 : MonoBehaviour
     private void AddAppleToInventory()
     {
         if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+
         {
             inventoryManager.AddItem(appleItem, 1); // Thêm 1 quả táo vào Inventory
             Debug.Log("Táo đã được thêm vào Inventory!");
@@ -802,6 +822,7 @@ public class Dichuyennv1 : MonoBehaviour
     private void AddArmorToInventory()
     {
         if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+
         {
             inventoryManager.AddItem(armorItem, 1); // Thêm 1 bộ giáp vào Inventory
             Debug.Log("Giáp đã được thêm vào Inventory!");
@@ -816,4 +837,5 @@ public class Dichuyennv1 : MonoBehaviour
         isAppleQuestComplete = true;
         Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
     }
+
 }
