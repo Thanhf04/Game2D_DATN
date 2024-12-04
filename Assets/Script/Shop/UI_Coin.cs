@@ -67,7 +67,6 @@ public class UI_Coin : MonoBehaviour
     {
         return currentCoins;
     }
-
     public void ClosePanel()
     {
         panelNotification.SetActive(false);

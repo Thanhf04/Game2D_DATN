@@ -5,14 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - Boss
+  - NenDat
+  - enemy
+  - Token
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
-  - 
+  - boss
   - 
   - 
   - 
@@ -56,4 +59,19 @@ TagManager:
     locked: 0
   - name: New Layer 5
     uniqueID: 4226007683
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 2404283969
+    locked: 0
+  - name: New Layer 7
+    uniqueID: 3879535541
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 391400875
+    locked: 0
+  - name: New Layer 9
+    uniqueID: 2896302613
+    locked: 0
+  - name: New Layer 10
+    uniqueID: 4281358677
     locked: 0

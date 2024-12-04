@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoQuanNang : MonoBehaviour
+public class CoQuanNang1 : MonoBehaviour
 {
     public GameObject diemNang; // Đối tượng sẽ được nâng lên
     public float liftAmount; // Khoảng cách nâng lên theo trục Y

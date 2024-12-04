@@ -160,7 +160,7 @@ public class Dichuyennv1 : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
-        if (NPC.isOpenShop || isStatsPanelOpen)
+        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
@@ -405,7 +405,6 @@ public class Dichuyennv1 : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(bullet);
     }
-
     void BreathFire()
     {
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
@@ -433,7 +432,6 @@ public class Dichuyennv1 : MonoBehaviour
         Destroy(fireBreath);
         currentFireBreath = null;
     }
-
     void FireHand()
     {
         if (currentMana >= 10) // Kiểm tra nếu mana đủ
@@ -459,7 +457,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
-
     private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
     {
         yield return new WaitForSeconds(time);
@@ -538,7 +535,6 @@ public class Dichuyennv1 : MonoBehaviour
             ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
-
     void DecreaseHealth()
     {
         if (currentHealth > 1 && upgradePoints < level + 5)
@@ -550,7 +546,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
-
     void IncreaseMana()
     {
         if (upgradePoints > 0)
@@ -566,7 +561,6 @@ public class Dichuyennv1 : MonoBehaviour
             ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
-
     void DecreaseMana()
     {
         if (currentMana > 1 && upgradePoints < level + 5)
@@ -578,7 +572,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
-
     void IncreaseDame()
     {
         if (upgradePoints > 0)
@@ -602,7 +595,6 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText();
         }
     }
-
     void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
@@ -658,24 +650,24 @@ public class Dichuyennv1 : MonoBehaviour
         bool isActive = ChisoPanel.activeSelf;
         //ChisoPanel.SetActive(!isActive);
         PanelManager.Instance.OpenPanel(ChisoPanel);
-
-        // Cập nhật thông tin nếu bảng hiển thị
-        if (!isActive)
         {
-            UpdateStatsDisplay();
+
+            // Cập nhật thông tin nếu bảng hiển thị
+            if (!isActive)
+            {
+                UpdateStatsDisplay();
+            }
         }
-    }
-    void UpdateStatsDisplay()
-    {
-        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-        damageInfoText.text = $"Sát thương:  {damageAmount}";
+        void UpdateStatsDisplay()
+        {
+            // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+            healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+            manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+            damageInfoText.text = $"Sát thương:  {damageAmount}";
+        }
     }
     public void ClosePanel()
     {
         PanelManager.Instance.ClosePanel(ChisoPanel);
-
-
     }
 }
