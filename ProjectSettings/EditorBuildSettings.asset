@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneBoss.unity
     guid: 2d62d779e99ca59408f498cd9a15523a
+  - enabled: 1
+    path: Assets/Scenes/TimeLine2.unity
+    guid: 9c55659008bc4de4dad743b626126448
   m_configObjects: {}

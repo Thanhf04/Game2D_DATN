@@ -73,27 +73,6 @@ public class InventoryManager : MonoBehaviour
 
         // StartCoroutine(WaitForPlayerSpawn());
     }
-
-
-    // IEnumerator WaitForPlayerSpawn()
-    // {
-    //     while (player1 == null)
-    //     {
-    //         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-    //         if (playerObj != null)
-    //         {
-    //             var playerNetworkObject = playerObj.GetComponent<NetworkObject>();
-
-    //             // Kiểm tra quyền sở hữu (Ownership)
-    //             if (playerNetworkObject != null && playerNetworkObject.HasInputAuthority)
-    //             {
-    //                 player1 = playerObj.GetComponent<Player>();
-    //             }
-    //         }
-    //         yield return null;
-    //     }
-    // }
-
     private void Update()
     {
         if (player1 == null)
@@ -142,7 +121,6 @@ public class InventoryManager : MonoBehaviour
             itemCursor.sprite = null;
         }
     }
-
     private void RefreshUI()
     {
         for (int i = 0; i < slots.Length; i++)
