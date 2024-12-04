@@ -112,11 +112,17 @@ armorCountText.gameObject.SetActive(false);
         {
             questText.text = secondQuestText;
             isQuestStarted = true;
+
+            // Hiển thị số kiếm khi nhận nhiệm vụ nhặt kiếm
+            swordCountText.gameObject.SetActive(true);
+            swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
         }
         else if (swordCount == 1 && monsterKillCount < 5)
         {
             questText.text = thirdQuestText;
-            swordCountText.text = "";
+
+            // Ẩn số kiếm khi chuyển sang nhiệm vụ giết quái
+            swordCountText.gameObject.SetActive(false);
             monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
         }
         else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
@@ -171,6 +177,7 @@ armorCountText.gameObject.SetActive(false);
         }
     }
 }
+
     private void OnConfirm()
 {
     if (questPanel != null)
