@@ -160,7 +160,7 @@ public class Dichuyennv1 : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
-        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue)
+        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);

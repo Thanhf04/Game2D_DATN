@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static System.Random rnd = new System.Random(); // Để trộn danh sách
     private int[] visibleFaces = { -1, -2 }; // Các thẻ đang được lật lên
     private UI_Coin ui; // UI để thêm điểm
+    public static bool isMiniGame = false;
 
     void Start()
     {
@@ -109,10 +110,13 @@ public class GameManager : MonoBehaviour
     {
         PanelManager.Instance.ClosePanel(Panel); // Đóng panel
         ClearTokens();
+        isMiniGame = false;
+        NPC_Controller.isDialogue = false;
     }
 
     public void OpenPanel1()
     {
+        isMiniGame = true;
         PanelManager.Instance.OpenPanel(Panel); // Mở panel
         ResetGame(); // Khởi động lại game
     }
