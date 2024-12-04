@@ -10,6 +10,8 @@
             //nhiemvu
             private NPCQuest npcQuest;
             private bool isQuest1Complete = false; 
+            private bool isAppleQuestComplete = false; // Nhiệm vụ nhặt táo
+            // private bool isEnemyQuestComplete = false;
             // private bool isQuest3Complete = false; 
             private bool isPlayerNearby = false;
             private GameObject currentChest;
@@ -228,30 +230,31 @@
         {
             StartCoroutine(Attack());
         }
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if (skill1Timer <= 0 && currentMana >= 20)
-                    {
-                        Skill1();
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if (skill2Timer <= 0 && currentMana >= 30)
-                    {
-                        Skill2();
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    if (skill3Timer <= 0 && currentMana >= 30)
-                    {
-                        Skill3();
-                    }
-                }
+                if (Input.GetKeyDown(KeyCode.Q) && isAppleQuestComplete)
+        {
+            if (skill1Timer <= 0)
+            {
+                Skill1();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E) && isAppleQuestComplete)
+        {
+            if (skill2Timer <= 0)
+            {
+                Skill2();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.R) && isAppleQuestComplete)
+        {
+            if (skill3Timer <= 0)
+            {
+                Skill3();
+            }
+        }
 
-                // Cập nhật các timer hồi chiêu
-                UpdateSkillCooldowns();
+        // Cập nhật cooldown
+        UpdateSkillCooldowns();
+    
                 
                 // Cập nhật vị trí của lửa nếu đang phun lửa
                 if (currentFireBreath != null)
@@ -723,6 +726,7 @@ private void OnTriggerEnter2D(Collider2D other)
     // Kiểm tra khi chạm vào táo
     if (other.CompareTag("Apple"))
     {
+        CompleteAppleQuest();
         CollectApple(other.gameObject);
     }
 
@@ -818,4 +822,9 @@ private void AddArmorToInventory()
         Debug.LogWarning("Không tìm thấy InventoryManager!");
     }
 }
+    public void CompleteAppleQuest()
+    {
+        isAppleQuestComplete = true;
+        Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
+    }
         }
