@@ -10,8 +10,13 @@
             //nhiemvu
             private NPCQuest npcQuest;
             private bool isQuest1Complete = false; 
+            // private bool isQuest3Complete = false; 
             private bool isPlayerNearby = false;
             private GameObject currentChest;
+            [SerializeField] private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
+            [SerializeField] private ItemClass appleItem;    
+            [SerializeField] private ItemClass armorItem;          // ItemClass đại diện cho Apple
+
             // Các biến điều khiển nhân vật
             public float speed = 5f;
             private Rigidbody2D rb;
@@ -131,6 +136,7 @@
                 //NPC
                 npcQuest = FindObjectOfType<NPCQuest>();
                 isQuest1Complete = false;
+                // isQuest3Complete = false; 
 
                 StartSound();
                 // Khởi tạo UI
@@ -687,54 +693,129 @@
         }
 
     public void UpdateQuest()
-    {
-        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest"); 
-        if (npcQuest != null)
-        {
-            npcQuest.FindSword(); 
-            isQuest1Complete = true;
-        }
-    }
-    private void OnTriggerEnter2D(Collider2D other)
 {
-    if (other.CompareTag("kiem"))
+    Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+    // Chỉ cập nhật nếu nhiệm vụ chưa hoàn thành
+    if (npcQuest != null && !isQuest1Complete)
     {
-        UpdateQuest(); 
-        Destroy(other.gameObject); 
-    }
-
-    // Kiểm tra nếu chạm vào rương
-    if (other.CompareTag("Chest"))
-    {
-        currentChest = other.gameObject; // Lưu tham chiếu đến rương
-        Debug.Log("Đã vào vùng tương tác với rương!");
-        isPlayerNearby = true; // Đặt trạng thái là gần rương
+        npcQuest.FindSword();
+        isQuest1Complete = true; // Đánh dấu nhiệm vụ đã hoàn thành
     }
 }
 
-    private void OnTriggerExit2D(Collider2D other)
+private void OnTriggerEnter2D(Collider2D other)
+{
+    // Kiểm tra khi chạm vào thanh kiếm
+    if (other.CompareTag("kiem") && !isQuest1Complete)
     {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNearby = false;
-            Debug.Log("Player rời vùng tương tác với rương.");
-        }
-
-        if (other.CompareTag("Chest"))
-        {
-            currentChest = null; // Xóa tham chiếu rương
-            Debug.Log("Rời vùng tương tác với rương!");
-        }
+        UpdateQuest();
+        Destroy(other.gameObject); 
     }
-    private void OpenChest(GameObject chest)
+
+    // Kiểm tra khi chạm vào rương
+    if (other.CompareTag("Chest"))
     {
-        Debug.Log("Rương được mở!");
-        chest.SetActive(false); // Ẩn rương khi mở
+        currentChest = other.gameObject;
+        Debug.Log("Đã vào vùng tương tác với rương!");
+        isPlayerNearby = true;
+    }
 
-    
-        if (chest.GetComponent<ChestInteraction>() != null)
-        {
-            chest.GetComponent<ChestInteraction>().OpenChest();
+    // Kiểm tra khi chạm vào táo
+    if (other.CompareTag("Apple"))
+    {
+        CollectApple(other.gameObject);
+    }
+
+    // Kiểm tra khi chạm vào giáp
+    if (other.CompareTag("Armor"))
+    {
+        CollectArmor(other.gameObject);
+    }
+}
+
+private void OnTriggerExit2D(Collider2D other)
+{
+    if (other.CompareTag("Player"))
+    {
+        isPlayerNearby = false;
+        Debug.Log("Player rời vùng tương tác với rương.");
+    }
+
+    if (other.CompareTag("Chest"))
+    {
+        currentChest = null; // Xóa tham chiếu rương
+        Debug.Log("Rời vùng tương tác với rương!");
+    }
+}
+
+private void OpenChest(GameObject chest)
+{
+    Debug.Log("Rương được mở!");
+    chest.SetActive(false); // Ẩn rương khi mở
+
+    if (chest.GetComponent<ChestInteraction>() != null)
+    {
+        chest.GetComponent<ChestInteraction>().OpenChest();
+    }
+}
+
+private void CollectApple(GameObject apple)
+{
+    AddAppleToInventory();  // Thêm táo vào Inventory
+    UpdateApple();          // Cập nhật nhiệm vụ (nếu cần)
+    Destroy(apple);         // Hủy object táo trong game
+}
+
+private void CollectArmor(GameObject armor)
+{
+    AddArmorToInventory(); // Thêm giáp vào Inventory
+    UpdateArmor();         // Cập nhật nhiệm vụ giáp (nếu cần)
+    Destroy(armor);        // Hủy object giáp trong game
+}
+
+public void UpdateApple()
+{
+    Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+    // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
+    if (npcQuest != null)
+    {
+        npcQuest.CollectApple();
+    }
+}
+
+public void UpdateArmor()
+{
+    Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+    // Chỉ cập nhật nếu nhiệm vụ giáp chưa hoàn thành
+    if (npcQuest != null)
+    {
+        npcQuest.CollectArmor(); // Gọi phương thức để cập nhật nhiệm vụ giáp
+    }
+}
+
+private void AddAppleToInventory()
+{
+    if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+    {
+        inventoryManager.AddItem(appleItem, 1); // Thêm 1 quả táo vào Inventory
+        Debug.Log("Táo đã được thêm vào Inventory!");
+    }
+    else
+    {
+        Debug.LogWarning("Không tìm thấy InventoryManager!");
+    }
+}
+
+private void AddArmorToInventory()
+{
+    if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+    {
+        inventoryManager.AddItem(armorItem, 1); // Thêm 1 bộ giáp vào Inventory
+        Debug.Log("Giáp đã được thêm vào Inventory!");
+    }
+    else
+    {
+        Debug.LogWarning("Không tìm thấy InventoryManager!");
+    }
+}
         }
-    }
-    }

@@ -9,6 +9,8 @@ TagManager:
   - enemy
   - kiem
   - Chest
+  - Apple
+  - Armor
   layers:
   - Default
   - TransparentFX
