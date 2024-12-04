@@ -4,14 +4,14 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public GameObject inventoryPanel; // Tham chiếu đến Canvas của bạn
-    public Button toggleButton;     // Tham chiếu đến Button
+    public Button toggleButton;       // Tham chiếu đến Button
 
     private bool isInventoryVisible = false;
 
     void Start()
     {
         // Đảm bảo Canvas được tắt khi khởi động
-        inventoryPanel.gameObject.SetActive(false);
+        inventoryPanel.SetActive(false);
 
         // Gán sự kiện cho Button
         toggleButton.onClick.AddListener(ToggleInventory);
@@ -29,7 +29,8 @@ public class Inventory : MonoBehaviour
     // Hàm bật/tắt Canvas
     void ToggleInventory()
     {
+        // Lấy trạng thái của Panel hiện tại và thay đổi nó
         isInventoryVisible = !isInventoryVisible;
-        PanelManager.Instance.OpenPanel(inventoryPanel);
+        inventoryPanel.SetActive(isInventoryVisible); // Chuyển trạng thái của inventoryPanel
     }
 }

@@ -18,29 +18,34 @@ public class EnemyRespawn : MonoBehaviour
     // Thực hiện respawn quái vật
     private IEnumerator Respawn(Enemy enemy)
     {
-        // Chờ một khoảng thời gian trước khi respawn
         yield return new WaitForSeconds(respawnTime);
 
-        // Kiểm tra xem spawnPoints có rỗng không
+        // Kiểm tra nếu mảng spawnPoints không rỗng
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points assigned!");
-            yield break; // Dừng coroutine nếu không có điểm spawn
+            yield break;
         }
 
-        // Kiểm tra xem enemy có phải là null không
         if (enemy != null)
         {
-            // Đặt lại vị trí của quái vật ở vị trí spawn ngẫu nhiên từ danh sách spawnPoints
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            // Chọn vị trí spawn ngẫu nhiên
+            int spawnIndex = Random.Range(0, spawnPoints.Length);
+            Debug.Log($"Random spawn index chosen: {spawnIndex}");
 
-            // Đặt lại vị trí và kích hoạt quái vật trở lại
+            Transform spawnPoint = spawnPoints[spawnIndex];
+
+            // Cập nhật vị trí và góc quay của quái vật
             enemy.transform.position = spawnPoint.position;
             enemy.transform.rotation = spawnPoint.rotation;
-            enemy.gameObject.SetActive(true); // Hiển thị quái vật trở lại
 
-            // Gọi phương thức Respawn trong Enemy
+            // Kích hoạt lại quái vật
+            enemy.gameObject.SetActive(true);
+
+            // Gọi phương thức Respawn trong script Enemy
             enemy.Respawn();
+
+            Debug.Log($"Enemy respawned at position: {spawnPoint.position}");
         }
         else
         {
