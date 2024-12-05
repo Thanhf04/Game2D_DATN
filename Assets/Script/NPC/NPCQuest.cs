@@ -19,7 +19,7 @@ public class NPCQuest : MonoBehaviour
     private string thirdQuestText = "Nhiệm vụ tiếp theo của bạn là giết 5 con quái.";
     private string rewardCompletionText = "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
     private string rewardTbaoShopText = "Giỏi lắm chàng trai mở thêm chức năng shop, bạn có thể mua vật phẩm để hồi năng lượng và máu!";
-    private string appleQuestText = "Nhiệm vụ mới: Thu thập 1 quả táo để tiếp tục hành trình!";
+    private string appleQuestText = "Nhiệm vụ mới: Thu thập 3 quả táo để tiếp tục hành trình!";
     private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 1 quả táo, nhận thêm 20 vàng!";
     private string rewardTbaoSkillText = "Giỏi lắm chàng trai bạn đã hoàn thành nhiệm vụ, bây giờ bạn có thể sài skill cho riêng bản thân mình";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
@@ -146,7 +146,7 @@ armorCountText.gameObject.SetActive(false);
             // Sau khi nhận reward cho shop, tiến tới nhiệm vụ nhặt táo
             questText.text = appleQuestText;
             appleCountText.gameObject.SetActive(true);
-            appleCountText.text = "Số táo đã thu thập: " + appleCount + "/1";
+            appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
         }
         else if (appleCount >= 1 && !hasCompletedAppleQuest)
         {
@@ -220,7 +220,7 @@ questPanel.SetActive(false);
     public void CollectApple()
 {
     appleCount++;
-    appleCountText.text = "Số táo đã thu thập: " + appleCount + "/1";
+    appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
 
     if (appleCount >= 1 && !hasCompletedAppleQuest)
     {
