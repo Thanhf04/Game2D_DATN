@@ -31,6 +31,7 @@ public class MainToken : MonoBehaviour
             {
                 spriteRenderer.sprite = back;
                 gameManager.GetComponent<GameManager>().RemoveVisibleFace(faceIndex);
+                //gameManager.GetComponent<GameManager>().ResetGame();
             }
         }
     }

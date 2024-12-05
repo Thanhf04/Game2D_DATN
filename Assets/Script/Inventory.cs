@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour
         inventoryPanel.SetActive(false);
 
         // Gán sự kiện cho Button
-        toggleButton.onClick.AddListener(ToggleInventory);
+        //toggleButton.onClick.AddListener(ToggleInventory);
     }
 
     void Update()
@@ -27,10 +27,17 @@ public class Inventory : MonoBehaviour
     }
 
     // Hàm bật/tắt Canvas
-    void ToggleInventory()
+    public void ToggleInventory()
     {
         // Lấy trạng thái của Panel hiện tại và thay đổi nó
-        isInventoryVisible = !isInventoryVisible;
-        inventoryPanel.SetActive(isInventoryVisible); // Chuyển trạng thái của inventoryPanel
+
+        if (!isInventoryVisible)
+        {
+            PanelManager.Instance.OpenPanel(inventoryPanel);
+        }
+        else
+        {
+            PanelManager.Instance.ClosePanel(inventoryPanel);
+        }
     }
 }
