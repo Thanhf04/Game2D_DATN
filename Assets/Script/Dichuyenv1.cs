@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
 {
+    #region Khai báo các biến
+
     //nhiemvu
     private NPCQuest npcQuest;
     private bool isQuest1Complete = false;
@@ -127,7 +129,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
-
+    #endregion
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -238,21 +240,21 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Attack());
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && isAppleQuestComplete)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
             }
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && isAppleQuestComplete)
         {
             if (skill2Timer <= 0 && currentMana >= 30)
             {
                 Skill2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && isAppleQuestComplete)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
             {

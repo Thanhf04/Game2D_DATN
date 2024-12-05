@@ -3,20 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-<<<<<<< HEAD
   tags:
   - NenDat
   - Chest
   - kiem
   - enemy
   - Boss
-  - Undefined
   - Token
-  - Armor
   - Apple
-=======
-  tags: []
->>>>>>> 9646860d4402b2091451b68b17dab9712d308635
+  - Undefined
+  - Armor
   layers:
   - Default
   - TransparentFX
@@ -54,30 +50,3 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-<<<<<<< HEAD
-  - name: New Layer 1
-    uniqueID: 1573394855
-    locked: 0
-  - name: New Layer 2
-    uniqueID: 3477834847
-    locked: 0
-  - name: New Layer 3
-    uniqueID: 824180947
-    locked: 0
-  - name: New Layer 4
-    uniqueID: 35404309
-    locked: 0
-  - name: New Layer 5
-    uniqueID: 53998941
-    locked: 0
-  - name: New Layer 6
-    uniqueID: 136619043
-    locked: 0
-  - name: New Layer 7
-    uniqueID: 2616680217
-    locked: 0
-  - name: New Layer 8
-    uniqueID: 3558644961
-    locked: 0
-=======
->>>>>>> 9646860d4402b2091451b68b17dab9712d308635
