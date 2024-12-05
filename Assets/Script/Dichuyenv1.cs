@@ -192,6 +192,7 @@ public class Dichuyennv1 : MonoBehaviour
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
+            playJump.Stop();
             return;
 
         }
