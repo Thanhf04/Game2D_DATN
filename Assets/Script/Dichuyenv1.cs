@@ -4,8 +4,24 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class Dichuyennv1 : MonoBehaviour
 {
+    #region Khai báo các biến
+
+    //nhiemvu
+    private NPCQuest npcQuest;
+    private bool isQuest1Complete = false;
+    private bool isAppleQuestComplete = false; // Nhiệm vụ nhặt táo
+                                               // private bool isEnemyQuestComplete = false;
+                                               // private bool isQuest3Complete = false; 
+    private bool isPlayerNearby = false;
+    private GameObject currentChest;
+    [SerializeField] private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
+    [SerializeField] private ItemClass appleItem;
+    [SerializeField] private ItemClass armorItem;          // ItemClass đại diện cho Apple
+
+
     // Các biến điều khiển nhân vật
     public float speed = 5f;
     private Rigidbody2D rb;
@@ -113,7 +129,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
-
+    #endregion
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -121,11 +137,20 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
-
+        #region đóng tương tác với slider
+        healthSlider.interactable = false;
+        manaSlider.interactable = false;
+        expSlider.interactable = false;
+        #endregion
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        // openPanelButton.onClick.AddListener(ToggleStatsPanel);
+        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
+
+        //NPC
+        npcQuest = FindObjectOfType<NPCQuest>();
+        isQuest1Complete = false;
+        // isQuest3Complete = false;
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -151,7 +176,7 @@ public class Dichuyennv1 : MonoBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
         ChisoPanel.SetActive(false);
-        // ChisoButton.onClick.AddListener(ToggleStatsDisplay);
+        //ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
     }
 
@@ -160,12 +185,15 @@ public class Dichuyennv1 : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
-        if (NPC.isOpenShop || isStatsPanelOpen)
+        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame)
+
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
+            playJump.Stop();
             return;
+
         }
         // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
@@ -188,6 +216,12 @@ public class Dichuyennv1 : MonoBehaviour
         {
             playWalk.Stop();
         }
+
+        if (Input.GetKeyDown(KeyCode.F) && currentChest != null) // Phím F
+        {
+            OpenChest(currentChest); // Gọi hàm mở rương
+        }
+
         // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || jumpCount < 2)) // Kiểm tra nếu nhân vật đang trên mặt đất hoặc đã nhảy ít hơn 2 lần
         {
@@ -202,31 +236,25 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Tấn công
 
-        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI()) // Kiểm tra nếu nhấn chuột trái và không trong quá trình lăn
+        if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI() && isQuest1Complete) // Phải hoàn thành nhiệm vụ 1 mới tấn công
         {
             StartCoroutine(Attack());
         }
-        //lan
-        // if (Input.GetKeyDown(KeyCode.F) && !isRoll)
-        // {
-        //     StartCoroutine(Roll());
-        // }
-        // Kỹ năng tấn công
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && isAppleQuestComplete)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
             }
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && isAppleQuestComplete)
         {
             if (skill2Timer <= 0 && currentMana >= 30)
             {
                 Skill2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && isAppleQuestComplete)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
             {
@@ -405,7 +433,6 @@ public class Dichuyennv1 : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(bullet);
     }
-
     void BreathFire()
     {
         if (currentMana >= 30) // Kiểm tra nếu mana đủ
@@ -433,7 +460,6 @@ public class Dichuyennv1 : MonoBehaviour
         Destroy(fireBreath);
         currentFireBreath = null;
     }
-
     void FireHand()
     {
         if (currentMana >= 10) // Kiểm tra nếu mana đủ
@@ -459,12 +485,12 @@ public class Dichuyennv1 : MonoBehaviour
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
-
     private IEnumerator DestroyFireHandAfterTime(GameObject fireHand, float time)
     {
         yield return new WaitForSeconds(time);
         Destroy(fireHand);
     }
+
 
     public void TakeDamage(int amount)
     {
@@ -517,10 +543,12 @@ public class Dichuyennv1 : MonoBehaviour
 
     // Các phương thức UI tăng/giảm máu và mana
     public void ToggleStatsPanel()
-  {
-      //statsPanel.SetActive(!statsPanel.activeSelf);
-      PanelManager.Instance.OpenPanel(statsPanel);
-  }
+    {
+        //statsPanel.SetActive(!statsPanel.activeSelf);
+        //isStatsPanelOpen = statsPanel.activeSelf;
+        PanelManager.Instance.OpenPanel(statsPanel);
+
+    }
 
     void IncreaseHealth()
     {
@@ -537,7 +565,6 @@ public class Dichuyennv1 : MonoBehaviour
             ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
-
     void DecreaseHealth()
     {
         if (currentHealth > 1 && upgradePoints < level + 5)
@@ -565,7 +592,6 @@ public class Dichuyennv1 : MonoBehaviour
             ShowNotification("Bạn đã hết điểm nâng cấp!");
         }
     }
-
     void DecreaseMana()
     {
         if (currentMana > 1 && upgradePoints < level + 5)
@@ -652,28 +678,166 @@ public class Dichuyennv1 : MonoBehaviour
         playJump.Stop();
     }
     public void ToggleStatsDisplay()
-{
-    // Hiển thị hoặc ẩn bảng Chỉ Số
-    bool isActive = ChisoPanel.activeSelf;
-    //ChisoPanel.SetActive(!isActive);
-    PanelManager.Instance.OpenPanel(ChisoPanel);
+    {
+        // Hiển thị hoặc ẩn bảng Chỉ Số
+        bool isActive = ChisoPanel.activeSelf;
+        //ChisoPanel.SetActive(!isActive);
+        PanelManager.Instance.OpenPanel(ChisoPanel);
+        {
 
-    // Cập nhật thông tin nếu bảng hiển thị
-    if (!isActive)
-    {
-        UpdateStatsDisplay();
+            // Cập nhật thông tin nếu bảng hiển thị
+            if (!isActive)
+            {
+                UpdateStatsDisplay();
+            }
+        }
+        void UpdateStatsDisplay()
+        {
+            // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+            healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+            manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+            damageInfoText.text = $"Sát thương:  {damageAmount}";
+        }
     }
-}
-    void UpdateStatsDisplay()
+    public void ClosePanel()
     {
-        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-        damageInfoText.text = $"Sát thương:  {damageAmount}";
+        PanelManager.Instance.ClosePanel(ChisoPanel);
     }
-    void ClosePanel()
+    public void UpdateQuest()
     {
-        ChisoPanel.SetActive(false);
+        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+        // Chỉ cập nhật nếu nhiệm vụ chưa hoàn thành
+        if (npcQuest != null && !isQuest1Complete)
+        {
+            npcQuest.FindSword();
+            isQuest1Complete = true; // Đánh dấu nhiệm vụ đã hoàn thành
+        }
 
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Kiểm tra khi chạm vào thanh kiếm
+        if (other.CompareTag("kiem") && !isQuest1Complete)
+        {
+            UpdateQuest();
+            Destroy(other.gameObject);
+        }
+
+        // Kiểm tra khi chạm vào rương
+        if (other.CompareTag("Chest"))
+        {
+            currentChest = other.gameObject;
+            Debug.Log("Đã vào vùng tương tác với rương!");
+            isPlayerNearby = true;
+        }
+
+        // Kiểm tra khi chạm vào táo
+        if (other.CompareTag("Apple"))
+        {
+            CollectApple(other.gameObject);
+        }
+
+        // Kiểm tra khi chạm vào giáp
+        if (other.CompareTag("Armor"))
+        {
+            CollectArmor(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerNearby = false;
+            Debug.Log("Player rời vùng tương tác với rương.");
+        }
+
+        if (other.CompareTag("Chest"))
+        {
+            currentChest = null; // Xóa tham chiếu rương
+            Debug.Log("Rời vùng tương tác với rương!");
+        }
+    }
+
+    private void OpenChest(GameObject chest)
+    {
+        Debug.Log("Rương được mở!");
+        chest.SetActive(false); // Ẩn rương khi mở
+
+        if (chest.GetComponent<ChestInteraction>() != null)
+        {
+            chest.GetComponent<ChestInteraction>().OpenChest();
+        }
+    }
+
+    private void CollectApple(GameObject apple)
+    {
+        AddAppleToInventory();  // Thêm táo vào Inventory
+        UpdateApple();          // Cập nhật nhiệm vụ (nếu cần)
+        Destroy(apple);         // Hủy object táo trong game
+
+    }
+
+    private void CollectArmor(GameObject armor)
+    {
+        AddArmorToInventory(); // Thêm giáp vào Inventory
+        UpdateArmor();         // Cập nhật nhiệm vụ giáp (nếu cần)
+        Destroy(armor);        // Hủy object giáp trong game
+
+    }
+
+    public void UpdateApple()
+    {
+        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+        // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
+        if (npcQuest != null)
+        {
+            npcQuest.CollectApple();
+        }
+    }
+
+    public void UpdateArmor()
+    {
+        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+        // Chỉ cập nhật nếu nhiệm vụ giáp chưa hoàn thành
+        if (npcQuest != null)
+        {
+            npcQuest.CollectArmor(); // Gọi phương thức để cập nhật nhiệm vụ giáp
+        }
+    }
+
+    private void AddAppleToInventory()
+    {
+        if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+
+        {
+            inventoryManager.AddItem(appleItem, 1); // Thêm 1 quả táo vào Inventory
+            Debug.Log("Táo đã được thêm vào Inventory!");
+        }
+        else
+        {
+            Debug.LogWarning("Không tìm thấy InventoryManager!");
+        }
+    }
+
+    private void AddArmorToInventory()
+    {
+        if (inventoryManager != null)  // Kiểm tra InventoryManager đã được tham chiếu
+
+        {
+            inventoryManager.AddItem(armorItem, 1); // Thêm 1 bộ giáp vào Inventory
+            Debug.Log("Giáp đã được thêm vào Inventory!");
+        }
+        else
+        {
+            Debug.LogWarning("Không tìm thấy InventoryManager!");
+        }
+    }
+    public void CompleteAppleQuest()
+    {
+        isAppleQuestComplete = true;
+        Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
+    }
+
 }

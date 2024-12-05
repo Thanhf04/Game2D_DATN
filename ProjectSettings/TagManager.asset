@@ -4,17 +4,22 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Boss
+  - Armor
   - NenDat
+  - Chest
+  - kiem
+  - Apple
   - enemy
+  - Boss
+  - Token
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - player
+  - 
   - Water
   - UI
-  - boss
+  - 
   - 
   - 
   - 
@@ -45,17 +50,8 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: New Layer 1
-    uniqueID: 3169870615
+    uniqueID: 2047268047
     locked: 0
   - name: New Layer 2
-    uniqueID: 2603834235
-    locked: 0
-  - name: New Layer 3
-    uniqueID: 1883276289
-    locked: 0
-  - name: New Layer 4
-    uniqueID: 2894372697
-    locked: 0
-  - name: New Layer 5
-    uniqueID: 4226007683
+    uniqueID: 1617167489
     locked: 0

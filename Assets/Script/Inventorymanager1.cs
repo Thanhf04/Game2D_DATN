@@ -6,179 +6,173 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 
-// Update the InventoryFirebaseManager to fix UI refresh issues and handle item display correctly.
-public class InventoryFirebaseManager : MonoBehaviour
+public class FirebaseInventoryManager1 : MonoBehaviour
 {
     [SerializeField] private GameObject slotsHolder;
-    [SerializeField] private ItemClass itemToAdd;
-    [SerializeField] private ItemClass itemToRemove;
     [SerializeField] private SlotClass[] items;
-    [SerializeField] private SlotClass[] startingItems;
-    [SerializeField] private ItemClass healthItem;
-    [SerializeField] private ItemClass manaItem;
+    [SerializeField] private GameObject[] slots;
+    public bool isMoving;
 
+    // Firebase Realtime Database reference
     private DatabaseReference reference;
-    private string username;
-    public Image itemCursor;
-    private bool isMoving;
 
-    // UI references for use item buttons
-    [Header("Use Item")]
-    [SerializeField] private Button Btn_Health;
-    [SerializeField] private Button Btn_Mana;
-    [SerializeField] public Slider healthSlider;
-    [SerializeField] public Slider manaSlider;
-    [SerializeField] private TextMeshProUGUI healthButtonText;
-    [SerializeField] private TextMeshProUGUI manaButtonText;
-    private float itemCooldownTime = 2f;
-    private bool isHealthOnCooldown = false;
-    private bool isManaOnCooldown = false;
-    private Dichuyennv1 player1;  // Reference to player object
+    public string username;
 
+    // Start is called before the first frame update
     void Start()
     {
-        // Automatically assign player1 if not already assigned
-        player1 = FindObjectOfType<Dichuyennv1>();
-        if (player1 == null)
+        // Kiểm tra xem username đã được lưu trong PlayerPrefs chưa
+        username = PlayerPrefs.GetString("username", string.Empty);
+
+        if (string.IsNullOrEmpty(username))
         {
-            Debug.LogError("Player1 is not assigned! Make sure the player object with Dichuyennv1 script is in the scene.");
+            Debug.LogError("Username chưa được lưu trong PlayerPrefs.");
             return;
         }
 
+        // Cài đặt Firebase và kiểm tra dependencies
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            reference = FirebaseDatabase.DefaultInstance.RootReference;
+            if (task.Result == DependencyStatus.Available)
+            {
+                // Firebase đã sẵn sàng
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-            // Get username from previous login (assumed)
-            username = "user123"; // Replace with actual login logic
+                // Xử lý các vật phẩm ban đầu
+                InitializeInventory();
 
-            // Load inventory data on start
-            LoadInventoryData();
+                // Tải kho đồ từ Firebase
+                LoadInventoryFromFirebase(username); // Đảm bảo gọi lại LoadInventoryFromFirebase
+            }
+            else
+            {
+                Debug.LogError("Firebase không sẵn sàng. Lỗi: " + task.Result.ToString());
+            }
         });
+    }
 
-        // Setup buttons for using items
-        Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
-        Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
-        healthButtonText.text = "";
-        manaButtonText.text = "";
+    private void InitializeInventory()
+    {
+        // Lấy các slot từ UI
+        slots = new GameObject[slotsHolder.transform.childCount];
+        items = new SlotClass[slots.Length];
 
-        // Setup initial inventory slots
-        int slotCount = slotsHolder.transform.childCount;
-        items = new SlotClass[slotCount];
-
-        for (int i = 0; i < slotCount; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            items[i] = new SlotClass();
+            slots[i] = slotsHolder.transform.GetChild(i).gameObject;
         }
 
-        // Set starting items
-        for (int i = 0; i < startingItems.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
-            items[i] = startingItems[i];
+            items[i] = new SlotClass();
         }
 
         RefreshUI();
     }
 
-    // Save inventory data to Firebase
-    public void SaveInventoryData()
-    {
-        // Create inventory data object
-        InventoryData data = new InventoryData(items, healthItem, manaItem);
-
-        // Convert inventory data to JSON format
-        string json = JsonUtility.ToJson(data);
-
-        // Save to Firebase under the user's username
-        reference.Child("inventory").Child(username).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => {
-            if (task.IsCompleted)
-            {
-                Debug.Log("Inventory data saved to Firebase!");
-            }
-            else
-            {
-                Debug.LogError("Failed to save inventory: " + task.Exception);
-            }
-        });
-    }
-
-    // Load inventory data from Firebase
-    public void LoadInventoryData()
-    {
-        reference.Child("inventory").Child(username).GetValueAsync().ContinueWithOnMainThread(task => {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-
-                if (snapshot.Exists)
-                {
-                    string json = snapshot.GetRawJsonValue();
-                    InventoryData data = JsonUtility.FromJson<InventoryData>(json);
-
-                    // Update the inventory with the loaded data
-                    items = data.items;
-                    healthItem = data.healthItem;
-                    manaItem = data.manaItem;
-
-                    RefreshUI();
-                    Debug.Log("Inventory data loaded!");
-                }
-                else
-                {
-                    Debug.LogWarning("No inventory data found for this user.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Failed to load inventory: " + task.Exception);
-            }
-        });
-    }
-
-    // Update UI to reflect inventory data
     private void RefreshUI()
     {
-        // Ensure slot count matches inventory size
-        if (slotsHolder.transform.childCount != items.Length)
-        {
-            Debug.LogWarning("Number of slots in UI does not match the number of items in inventory.");
-        }
-
-        // Iterate through each slot and update the UI accordingly
-        for (int i = 0; i < items.Length; i++)
+        // Kiểm tra lại mỗi slot và cập nhật UI
+        for (int i = 0; i < slots.Length; i++)
         {
             try
             {
-                // Get the item in the slot
-                var item = items[i].GetItem();
-                var slot = slotsHolder.transform.GetChild(i).gameObject;
-                Image itemImage = slot.transform.GetChild(0).GetComponent<Image>(); // Image for item icon
-                TextMeshProUGUI quantityText = slot.transform.GetChild(1).GetComponent<TextMeshProUGUI>(); // Quantity text
+                SlotClass slot = items[i]; // Lấy Slot hiện tại từ `items`
 
-                // Update item image and quantity text based on the inventory item
-                if (item != null)
+                // Cập nhật hình ảnh item
+                if (slot.GetItem() != null)
                 {
-                    itemImage.sprite = item.itemIcon;
-                    itemImage.enabled = true; // Show the item icon
-                    quantityText.text = item.isStackable ? items[i].GetQuantity().ToString() : ""; // Display quantity if stackable
+                    slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
+                    slots[i].transform.GetChild(0).GetComponent<Image>().sprite = slot.GetItem().itemIcon;
                 }
                 else
                 {
-                    itemImage.sprite = null;
-                    itemImage.enabled = false; // Hide the item icon if there's no item in this slot
-                    quantityText.text = ""; // Clear quantity text
+                    slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                }
+
+                // Kiểm tra xem item có stackable hay không
+                TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+                if (slot.GetItem() != null && slot.GetItem().isStackable)
+                {
+                    quantityText.text = slot.GetQuantity().ToString(); // Hiển thị số lượng
+                }
+                else
+                {
+                    quantityText.text = ""; // Nếu không stackable, thì không hiển thị số lượng
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
-                // Handle potential errors during UI update (e.g., missing slots or items)
-                Debug.LogError("Error updating slot UI");
+                Debug.LogError("Error refreshing UI: " + ex.Message);
+                // Reset UI cho slot khi có lỗi
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             }
         }
     }
 
-    // Add item to inventory and refresh UI
-    public void AddItem(ItemClass item, int quantity)
+    // Lưu kho đồ lên Firebase
+    public void SaveInventoryToFirebase(string username)
+    {
+        if (reference == null || string.IsNullOrEmpty(username)) return;
+
+        string json = JsonUtility.ToJson(new InventoryData(items));
+        reference.Child("users").Child(username).Child("inventory").SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Kho đồ đã được lưu lên Firebase.");
+            }
+            else
+            {
+                Debug.LogError("Lỗi khi lưu kho đồ lên Firebase.");
+            }
+        });
+    }
+
+    // Tải kho đồ từ Firebase
+    private void LoadInventoryFromFirebase(string username)
+    {
+        if (reference == null || string.IsNullOrEmpty(username)) return;
+
+        reference.Child("users").Child(username).Child("inventory").GetValueAsync().ContinueWithOnMainThread(task => {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot.Exists)
+                {
+                    string json = snapshot.GetRawJsonValue();
+                    InventoryData inventoryData = JsonUtility.FromJson<InventoryData>(json);
+
+                    // Cập nhật kho đồ từ dữ liệu tải về
+                    items = inventoryData.items;
+
+                    // Debug log để kiểm tra các item
+                    Debug.Log("Loaded inventory items:");
+                    foreach (var slot in items)
+                    {
+                        Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
+                    }
+
+                    // Cập nhật UI trong InventoryManager
+                    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+                    if (inventoryManager != null)
+                    {
+                        inventoryManager.RefreshUI();  // Làm mới UI trong InventoryManager
+                    }
+
+                    Debug.Log("Kho đồ đã được tải từ Firebase.");
+                }
+                else
+                {
+                    Debug.LogWarning("Không tìm thấy dữ liệu kho đồ cho người dùng này.");
+                }
+            }
+        });
+    }
+
+    // Đồng bộ hóa AddItem từ InventoryManager
+    public void AddItemToFirebase(ItemClass item, int quantity)
     {
         SlotClass slot = ContainsItem(item);
         if (slot != null && slot.GetItem().isStackable)
@@ -197,14 +191,13 @@ public class InventoryFirebaseManager : MonoBehaviour
             }
         }
 
-        // Save the updated inventory to Firebase after adding an item
-        SaveInventoryData();
-
+        // Cập nhật Firebase
+        SaveInventoryToFirebase(username);
         RefreshUI();
     }
 
-    // Remove item from inventory and refresh UI
-    public void RemoveItem(ItemClass item, int quantity)
+    // Đồng bộ hóa RemoveItem từ InventoryManager
+    public void RemoveItemFromFirebase(ItemClass item, int quantity)
     {
         SlotClass slot = ContainsItem(item);
         if (slot != null)
@@ -215,29 +208,24 @@ public class InventoryFirebaseManager : MonoBehaviour
             }
             else
             {
-                // Find the slot and remove the item completely
+                int slotToRemoveIndex = 0;
                 for (int i = 0; i < items.Length; i++)
                 {
                     if (items[i].GetItem() == item)
                     {
-                        items[i].RemoveItem();
+                        slotToRemoveIndex = i;
                         break;
                     }
                 }
+
+                items[slotToRemoveIndex].RemoveItem();
             }
 
-            // Save the updated inventory to Firebase after removing an item
-            SaveInventoryData();
-
-            RefreshUI();
-        }
-        else
-        {
-            Debug.LogWarning("Item không tồn tại trong inventory.");
+            // Cập nhật Firebase
+            SaveInventoryToFirebase(username);
         }
     }
 
-    // Helper method to check if an item already exists in inventory
     private SlotClass ContainsItem(ItemClass item)
     {
         for (int i = 0; i < items.Length; i++)
@@ -249,49 +237,16 @@ public class InventoryFirebaseManager : MonoBehaviour
         }
         return null;
     }
-
-    // Use Health item
-    public void UseHealth(ItemClass item)
-    {
-        if (item is ConsumableClass consumable)
-        {
-            if (player1.currentHealth < player1.maxHealth)
-            {
-                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
-                healthSlider.value = player1.currentHealth;
-                RemoveItem(item, 1);
-                RefreshUI();
-            }
-        }
-    }
-
-    // Use Mana item
-    public void UseMana(ItemClass item)
-    {
-        if (item is ConsumableClass consumable)
-        {
-            if (player1.currentMana < player1.maxMana)
-            {
-                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
-                manaSlider.value = player1.currentMana;
-                RemoveItem(item, 1);
-                RefreshUI();
-            }
-        }
-    }
 }
 
+// Lớp để lưu trữ kho đồ trong Firebase
 [System.Serializable]
 public class InventoryData
 {
     public SlotClass[] items;
-    public ItemClass healthItem;
-    public ItemClass manaItem;
 
-    public InventoryData(SlotClass[] items, ItemClass healthItem, ItemClass manaItem)
+    public InventoryData(SlotClass[] items)
     {
         this.items = items;
-        this.healthItem = healthItem;
-        this.manaItem = manaItem;
     }
 }
