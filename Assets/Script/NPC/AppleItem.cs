@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class AppleItem : MonoBehaviour
 {
-    public NPCQuest npcQuest;  
+    public NPCAppleArmorQuest npcApple;  
 
     void Start()
     {
-        if (npcQuest == null)
+        if (npcApple == null)
         {
-            npcQuest = FindObjectOfType<NPCQuest>(); 
+            npcApple = FindObjectOfType<NPCAppleArmorQuest>(); 
         }
     }
 
@@ -18,9 +18,9 @@ public class AppleItem : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // Tăng số táo trong NPCQuest
-            if (npcQuest != null)
+            if (npcApple != null)
             {
-                npcQuest.CollectApple();  // Gọi phương thức để tăng số táo
+                npcApple    .CollectApple();  // Gọi phương thức để tăng số táo
             }
 
             // Xóa quả táo sau khi thu thập

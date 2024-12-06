@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NPC_Controller : MonoBehaviour
 {
@@ -7,6 +7,10 @@ public class NPC_Controller : MonoBehaviour
     public static bool isDialogue = false;
     private void OnMouseDown()
     {
+        if (GameManager.isMiniGame == true)
+        {
+            return;
+        }
         PanelManager.Instance.OpenPanel(panelDialogueNpc);
         isDialogue = true;
     }
