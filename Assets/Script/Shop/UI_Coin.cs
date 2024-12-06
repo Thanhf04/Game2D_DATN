@@ -28,7 +28,7 @@ public class UI_Coin : MonoBehaviour
     private void Start()
     {
         AddCoins(100);
-        Debug.Log("Coins Initialized");
+        // Debug.Log("Coins Initialized");
     }
 
     public void AddCoins(int amount)
@@ -67,7 +67,6 @@ public class UI_Coin : MonoBehaviour
     {
         return currentCoins;
     }
-
     public void ClosePanel()
     {
         panelNotification.SetActive(false);
