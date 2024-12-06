@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
 {
+    #region Khai báo các biến
+
     //nhiemvu
     private NPCQuest npcQuest;
     private bool isQuest1Complete = false;
@@ -126,7 +128,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
-
+    #endregion
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -134,22 +136,21 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
+        #region đóng tương tác với slider
         healthSlider.interactable = false;
         manaSlider.interactable = false;
         expSlider.interactable = false;
+        #endregion
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
         //openPanelButton.onClick.AddListener(ToggleStatsPanel);
-
 
         //NPC
         npcQuest = FindObjectOfType<NPCQuest>();
         npcapple = FindObjectOfType<NPCAppleArmorQuest>();
         isQuest1Complete = false;
         // isQuest3Complete = false;
-
-
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -190,6 +191,7 @@ public class Dichuyennv1 : MonoBehaviour
             isRunning = false;
             anim.SetBool("isRunning", false);
             playWalk.Stop();
+            playJump.Stop();
             return;
 
         }

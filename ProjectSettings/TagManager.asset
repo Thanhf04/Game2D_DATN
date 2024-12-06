@@ -4,14 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Armor
   - NenDat
   - Chest
   - kiem
   - Apple
+  - enemy
   - Boss
   - Token
-  - enemy
-  - Armor
   layers:
   - Default
   - TransparentFX
@@ -48,4 +48,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: New Layer 1
+    uniqueID: 2047268047
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 1617167489
     locked: 0
