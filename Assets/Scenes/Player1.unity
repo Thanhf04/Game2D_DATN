@@ -860,7 +860,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.49873, y: 2.9900002, z: -10}
+  m_LocalPosition: {x: -11.518428, y: 2.9900002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -917,7 +917,7 @@ GameObject:
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &545937006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43302,6 +43302,17 @@ MonoBehaviour:
   respawnTime: 5
   spawnPoints:
   - {fileID: 585454872}
+--- !u!114 &638606286 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1556059419551371973, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
+  m_PrefabInstance: {fileID: 448342099152898465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448342099152898468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &678807591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46438,8 +46449,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1155822586552047254, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1513638521}
   m_SourcePrefab: {fileID: 100100000, guid: 228517ab120b86742a0bffee13763592, type: 3}
+--- !u!114 &1478235197 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6463134651474476217, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1478235198 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 50341388188801143, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1478235199 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5170149792753813310, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1478235200 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1155822586552047254, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1482105331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46758,6 +46804,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4708711625825118654, guid: 228517ab120b86742a0bffee13763592, type: 3}
   m_PrefabInstance: {fileID: 1478235196}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1513638521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478235200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c5de86aec297d448eb4fe78b65b280, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthText: {fileID: 0}
+  energyText: {fileID: 0}
+  expText: {fileID: 0}
+  goldText: {fileID: 0}
+  diamondText: {fileID: 0}
+  healthSlider: {fileID: 638606286}
+  energySlider: {fileID: 1478235198}
+  expSlider: {fileID: 1478235197}
+  player: {fileID: 1478235200}
+  inventoryCanvas: {fileID: 1478235199}
+  gold: 0
+  diamond: 0
+  items: []
+  itemToAdd: {fileID: 11400000, guid: b8f4f1975cf90d046817031f98d42912, type: 2}
+  itemToRemove: {fileID: 11400000, guid: d6fc0a123101fe1478736bc20b331d59, type: 2}
 --- !u!1 &1569438502
 GameObject:
   m_ObjectHideFlags: 0
@@ -47035,7 +47108,7 @@ Transform:
   m_GameObject: {fileID: 1617019410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.49873, y: 2.9900002, z: -10}
+  m_LocalPosition: {x: -11.518428, y: 2.9900002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
