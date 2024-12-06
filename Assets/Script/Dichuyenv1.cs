@@ -12,7 +12,7 @@ public class Dichuyennv1 : MonoBehaviour
     //nhiemvu
     private NPCQuest npcQuest;
     private bool isQuest1Complete = false;
-    private bool isAppleQuestComplete = false; 
+    private bool isAppleQuestComplete = false;
     private NPCAppleArmorQuest npcapple;
     private bool isPlayerNearby = false;
     private GameObject currentChest;
@@ -691,13 +691,13 @@ public class Dichuyennv1 : MonoBehaviour
                 UpdateStatsDisplay();
             }
         }
-        void UpdateStatsDisplay()
-        {
-            // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-            healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-            manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-            damageInfoText.text = $"Sát thương:  {damageAmount}";
-        }
+    }
+    void UpdateStatsDisplay()
+    {
+        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+        damageInfoText.text = $"Sát thương:  {damageAmount}";
     }
     public void ClosePanel()
     {
