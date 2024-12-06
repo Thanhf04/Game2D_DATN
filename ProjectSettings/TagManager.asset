@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - NenDat
+  - Chest
+  - kiem
+  - Apple
+  - Boss
+  - Token
+  - enemy
+  - Armor
   layers:
   - Default
   - TransparentFX
