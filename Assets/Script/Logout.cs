@@ -22,7 +22,7 @@ public class Logout : MonoBehaviour
             Debug.Log("Người dùng đã đăng xuất.");
             PlayerPrefs.DeleteKey("username");
             PlayerPrefs.Save();
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("Login");
         }
         else
         {
