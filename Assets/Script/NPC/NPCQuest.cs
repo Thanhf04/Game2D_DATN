@@ -23,7 +23,6 @@ public class NPCQuest : MonoBehaviour
     private string CardQuestText = "Nhiệm vụ lần này của bạn là lật đúng 2 lần thẻ giống nhau";
     private string CardQuestText1 = "Sau đó quay về đây cậu sẽ nhận phần quà bất ngờ";
     private string congratulationCardQuestText = "Bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 70 vàng";
-
     #endregion
 
     private bool isPanelVisible = false;
