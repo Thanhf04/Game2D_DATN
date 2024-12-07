@@ -47652,7 +47652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8063795307854228421, guid: c46fc9623f8e375499b680bc4a93951b, type: 3}
       propertyPath: currentCard
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8063795307854228421, guid: c46fc9623f8e375499b680bc4a93951b, type: 3}
       propertyPath: confirmButton
@@ -49175,5 +49175,5 @@ SceneRoots:
   - {fileID: 2008834132}
   - {fileID: 1297338936}
   - {fileID: 989951406}
-  - {fileID: 1239228031}
   - {fileID: 1153818221}
+  - {fileID: 1239228031}
