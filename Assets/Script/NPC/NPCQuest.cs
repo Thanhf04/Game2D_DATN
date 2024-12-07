@@ -27,6 +27,10 @@ public class NPCQuest : MonoBehaviour
     private int swordCount = 0;
     private int monsterKillCount = 0;
 
+    // private bool isQuestCompleted = false;
+    // public ArrowGuide arrowGuide;
+    // public Transform swordLocation;
+
     void Start()
     {
         if (questPanel != null)
@@ -57,6 +61,12 @@ public class NPCQuest : MonoBehaviour
         }
 
         uiCoin = FindObjectOfType<UI_Coin>();
+
+        // Ẩn mũi tên lúc đầu
+        // if (arrowGuide != null)
+        // {
+        //     arrowGuide.SetTarget(null);
+        // }
     }
 
     void OnMouseDown()
@@ -91,6 +101,13 @@ public class NPCQuest : MonoBehaviour
 
                 swordCountText.gameObject.SetActive(true);
                 swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
+
+            //     if (arrowGuide != null && swordLocation != null)
+            // {
+            //     arrowGuide.SetTarget(swordLocation);
+            // }
+
+                swordCountText.color = Color.white;
             }
             else if (swordCount == 1 && monsterKillCount < 5)
             {
@@ -100,6 +117,7 @@ public class NPCQuest : MonoBehaviour
                 swordCountText.gameObject.SetActive(false);
                 monsterCountText.gameObject.SetActive(true);
                 monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
+                monsterCountText.color = Color.white;
             }
             else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
             {
@@ -136,11 +154,26 @@ public class NPCQuest : MonoBehaviour
     {
         swordCount = 1;
         swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
+        // isQuestCompleted = true;
+        // // Ẩn mũi tên khi tìm được kiếm
+        // if (arrowGuide != null)
+        // {
+        //     arrowGuide.SetTarget(null);
+        // }
+
+        if (swordCount == 1)
+    {
+        swordCountText.color = Color.yellow;
+    }
     }
 
     public void KillMonster()
     {
         monsterKillCount++;
         monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
+         if (monsterKillCount == 5)
+    {
+        monsterCountText.color = Color.yellow;
+    }
     }
 }

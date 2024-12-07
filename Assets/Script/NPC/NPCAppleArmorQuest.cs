@@ -16,6 +16,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
+    private string textTiepTuc = "Bây giờ còn hãy tìm đường tới Thành phố bỏ hoang và gặp người bí ẩn.";
 
     private bool isPanelVisible = false;
     private bool hasCompletedAppleQuest = false;
@@ -71,6 +72,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             else if (hasCompletedArmorQuest)
             {
                 questText.text = armorCompletionText;
+                questText.text = textTiepTuc;
             }
             else if (hasCompletedAppleQuest)
             {
@@ -96,6 +98,8 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 questText.text = appleQuestText;
                 appleCountText.gameObject.SetActive(true);
                 appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
+
+                appleCountText.color = Color.white;
             }
         }
         else if (hasCompletedAppleQuest && !hasCompletedArmorQuest)
@@ -103,6 +107,8 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = armorQuestText;
             armorCountText.gameObject.SetActive(true);
             armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
+
+            armorCountText.color = Color.white;
         }
     }
 
@@ -141,6 +147,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             hasCompletedAppleQuest = true;
             questText.text = appleCompletionText;
+            appleCountText.color = Color.yellow;
             if (uiCoin != null)
             {
                 uiCoin.AddCoins(20);
@@ -157,6 +164,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             hasCompletedArmorQuest = true;
             questText.text = armorCompletionText;
+            armorCountText.color = Color.yellow;
             if (uiCoin != null)
             {
                 uiCoin.AddCoins(30);
