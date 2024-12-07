@@ -17,6 +17,7 @@ public class NPCQuest : MonoBehaviour
     private string thirdQuestText = "Nhiệm vụ tiếp theo của bạn là giết 5 con quái.";
     private string rewardCompletionText = "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
     private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
+    private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
     private bool isPanelVisible = false;
     private bool isQuestStarted = false;
@@ -117,6 +118,7 @@ public class NPCQuest : MonoBehaviour
             {
                 // Câu chúc mừng cuối cùng
                 questText.text = finalEncouragementText;
+                questText.text = continuareText;
             }
         }
     }
