@@ -19,6 +19,7 @@ public class NPCQuest : MonoBehaviour
     private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
     private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
+
     private bool isPanelVisible = false;
     private bool isQuestStarted = false;
     private bool hasShownCongratulation = false;
@@ -128,7 +129,6 @@ public class NPCQuest : MonoBehaviour
                 {
                     uiCoin.AddCoins(50);
                 }
-
                 hasReceivedReward = true;
                 monsterCountText.gameObject.SetActive(false);
             }
@@ -137,7 +137,7 @@ public class NPCQuest : MonoBehaviour
                 // Câu chúc mừng cuối cùng
                 questText.text = finalEncouragementText;
                 questText.text = continuareText;
-            }
+        }
         }
     }
 
@@ -177,3 +177,4 @@ public class NPCQuest : MonoBehaviour
     }
     }
 }
+

@@ -21,10 +21,21 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private bool isPanelVisible = false;
     private bool hasCompletedAppleQuest = false;
     private bool hasCompletedArmorQuest = false;
+    private bool hasCardQuest = false;
     private bool hasShownEncouragement = false;
 
     private int appleCount = 0;
     private int armorCount = 0;
+    private int currentCard = 0;
+
+    public Text currentCardText;
+
+    #region Nhiệm vụ lật thẻ
+    private string CardQuestText = "Nhiệm vụ lần này của bạn là lật đúng 2 lần thẻ giống nhau";
+    private string CardQuestText1 = "Sau đó quay về đây cậu sẽ nhận phần quà bất ngờ";
+    private string congratulationCardQuestText = "Bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 70 vàng";
+
+    #endregion
 
     void Start()
     {
@@ -53,6 +64,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             armorCountText.text = "";
             armorCountText.gameObject.SetActive(false);
+        }
+        if (currentCardText != null)
+        {
+            currentCardText.text = "";
+            currentCardText.gameObject.SetActive(false);
         }
 
         uiCoin = FindObjectOfType<UI_Coin>();
@@ -170,5 +186,25 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 uiCoin.AddCoins(30);
             }
         }
+    }
+     public void CurrentCard()
+    {
+        currentCard++;
+        currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
+
+          if (currentCard == 0 && !hasCardQuest)
+            {
+                questText.text = CardQuestText;
+                hasCardQuest = true;
+
+                currentCardText.gameObject.SetActive(true);
+                currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
+            }
+            else if (currentCard == 2)
+            {
+                questText.text = congratulationCardQuestText;
+                currentCardText.gameObject.SetActive(false);
+                uiCoin.AddCoins(70);
+            }
     }
 }
