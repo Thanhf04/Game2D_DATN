@@ -151,7 +151,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                     Debug.Log("Loaded inventory items:");
                     foreach (var slot in items)
                     {
-                        Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
+                        if (slot.GetItem() != null)
+                            Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
                     }
 
                     // Cập nhật UI trong InventoryManager
@@ -161,12 +162,19 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                         inventoryManager.RefreshUI();  // Làm mới UI trong InventoryManager
                     }
 
+                    // Gọi lại RefreshUI trong FirebaseInventoryManager1
+                    RefreshUI();
+
                     Debug.Log("Kho đồ đã được tải từ Firebase.");
                 }
                 else
                 {
                     Debug.LogWarning("Không tìm thấy dữ liệu kho đồ cho người dùng này.");
                 }
+            }
+            else
+            {
+                Debug.LogError("Lỗi khi tải dữ liệu kho đồ từ Firebase.");
             }
         });
     }
