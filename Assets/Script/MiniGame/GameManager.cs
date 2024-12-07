@@ -15,11 +15,13 @@ public class GameManager : MonoBehaviour
     private int remainingTurns = 4;         // Số lượt chơi còn lại
     public static bool isMiniGame = false;
     UI_Coin ui;
+    public NPCQuest npcQuest;
     void Start()
     {
 
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
+        npcQuest = FindObjectOfType<NPCQuest>();
     }
 
     private void InitializeGame()
@@ -80,6 +82,7 @@ public class GameManager : MonoBehaviour
             visibleFaces[1] = -2;
             success = true;
             ui.AddCoins(10);
+            npcQuest.CurrentCard();
         }
         return success;
     }
@@ -107,10 +110,11 @@ public class GameManager : MonoBehaviour
     }
     public void CloseMiniGame()
     {
-        PanelManager.Instance.ClosePanel(panel); isMiniGame = false;
+        PanelManager.Instance.ClosePanel(panel);
         ClearTokens();
         button.SetActive(false);
         isMiniGame = false;
+        NPC_Controller.isDialogue = false;
         outOfTurn.SetActive(false);
     }
 }

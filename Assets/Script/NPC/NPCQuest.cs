@@ -9,6 +9,7 @@ public class NPCQuest : MonoBehaviour
     public Button confirmButton;
     public Text swordCountText;
     public Text monsterCountText;
+    public Text currentCardText;
     public UI_Coin uiCoin;
 
     private string initialQuestText = "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
@@ -18,13 +19,21 @@ public class NPCQuest : MonoBehaviour
     private string rewardCompletionText = "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
     private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
 
+    #region Nhiệm vụ lật thẻ
+    private string CardQuestText = "Nhiệm vụ lần này của bạn là lật đúng 2 lần thẻ giống nhau";
+    private string CardQuestText1 = "Sau đó quay về đây cậu sẽ nhận phần quà bất ngờ";
+    private string congratulationCardQuestText = "Bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 70 vàng";
+
+    #endregion
+
     private bool isPanelVisible = false;
     private bool isQuestStarted = false;
     private bool hasShownCongratulation = false;
     private bool hasReceivedReward = false;
 
-    private int swordCount = 0;
-    private int monsterKillCount = 0;
+    public int swordCount = 0;
+    public int monsterKillCount = 0;
+    public int currentCard = 0;
 
     void Start()
     {
@@ -53,6 +62,11 @@ public class NPCQuest : MonoBehaviour
         {
             monsterCountText.text = "";
             monsterCountText.gameObject.SetActive(false);
+        }
+        if (currentCardText != null)
+        {
+            currentCardText.text = "";
+            currentCardText.gameObject.SetActive(false);
         }
 
         uiCoin = FindObjectOfType<UI_Coin>();
@@ -109,11 +123,24 @@ public class NPCQuest : MonoBehaviour
                 {
                     uiCoin.AddCoins(50);
                 }
-
                 hasReceivedReward = true;
                 monsterCountText.gameObject.SetActive(false);
             }
-            else if (hasReceivedReward)
+            else if (currentCard == 0 && monsterKillCount == 5)
+            {
+                questText.text = CardQuestText;
+                isQuestStarted = true;
+
+                currentCardText.gameObject.SetActive(true);
+                currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
+            }
+            else if (currentCard == 2)
+            {
+                questText.text = congratulationCardQuestText;
+                currentCardText.gameObject.SetActive(false);
+                uiCoin.AddCoins(70);
+            }
+            else if (hasReceivedReward && currentCard == 2)
             {
                 // Câu chúc mừng cuối cùng
                 questText.text = finalEncouragementText;
@@ -141,4 +168,10 @@ public class NPCQuest : MonoBehaviour
         monsterKillCount++;
         monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
     }
+    public void CurrentCard()
+    {
+        currentCard++;
+        currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
+    }
 }
+
