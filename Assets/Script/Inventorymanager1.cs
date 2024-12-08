@@ -167,6 +167,9 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                     // Đây là phần bạn cần chú ý để gọi lại RefreshUI
                     RefreshUI();
 
+                    // Gọi lại RefreshUI trong FirebaseInventoryManager1
+                    RefreshUI();
+
                     Debug.Log("Kho đồ đã được tải từ Firebase.");
                 }
                 else

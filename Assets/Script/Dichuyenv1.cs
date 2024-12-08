@@ -12,9 +12,8 @@ public class Dichuyennv1 : MonoBehaviour
     //nhiemvu
     private NPCQuest npcQuest;
     private bool isQuest1Complete = false;
-    private bool isAppleQuestComplete = false; // Nhiệm vụ nhặt táo
-                                               // private bool isEnemyQuestComplete = false;
-                                               // private bool isQuest3Complete = false; 
+    private bool isAppleQuestComplete = false;
+    private NPCAppleArmorQuest npcapple;
     private bool isPlayerNearby = false;
     private GameObject currentChest;
     [SerializeField] private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
@@ -149,6 +148,7 @@ public class Dichuyennv1 : MonoBehaviour
 
         //NPC
         npcQuest = FindObjectOfType<NPCQuest>();
+        npcapple = FindObjectOfType<NPCAppleArmorQuest>();
         isQuest1Complete = false;
         // isQuest3Complete = false;
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
@@ -185,7 +185,8 @@ public class Dichuyennv1 : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
-        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame)
+        if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
+            || OpenChiSoCaNhan.ischisoCaNhan)
 
         {
             isRunning = false;
@@ -691,13 +692,13 @@ public class Dichuyennv1 : MonoBehaviour
                 UpdateStatsDisplay();
             }
         }
-        void UpdateStatsDisplay()
-        {
-            // Cập nhật các dòng chữ trong bảng "Chỉ Số"
-            healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
-            manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
-            damageInfoText.text = $"Sát thương:  {damageAmount}";
-        }
+    }
+    void UpdateStatsDisplay()
+    {
+        // Cập nhật các dòng chữ trong bảng "Chỉ Số"
+        healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
+        manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
+        damageInfoText.text = $"Sát thương:  {damageAmount}";
     }
     public void ClosePanel()
     {
@@ -789,21 +790,21 @@ public class Dichuyennv1 : MonoBehaviour
 
     public void UpdateApple()
     {
-        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+        Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
         // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
-        if (npcQuest != null)
+        if (npcapple != null)
         {
-            npcQuest.CollectApple();
+            npcapple.CollectApple();
         }
     }
 
     public void UpdateArmor()
     {
-        Debug.Log("Cập nhật nhiệm vụ cho NPCQuest");
+        Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
         // Chỉ cập nhật nếu nhiệm vụ giáp chưa hoàn thành
-        if (npcQuest != null)
+        if (npcapple != null)
         {
-            npcQuest.CollectArmor(); // Gọi phương thức để cập nhật nhiệm vụ giáp
+            npcapple.CollectArmor(); // Gọi phương thức để cập nhật nhiệm vụ giáp
         }
     }
 
