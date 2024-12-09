@@ -15,13 +15,13 @@ public class GameManager : MonoBehaviour
     private int remainingTurns = 4;         // Số lượt chơi còn lại
     public static bool isMiniGame = false;
     UI_Coin ui;
-    public NPCQuest npcQuest;
+    public NPCAppleArmorQuest npcQuest;
     void Start()
     {
 
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
-        npcQuest = FindObjectOfType<NPCQuest>();
+        npcQuest = FindObjectOfType<NPCAppleArmorQuest>();
     }
 
     private void InitializeGame()
