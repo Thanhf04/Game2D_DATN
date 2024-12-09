@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             visibleFaces[1] = -2;
             success = true;
             ui.AddCoins(10);
-            npcQuest.CurrentCard();
+            // npcQuest.CurrentCard();
         }
         return success;
     }
