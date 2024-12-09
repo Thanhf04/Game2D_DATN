@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour
     private int[] visibleFaces = { -1, -2 }; // Các thẻ đang được lật lên
     public static bool isMiniGame = false;
     UI_Coin ui;
-    NPCAppleArmorQuest npcQuest;
+    Quest_3 q3;
     void Start()
     {
 
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
-        //npcQuest = FindObjectOfType<NPCAppleArmorQuest>();
+        q3 = FindObjectOfType<Quest_3>();
     }
 
     private void InitializeGame()
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
             visibleFaces[0] = -1;
             visibleFaces[1] = -2;
             success = true;
-            //npcQuest.CurrentCard();
+            q3.CompleteQuestCard();
         }
         return success;
     }
