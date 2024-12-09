@@ -70,7 +70,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         // Kiểm tra lại mỗi slot và cập nhật UI
         for (int i = 0; i < slots.Length; i++)

@@ -134,6 +134,15 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity().ToString();
+                    if (items[i].GetItem() == healthItem) // Nếu item là healthItem
+                    {
+                        UpdateButtonQuantity(Btn_Health, items[i].GetItem());
+                    }
+                    else if (items[i].GetItem() == manaItem) // Nếu item là manaItem
+                    {
+                        UpdateButtonQuantity(Btn_Mana, items[i].GetItem());
+                    }
+
                 }
             }
             catch
@@ -166,11 +175,11 @@ public class InventoryManager : MonoBehaviour
         }
 
         //// Cập nhật Firebase sau khi thêm vật phẩm
-        //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-        //if (firebaseInventory != null)
-        //{
-        //    firebaseInventory.AddItemToFirebase(item, quantity);
-        //}
+        FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+        if (firebaseInventory != null)
+        {
+            firebaseInventory.AddItemToFirebase(item, quantity);
+        }
 
         RefreshUI();
     }
@@ -200,11 +209,11 @@ public class InventoryManager : MonoBehaviour
             }
 
             // Cập nhật Firebase sau khi xóa vật phẩm
-            //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-            //if (firebaseInventory != null)
-            //{
-            //    firebaseInventory.RemoveItemFromFirebase(item, quantity);
-            //}
+            FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+            if (firebaseInventory != null)
+            {
+                firebaseInventory.RemoveItemFromFirebase(item, quantity);
+            }
         }
 
         RefreshUI();
@@ -342,6 +351,12 @@ public class InventoryManager : MonoBehaviour
     // use item
     public void UseHealth(ItemClass item)
     {
+        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        if (slot == null || slot.GetQuantity() <= 0)
+        {
+            Debug.Log("Không có vật phẩm Health để sử dụng!");
+            return;
+        }
         if (item is ConsumableClass consumable)
         {
             if (player1.currentHealth < player1.maxHealth)
@@ -371,14 +386,17 @@ public class InventoryManager : MonoBehaviour
             }
             Debug.Log("Co item" + item);
         }
-        else
-        {
-            Debug.Log("Không tìm thấy vật phẩm");
-        }
+
     }
 
     public void UseMana(ItemClass item)
     {
+        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        if (slot == null || slot.GetQuantity() <= 0)
+        {
+            Debug.Log("Không có vật phẩm Mana để sử dụng!");
+            return;
+        }
         if (item is ConsumableClass consumable)
         {
             if (player1.currentMana < player1.maxMana)
@@ -390,11 +408,11 @@ public class InventoryManager : MonoBehaviour
                 RemoveItem(item, 1);
 
                 // Cập nhật Firebase về sự thay đổi này
-                //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-                //if (firebaseInventory != null)
-                //{
-                //    firebaseInventory.RemoveItemFromFirebase(item, 1);
-                //}
+                FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+                if (firebaseInventory != null)
+                {
+                    firebaseInventory.RemoveItemFromFirebase(item, 1);
+                }
 
                 UpdateButtonQuantity(Btn_Mana, item);
                 RefreshUI();
@@ -405,10 +423,7 @@ public class InventoryManager : MonoBehaviour
                 Debug.Log("Mana của bạn đã đầy!");
             }
         }
-        else
-        {
-            Debug.Log("Không tìm thấy vật phẩm");
-        }
+
     }
 
     private void UpdateButtonQuantity(Button button, ItemClass item)

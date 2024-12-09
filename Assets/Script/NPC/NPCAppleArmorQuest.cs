@@ -16,7 +16,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
-    private string textTiepTuc = "Bây giờ còn hãy tìm đường tới Thành phố bỏ hoang và gặp người bí ẩn.";
 
     private bool isPanelVisible = false;
     private bool hasCompletedAppleQuest = false;
@@ -26,16 +25,9 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
     private int appleCount = 0;
     private int armorCount = 0;
-    private int currentCard = 0;
 
-    public Text currentCardText;
 
-    #region Nhiệm vụ lật thẻ
-    private string CardQuestText = "Nhiệm vụ lần này của bạn là lật đúng 2 lần thẻ giống nhau";
-    private string CardQuestText1 = "Sau đó quay về đây cậu sẽ nhận phần quà bất ngờ";
-    private string congratulationCardQuestText = "Bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 70 vàng";
 
-    #endregion
 
     void Start()
     {
@@ -65,11 +57,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             armorCountText.text = "";
             armorCountText.gameObject.SetActive(false);
         }
-        if (currentCardText != null)
-        {
-            currentCardText.text = "";
-            currentCardText.gameObject.SetActive(false);
-        }
+
 
         uiCoin = FindObjectOfType<UI_Coin>();
     }
@@ -88,18 +76,12 @@ public class NPCAppleArmorQuest : MonoBehaviour
             else if (hasCompletedArmorQuest)
             {
                 questText.text = armorCompletionText;
-                questText.text = textTiepTuc;
             }
             else if (hasCompletedAppleQuest)
             {
                 questText.text = appleCompletionText;
             }
-            else
-            {
-                questText.text = appleQuestText;
-                appleCountText.gameObject.SetActive(true);
-                appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
-            }
+
 
             isPanelVisible = true;
         }
@@ -122,6 +104,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             questText.text = armorQuestText;
             armorCountText.gameObject.SetActive(true);
+            appleCountText.gameObject.SetActive(false);
             armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
 
             armorCountText.color = Color.white;
@@ -137,18 +120,12 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
             if (hasCompletedArmorQuest)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(30);
-                }
+
                 armorCountText.gameObject.SetActive(false);
             }
             else if (hasCompletedAppleQuest)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(20);
-                }
+
                 appleCountText.gameObject.SetActive(false);
             }
         }
@@ -186,25 +163,5 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 uiCoin.AddCoins(30);
             }
         }
-    }
-     public void CurrentCard()
-    {
-        currentCard++;
-        currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
-
-          if (currentCard == 0 && !hasCardQuest)
-            {
-                questText.text = CardQuestText;
-                hasCardQuest = true;
-
-                currentCardText.gameObject.SetActive(true);
-                currentCardText.text = "Số thẻ đã lật thành công: " + currentCard + "/2";
-            }
-            else if (currentCard == 2)
-            {
-                questText.text = congratulationCardQuestText;
-                currentCardText.gameObject.SetActive(false);
-                uiCoin.AddCoins(70);
-            }
     }
 }
