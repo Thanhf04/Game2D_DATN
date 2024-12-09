@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject tokenPrefab; // Prefab của token
-    public GameObject Panel; // Panel chứa các thẻ bài
-
+    [SerializeField] private GameObject Panel; // Panel chứa các thẻ bài
+    [SerializeField] private GameObject noMoreTurnsPanel; // Panel thông báo hết lượt
+    [SerializeField] private GameObject notificationPrefab; // Panel thông báo hết lượt
     private List<int> faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 };
     public static System.Random rnd = new System.Random(); // Để trộn danh sách
     private int[] visibleFaces = { -1, -2 }; // Các thẻ đang được lật lên
     private UI_Coin ui; // UI để thêm điểm
     public static bool isMiniGame = false;
-
+    private int remainingTurns = 4; // Số lượt chơi còn lại
+    public TextMeshProUGUI turn;
+    int turnInt = 0;
     void Start()
     {
         ui = FindObjectOfType<UI_Coin>();
@@ -20,40 +24,45 @@ public class GameManager : MonoBehaviour
 
     void InitializeGame()
     {
+        // Kiểm tra xem còn lượt chơi hay không
+        if (remainingTurns <= 0)
+        {
+            ShowNoMoreTurnsPanel();
+            return;
+        }
 
         float yPosition = 4f; // Tọa độ Y ban đầu
-        float xPosition = -14.7f; // Tọa độ X ban đầu
+        float xPosition = -17.5f; // Tọa độ X ban đầu
 
         ClearTokens();
 
-        // Kiểm tra số lượng phần tử trong faceIndexes trước khi tạo token
-        int tokensToCreate = Mathf.Min(faceIndexes.Count, 8); // Đảm bảo không tạo nhiều hơn số lượng phần tử có trong faceIndexes
+        int tokensToCreate = Mathf.Min(faceIndexes.Count, 8); // Đảm bảo không tạo nhiều hơn số lượng phần tử trong faceIndexes
 
         for (int i = 0; i < tokensToCreate; i++)
         {
-            if (faceIndexes.Count == 0) break; // Kiểm tra nếu danh sách faceIndexes đã hết phần tử
+            if (faceIndexes.Count == 0) break;
 
-            int shuffleNum = rnd.Next(0, faceIndexes.Count); // Khai báo và lấy chỉ số ngẫu nhiên từ faceIndexes
-
-            if (shuffleNum < 0 || shuffleNum >= faceIndexes.Count) continue; // Đảm bảo shuffleNum hợp lệ
+            int shuffleNum = rnd.Next(0, faceIndexes.Count);
 
             var temp = Instantiate(tokenPrefab, new Vector3(xPosition, yPosition, 0), Quaternion.identity);
             temp.tag = "Token";
             temp.GetComponent<MainToken>().faceIndex = faceIndexes[shuffleNum];
-
-            // Sau khi sử dụng chỉ số, xóa phần tử khỏi faceIndexes để không tạo lại token giống nhau
             faceIndexes.RemoveAt(shuffleNum);
 
             xPosition += 2; // Tăng tọa độ X để tạo thẻ kế tiếp
 
-            // Nếu đã tạo đủ số thẻ trên 1 dòng, chuyển sang dòng mới
+            // Chuyển sang dòng mới sau khi tạo 4 thẻ trên cùng một hàng
             if (i == 3)
             {
                 yPosition = 1f;
-                xPosition = -14.7f;
+                xPosition = -17.5f;
             }
         }
+
+        remainingTurns--; // Giảm số lượt chơi sau mỗi lần khởi tạo
     }
+
+    // Kiểm tra xem có 2 thẻ đang được lật lên hay không
     public bool TwoCardsUp()
     {
         return visibleFaces[0] >= 0 && visibleFaces[1] >= 0;
@@ -79,7 +88,11 @@ public class GameManager : MonoBehaviour
             visibleFaces[0] = -1;
             visibleFaces[1] = -2;
             success = true;
-            ui.AddCoins(10); // Thưởng người chơi khi có một cặp bài
+            ui.AddCoins(10); // Thưởng người chơi khi ghép đúng
+            turn.SetText("Lượt chơi: " + $"{turnInt + 1}" + "/2");
+            turnInt = 1;
+            CreateNotification("Bạn nhận được 10 vàng!");
+
         }
         return success;
     }
@@ -87,11 +100,11 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         ClearTokens(); // Xóa tất cả các token
-        faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 }; // Tạo lại danh sách faceIndexes
+        faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 }; // Reset lại danh sách faceIndexes
+
         InitializeGame(); // Gọi lại phương thức khởi tạo game
     }
 
-    // Xóa tất cả các token trong game
     private void ClearTokens()
     {
         var tokens = GameObject.FindGameObjectsWithTag("Token");
@@ -103,12 +116,12 @@ public class GameManager : MonoBehaviour
 
     public void CloseGame()
     {
-        ClearTokens(); // Xóa tất cả các token khi đóng game
+        ClearTokens();
     }
 
     public void ClosePanel1()
     {
-        PanelManager.Instance.ClosePanel(Panel); // Đóng panel
+        PanelManager.Instance.ClosePanel(Panel);
         ClearTokens();
         isMiniGame = false;
         NPC_Controller.isDialogue = false;
@@ -117,7 +130,33 @@ public class GameManager : MonoBehaviour
     public void OpenPanel1()
     {
         isMiniGame = true;
-        PanelManager.Instance.OpenPanel(Panel); // Mở panel
-        ResetGame(); // Khởi động lại game
+        PanelManager.Instance.OpenPanel(Panel);
+        ResetGame();
+    }
+
+    // Hiển thị thông báo hết lượt chơi
+    private void ShowNoMoreTurnsPanel()
+    {
+        if (noMoreTurnsPanel != null)
+        {
+            noMoreTurnsPanel.SetActive(true);
+        }
+        Debug.Log("Bạn đã hết lượt chơi!");
+    }
+    private void CreateNotification(string message)
+    {
+        // Tạo một instance của prefab
+        GameObject notificationInstance = Instantiate(notificationPrefab, new Vector3(238, 491, 0), Quaternion.identity);
+
+        // Đảm bảo thông báo xuất hiện ở đúng vị trí trên UI (nếu cần)
+        notificationInstance.transform.SetParent(this.transform, false);
+        TextMeshProUGUI text = notificationInstance.GetComponentInChildren<TextMeshProUGUI>();
+        if (text != null)
+        {
+            text.text = message; // Đặt nội dung thông báo
+        }
+
+        // Hủy thông báo sau 2 giây
+        Destroy(notificationInstance, 1.5f);
     }
 }

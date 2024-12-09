@@ -137,21 +137,20 @@ public class Dichuyennv1 : MonoBehaviour
         isRunning = false;
         isRoll = false;
         isJump = false;
+        #region đóng tương tác với slider
         healthSlider.interactable = false;
         manaSlider.interactable = false;
         expSlider.interactable = false;
+        #endregion
         StartSound();
         // Khởi tạo UI
         statsPanel.SetActive(false);
         //openPanelButton.onClick.AddListener(ToggleStatsPanel);
 
-
         //NPC
         npcQuest = FindObjectOfType<NPCQuest>();
         isQuest1Complete = false;
         // isQuest3Complete = false;
-
-
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
