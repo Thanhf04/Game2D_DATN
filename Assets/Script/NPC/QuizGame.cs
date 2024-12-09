@@ -6,48 +6,46 @@ using UnityEngine.UI;
 
 public class QuizGame : MonoBehaviour
 {
-    public List<Question> questions; // Danh sách câu hỏi
-    public Text questionText; // Text hiển thị câu hỏi
-    public Button[] answerButtons; // Các nút trả lời
-    public GameObject quizPanel; // Panel câu hỏi
-    public Text[] feedbackTexts; // Các Text hiển thị feedback
-    public Text scoreText; // Text hiển thị điểm
-    public GameObject doorObject; // Cánh cửa
-    public GameObject messagePanel; // Panel thông báo
-    public Text messageText; // Text hiển thị thông báo
-    public Button confirmButton; // Nút xác nhận
+    public List<Question> questions;
+    public Text questionText;
+    public Button[] answerButtons;
+    public GameObject quizPanel;
+    public Text[] feedbackTexts;
+    public Text scoreText;
+    public GameObject doorObject;
+    public GameObject messagePanel;
+    public Text messageText;
+    public Button confirmButton;
+    public Button exitButton;
 
-    private int currentQuestionIndex = 0; // Chỉ số câu hỏi hiện tại
-    private int correctAnswers = 0; // Số câu trả lời đúng
+    private int currentQuestionIndex = 0;
+    private int correctAnswers = 0;
 
     void Start()
     {
-        quizPanel.SetActive(false); // Ẩn panel câu hỏi khi bắt đầu
-        messagePanel.SetActive(false); // Ẩn panel thông báo khi bắt đầu
-        confirmButton.onClick.AddListener(StartQuiz); // Thêm sự kiện cho nút xác nhận
-        UpdateScore(); // Cập nhật điểm
+        quizPanel.SetActive(false);
+        messagePanel.SetActive(false);
+        confirmButton.onClick.AddListener(StartQuiz);
+        exitButton.onClick.AddListener(CloseQuiz);
+        UpdateScore();
     }
 
     void ShowQuestion()
     {
-        // Ẩn tất cả feedback trước khi hiển thị câu hỏi mới
-        HideAllFeedback();
+        DestroyAllFeedback();
 
         if (currentQuestionIndex < questions.Count)
         {
             Question currentQuestion = questions[currentQuestionIndex];
-            questionText.text = currentQuestion.questionText; // Hiển thị câu hỏi
+            questionText.text = currentQuestion.questionText;
 
-            // Cập nhật các nút trả lời
             for (int i = 0; i < currentQuestion.options.Length; i++)
             {
                 answerButtons[i].GetComponentInChildren<Text>().text = currentQuestion.options[i];
                 int index = i;
-                answerButtons[i].onClick.RemoveAllListeners(); // Xóa các sự kiện cũ
-                answerButtons[i].onClick.AddListener(() => CheckAnswer(index)); // Thêm sự kiện kiểm tra câu trả lời
+                answerButtons[i].onClick.RemoveAllListeners();
+                answerButtons[i].onClick.AddListener(() => CheckAnswer(index));
             }
-
-            feedbackTexts[currentQuestionIndex].gameObject.SetActive(true); // Hiển thị feedback cho câu hỏi hiện tại
         }
     }
 
@@ -55,83 +53,66 @@ public class QuizGame : MonoBehaviour
     {
         Question currentQuestion = questions[currentQuestionIndex];
 
-        // Kiểm tra câu trả lời đúng hay sai
         if (index == currentQuestion.correctAnswerIndex)
         {
-            feedbackTexts[currentQuestionIndex].text = "Chúc mừng bạn đã trả lời đúng!";
-            correctAnswers++; // Tăng số câu trả lời đúng
+            CreateFeedback("Chúc mừng bạn đã trả lời đúng!", true);
+            correctAnswers++;
         }
         else
         {
-            feedbackTexts[currentQuestionIndex].text = "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.";
-            StartCoroutine(HandleWrongAnswer()); // Xử lý khi trả lời sai
+            CreateFeedback("Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.", false);
+            StartCoroutine(HandleWrongAnswer());
             return;
         }
 
-        currentQuestionIndex++; // Chuyển sang câu hỏi tiếp theo
-        StartCoroutine(WaitAndShowNextQuestion(1.5f)); // Đợi 1,5 giây trước khi chuyển sang câu hỏi tiếp theo
+        currentQuestionIndex++;
+        StartCoroutine(WaitAndShowNextQuestion(1.5f));
     }
 
     IEnumerator WaitAndShowNextQuestion(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime); // Chờ trong 1,5 giây
+        yield return new WaitForSeconds(waitTime);
+        DestroyAllFeedback();
 
-        // Ẩn feedback sau 1,5 giây
-        HideAllFeedback();
-
-        // Kiểm tra nếu trả lời đúng 4 câu
         if (correctAnswers >= 4)
         {
-            quizPanel.SetActive(false); // Ẩn panel câu hỏi
+            quizPanel.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene(3); // Chuyển đến Scene 3
+            SceneManager.LoadScene(3);
         }
         else
         {
             if (currentQuestionIndex < questions.Count)
             {
-                ShowQuestion(); // Hiển thị câu hỏi tiếp theo
+                ShowQuestion();
             }
         }
 
-        UpdateScore(); // Cập nhật điểm
-    }
-
-    void HideAllFeedback()
-    {
-        // Ẩn tất cả feedback trước khi hiển thị câu hỏi mới hoặc khi reset
-        foreach (var feedback in feedbackTexts)
-        {
-            feedback.gameObject.SetActive(false);
-        }
+        UpdateScore();
     }
 
     void UpdateScore()
     {
-        // Cập nhật điểm số hiển thị
         scoreText.text = "Số câu trả lời đúng: " + $"{correctAnswers}/4";
     }
 
     IEnumerator HandleWrongAnswer()
     {
-        yield return new WaitForSeconds(1.5f); // Đợi 1,5 giây để người chơi đọc feedback
-
-        // Ẩn feedback sau khi trả lời sai và reset quiz
-        HideAllFeedback();
-        ResetQuiz(); // Đặt lại quiz
+        yield return new WaitForSeconds(1.5f);
+        DestroyAllFeedback();
+        ResetQuiz();
     }
 
     void ResetQuiz()
     {
-        correctAnswers = 0; // Đặt lại số câu trả lời đúng
-        currentQuestionIndex = 0; // Quay lại câu hỏi đầu tiên
-        ShowQuestion(); // Hiển thị câu hỏi đầu tiên
-        UpdateScore(); // Cập nhật điểm lại
+        correctAnswers = 0;
+        currentQuestionIndex = 0;
+        ShowQuestion();
+        UpdateScore();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Khi người chơi chạm vào cửa
         if (collision.collider.CompareTag("Player"))
         {
             ShowMessage("Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa.");
@@ -140,24 +121,52 @@ public class QuizGame : MonoBehaviour
 
     void ShowMessage(string message)
     {
-        // Hiển thị thông báo
         messageText.text = message;
-        messagePanel.SetActive(true); // Hiển thị panel thông báo
+        messagePanel.SetActive(true);
     }
 
     public void StartQuiz()
     {
-        // Khi người chơi nhấn nút xác nhận, ẩn thông báo và bắt đầu quiz
         messagePanel.SetActive(false);
         quizPanel.SetActive(true);
-        ShowQuestion(); // Hiển thị câu hỏi đầu tiên
+        ShowQuestion();
+    }
+
+    public void CloseQuiz()
+    {
+        quizPanel.SetActive(false);
+        DestroyAllFeedback();
+    }
+
+    void CreateFeedback(string message, bool isCorrect)
+    {
+        GameObject feedback = new GameObject("Feedback");
+        Text feedbackText = feedback.AddComponent<Text>();
+        feedbackText.text = message;
+        feedbackText.color = isCorrect ? Color.green : Color.red;
+        feedbackText.font = scoreText.font;
+        feedbackText.fontSize = 20;
+        feedback.transform.SetParent(quizPanel.transform);
+
+        Destroy(feedback, 1.5f);
+    }
+
+    void DestroyAllFeedback()
+    {
+        foreach (var feedback in feedbackTexts)
+        {
+            if (feedback != null)
+            {
+                Destroy(feedback.gameObject);
+            }
+        }
     }
 
     [System.Serializable]
     public class Question
     {
-        public string questionText; // Câu hỏi
-        public string[] options; // Các lựa chọn trả lời
-        public int correctAnswerIndex; // Câu trả lời đúng (0, 1, 2, 3)
+        public string questionText;
+        public string[] options;
+        public int correctAnswerIndex;
     }
 }

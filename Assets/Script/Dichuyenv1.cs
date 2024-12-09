@@ -16,6 +16,10 @@ public class Dichuyennv1 : MonoBehaviour
     private NPCAppleArmorQuest npcapple;
     private bool isPlayerNearby = false;
     private GameObject currentChest;
+    public GameObject quizGamePanel;
+    public GameObject tbaoQuizGamePanel; // Panel thông báo (Tbaoquizz game)
+
+
     [SerializeField] private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
     [SerializeField] private ItemClass appleItem;
     [SerializeField] private ItemClass armorItem;          // ItemClass đại diện cho Apple
@@ -182,11 +186,24 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Update()
     {
+        
+
+          if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
+        {
+            // Dừng animation và âm thanh
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            playJump.Stop();
+
+            // Ngăn player di chuyển hoặc thực hiện các hành động khác
+            rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
+            return;
+        }
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
-            || OpenChiSoCaNhan.ischisoCaNhan)
+            || OpenChiSoCaNhan.ischisoCaNhan )
 
         {
             isRunning = false;
@@ -236,7 +253,6 @@ public class Dichuyennv1 : MonoBehaviour
         }
 
         // Tấn công
-
         if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI() && isQuest1Complete) // Phải hoàn thành nhiệm vụ 1 mới tấn công
         {
             StartCoroutine(Attack());
@@ -841,4 +857,29 @@ public class Dichuyennv1 : MonoBehaviour
         Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
     }
 
+ // Mở panel quiz game
+    public void OpenQuizGamePanel()
+    {
+        quizGamePanel.SetActive(true); // Hiển thị panel
+    }
+
+    // Đóng panel quiz game
+    public void CloseQuizGamePanel()
+    {
+        quizGamePanel.SetActive(false); // Ẩn panel
+    }
+
+    // Mở panel thông báo
+    public void OpenTbaoQuizGamePanel()
+    {
+        tbaoQuizGamePanel.SetActive(true); // Hiển thị panel
+    }
+
+    // Đóng panel thông báo và mở panel quiz game
+    public void CloseTbaoAndOpenQuizGamePanel()
+    {
+        tbaoQuizGamePanel.SetActive(false); // Ẩn panel thông báo
+        OpenQuizGamePanel(); // Mở panel quiz game
+    }
 }
+
