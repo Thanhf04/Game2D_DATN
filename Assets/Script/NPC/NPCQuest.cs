@@ -19,21 +19,17 @@ public class NPCQuest : MonoBehaviour
     private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
     private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
-
     private bool isPanelVisible = false;
     private bool isQuestStarted = false;
     private bool hasShownCongratulation = false;
     private bool hasReceivedReward = false;
 
-    private int swordCount = 0;
-    private int monsterKillCount = 0;
-
-    // private bool isQuestCompleted = false;
-    // public ArrowGuide arrowGuide;
-    // public Transform swordLocation;
+    private NPCQuestFirebase npcQuestFirebase;
 
     void Start()
     {
+        npcQuestFirebase = FindObjectOfType<NPCQuestFirebase>();
+
         if (questPanel != null)
         {
             questPanel.SetActive(false);
@@ -62,12 +58,6 @@ public class NPCQuest : MonoBehaviour
         }
 
         uiCoin = FindObjectOfType<UI_Coin>();
-
-        // Ẩn mũi tên lúc đầu
-        // if (arrowGuide != null)
-        // {
-        //     arrowGuide.SetTarget(null);
-        // }
     }
 
     void OnMouseDown()
@@ -76,16 +66,19 @@ public class NPCQuest : MonoBehaviour
         {
             questPanel.SetActive(true);
 
-            if (swordCount == 1 && !hasShownCongratulation)
+            if (npcQuestFirebase != null)
             {
-                questText.text = congratulationText;
-                hasShownCongratulation = true;
-                isQuestStarted = false;
-            }
-            else if (swordCount == 0)
-            {
-                questText.text = initialQuestText;
-                isPanelVisible = true;
+                if (npcQuestFirebase.GetSwordCount() == 1 && !hasShownCongratulation)
+                {
+                    questText.text = congratulationText;
+                    hasShownCongratulation = true;
+                    isQuestStarted = false;
+                }
+                else if (npcQuestFirebase.GetSwordCount() == 0)
+                {
+                    questText.text = initialQuestText;
+                    isPanelVisible = true;
+                }
             }
         }
     }
@@ -94,35 +87,22 @@ public class NPCQuest : MonoBehaviour
     {
         if (questPanel != null)
         {
-            if (!isQuestStarted && swordCount == 0)
+            if (!isQuestStarted && npcQuestFirebase.GetSwordCount() == 0)
             {
-                // Nhiệm vụ kiếm
                 questText.text = secondQuestText;
                 isQuestStarted = true;
-
                 swordCountText.gameObject.SetActive(true);
-                swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
-
-            //     if (arrowGuide != null && swordLocation != null)
-            // {
-            //     arrowGuide.SetTarget(swordLocation);
-            // }
-
-                swordCountText.color = Color.white;
+                swordCountText.text = "Số kiếm đã tìm được: " + npcQuestFirebase.GetSwordCount() + "/1";
             }
-            else if (swordCount == 1 && monsterKillCount < 5)
+            else if (npcQuestFirebase.GetSwordCount() == 1 && npcQuestFirebase.GetMonsterKillCount() < 5)
             {
-                // Nhiệm vụ giết quái
                 questText.text = thirdQuestText;
-
                 swordCountText.gameObject.SetActive(false);
                 monsterCountText.gameObject.SetActive(true);
-                monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
-                monsterCountText.color = Color.white;
+                monsterCountText.text = "Số quái cần giết: " + npcQuestFirebase.GetMonsterKillCount() + "/5";
             }
-            else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
+            else if (npcQuestFirebase.GetSwordCount() == 1 && npcQuestFirebase.GetMonsterKillCount() >= 5 && !hasReceivedReward)
             {
-                // Hoàn thành nhiệm vụ và nhận thưởng
                 questText.text = rewardCompletionText;
 
                 if (uiCoin != null)
@@ -131,13 +111,18 @@ public class NPCQuest : MonoBehaviour
                 }
                 hasReceivedReward = true;
                 monsterCountText.gameObject.SetActive(false);
+
+                // Save quest status to Firebase when quest is completed
+                npcQuestFirebase.SaveQuestStatus();
             }
             else if (hasReceivedReward)
             {
-                // Câu chúc mừng cuối cùng
                 questText.text = finalEncouragementText;
                 questText.text = continuareText;
-        }
+
+                // Save completed quest status to Firebase
+                npcQuestFirebase.SaveQuestStatus();
+            }
         }
     }
 
@@ -152,29 +137,17 @@ public class NPCQuest : MonoBehaviour
 
     public void FindSword()
     {
-        swordCount = 1;
-        swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
-        // isQuestCompleted = true;
-        // // Ẩn mũi tên khi tìm được kiếm
-        // if (arrowGuide != null)
-        // {
-        //     arrowGuide.SetTarget(null);
-        // }
+        npcQuestFirebase.SetSwordCount(1);
 
-        if (swordCount == 1)
-    {
-        swordCountText.color = Color.yellow;
-    }
+        // Lưu trạng thái sau khi nhặt kiếm
+        npcQuestFirebase.SaveQuestStatus();
     }
 
     public void KillMonster()
     {
-        monsterKillCount++;
-        monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
-         if (monsterKillCount == 5)
-    {
-        monsterCountText.color = Color.yellow;
-    }
+        npcQuestFirebase.SetMonsterKillCount(npcQuestFirebase.GetMonsterKillCount() + 1);
+
+        // Lưu trạng thái sau khi giết quái
+        npcQuestFirebase.SaveQuestStatus();
     }
 }
-

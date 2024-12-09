@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using Firebase;
+﻿using Firebase;
 using Firebase.Database;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class PlayerDataTest : MonoBehaviour
 {
@@ -26,21 +27,21 @@ public class PlayerDataTest : MonoBehaviour
     private string username;
     private Vector3 lastSavedPosition;
 
+    // Kiểm tra xem player có được gán chưa trước khi truy cập
     private async void Start()
     {
         // Kiểm tra và khởi tạo Firebase
-        await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (dependencyStatus == DependencyStatus.Available)
         {
-            if (task.Result == DependencyStatus.Available)
-            {
-                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase khởi tạo thành công.");
-            }
-            else
-            {
-                Debug.LogError("Firebase không thể khởi tạo: " + task.Result);
-            }
-        });
+            // Khởi tạo reference của Firebase Database sau khi Firebase đã sẵn sàng
+            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        }
+        else
+        {
+            Debug.LogError("Firebase không thể khởi tạo: " + dependencyStatus);
+            return;  // Dừng lại nếu Firebase không khởi tạo được
+        }
 
         // Lấy username từ PlayerPrefs
         username = PlayerPrefs.GetString("username", "");
@@ -52,6 +53,13 @@ public class PlayerDataTest : MonoBehaviour
             return;
         }
 
+        // Kiểm tra xem player có null không trước khi thao tác
+        if (player == null)
+        {
+            Debug.LogError("Player GameObject is null. Cannot track position.");
+            return;
+        }
+
         // Gán các listener cho các slider
         if (healthSlider != null) healthSlider.onValueChanged.AddListener(UpdateHealth);
         if (energySlider != null) energySlider.onValueChanged.AddListener(UpdateEnergy);
@@ -60,6 +68,7 @@ public class PlayerDataTest : MonoBehaviour
         // Kiểm tra nếu databaseReference đã được khởi tạo và player không phải là null
         if (databaseReference != null && !string.IsNullOrEmpty(username))
         {
+            // Chờ đợi dữ liệu người chơi được tải từ Firebase
             await LoadPlayerDataFromFirebase(username);
 
             // Tải vị trí người chơi từ Firebase sau khi tải các dữ liệu khác
@@ -87,7 +96,6 @@ public class PlayerDataTest : MonoBehaviour
         if (healthText != null)
             healthText.text = "Health: " + value.ToString("F0");
 
-        Debug.Log("Health value changed: " + value);
         SavePlayerData("HealthCurrent", (int)value);  // Lưu giá trị health vào Firebase
     }
 
@@ -134,7 +142,6 @@ public class PlayerDataTest : MonoBehaviour
 
         // Lưu dữ liệu vào Firebase
         await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
-        Debug.Log($"{field} saved to Firebase: {value}");
     }
 
     // Lưu vị trí của người chơi vào Firebase
@@ -152,7 +159,15 @@ public class PlayerDataTest : MonoBehaviour
 
         // Lưu thông tin vị trí vào Firebase
         await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
-        Debug.Log("Player position saved to Firebase: " + position);
+    }
+
+    // Lưu tên scene hiện tại vào Firebase
+    private async void SavePlayerScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(username) || databaseReference == null) return;
+
+        // Lưu tên scene vào Firebase
+        await databaseReference.Child("players").Child(username).Child("Scene").SetValueAsync(sceneName);
     }
 
     // Tải lại tất cả dữ liệu người chơi từ Firebase
@@ -216,8 +231,6 @@ public class PlayerDataTest : MonoBehaviour
                 if (diamondText != null)
                     diamondText.text = "Diamond: " + diamond.ToString();  // Hiển thị Diamond trên UI
             }
-
-            Debug.Log("Player data loaded from Firebase.");
         }
         else
         {
@@ -246,7 +259,6 @@ public class PlayerDataTest : MonoBehaviour
 
             // Cập nhật vị trí của nhân vật trong game
             player.transform.position = new Vector3(positionX, positionY, positionZ);
-            Debug.Log("Player position loaded from Firebase: " + player.transform.position);
         }
         else
         {
@@ -267,6 +279,9 @@ public class PlayerDataTest : MonoBehaviour
                 SavePlayerPosition(currentPosition);
                 lastSavedPosition = currentPosition; // Cập nhật vị trí đã lưu
             }
+
+            // Lưu tên scene hiện tại vào Firebase khi chuyển màn hình
+            SavePlayerScene(SceneManager.GetActiveScene().name);
         }
     }
 }

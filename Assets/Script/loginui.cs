@@ -82,14 +82,14 @@ public class LoginUI : MonoBehaviour
                 if (user.IsEmailVerified)
                 {
                     UpdateFeedback("Đăng nhập thành công!");
-                    PlayerPrefs.SetString("username", username);
-                    PlayerPrefs.Save();
+                    PlayerPrefs.SetString("username", username);  // Lưu tên người dùng vào PlayerPrefs
+                    PlayerPrefs.Save();  // Lưu lại ngay lập tức
 
                     // Tải dữ liệu người chơi từ Firebase sau khi đăng nhập thành công
-                    await LoadPlayerDataFromFirebase(username);  // Load data từ Firebase
+                    await LoadPlayerDataFromFirebase(username);
 
                     // Sau khi tải dữ liệu người chơi, tải lại scene mà người chơi đã chơi
-                    await LoadPlayerSceneFromFirebase(username);  // Tải lại scene đã lưu trong Firebase
+                    await LoadPlayerSceneFromFirebase(username);
                 }
                 else
                 {
@@ -108,6 +108,7 @@ public class LoginUI : MonoBehaviour
             Debug.LogError($"Error: {ex.Message}");
         }
     }
+
 
     // Tìm email dựa trên username từ Firebase Realtime Database
     private async Task<string> FindEmailByUsername(string username)
@@ -211,7 +212,7 @@ public class LoginUI : MonoBehaviour
             SceneManager.LoadScene(sceneName); // Tải lại scene mà người chơi đã lưu trước đó
         }
         else
-        {
+        {   
             Debug.LogWarning("Không tìm thấy scene cho người chơi: " + username);
             // Nếu không tìm thấy scene đã lưu, có thể chuyển đến scene mặc định
             SceneManager.LoadScene("Player1");

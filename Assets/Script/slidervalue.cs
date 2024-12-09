@@ -1,14 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.UI;  // Để sử dụng Slider
-using Firebase;
+﻿using Firebase;
 using Firebase.Database;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerDataTest12 : MonoBehaviour
+public class SliderMinMaxData : MonoBehaviour
 {
-    public Slider healthSlider;  // Slider cho Health
-    public Slider energySlider;  // Slider cho Energy
+    public Slider healthSlider;  // Slider cho health
+    public Slider energySlider;  // Slider cho energy
 
     private DatabaseReference databaseReference;
     private string username;
@@ -16,133 +14,113 @@ public class PlayerDataTest12 : MonoBehaviour
     private void Start()
     {
         // Kiểm tra và khởi tạo Firebase
+        InitializeFirebase();
+
+        // Lấy username từ PlayerPrefs
+        username = PlayerPrefs.GetString("username", "");
+
+        if (string.IsNullOrEmpty(username))
+        {
+            Debug.LogError("Username is empty. Cannot load slider data.");
+            return;
+        }
+
+        // Đăng ký sự kiện thay đổi giá trị min/max slider
+        if (healthSlider != null)
+        {
+            healthSlider.onValueChanged.AddListener((value) => SaveSliderMinMax());
+        }
+
+        if (energySlider != null)
+        {
+            energySlider.onValueChanged.AddListener((value) => SaveSliderMinMax());
+        }
+
+        // Tải min/max của các slider từ Firebase
+        LoadSliderMinMaxFromFirebase();
+    }
+
+    private void InitializeFirebase()
+    {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
-            if (task.Result == DependencyStatus.Available)
-            {
-                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase initialized successfully.");
-            }
-            else
-            {
-                Debug.LogError("Firebase initialization failed: " + task.Result);
-            }
+            FirebaseApp app = FirebaseApp.DefaultInstance;
+            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         });
-
-        // Lấy username từ PlayerPrefs (hoặc gán cứng nếu muốn)
-        username = PlayerPrefs.GetString("username", "defaultUser");
-
-        // Lắng nghe sự thay đổi giá trị của các thanh slider
-        healthSlider.onValueChanged.AddListener(OnHealthSliderValueChanged);
-        energySlider.onValueChanged.AddListener(OnEnergySliderValueChanged);
-
-        // Tải giá trị ban đầu từ Firebase khi game bắt đầu
-        LoadSliderValueFromFirebase("HealthCurrent");
-        LoadSliderValueFromFirebase("EnergyCurrent");
-
-        // Tải min và max value của các slider từ Firebase khi game bắt đầu
-        LoadSliderValueFromFirebase("HealthMin");
-        LoadSliderValueFromFirebase("HealthMax");
-        LoadSliderValueFromFirebase("EnergyMin");
-        LoadSliderValueFromFirebase("EnergyMax");
     }
 
-    private void OnHealthSliderValueChanged(float value)
-    {
-        // Mỗi khi giá trị healthSlider thay đổi, lưu vào Firebase
-        SaveSliderValueToFirebase("HealthCurrent", value);
-    }
-
-    private void OnEnergySliderValueChanged(float value)
-    {
-        // Mỗi khi giá trị energySlider thay đổi, lưu vào Firebase
-        SaveSliderValueToFirebase("EnergyCurrent", value);
-    }
-
-    // Lưu giá trị của slider vào Firebase
-    private async void SaveSliderValueToFirebase(string field, float value)
+    // Lưu giá trị min/max của các slider vào Firebase
+    private async void SaveSliderMinMax()
     {
         if (string.IsNullOrEmpty(username) || databaseReference == null)
         {
-            Debug.LogError("SaveSliderValueToFirebase failed: Username is empty or Firebase is not initialized.");
+            Debug.LogError("SaveSliderMinMax failed: Username is empty or Firebase is not initialized.");
             return;
         }
 
-        // Thêm debug để thông báo giá trị chuẩn bị được lưu vào Firebase
-        Debug.Log($"Attempting to save {field} with value {value} to Firebase...");
-
-        try
+        // Lưu min/max cho healthSlider vào Firebase
+        if (healthSlider != null)
         {
-            // Lưu giá trị của thanh slider vào Firebase
-            await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
-
-            // Thêm debug để xác nhận đã lưu thành công
-            Debug.Log($"{field} successfully saved to Firebase with value: {value}");
+            await databaseReference.Child("players").Child(username).Child("HealthSliderMin").SetValueAsync(healthSlider.minValue);
+            await databaseReference.Child("players").Child(username).Child("HealthSliderMax").SetValueAsync(healthSlider.maxValue);
         }
-        catch (System.Exception ex)
+
+        // Lưu min/max cho energySlider vào Firebase
+        if (energySlider != null)
         {
-            // Nếu có lỗi khi lưu dữ liệu, log ra console
-            Debug.LogError($"Error saving {field} to Firebase: {ex.Message}");
+            await databaseReference.Child("players").Child(username).Child("EnergySliderMin").SetValueAsync(energySlider.minValue);
+            await databaseReference.Child("players").Child(username).Child("EnergySliderMax").SetValueAsync(energySlider.maxValue);
         }
     }
 
-    // Tải lại giá trị từ Firebase và cập nhật thanh slider
-    private async void LoadSliderValueFromFirebase(string field)
+    // Tải min/max của các slider từ Firebase
+    private async void LoadSliderMinMaxFromFirebase()
     {
         if (string.IsNullOrEmpty(username) || databaseReference == null)
         {
-            Debug.LogError("LoadSliderValueFromFirebase failed: Username is empty or Firebase is not initialized.");
+            Debug.LogError("LoadSliderMinMax failed: Username is empty or Firebase is not initialized.");
             return;
         }
 
-        // Thêm debug để thông báo giá trị đang được tải từ Firebase
-        Debug.Log($"Attempting to load {field} from Firebase...");
+        var snapshot = await databaseReference.Child("players").Child(username).GetValueAsync();
 
-        try
+        if (snapshot.Exists)
         {
-            var snapshot = await databaseReference.Child("players").Child(username).Child(field).GetValueAsync();
-
-            if (snapshot.Exists)
+            // Lấy min/max cho healthSlider từ Firebase
+            if (snapshot.Child("HealthSliderMin").Exists && snapshot.Child("HealthSliderMax").Exists)
             {
-                // Lấy giá trị từ Firebase và cập nhật thanh slider
-                float value = float.Parse(snapshot.Value.ToString());
-                Debug.Log($"{field} loaded from Firebase with value: {value}");
+                float healthSliderMin = float.Parse(snapshot.Child("HealthSliderMin").Value.ToString());
+                float healthSliderMax = float.Parse(snapshot.Child("HealthSliderMax").Value.ToString());
 
-                // Cập nhật giá trị slider
-                if (field == "HealthCurrent")
+                if (healthSlider != null)
                 {
-                    healthSlider.value = value;
-                }
-                else if (field == "EnergyCurrent")
-                {
-                    energySlider.value = value;
-                }
-                else if (field == "HealthMin")
-                {
-                    healthSlider.minValue = value;
-                }
-                else if (field == "HealthMax")
-                {
-                    healthSlider.maxValue = value;
-                }
-                else if (field == "EnergyMin")
-                {
-                    energySlider.minValue = value;
-                }
-                else if (field == "EnergyMax")
-                {
-                    energySlider.maxValue = value;
+                    healthSlider.minValue = healthSliderMin;
+                    healthSlider.maxValue = healthSliderMax;
                 }
             }
-            else
+
+            // Lấy min/max cho energySlider từ Firebase
+            if (snapshot.Child("EnergySliderMin").Exists && snapshot.Child("EnergySliderMax").Exists)
             {
-                Debug.LogWarning($"{field} does not exist in Firebase for user {username}.");
+                float energySliderMin = float.Parse(snapshot.Child("EnergySliderMin").Value.ToString());
+                float energySliderMax = float.Parse(snapshot.Child("EnergySliderMax").Value.ToString());
+
+                if (energySlider != null)
+                {
+                    energySlider.minValue = energySliderMin;
+                    energySlider.maxValue = energySliderMax;
+                }
             }
         }
-        catch (System.Exception ex)
+        else
         {
-            // Nếu có lỗi khi tải dữ liệu, log ra console
-            Debug.LogError($"Error loading {field} from Firebase: {ex.Message}");
+            Debug.LogWarning("No slider min/max data found for player: " + username);
         }
+    }
+
+    // Gọi phương thức này để lưu lại min/max khi cần
+    private void OnApplicationQuit()
+    {
+        SaveSliderMinMax();
     }
 }

@@ -16,12 +16,12 @@ public class GameManager : MonoBehaviour
     public static bool isMiniGame = false;
     UI_Coin ui;
     public NPCAppleArmorQuest npcQuest;
+
     void Start()
     {
-
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
-        npcQuest = FindObjectOfType<NPCAppleArmorQuest>();
+        npcQuest = FindObjectOfType<NPCAppleArmorQuest>(); // Tìm NPCAppleArmorQuest từ scene
     }
 
     private void InitializeGame()
@@ -43,13 +43,13 @@ public class GameManager : MonoBehaviour
             GameObject token = Instantiate(tokenPrefab);
             token.transform.SetParent(panel.transform, false); // Đặt Token vào Panel
 
-
             // Gán faceIndex cho token
             token.GetComponent<MainToken>().faceIndex = faceIndexes[shuffleNum];
             faceIndexes.RemoveAt(shuffleNum);
         }
         UpdateTurnText();
     }
+
     private void UpdateTurnText()
     {
         remainingTurns--;
@@ -81,8 +81,8 @@ public class GameManager : MonoBehaviour
             visibleFaces[0] = -1;
             visibleFaces[1] = -2;
             success = true;
-            ui.AddCoins(10);
-            npcQuest.CurrentCard();
+            ui.AddCoins(10);  // Thêm xu
+            npcQuest.UpdateCurrentCardStatus();  // Gọi phương thức UpdateCurrentCardStatus sau khi có cặp thẻ trùng
         }
         return success;
     }
@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
         faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 };
         InitializeGame();
     }
+
     public void OpenMiniGame()
     {
         PanelManager.Instance.OpenPanel(panel);
@@ -108,6 +109,7 @@ public class GameManager : MonoBehaviour
         button.SetActive(true);
         ResetGame();
     }
+
     public void CloseMiniGame()
     {
         PanelManager.Instance.ClosePanel(panel);
