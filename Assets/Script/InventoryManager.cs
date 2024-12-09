@@ -166,11 +166,11 @@ public class InventoryManager : MonoBehaviour
         }
 
         //// Cập nhật Firebase sau khi thêm vật phẩm
-        FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-        if (firebaseInventory != null)
-        {
-            firebaseInventory.AddItemToFirebase(item, quantity);
-        }
+        //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+        //if (firebaseInventory != null)
+        //{
+        //    firebaseInventory.AddItemToFirebase(item, quantity);
+        //}
 
         RefreshUI();
     }
@@ -200,11 +200,11 @@ public class InventoryManager : MonoBehaviour
             }
 
             // Cập nhật Firebase sau khi xóa vật phẩm
-            FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-            if (firebaseInventory != null)
-            {
-                firebaseInventory.RemoveItemFromFirebase(item, quantity);
-            }
+            //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+            //if (firebaseInventory != null)
+            //{
+            //    firebaseInventory.RemoveItemFromFirebase(item, quantity);
+            //}
         }
 
         RefreshUI();
