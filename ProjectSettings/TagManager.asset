@@ -12,6 +12,7 @@ TagManager:
   - enemy
   - Boss
   - Token
+  - Wolf
   layers:
   - Default
   - TransparentFX

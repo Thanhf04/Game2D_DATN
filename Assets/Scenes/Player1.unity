@@ -690,11 +690,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &383063051 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4104519703188935540, guid: e249b85db23b3854c94436022764bb43, type: 3}
-  m_PrefabInstance: {fileID: 2962700426704877741}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &446629270 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7096236406139852706, guid: 228517ab120b86742a0bffee13763592, type: 3}
@@ -45248,17 +45243,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1098314078 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1487250077697366819, guid: f2c36941c8cca5942ab78aab6db15403, type: 3}
-  m_PrefabInstance: {fileID: 1833272854}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf82efae5fe9d643b03bd62dfd89719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1119944088 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7125386941178297401, guid: 2d509175af9adb4408bb33a02573df73, type: 3}
@@ -47314,6 +47298,42 @@ PrefabInstance:
       propertyPath: tbaoQuizGamePanel
       value: 
       objectReference: {fileID: 1778879010}
+    - target: {fileID: 6073535254716935610, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543164486435906803, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -21.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543164486435906803, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 6.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687741721650165865, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981047602641856740, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 11.1119
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981047602641856740, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 15.6243
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981047602641856740, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -33.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981047602641856740, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662288516649370422, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9199606315019547968, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_Camera
       value: 
@@ -47866,6 +47886,41 @@ Transform:
   - {fileID: 1410647980}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1619453003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1619453004}
+  m_Layer: 5
+  m_Name: TextTBnv
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1619453004
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619453003}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 107.063354, y: 82.19998}
+  m_SizeDelta: {x: 430.3896, y: 53.3733}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1619453005 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 146546172691325560, guid: 228517ab120b86742a0bffee13763592, type: 3}
@@ -48914,7 +48969,7 @@ PrefabInstance:
     - target: {fileID: 1487250077697366819, guid: f2c36941c8cca5942ab78aab6db15403, type: 3}
       propertyPath: panelDialogueNpc
       value: 
-      objectReference: {fileID: 383063051}
+      objectReference: {fileID: 0}
     - target: {fileID: 4121277371950949008, guid: f2c36941c8cca5942ab78aab6db15403, type: 3}
       propertyPath: m_Name
       value: NPC_MiniGame
@@ -50234,7 +50289,7 @@ PrefabInstance:
     - target: {fileID: 6026400191010088271, guid: e249b85db23b3854c94436022764bb43, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1098314078}
+      objectReference: {fileID: 0}
     - target: {fileID: 6264072849349423856, guid: e249b85db23b3854c94436022764bb43, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -50434,7 +50489,6 @@ SceneRoots:
   - {fileID: 823198514}
   - {fileID: 1275020369}
   - {fileID: 2136965359}
-  - {fileID: 1833272854}
   - {fileID: 1478235196}
   - {fileID: 349410611}
   - {fileID: 6321240823487734967}
@@ -50449,3 +50503,5 @@ SceneRoots:
   - {fileID: 1656263149}
   - {fileID: 1490163532}
   - {fileID: 713153544}
+  - {fileID: 1833272854}
+  - {fileID: 1619453004}

@@ -34,7 +34,8 @@ public class Dichuyennv1 : MonoBehaviour
     private bool isRunning;
     private bool isRoll;
     private bool isJump;
-    private bool isStatsPanelOpen = false;
+    public static bool isStatsPanelOpen = false;
+    public static bool isStatsDisplayOpen = false;
     private Animator anim;
     public TextMeshProUGUI notificationText;
 
@@ -186,24 +187,24 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Update()
     {
-        
 
-          if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
-        {
-            // Dừng animation và âm thanh
-            anim.SetBool("isRunning", false);
-            playWalk.Stop();
-            playJump.Stop();
 
-            // Ngăn player di chuyển hoặc thực hiện các hành động khác
-            rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
-            return;
-        }
+        //if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
+        //{
+        //    // Dừng animation và âm thanh
+        //    anim.SetBool("isRunning", false);
+        //    playWalk.Stop();
+        //    playJump.Stop();
+
+        //    // Ngăn player di chuyển hoặc thực hiện các hành động khác
+        //    rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
+        //    return;
+        //}
         float moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
-            || OpenChiSoCaNhan.ischisoCaNhan )
+            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3)
 
         {
             isRunning = false;
@@ -564,7 +565,12 @@ public class Dichuyennv1 : MonoBehaviour
         //statsPanel.SetActive(!statsPanel.activeSelf);
         //isStatsPanelOpen = statsPanel.activeSelf;
         PanelManager.Instance.OpenPanel(statsPanel);
-
+        isStatsPanelOpen = true;
+    }
+    public void ToggleCloseStatsPanel()
+    {
+        PanelManager.Instance.ClosePanel(statsPanel);
+        isStatsPanelOpen = false;
     }
 
     void IncreaseHealth()
@@ -698,7 +704,7 @@ public class Dichuyennv1 : MonoBehaviour
     {
         // Hiển thị hoặc ẩn bảng Chỉ Số
         bool isActive = ChisoPanel.activeSelf;
-        //ChisoPanel.SetActive(!isActive);
+        isStatsDisplayOpen = true;
         PanelManager.Instance.OpenPanel(ChisoPanel);
         {
 
@@ -708,6 +714,11 @@ public class Dichuyennv1 : MonoBehaviour
                 UpdateStatsDisplay();
             }
         }
+    }
+    public void ToggleCloseStatsDisplay()
+    {
+        PanelManager.Instance.ClosePanel(ChisoPanel);
+        isStatsDisplayOpen = false;
     }
     void UpdateStatsDisplay()
     {
@@ -857,7 +868,7 @@ public class Dichuyennv1 : MonoBehaviour
         Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
     }
 
- // Mở panel quiz game
+    // Mở panel quiz game
     public void OpenQuizGamePanel()
     {
         quizGamePanel.SetActive(true); // Hiển thị panel
