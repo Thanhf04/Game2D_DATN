@@ -79,7 +79,7 @@ public class QuizGame : MonoBehaviour
         {
             quizPanel.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(4);
         }
         else
         {

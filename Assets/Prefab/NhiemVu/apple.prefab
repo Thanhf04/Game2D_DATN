@@ -171,4 +171,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b586a96cfd1e7af4dbe5755061374277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcQuest: {fileID: 0}
+  npcApple: {fileID: 0}

@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     Quest_3 q3;
     void Start()
     {
-
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
         q3 = FindObjectOfType<Quest_3>();
@@ -26,13 +25,13 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 8; i++) // Tạo 8 token
         {
-            if (faceIndexes.Count == 0) break;
+            if (faceIndexes.Count == 0)
+                break;
 
             int shuffleNum = rnd.Next(0, faceIndexes.Count);
 
             GameObject token = Instantiate(tokenPrefab);
             token.transform.SetParent(panel.transform, false); // Đặt Token vào Panel
-
 
             // Gán faceIndex cho token
             token.GetComponent<MainToken>().faceIndex = faceIndexes[shuffleNum];
@@ -47,14 +46,18 @@ public class GameManager : MonoBehaviour
 
     public void AddVisibleFace(int index)
     {
-        if (visibleFaces[0] == -1) visibleFaces[0] = index;
-        else if (visibleFaces[1] == -2) visibleFaces[1] = index;
+        if (visibleFaces[0] == -1)
+            visibleFaces[0] = index;
+        else if (visibleFaces[1] == -2)
+            visibleFaces[1] = index;
     }
 
     public void RemoveVisibleFace(int index)
     {
-        if (visibleFaces[0] == index) visibleFaces[0] = -1;
-        else if (visibleFaces[1] == index) visibleFaces[1] = -2;
+        if (visibleFaces[0] == index)
+            visibleFaces[0] = -1;
+        else if (visibleFaces[1] == index)
+            visibleFaces[1] = -2;
     }
 
     public bool CheckMatch()
@@ -84,6 +87,7 @@ public class GameManager : MonoBehaviour
         faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 };
         InitializeGame();
     }
+
     public void OpenMiniGame()
     {
         PanelManager.Instance.OpenPanel(panel);
@@ -91,6 +95,7 @@ public class GameManager : MonoBehaviour
         button.SetActive(true);
         ResetGame();
     }
+
     public void CloseMiniGame()
     {
         PanelManager.Instance.ClosePanel(panel);

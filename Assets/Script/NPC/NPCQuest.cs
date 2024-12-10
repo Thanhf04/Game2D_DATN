@@ -14,12 +14,16 @@ public class NPCQuest : MonoBehaviour
     public Text completionText; // Text để hiển thị thông báo
     public UI_Coin uiCoin;
 
-    private string initialQuestText = "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
+    private string initialQuestText =
+        "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
     private string secondQuestText = "Nhiệm vụ đầu tiên của bạn là tìm lại thanh kiếm đã mất.";
-    private string congratulationText = "Giỏi lắm chàng trai, bây giờ bạn có thể dùng chuột trái để tấn công!";
+    private string congratulationText =
+        "Giỏi lắm chàng trai, bây giờ bạn có thể dùng chuột trái để tấn công!";
     private string thirdQuestText = "Nhiệm vụ tiếp theo của bạn là giết 5 con quái.";
-    private string rewardCompletionText = "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
-    private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
+    private string rewardCompletionText =
+        "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
+    private string finalEncouragementText =
+        "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
     private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
     private bool isPanelVisible = false;
