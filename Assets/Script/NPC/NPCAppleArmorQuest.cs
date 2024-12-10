@@ -119,30 +119,37 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     private void OnConfirm()
+{
+    if (questPanel != null)
     {
-        if (questPanel != null)
-        {
-            questPanel.SetActive(false);
-            isPanelVisible = false;
+        questPanel.SetActive(false);
+        isPanelVisible = false;
 
-            if (hasCompletedArmorQuest)
+        if (hasCompletedArmorQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(30);
-                }
-                armorCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(30);
             }
-            else if (hasCompletedAppleQuest)
+            armorCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
+        }
+        else if (hasCompletedAppleQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(20);
-                }
-                appleCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(20);
             }
+            appleCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
         }
     }
+}
+
 
     public void CollectApple()
     {
@@ -155,7 +162,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
 
-            ShowCompletionText("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"); // Gọi hàm hiển thị thông báo
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
 
             if (uiCoin != null)
             {
@@ -175,7 +182,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = armorCompletionText;
             armorCountText.color = Color.yellow;
 
-            ShowCompletionText("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"); // Gọi hàm hiển thị thông báo
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
 
             if (uiCoin != null)
             {
@@ -192,7 +199,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             completionText.gameObject.SetActive(true); // Hiển thị Text
 
             // Tắt Text sau 2 giây
-            Invoke(nameof(HideCompletionText), 2f);
+            // Invoke(nameof(HideCompletionText), 2f);
         }
     }
 
