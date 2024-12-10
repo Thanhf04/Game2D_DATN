@@ -27,12 +27,13 @@ public class QuizGame : MonoBehaviour
         messagePanel.SetActive(false);
         confirmButton.onClick.AddListener(StartQuiz);
         exitButton.onClick.AddListener(CloseQuiz);
+        HideAllFeedback();
         UpdateScore();
     }
 
     void ShowQuestion()
     {
-        DestroyAllFeedback();
+        HideAllFeedback();
 
         if (currentQuestionIndex < questions.Count)
         {
@@ -55,12 +56,12 @@ public class QuizGame : MonoBehaviour
 
         if (index == currentQuestion.correctAnswerIndex)
         {
-            CreateFeedback("Chúc mừng bạn đã trả lời đúng!", true);
+            CreateFeedback(currentQuestionIndex, "Chúc mừng bạn đã trả lời đúng!", true);
             correctAnswers++;
         }
         else
         {
-            CreateFeedback("Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.", false);
+            CreateFeedback(currentQuestionIndex, "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.", false);
             StartCoroutine(HandleWrongAnswer());
             return;
         }
@@ -72,13 +73,13 @@ public class QuizGame : MonoBehaviour
     IEnumerator WaitAndShowNextQuestion(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        DestroyAllFeedback();
+        HideAllFeedback();
 
         if (correctAnswers >= 4)
         {
             quizPanel.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(4);
         }
         else
         {
@@ -99,13 +100,13 @@ public class QuizGame : MonoBehaviour
     IEnumerator HandleWrongAnswer()
     {
         yield return new WaitForSeconds(1.5f);
-        DestroyAllFeedback();
+        HideAllFeedback();
         ResetQuiz();
     }
 
     void ResetQuiz()
     {
-        correctAnswers = 0;
+correctAnswers = 0;
         currentQuestionIndex = 0;
         ShowQuestion();
         UpdateScore();
@@ -135,29 +136,38 @@ public class QuizGame : MonoBehaviour
     public void CloseQuiz()
     {
         quizPanel.SetActive(false);
-        DestroyAllFeedback();
+        HideAllFeedback();
     }
 
-    void CreateFeedback(string message, bool isCorrect)
+    void CreateFeedback(int questionIndex, string message, bool isCorrect)
     {
-        GameObject feedback = new GameObject("Feedback");
-        Text feedbackText = feedback.AddComponent<Text>();
-        feedbackText.text = message;
-        feedbackText.color = isCorrect ? Color.green : Color.red;
-        feedbackText.font = scoreText.font;
-        feedbackText.fontSize = 20;
-        feedback.transform.SetParent(quizPanel.transform);
+        if (questionIndex < feedbackTexts.Length)
+        {
+            Text feedbackText = feedbackTexts[questionIndex];
+            feedbackText.text = message;
+            feedbackText.color = isCorrect ? Color.green : Color.red;
+            feedbackText.gameObject.SetActive(true);
 
-        Destroy(feedback, 1.5f);
+            StartCoroutine(HideFeedbackAfterDelay(feedbackText, 1.5f));
+        }
     }
 
-    void DestroyAllFeedback()
+    IEnumerator HideFeedbackAfterDelay(Text feedback, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (feedback != null)
+        {
+            feedback.gameObject.SetActive(false);
+        }
+    }
+
+    void HideAllFeedback()
     {
         foreach (var feedback in feedbackTexts)
         {
             if (feedback != null)
             {
-                Destroy(feedback.gameObject);
+                feedback.gameObject.SetActive(false);
             }
         }
     }

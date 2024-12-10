@@ -4,15 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Armor
   - NenDat
   - Chest
   - kiem
-  - Apple
   - enemy
   - Boss
   - Token
   - Wolf
+  - Armor
+  - Apple
   layers:
   - Default
   - TransparentFX
@@ -21,10 +21,10 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - bg
+  - gamexephinh
   - 
   - 
   - 

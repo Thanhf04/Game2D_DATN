@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MainToken : MonoBehaviour, IPointerClickHandler
 {
     public Sprite[] faces; // Các mặt của thẻ bài
-    public Sprite back;    // Mặt sau của thẻ bài
-    public int faceIndex;  // Chỉ số của mặt thẻ
+    public Sprite back; // Mặt sau của thẻ bài
+    public int faceIndex; // Chỉ số của mặt thẻ
     public bool matched = false;
 
     private Image imageRenderer;
@@ -47,8 +47,8 @@ public class MainToken : MonoBehaviour, IPointerClickHandler
         }
         IEnumerator WaitBeforeReset()
         {
-            yield return new WaitForSeconds(1f);  // Wait for 1 second
-            gameManager.GetComponent<GameManager>().ResetGame();  // Reset the game after the delay
+            yield return new WaitForSeconds(1f); // Wait for 1 second
+            gameManager.GetComponent<GameManager>().ResetGame(); // Reset the game after the delay
         }
     }
 }
