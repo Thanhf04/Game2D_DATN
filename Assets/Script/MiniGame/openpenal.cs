@@ -10,29 +10,36 @@ public class openpenal : MonoBehaviour
     // Biến kiểm tra nhân vật có trong vùng va chạm không
     private bool isPlayerInRange = false;
 
-    private void Start() {
+    private void Start()
+    {
         // Ẩn panel khi bắt đầu game
         panel.SetActive(false);
     }
 
-    private void Update() {
+    private void Update()
+    {
         // Kiểm tra nếu nhân vật vào vùng va chạm và nhấn phím F
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F)) {
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+        {
             // Mở panel khi nhấn phím F
             panel.SetActive(true);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         // Kiểm tra nếu đối tượng vào vùng va chạm là nhân vật
-        if (other.CompareTag("Player")) {
+        if (other.CompareTag("Player"))
+        {
             isPlayerInRange = true; // Đánh dấu là nhân vật đang trong vùng va chạm
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) {
+    private void OnTriggerExit2D(Collider2D other)
+    {
         // Kiểm tra nếu đối tượng ra khỏi vùng va chạm là nhân vật
-        if (other.CompareTag("Player")) {
+        if (other.CompareTag("Player"))
+        {
             isPlayerInRange = false; // Đánh dấu là nhân vật đã ra khỏi vùng va chạm
         }
     }

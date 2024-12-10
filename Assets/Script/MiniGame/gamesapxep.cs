@@ -14,6 +14,11 @@ public class gamesapxep : MonoBehaviour
     private int emptyLocation;
     private int size;
     private bool shuffling = false;
+    public int completionCount = 0; // Biến đếm số lần hoàn thành
+
+    public GameObject completionMessage;
+    public GameObject openxephinh;
+    public bool isGameCompleted = false; // Cờ để kiểm tra game đã hoàn thành hay chưa
 
     // Create the game setup with size x size pieces.
     private void CreateGamePieces(float gapThickness)
@@ -71,9 +76,21 @@ public class gamesapxep : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        completionMessage.SetActive(false); // Đảm bảo panel thông báo bị tắt lúc đầu
         pieces = new List<Transform>();
         size = 3;
+        isGameCompleted = false; // Đặt lại cờ là chưa hoàn thành khi bắt đầu game
+        completionCount = 0; // Đặt lại biến đếm số lần hoàn thành
         CreateGamePieces(0.01f);
+    }
+
+    private IEnumerator HideCompletionMessage()
+    {
+        yield return new WaitForSeconds(3f);
+        if (completionMessage != null)
+        {
+            completionMessage.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -145,14 +162,36 @@ public class gamesapxep : MonoBehaviour
     // We name the pieces in order so we can use this to check completion.
     private bool CheckCompletion()
     {
+        // Kiểm tra nếu các mảnh ghép đã được sắp xếp đúng
         for (int i = 0; i < pieces.Count; i++)
         {
             if (pieces[i].name != $"{i}")
             {
-                return false;
+                return false; // Nếu mảnh ghép chưa đúng vị trí, không hoàn thành
             }
         }
-        return true;
+
+        // Kiểm tra số lần hoàn thành
+        if (completionCount == 1) // Nếu đây là lần hoàn thành thứ 2
+        {
+            if (!isGameCompleted)
+            {
+                isGameCompleted = true;
+                openxephinh.SetActive(false); // Tắt các vật phẩm hoặc giao diện không cần thiết
+                if (completionMessage != null)
+                {
+                    completionMessage.SetActive(true); // Hiển thị thông báo hoàn thành
+                    StartCoroutine(HideCompletionMessage()); // Tắt thông báo sau 3 giây
+                }
+            }
+        }
+        else
+        {
+            // Nếu là lần hoàn thành đầu tiên, chỉ tăng số lần hoàn thành mà không hiển thị thông báo
+            completionCount++;
+        }
+
+        return true; // Nếu tất cả các mảnh ghép đúng, trò chơi hoàn thành
     }
 
     private IEnumerator WaitShuffle(float duration)
