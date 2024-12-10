@@ -326,12 +326,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55605fb16d50a0e459f958edee3a1566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: 0
-  end: 0
+  start: 59.7
+  end: 74.3
   isRight: 0
   speed: 2
   attackRange: 1.3
-  chaseRange: 5
+  chaseRange: 3
 --- !u!95 &6536235380910947185
 Animator:
   serializedVersion: 5
@@ -429,7 +429,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6861254357843087506}
   - component: {fileID: 7873382059504427450}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -608,6 +608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4513521978102076515}
   - component: {fileID: 3244921301216282683}
+  - component: {fileID: 1583454452796532183}
   m_Layer: 5
   m_Name: Health_Slider
   m_TagString: Untagged
@@ -633,8 +634,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchoredPosition: {x: -4.7, y: 0}
+  m_SizeDelta: {x: 84.97, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3244921301216282683
 MonoBehaviour:
@@ -687,3 +688,16 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1583454452796532183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7102239625338154412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b02d669fee6b2f4d92024a28c0a621c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 8176242989606000389}

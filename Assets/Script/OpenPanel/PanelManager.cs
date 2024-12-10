@@ -17,32 +17,31 @@ public class PanelManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    /// <summary>
-    /// Mở một panel, đóng panel đang mở (nếu có)
-    /// </summary>
-    /// <param name="panel">Panel cần mở</param>
     public void OpenPanel(GameObject panel)
     {
         if (currentPanel != null && currentPanel != panel)
         {
             currentPanel.SetActive(false); // Đóng panel đang mở
+            ShopOpen.isOpenShop = false;
+            NPC_Controller.isDialogue = false;
+            GameManager.isMiniGame = false;
+            OpenSettings.isSettings = false;
+            OpenChiSoCaNhan.ischisoCaNhan = false;
+            Dichuyennv1.isStatsPanelOpen = false;
+            Dichuyennv1.isStatsDisplayOpen = false;
         }
 
         currentPanel = panel; // Ghi nhận panel mới
         currentPanel.SetActive(true); // Mở panel mới
     }
 
-    /// <summary>
-    /// Đóng panel hiện tại (nếu khớp)
-    /// </summary>
-    /// <param name="panel">Panel cần đóng</param>
     public void ClosePanel(GameObject panel)
     {
         if (currentPanel == panel)
         {
             currentPanel.SetActive(false);
             currentPanel = null; // Xóa tham chiếu khi panel đóng
+
         }
     }
 }

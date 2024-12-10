@@ -88,8 +88,8 @@ public class LoginUI : MonoBehaviour
                     // Tải dữ liệu người chơi từ Firebase sau khi đăng nhập thành công
                     await LoadPlayerDataFromFirebase(username);  // Load data từ Firebase
 
-                    // Chuyển cảnh sau khi load dữ liệu
-                    SceneManager.LoadScene("Player1");
+                    // Sau khi tải dữ liệu người chơi, tải lại scene mà người chơi đã chơi
+                    await LoadPlayerSceneFromFirebase(username);  // Tải lại scene đã lưu trong Firebase
                 }
                 else
                 {
@@ -195,6 +195,26 @@ public class LoginUI : MonoBehaviour
         else
         {
             Debug.LogWarning("Không tìm thấy dữ liệu cho người chơi: " + username);
+        }
+    }
+
+    // Tải tên scene người chơi đang chơi từ Firebase
+    private async Task LoadPlayerSceneFromFirebase(string username)
+    {
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
+
+        if (snapshot.Exists && snapshot.Child("Scene").Exists)
+        {
+            string sceneName = snapshot.Child("Scene").Value.ToString();
+            Debug.Log("Tải lại scene: " + sceneName);
+            SceneManager.LoadScene(sceneName); // Tải lại scene mà người chơi đã lưu trước đó
+        }
+        else
+        {
+            Debug.LogWarning("Không tìm thấy scene cho người chơi: " + username);
+            // Nếu không tìm thấy scene đã lưu, có thể chuyển đến scene mặc định
+            SceneManager.LoadScene(1);
         }
     }
 

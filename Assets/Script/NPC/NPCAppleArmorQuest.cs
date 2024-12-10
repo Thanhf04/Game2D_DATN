@@ -9,6 +9,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public Button confirmButton;
     public Text appleCountText;
     public Text armorCountText;
+    public Text completionText; // Text hiển thị thông báo hoàn thành
     public UI_Coin uiCoin;
 
     private string encouragementText = "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
@@ -30,6 +31,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
         if (questPanel != null)
         {
             questPanel.SetActive(false);
+        }
+
+        if (completionText != null)
+        {
+            completionText.gameObject.SetActive(false); // Ẩn Text hoàn thành khi bắt đầu
         }
 
         if (continueButton != null)
@@ -76,12 +82,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             {
                 questText.text = appleCompletionText;
             }
-            else
-            {
-                questText.text = appleQuestText;
-                appleCountText.gameObject.SetActive(true);
-                appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
-            }
+
 
             isPanelVisible = true;
         }
@@ -96,41 +97,53 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 questText.text = appleQuestText;
                 appleCountText.gameObject.SetActive(true);
                 appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
+
+                appleCountText.color = Color.white;
             }
         }
         else if (hasCompletedAppleQuest && !hasCompletedArmorQuest)
         {
             questText.text = armorQuestText;
             armorCountText.gameObject.SetActive(true);
+            appleCountText.gameObject.SetActive(false);
             armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
+
+            armorCountText.color = Color.white;
         }
     }
 
     private void OnConfirm()
+{
+    if (questPanel != null)
     {
-        if (questPanel != null)
-        {
-            questPanel.SetActive(false);
-            isPanelVisible = false;
+        questPanel.SetActive(false);
+        isPanelVisible = false;
 
-            if (hasCompletedArmorQuest)
+        if (hasCompletedArmorQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(30);
-                }
-                armorCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(30);
             }
-            else if (hasCompletedAppleQuest)
+            armorCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
+        }
+        else if (hasCompletedAppleQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(20);
-                }
-                appleCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(20);
             }
+            appleCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
         }
     }
+}
+
 
     public void CollectApple()
     {
@@ -141,6 +154,10 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             hasCompletedAppleQuest = true;
             questText.text = appleCompletionText;
+            appleCountText.color = Color.yellow;
+
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
+
             if (uiCoin != null)
             {
                 uiCoin.AddCoins(20);
@@ -157,10 +174,34 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             hasCompletedArmorQuest = true;
             questText.text = armorCompletionText;
+            armorCountText.color = Color.yellow;
+
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
+
             if (uiCoin != null)
             {
                 uiCoin.AddCoins(30);
             }
+        }
+    }
+
+    private void ShowCompletionText(string message)
+    {
+        if (completionText != null)
+        {
+            completionText.text = message;
+            completionText.gameObject.SetActive(true); // Hiển thị Text
+
+            // Tắt Text sau 2 giây
+            // Invoke(nameof(HideCompletionText), 2f);
+        }
+    }
+
+    private void HideCompletionText()
+    {
+        if (completionText != null)
+        {
+            completionText.gameObject.SetActive(false);
         }
     }
 }

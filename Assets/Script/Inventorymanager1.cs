@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase;
-using Firebase.Database;
-using Firebase.Extensions;
 
 public class FirebaseInventoryManager1 : MonoBehaviour
 {
@@ -31,7 +30,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         }
 
         // Cài đặt Firebase và kiểm tra dependencies
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.Result == DependencyStatus.Available)
             {
                 // Firebase đã sẵn sàng
@@ -70,7 +70,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         // Kiểm tra lại mỗi slot và cập nhật UI
         for (int i = 0; i < slots.Length; i++)
@@ -118,7 +118,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         if (reference == null || string.IsNullOrEmpty(username)) return;
 
         string json = JsonUtility.ToJson(new InventoryData(items));
-        reference.Child("users").Child(username).Child("inventory").SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => {
+        reference.Child("users").Child(username).Child("inventory").SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
                 Debug.Log("Kho đồ đã được lưu lên Firebase.");
@@ -135,7 +136,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
     {
         if (reference == null || string.IsNullOrEmpty(username)) return;
 
-        reference.Child("users").Child(username).Child("inventory").GetValueAsync().ContinueWithOnMainThread(task => {
+        reference.Child("users").Child(username).Child("inventory").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
@@ -151,7 +153,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                     Debug.Log("Loaded inventory items:");
                     foreach (var slot in items)
                     {
-                        Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
+                        if (slot.GetItem() != null)
+                            Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
                     }
 
                     // Cập nhật UI trong InventoryManager
@@ -161,12 +164,19 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                         inventoryManager.RefreshUI();  // Làm mới UI trong InventoryManager
                     }
 
+                    // Gọi lại RefreshUI trong FirebaseInventoryManager1
+                    RefreshUI();
+
                     Debug.Log("Kho đồ đã được tải từ Firebase.");
                 }
                 else
                 {
                     Debug.LogWarning("Không tìm thấy dữ liệu kho đồ cho người dùng này.");
                 }
+            }
+            else
+            {
+                Debug.LogError("Lỗi khi tải dữ liệu kho đồ từ Firebase.");
             }
         });
     }
