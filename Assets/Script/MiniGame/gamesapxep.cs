@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class gamesapxep : MonoBehaviour
+public class Gamesapxep : MonoBehaviour
 {
     [SerializeField]
     private Transform gameTransform;
@@ -96,6 +96,7 @@ public class gamesapxep : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Debug.Log(completionCount);
         // Check for completion.
         if (!shuffling && CheckCompletion())
         {
@@ -184,6 +185,7 @@ public class gamesapxep : MonoBehaviour
                     StartCoroutine(HideCompletionMessage()); // Tắt thông báo sau 3 giây
                 }
             }
+            completionCount++;
         }
         else
         {
