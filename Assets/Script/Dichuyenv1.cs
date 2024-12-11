@@ -19,6 +19,8 @@ public class Dichuyennv1 : MonoBehaviour
     public GameObject quizGamePanel;
     public GameObject tbaoQuizGamePanel; // Panel thông báo (Tbaoquizz game)
 
+    [SerializeField] private Image imageSkill3;
+
     [SerializeField]
     private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
 
@@ -153,7 +155,6 @@ public class Dichuyennv1 : MonoBehaviour
         // Khởi tạo UI
         statsPanel.SetActive(false);
         //openPanelButton.onClick.AddListener(ToggleStatsPanel);
-
         //NPC
         npcQuest = FindObjectOfType<NPCQuest>();
         npcapple = FindObjectOfType<NPCAppleArmorQuest>();
@@ -278,17 +279,19 @@ public class Dichuyennv1 : MonoBehaviour
                 Skill1();
             }
         }
-        if (Input.GetKeyDown(KeyCode.E) && isAppleQuestComplete)
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (skill2Timer <= 0 && currentMana >= 30)
             {
+
                 Skill2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.R) && isAppleQuestComplete)
+        if (Input.GetKeyDown(KeyCode.R) && Quest_3.hasCompletedQuestInput == true)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
             {
+
                 Skill3();
             }
         }
@@ -841,10 +844,10 @@ public class Dichuyennv1 : MonoBehaviour
         // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
         if (npcapple != null)
         {
+            isAppleQuestComplete = true;
             npcapple.CollectApple();
         }
     }
-
     public void UpdateArmor()
     {
         Debug.Log("Cập nhật nhiệm vụ cho NPCApple");

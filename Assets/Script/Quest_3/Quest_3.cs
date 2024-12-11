@@ -15,6 +15,8 @@ public class Quest_3 : MonoBehaviour
     public GameObject GOwolf;
     UI_Coin uiCoin;
 
+    [SerializeField] private Image imageSkill3;
+
     // đối thoại
     private string encouragementText = "Xin chào, ta là một thương nhân của vùng đất này!";
     private string encouragementText1 = "Hãy giúp ta truy tìm những thẻ bị thất lạc ở chỗ Cô Suna.";
@@ -28,7 +30,7 @@ public class Quest_3 : MonoBehaviour
     public static bool hasCompletedWolfQuest = false;
     public static bool isWolfQuest;
     private bool hasShownEncouragement = false;
-    private bool hasCompletedQuestInput = false;
+    public static bool hasCompletedQuestInput = false;
     public int currentCard = 0;
     public int currenCorrectInput = 0;
     private int dialogueStep = 0;
@@ -216,6 +218,7 @@ public class Quest_3 : MonoBehaviour
             questInput.text = "Bạn đã hoàn thành nhiệm vụ";
             questInput.color = Color.yellow;
             hasCompletedQuestInput = true;
+            Destroy(imageSkill3, 3f);
         }
     }
     private void ShowCompletionText(string message)
