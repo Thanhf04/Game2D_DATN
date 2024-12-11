@@ -47,7 +47,7 @@ public class MainToken : MonoBehaviour, IPointerClickHandler
         }
         IEnumerator WaitBeforeReset()
         {
-            yield return new WaitForSeconds(1f); // Wait for 1 second
+            yield return new WaitForSeconds(0.3f); // Wait for 1 second
             gameManager.GetComponent<GameManager>().ResetGame(); // Reset the game after the delay
         }
     }

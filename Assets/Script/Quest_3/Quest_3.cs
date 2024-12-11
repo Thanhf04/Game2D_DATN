@@ -110,9 +110,9 @@ public class Quest_3 : MonoBehaviour
             // Kiểm tra nếu đủ 4 thẻ mới chuyển qua bước tiếp theo
             if (currentCard == 4)
             {
-                questText.text = CompleteText;
-                currentCardText.text = "Bạn đã lật đủ thẻ!";
+
                 currentCardText.color = Color.yellow;
+                currentCardText.text = "Bạn đã hoàn thành nhiệm vụ lật thẻ";
                 uiCoin.AddCoins(100);
                 dialogueStep = 3;
 
@@ -142,7 +142,7 @@ public class Quest_3 : MonoBehaviour
             questNext.gameObject.SetActive(true);
             questNext.text = "Hãy đến NPC khác nhận nhiệm vụ";
             questText.text = "Cảm ơn ngươi vì sự giúp đỡ, ta đã hết thứ cho ngươi rồi!";
-            Debug.Log("4");
+
         }
     }
 
@@ -171,6 +171,7 @@ public class Quest_3 : MonoBehaviour
         currentCardText.text = "Số cặp thẻ đã lật: " + currentCard + "/4";
         if (currentCard == 4)
         {
+            currentCardText.text = "Bạn đã hoàn thành nhiệm vụ lật thẻ";
             currentCardText.color = Color.yellow;
             hasCompletedCardQuest = true;
         }
@@ -178,7 +179,7 @@ public class Quest_3 : MonoBehaviour
     public void CompleteWolf()
     {
         hasCompletedWolfQuest = true;
-        questWolf.text = "Bạn đã hoàn thành nhiệm vụ";
+        questWolf.text = "Bạn đã hoàn thành nhiệm vụ, hãy quay về Thương Nhân để trả nhiệm vụ";
         questWolf.color = Color.yellow;
 
     }

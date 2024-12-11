@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Transform child in panel.transform)
         {
+
             Destroy(child.gameObject);
         }
     }
@@ -99,7 +100,7 @@ public class GameManager : MonoBehaviour
     public void CloseMiniGame()
     {
         PanelManager.Instance.ClosePanel(panel);
-        ClearTokens();
+        ResetGame();
         button.SetActive(false);
         isMiniGame = false;
         NPC_Controller.isDialogue = false;
