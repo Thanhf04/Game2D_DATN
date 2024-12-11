@@ -1,11 +1,11 @@
 ﻿using Firebase;
 using Firebase.Database;
-using TMPro;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
+using UnityEngine.UI;
 
 public class PlayerDataTest : MonoBehaviour
 {

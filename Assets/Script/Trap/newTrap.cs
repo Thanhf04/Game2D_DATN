@@ -33,12 +33,11 @@ public class newTrap : MonoBehaviour
     {
         transform.Rotate(0, 0, tocDoXoay);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("Player"))
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm
-            Dichuyennv1 playerHealth = collision.collider.GetComponent<Dichuyennv1>();
+            Dichuyennv1 playerHealth = other.GetComponent<Dichuyennv1>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(1); // Gây 20 sát thương

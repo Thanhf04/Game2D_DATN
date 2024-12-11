@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase;
-using Firebase.Database;
-using Firebase.Extensions;
 
 public class FirebaseInventoryManager1 : MonoBehaviour
 {
@@ -31,7 +30,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         }
 
         // Cài đặt Firebase và kiểm tra dependencies
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.Result == DependencyStatus.Available)
             {
                 // Firebase đã sẵn sàng
@@ -70,7 +70,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         // Kiểm tra lại mỗi slot và cập nhật UI
         for (int i = 0; i < slots.Length; i++)

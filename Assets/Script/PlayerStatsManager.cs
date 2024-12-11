@@ -1,15 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Firebase;
 using Firebase.Database;
 using TMPro;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerStatsManager : MonoBehaviour
 {
-    public TMP_Text healthText;   // Text để hiển thị điểm Health
-    public TMP_Text manaText;     // Text để hiển thị điểm Mana
-    public TMP_Text damageText;   // Text để hiển thị điểm Damage
+    public TMP_Text healthText; // Text để hiển thị điểm Health
+    public TMP_Text manaText; // Text để hiển thị điểm Mana
+    public TMP_Text damageText; // Text để hiển thị điểm Damage
 
     private DatabaseReference databaseReference;
 
@@ -17,25 +17,27 @@ public class PlayerStatsManager : MonoBehaviour
     private async void Start()
     {
         // Kiểm tra và thiết lập Firebase
-        await FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
+        await FirebaseApp
+            .CheckAndFixDependenciesAsync()
+            .ContinueWith(task =>
             {
-                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase khởi tạo thành công.");
-            }
-            else
-            {
-                Debug.LogError("Lỗi khởi tạo Firebase: " + task.Result);
-            }
-        });
+                if (task.Result == DependencyStatus.Available)
+                {
+                    databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                    Debug.Log("Firebase khởi tạo thành công.");
+                }
+                else
+                {
+                    Debug.LogError("Lỗi khởi tạo Firebase: " + task.Result);
+                }
+            });
 
         // Lấy username từ PlayerPrefs (vì bạn đã lưu nó trong quá trình đăng nhập)
         string username = PlayerPrefs.GetString("username");
 
         if (!string.IsNullOrEmpty(username))
         {
-            await LoadPlayerStatsFromFirebase(username);  // Tải dữ liệu người chơi từ Firebase
+            await LoadPlayerStatsFromFirebase(username); // Tải dữ liệu người chơi từ Firebase
         }
         else
         {
@@ -82,7 +84,9 @@ public class PlayerStatsManager : MonoBehaviour
                 manaText.text = "Mana: " + manaValue.ToString();
                 damageText.text = "Damage: " + damageValue.ToString();
 
-                Debug.Log($"Player Data Loaded: {username}, Health: {healthValue}, Mana: {manaValue}, Damage: {damageValue}");
+                Debug.Log(
+                    $"Player Data Loaded: {username}, Health: {healthValue}, Mana: {manaValue}, Damage: {damageValue}"
+                );
             }
             else
             {
