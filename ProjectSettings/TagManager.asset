@@ -4,26 +4,27 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Armor
   - NenDat
   - Chest
   - kiem
-  - Apple
   - enemy
   - Boss
   - Token
+  - Wolf
+  - Armor
+  - Apple
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Boss
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - bg
+  - gamexephinh
   - 
   - 
   - 

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3756789695138536190}
   - component: {fileID: 8575239408569955028}
-  - component: {fileID: 6439076187262227218}
   - component: {fileID: 5403136599680188165}
   - component: {fileID: 6092003002275895852}
   - component: {fileID: 6992432132714821224}
+  - component: {fileID: 3887974179831535796}
   m_Layer: 0
   m_Name: Token
   m_TagString: Token
@@ -92,26 +92,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6439076187262227218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253011026616125867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97da3b82309465547a29925358c76ad0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faces:
-  - {fileID: 21300000, guid: fa8aecd2874cbef4f963f791fe49a8f3, type: 3}
-  - {fileID: 21300000, guid: a4080480a686e97498f2323ce89710d9, type: 3}
-  - {fileID: 21300000, guid: 7dc354d143eef864fb48570bcbb0c28d, type: 3}
-  - {fileID: 21300000, guid: 173c1b75192178a498050c1f93fa06b9, type: 3}
-  back: {fileID: 21300000, guid: 9369228b8395ae546ad8ba7c68ec7d78, type: 3}
-  faceIndex: 0
-  matched: 0
 --- !u!58 &5403136599680188165
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -185,3 +165,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3887974179831535796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253011026616125867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97da3b82309465547a29925358c76ad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faces:
+  - {fileID: 21300000, guid: d52d1daf7561cfa4b823a0fcff51ecaa, type: 3}
+  - {fileID: 21300000, guid: da9a3470309ab444b85e3e774034a82b, type: 3}
+  - {fileID: 21300000, guid: bc81712a2125f9641835c7e60bf5b58f, type: 3}
+  - {fileID: 21300000, guid: 2083825803c79954592a380d40a0a9cc, type: 3}
+  back: {fileID: 21300000, guid: 9369228b8395ae546ad8ba7c68ec7d78, type: 3}
+  faceIndex: 0
+  matched: 0

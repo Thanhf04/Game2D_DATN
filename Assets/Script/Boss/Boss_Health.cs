@@ -13,7 +13,9 @@ public class Boss_Health : MonoBehaviour
     public GameObject PanelSkillBoss;
     Dichuyennv1 Player1;
 
-    // Start is called before the first frame update
+    // Tham chiếu đến script nhiệm vụ
+    public NPCQuestSkill12 npcQuestskill2;
+
     void Start()
     {
         HealthBoss.maxValue = maxHealth;
@@ -21,7 +23,14 @@ public class Boss_Health : MonoBehaviour
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         Player1 = FindObjectOfType<Dichuyennv1>();
+
+        // Tìm script nhiệm vụ nếu chưa được gán
+        if (npcQuestskill2 == null)
+        {
+            npcQuestskill2 = FindObjectOfType<NPCQuestSkill12>();
+        }
     }
+
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -32,16 +41,24 @@ public class Boss_Health : MonoBehaviour
         animator.SetBool("Hit", true);
         StartCoroutine(ResetHitAnimation());
         HealthBoss.value = currentHealth;
-
     }
+
     public void Die()
     {
         Player1.LevelSlider(100);
         animator.SetBool("Death", true);
+
+        // Cập nhật nhiệm vụ khi boss bị tiêu diệt
+        if (CompareTag("Boss") && npcQuestskill2 != null)
+        {
+            npcQuestskill2.DefeatFireEnemy();
+        }
+
         Destroy(gameObject, 2f);
         PanelSkillBoss.SetActive(true);
         DropItem();
     }
+
     public void DropItem()
     {
         if (prefabsItem != null)
@@ -49,10 +66,12 @@ public class Boss_Health : MonoBehaviour
             Instantiate(prefabsItem, transform.position, Quaternion.identity);
         }
     }
+
     public void ClosePanel()
     {
         PanelSkillBoss.SetActive(false);
     }
+
     private IEnumerator ResetHitAnimation()
     {
         yield return new WaitForSeconds(0.5f);

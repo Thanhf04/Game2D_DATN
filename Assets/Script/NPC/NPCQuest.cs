@@ -10,21 +10,28 @@ public class NPCQuest : MonoBehaviour
     public Button confirmButton;
     public Text swordCountText;
     public Text monsterCountText;
+    public Text NVtimThoRenText;
     public Text completionText; // Text để hiển thị thông báo
     public UI_Coin uiCoin;
 
-    private string initialQuestText = "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
+    private string initialQuestText =
+        "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
     private string secondQuestText = "Nhiệm vụ đầu tiên của bạn là tìm lại thanh kiếm đã mất.";
-    private string congratulationText = "Giỏi lắm chàng trai, bây giờ bạn có thể dùng chuột trái để tấn công!";
+    private string congratulationText =
+        "Giỏi lắm chàng trai, bây giờ bạn có thể dùng chuột trái để tấn công!";
     private string thirdQuestText = "Nhiệm vụ tiếp theo của bạn là giết 5 con quái.";
-    private string rewardCompletionText = "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
-    private string finalEncouragementText = "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
+    private string rewardCompletionText =
+        "Chúc mừng bạn đã hoàn thành nhiệm vụ, phần thưởng của bạn là 50 vàng!";
+    private string finalEncouragementText =
+        "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
     private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
     private bool isPanelVisible = false;
     private bool isQuestStarted = false;
     private bool hasShownCongratulation = false;
     private bool hasReceivedReward = false;
+    private bool hasShownContinuareText = false;
+
 
     private int swordCount = 0;
     private int monsterKillCount = 0;
@@ -57,6 +64,11 @@ public class NPCQuest : MonoBehaviour
             monsterCountText.text = "";
             monsterCountText.gameObject.SetActive(false);
         }
+        if (NVtimThoRenText != null)
+        {
+            NVtimThoRenText.text = "";
+            NVtimThoRenText.gameObject.SetActive(false);
+        }
 
         if (completionText != null)
         {
@@ -86,60 +98,71 @@ public class NPCQuest : MonoBehaviour
         }
     }
 
-    private void OnContinue()
+ private void OnContinue()
+{
+    if (questPanel != null)
     {
-        if (questPanel != null)
+        if (!isQuestStarted && swordCount == 0)
         {
-            if (!isQuestStarted && swordCount == 0)
-            {
-                // Nhiệm vụ kiếm
-                questText.text = secondQuestText;
-                isQuestStarted = true;
+            questText.text = secondQuestText;
+            isQuestStarted = true;
 
-                swordCountText.gameObject.SetActive(true);
-                swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
+            swordCountText.gameObject.SetActive(true);
+            swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
+            swordCountText.color = Color.white;
 
-                swordCountText.color = Color.white;
-            }
-            else if (swordCount == 1 && monsterKillCount < 5)
-            {
-                // Nhiệm vụ giết quái
-                questText.text = thirdQuestText;
+            // Ẩn thông báo khi bắt đầu nhiệm vụ mới
+            HideCompletionMessage();
+        }
+        else if (swordCount == 1 && monsterKillCount < 5)
+        {
+            questText.text = thirdQuestText;
 
-                swordCountText.gameObject.SetActive(false);
-                monsterCountText.gameObject.SetActive(true);
-                monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
-                monsterCountText.color = Color.white;
-            }
-            else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
-            {
-                // Hoàn thành nhiệm vụ và nhận thưởng
-                questText.text = rewardCompletionText;
+            swordCountText.gameObject.SetActive(false);
+            monsterCountText.gameObject.SetActive(true);
+            monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
+            monsterCountText.color = Color.white;
 
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(50);
-                }
-                hasReceivedReward = true;
-                monsterCountText.gameObject.SetActive(false);
-            }
-            else if (hasReceivedReward)
+            // Ẩn thông báo khi tiếp tục nhiệm vụ
+            HideCompletionMessage();
+        }
+        else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
+        {
+            questText.text = rewardCompletionText;
+
+            if (uiCoin != null)
             {
-                // Câu chúc mừng cuối cùng
-                questText.text = finalEncouragementText;
-                questText.text = continuareText;
+                uiCoin.AddCoins(50);
             }
+            hasReceivedReward = true;
+            monsterCountText.gameObject.SetActive(false);
+        }
+        else if (hasReceivedReward)
+        {
+            questText.text = finalEncouragementText;
+        
+            HideCompletionMessage();
+            hasShownContinuareText = true;
+        } else if (hasShownContinuareText){
+             questText.text = continuareText;
         }
     }
+}
 
     private void OnConfirm()
+{
+    if (questPanel != null)
     {
-        if (questPanel != null)
+        questPanel.SetActive(false);
+        isPanelVisible = false;
+
+        // Ẩn thông báo nếu đã hoàn thành nhiệm vụ
+        if (hasReceivedReward)
         {
-            questPanel.SetActive(false);
-            isPanelVisible = false;
+            HideCompletionMessage();
         }
     }
+}
 
     public void FindSword()
     {
@@ -151,7 +174,8 @@ public class NPCQuest : MonoBehaviour
             swordCountText.color = Color.yellow;
 
             // Hiển thị thông báo hoàn thành nhiệm vụ
-            StartCoroutine(ShowCompletionMessage("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"));
+            // StartCoroutine(ShowCompletionMessage("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"));
+            ShowCompletionMessage("Báo cáo cho Trưởng làng");
         }
     }
 
@@ -165,20 +189,37 @@ public class NPCQuest : MonoBehaviour
             monsterCountText.color = Color.yellow;
 
             // Hiển thị thông báo hoàn thành nhiệm vụ
-            StartCoroutine(ShowCompletionMessage("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"));
+            // StartCoroutine(ShowCompletionMessage("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"));
+            ShowCompletionMessage("Báo cáo cho Trưởng làng");
         }
     }
 
-    private IEnumerator ShowCompletionMessage(string message)
+    // private IEnumerator ShowCompletionMessage(string message)
+    // {
+    //     if (completionText != null)
+    //     {
+    //         completionText.text = message;
+    //         completionText.gameObject.SetActive(true);
+
+    //         yield return new WaitForSeconds(2); // Chờ 2 giây
+
+    //         completionText.gameObject.SetActive(false);
+    //     }
+    // }
+    private void ShowCompletionMessage(string message)
+{
+    if (completionText != null)
     {
-        if (completionText != null)
-        {
-            completionText.text = message;
-            completionText.gameObject.SetActive(true);
-
-            yield return new WaitForSeconds(2); // Chờ 2 giây
-
-            completionText.gameObject.SetActive(false);
-        }
+        completionText.text = message;
+        completionText.gameObject.SetActive(true);
     }
+}
+
+private void HideCompletionMessage()
+{
+    if (completionText != null)
+    {
+        completionText.gameObject.SetActive(false);
+    }
+}
 }

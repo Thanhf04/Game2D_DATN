@@ -214,7 +214,7 @@ public class LoginUI : MonoBehaviour
         {
             Debug.LogWarning("Không tìm thấy scene cho người chơi: " + username);
             // Nếu không tìm thấy scene đã lưu, có thể chuyển đến scene mặc định
-            SceneManager.LoadScene("Player1");
+            SceneManager.LoadScene(1);
         }
     }
 

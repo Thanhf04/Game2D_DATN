@@ -3,9 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Gamesapxep gamesapxepa;
+
+    void Start()
+    {
+        gamesapxepa = FindObjectOfType<Gamesapxep>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        SceneManager.LoadScene(3);
+        if (other.CompareTag("Player") && gamesapxepa.completionCount > 1)
+        {
+            SceneManager.LoadScene("SceneBoss");
+        }
     }
 }
