@@ -25,6 +25,8 @@ public class PanelManager : MonoBehaviour
             ShopOpen.isOpenShop = false;
             NPC_Controller.isDialogue = false;
             GameManager.isMiniGame = false;
+            OpenMiniGame_Input.isMiniGameInput = false;
+            OpenMiniGame_Input.isDialogue_MiniGameInput = false;
             OpenSettings.isSettings = false;
             OpenChiSoCaNhan.ischisoCaNhan = false;
             Dichuyennv1.isStatsPanelOpen = false;

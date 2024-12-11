@@ -9,7 +9,8 @@ public class Quest_3 : MonoBehaviour
     public Button confirmButton;
     public Text currentCardText;
     public Text questWolf;
-    public Text questNext;
+    public Text questInput;
+    public Text questFinal;
     public Text completionText; // Text hiển thị thông báo hoàn thành
     public GameObject GOwolf;
     UI_Coin uiCoin;
@@ -19,15 +20,17 @@ public class Quest_3 : MonoBehaviour
     private string encouragementText1 = "Hãy giúp ta truy tìm những thẻ bị thất lạc ở chỗ Cô Suna.";
     private string encouragementText2 = "Sau khi hoàn thành hãy quay về đây ta có món quà dành cho cậu.";
     private string quest1 = "Nhiệm vụ hiện tại của bạn là lật 4 cặp thẻ.";
-    private string CompleteText = "Bạn nhận được 100 vàng";
-
+    private string CompleteText = "Phần thưởng của bạn là 100 vàng";
     private string quest2 = "Hãy giúp ta đưa chú chó này an toàn đến Cô Suna";
 
     private bool isPanelVisible = false;
     private bool hasCompletedCardQuest = false;
     public static bool hasCompletedWolfQuest = false;
+    public static bool isWolfQuest;
     private bool hasShownEncouragement = false;
+    private bool hasCompletedQuestInput = false;
     public int currentCard = 0;
+    public int currenCorrectInput = 0;
     private int dialogueStep = 0;
 
     public static bool isQuest3;
@@ -64,12 +67,16 @@ public class Quest_3 : MonoBehaviour
             questWolf.text = "";
             questWolf.gameObject.SetActive(false);
         }
-        if (questNext != null)
+        if (questInput != null)
         {
-            questNext.text = "";
-            questNext.gameObject.SetActive(false);
+            questInput.text = "";
+            questInput.gameObject.SetActive(false);
         }
-
+        if (questFinal != null)
+        {
+            questFinal.text = "";
+            questFinal.gameObject.SetActive(false);
+        }
         uiCoin = FindObjectOfType<UI_Coin>();
     }
 
@@ -127,6 +134,7 @@ public class Quest_3 : MonoBehaviour
             questWolf.gameObject.SetActive(true);
             questWolf.text = "Dẫn chú chó đến Cô Suna";
             questText.text = quest2;
+            isWolfQuest = true;
 
             // Hoàn thành nhiệm vụ sói và thưởng
             if (hasCompletedWolfQuest == true)
@@ -134,14 +142,30 @@ public class Quest_3 : MonoBehaviour
                 GOwolf.gameObject.SetActive(false);
                 questText.text = CompleteText;
                 dialogueStep = 4;
-                questWolf.text = "";
+                uiCoin.AddCoins(50);
+                questWolf.text = "Bạn đã hoàn thành nhiệm vụ, hãy quay về Thương Nhân để trả nhiệm vụ";
             }
         }
         else if (dialogueStep == 4)
         {
-            questNext.gameObject.SetActive(true);
-            questNext.text = "Hãy đến NPC khác nhận nhiệm vụ";
-            questText.text = "Cảm ơn ngươi vì sự giúp đỡ, ta đã hết thứ cho ngươi rồi!";
+            questWolf.text = "";
+            questInput.gameObject.SetActive(true);
+            questInput.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành 0/3 câu hỏi";
+            questText.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành 3 câu hỏi và trở về đây để nhận thưởng.";
+            if (hasCompletedQuestInput == true)
+            {
+                uiCoin.AddCoins(50);
+                questInput.text = "Bạn đã hoàn thành nhiệm vụ";
+                dialogueStep = 5;
+            }
+
+        }
+        else if (dialogueStep == 5)
+        {
+            questFinal.gameObject.SetActive(true);
+            questInput.gameObject.SetActive(false);
+            questFinal.text = "Bạn hãy di chuyển đến cuối map.";
+            questText.text = "Bạn hãy di chuyển đến cuối map và hoàn thành nhiệm vụ để qua vùng đất tiếp theo.";
 
         }
     }
@@ -181,10 +205,19 @@ public class Quest_3 : MonoBehaviour
         hasCompletedWolfQuest = true;
         questWolf.text = "Bạn đã hoàn thành nhiệm vụ, hãy quay về Thương Nhân để trả nhiệm vụ";
         questWolf.color = Color.yellow;
-
+        isWolfQuest = false;
     }
-
-
+    public void CompleteQuestInput()
+    {
+        currenCorrectInput++;
+        questInput.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành " + currenCorrectInput + "/3 câu hỏi";
+        if (currenCorrectInput == 3)
+        {
+            questInput.text = "Bạn đã hoàn thành nhiệm vụ";
+            questInput.color = Color.yellow;
+            hasCompletedQuestInput = true;
+        }
+    }
     private void ShowCompletionText(string message)
     {
         if (completionText != null)
@@ -196,7 +229,6 @@ public class Quest_3 : MonoBehaviour
             Invoke(nameof(HideCompletionText), 2f);
         }
     }
-
     private void HideCompletionText()
     {
         if (completionText != null)

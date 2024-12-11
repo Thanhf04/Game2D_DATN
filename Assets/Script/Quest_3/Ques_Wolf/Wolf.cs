@@ -3,8 +3,8 @@
 public class Wolf : MonoBehaviour
 {
     public Transform player; // Nhân vật chính
-    public float followDistance = 2f; // Khoảng cách tối thiểu để bắt đầu đi theo
-    public float speed = 3f; // Tốc độ di chuyển
+    public float followDistance = 1f; // Khoảng cách tối thiểu để bắt đầu đi theo
+    public float speed = 2f; // Tốc độ di chuyển
     private SpriteRenderer spriteRenderer; // Để lật hướng
     private Animator animator; // Để điều khiển Animation
 
@@ -29,7 +29,6 @@ public class Wolf : MonoBehaviour
                 spriteRenderer.flipX = false; // Hướng về bên phải
             else if (direction.x < 0)
                 spriteRenderer.flipX = true; // Hướng về bên trái
-
             // Bật animation đi bộ
             animator.SetBool("Walk", true);
         }
