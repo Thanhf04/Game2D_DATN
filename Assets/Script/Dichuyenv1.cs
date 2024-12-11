@@ -136,6 +136,8 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
+
+    public float moveInput;
     #endregion
     void Start()
     {
@@ -190,18 +192,18 @@ public class Dichuyennv1 : MonoBehaviour
 
     void Update()
     {
-        // if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
-        // {
-        //     // Dừng animation và âm thanh
-        //     anim.SetBool("isRunning", false);
-        //     playWalk.Stop();
-        //     playJump.Stop();
+        if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
+        {
+            // Dừng animation và âm thanh
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            playJump.Stop();
 
-        //     // Ngăn player di chuyển hoặc thực hiện các hành động khác
-        //     rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
-        //     return;
-        // }
-        float moveInput = Input.GetAxis("Horizontal");
+            // Ngăn player di chuyển hoặc thực hiện các hành động khác
+            rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
+            return;
+        }
+        moveInput = Input.GetAxis("Horizontal");
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (
@@ -212,6 +214,7 @@ public class Dichuyennv1 : MonoBehaviour
             || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan
             || isStatsDisplayOpen
+            || Quest_3.isQuest3
         )
         {
             isRunning = false;
@@ -762,6 +765,7 @@ public class Dichuyennv1 : MonoBehaviour
         // Kiểm tra khi chạm vào thanh kiếm
         if (other.CompareTag("kiem") && !isQuest1Complete)
         {
+            Debug.Log("anh nhat dep trai qua");
             UpdateQuest();
             Destroy(other.gameObject);
         }
@@ -879,6 +883,7 @@ public class Dichuyennv1 : MonoBehaviour
         Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
     }
 
+    // Mở panel quiz game
     // Mở panel quiz game
     public void OpenQuizGamePanel()
     {

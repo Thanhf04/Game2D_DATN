@@ -10,8 +10,10 @@ TagManager:
   - enemy
   - Boss
   - Token
+  - Wolf
   - Armor
   - Apple
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -24,7 +26,7 @@ TagManager:
   - Enemy
   - bg
   - gamexephinh
-  - 
+  - NPC
   - 
   - 
   - 

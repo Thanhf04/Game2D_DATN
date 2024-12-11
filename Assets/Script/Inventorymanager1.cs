@@ -7,9 +7,14 @@ using UnityEngine.UI;
 
 public class FirebaseInventoryManager1 : MonoBehaviour
 {
-    [SerializeField] private GameObject slotsHolder;
-    [SerializeField] private SlotClass[] items;
-    [SerializeField] private GameObject[] slots;
+    [SerializeField]
+    private GameObject slotsHolder;
+
+    [SerializeField]
+    private SlotClass[] items;
+
+    [SerializeField]
+    private GameObject[] slots;
     public bool isMoving;
 
     // Firebase Realtime Database reference
@@ -30,25 +35,27 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         }
 
         // Cài đặt Firebase và kiểm tra dependencies
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
+        FirebaseApp
+            .CheckAndFixDependenciesAsync()
+            .ContinueWithOnMainThread(task =>
             {
-                // Firebase đã sẵn sàng
-                FirebaseApp app = FirebaseApp.DefaultInstance;
-                reference = FirebaseDatabase.DefaultInstance.RootReference;
+                if (task.Result == DependencyStatus.Available)
+                {
+                    // Firebase đã sẵn sàng
+                    FirebaseApp app = FirebaseApp.DefaultInstance;
+                    reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-                // Xử lý các vật phẩm ban đầu
-                InitializeInventory();
+                    // Xử lý các vật phẩm ban đầu
+                    InitializeInventory();
 
-                // Tải kho đồ từ Firebase
-                LoadInventoryFromFirebase(username); // Đảm bảo gọi lại LoadInventoryFromFirebase
-            }
-            else
-            {
-                Debug.LogError("Firebase không sẵn sàng. Lỗi: " + task.Result.ToString());
-            }
-        });
+                    // Tải kho đồ từ Firebase
+                    LoadInventoryFromFirebase(username); // Đảm bảo gọi lại LoadInventoryFromFirebase
+                }
+                else
+                {
+                    Debug.LogError("Firebase không sẵn sàng. Lỗi: " + task.Result.ToString());
+                }
+            });
     }
 
     private void InitializeInventory()
@@ -70,7 +77,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         // Kiểm tra lại mỗi slot và cập nhật UI
         for (int i = 0; i < slots.Length; i++)
@@ -83,7 +90,8 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                 if (slot.GetItem() != null)
                 {
                     slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                    slots[i].transform.GetChild(0).GetComponent<Image>().sprite = slot.GetItem().itemIcon;
+                    slots[i].transform.GetChild(0).GetComponent<Image>().sprite =
+                        slot.GetItem().itemIcon;
                 }
                 else
                 {
@@ -91,7 +99,9 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                 }
 
                 // Kiểm tra xem item có stackable hay không
-                TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI quantityText = slots[i]
+                    .transform.GetChild(1)
+                    .GetComponent<TextMeshProUGUI>();
                 if (slot.GetItem() != null && slot.GetItem().isStackable)
                 {
                     quantityText.text = slot.GetQuantity().ToString(); // Hiển thị số lượng
@@ -115,70 +125,87 @@ public class FirebaseInventoryManager1 : MonoBehaviour
     // Lưu kho đồ lên Firebase
     public void SaveInventoryToFirebase(string username)
     {
-        if (reference == null || string.IsNullOrEmpty(username)) return;
+        if (reference == null || string.IsNullOrEmpty(username))
+            return;
 
         string json = JsonUtility.ToJson(new InventoryData(items));
-        reference.Child("users").Child(username).Child("inventory").SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted)
+        reference
+            .Child("users")
+            .Child(username)
+            .Child("inventory")
+            .SetRawJsonValueAsync(json)
+            .ContinueWithOnMainThread(task =>
             {
-                Debug.Log("Kho đồ đã được lưu lên Firebase.");
-            }
-            else
-            {
-                Debug.LogError("Lỗi khi lưu kho đồ lên Firebase.");
-            }
-        });
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Kho đồ đã được lưu lên Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Lỗi khi lưu kho đồ lên Firebase.");
+                }
+            });
     }
 
     // Tải kho đồ từ Firebase
     private void LoadInventoryFromFirebase(string username)
     {
-        if (reference == null || string.IsNullOrEmpty(username)) return;
+        if (reference == null || string.IsNullOrEmpty(username))
+            return;
 
-        reference.Child("users").Child(username).Child("inventory").GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted)
+        reference
+            .Child("users")
+            .Child(username)
+            .Child("inventory")
+            .GetValueAsync()
+            .ContinueWithOnMainThread(task =>
             {
-                DataSnapshot snapshot = task.Result;
-                if (snapshot.Exists)
+                if (task.IsCompleted)
                 {
-                    string json = snapshot.GetRawJsonValue();
-                    InventoryData inventoryData = JsonUtility.FromJson<InventoryData>(json);
-
-                    // Cập nhật kho đồ từ dữ liệu tải về
-                    items = inventoryData.items;
-
-                    // Debug log để kiểm tra các item
-                    Debug.Log("Loaded inventory items:");
-                    foreach (var slot in items)
+                    DataSnapshot snapshot = task.Result;
+                    if (snapshot.Exists)
                     {
-                        if (slot.GetItem() != null)
-                            Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
-                    }
+                        string json = snapshot.GetRawJsonValue();
+                        InventoryData inventoryData = JsonUtility.FromJson<InventoryData>(json);
 
-                    // Cập nhật UI trong InventoryManager
-                    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
-                    if (inventoryManager != null)
+                        // Cập nhật kho đồ từ dữ liệu tải về
+                        items = inventoryData.items;
+
+                        // Debug log để kiểm tra các item
+                        Debug.Log("Loaded inventory items:");
+                        foreach (var slot in items)
+                        {
+                            if (slot.GetItem() != null)
+                                Debug.Log(
+                                    "Item: "
+                                        + slot.GetItem().itemName
+                                        + ", Quantity: "
+                                        + slot.GetQuantity()
+                                );
+                        }
+
+                        // Cập nhật UI trong InventoryManager
+                        InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+                        if (inventoryManager != null)
+                        {
+                            inventoryManager.RefreshUI(); // Làm mới UI trong InventoryManager
+                        }
+
+                        // Gọi lại RefreshUI trong FirebaseInventoryManager1
+                        RefreshUI();
+
+                        Debug.Log("Kho đồ đã được tải từ Firebase.");
+                    }
+                    else
                     {
-                        inventoryManager.RefreshUI();  // Làm mới UI trong InventoryManager
+                        Debug.LogWarning("Không tìm thấy dữ liệu kho đồ cho người dùng này.");
                     }
-
-                    // Gọi lại RefreshUI trong FirebaseInventoryManager1
-                    RefreshUI();
-
-                    Debug.Log("Kho đồ đã được tải từ Firebase.");
                 }
                 else
                 {
-                    Debug.LogWarning("Không tìm thấy dữ liệu kho đồ cho người dùng này.");
+                    Debug.LogError("Lỗi khi tải dữ liệu kho đồ từ Firebase.");
                 }
-            }
-            else
-            {
-                Debug.LogError("Lỗi khi tải dữ liệu kho đồ từ Firebase.");
-            }
-        });
+            });
     }
 
     // Đồng bộ hóa AddItem từ InventoryManager

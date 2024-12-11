@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8a69f4173d127b40a3b81903f86fcad, type: 3}
+  m_Name: QuestionData
+  m_EditorClassIdentifier: 
+  questions:
+  - question: "V\xF9ng \u0111\u1EA5t t\u1EEBng \u0111\u01B0\u1EE3c bi\u1EBFt \u0111\u1EBFn
+      v\u1EDBi s\u1EF1 c\xE2n b\u1EB1ng ho\xE0n h\u1EA3o gi\u1EEFa \"______\" v\xE0
+      Ma Thu\u1EADt"
+    answer: "V\u1EADt L\xFD"
+    options: []
+  - question: "C\u01A1n h\u1ED7n lo\u1EA1n b\u1EAFt \u0111\u1EA7u khi \"__________\"
+      nh\u1EA5n ch\xECm Shadow Land trong b\xF3ng t\u1ED1i."
+    answer: "th\u1EBF l\u1EF1c h\u1EAFc \xE1m"
+    options: []
+  - question: "Ch\u1EC9 khi \xE1nh s\xE1ng v\xE0 b\xF3ng t\u1ED1i c\xF9ng t\u1ED3n
+      t\u1EA1i, \"__________\" s\u1EBD \u0111\u01B0\u1EE3c kh\xF4i ph\u1EE5c"
+    answer: "s\u1EF1 c\xE2n b\u1EB1ng"
+    options: []
+  - question: "S\u1EE9c m\u1EA1nh b\xF3ng t\u1ED1i l\u1EDBn nh\u1EA5t n\u1EB1m trong
+      \"__________\", trung t\xE2m c\u1EE7a v\xF9ng \u0111\u1EA5t b\u1ECB nguy\u1EC1n
+      r\u1EE7a."
+    answer: "\u0110\u1EC1n B\xF3ng T\u1ED1i."
+    options: []
+  - question: "Tr\u01B0\u1EDBc khi b\xF3ng t\u1ED1i \u0111\u1EBFn, Shadow Land t\u1EEBng
+      \u0111\u01B0\u1EE3c g\u1ECDi l\xE0 \"__________\"."
+    answer: "V\xF9ng \u0110\u1EA5t \xC1nh S\xE1ng"
+    options: []
+  - question: "Nh\u1EEFng chi\u1EBFn binh th\u1EDDi x\u01B0a l\xE0 bi\u1EC3u t\u01B0\u1EE3ng
+      c\u1EE7a \xE1nh s\xE1ng v\xE0 \"_____\"."
+    answer: "hy v\u1ECDng"
+    options: []

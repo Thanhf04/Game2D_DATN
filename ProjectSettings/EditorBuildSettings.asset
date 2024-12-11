@@ -9,14 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Login.unity
     guid: c5a7de18bca64e4449990d095352ca52
   - enabled: 1
-    path: Assets/Scenes/Home.unity
-    guid: a0eb700f8a09519469c57b09657aebce
-  - enabled: 0
+    path: Assets/Scenes/StartTimeline.unity
+    guid: 94f17da984eba8f4d99101fabdac149b
+  - enabled: 1
     path: Assets/Scenes/TimeLine2.unity
     guid: 9c55659008bc4de4dad743b626126448
-  - enabled: 1
-    path: Assets/Scenes/Play.unity
-    guid: 9e87cd36079082249925a013d9cd677f
   - enabled: 1
     path: Assets/Scenes/Player1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
@@ -24,9 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Player2.unity
     guid: ce693fcf1249724419cf535590fd5ebe
   - enabled: 0
-    path: Assets/Scenes/WaitRoom.unity
-    guid: 7b0534b1c26797e47a65d4215f0e61f9
-  - enabled: 1
     path: Assets/Scenes/MapBossAn.unity
     guid: f059f2d5e1e28424cbe6eaa7ce8d9214
   - enabled: 1

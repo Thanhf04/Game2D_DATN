@@ -1,4 +1,3 @@
-
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -6,39 +5,70 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField] private GameObject slotsHolder;
-    [SerializeField] private ItemClass itemToAdd;
-    [SerializeField] private ItemClass itemToRemove;
-    [SerializeField] private SlotClass[] items;
-    [SerializeField] private SlotClass[] startingItems;
+    [SerializeField]
+    private GameObject slotsHolder;
 
-    [SerializeField] private SlotClass movingSlot;
-    [SerializeField] private SlotClass originalSlot;
-    [SerializeField] private SlotClass tempSlot;
+    [SerializeField]
+    private ItemClass itemToAdd;
+
+    [SerializeField]
+    private ItemClass itemToRemove;
+
+    [SerializeField]
+    private SlotClass[] items;
+
+    [SerializeField]
+    private SlotClass[] startingItems;
+
+    [SerializeField]
+    private SlotClass movingSlot;
+
+    [SerializeField]
+    private SlotClass originalSlot;
+
+    [SerializeField]
+    private SlotClass tempSlot;
 
     public Image itemCursor;
 
-    [SerializeField] private GameObject[] slots;
+    [SerializeField]
+    private GameObject[] slots;
     public bool isMoving;
 
     // use item
     [Header("Use Item")]
-    [SerializeField] private Button Btn_Health;
-    [SerializeField] private Button Btn_Mana;
-    [SerializeField] private ItemClass healthItem;
-    [SerializeField] private ItemClass manaItem;
-    [SerializeField] public Slider healthSlider;
-    [SerializeField] public Slider manaSlider;
-    [SerializeField] private TextMeshProUGUI healthButtonText;
-    [SerializeField] private TextMeshProUGUI manaButtonText;
+    [SerializeField]
+    private Button Btn_Health;
+
+    [SerializeField]
+    private Button Btn_Mana;
+
+    [SerializeField]
+    private ItemClass healthItem;
+
+    [SerializeField]
+    private ItemClass manaItem;
+
+    [SerializeField]
+    public Slider healthSlider;
+
+    [SerializeField]
+    public Slider manaSlider;
+
+    [SerializeField]
+    private TextMeshProUGUI healthButtonText;
+
+    [SerializeField]
+    private TextMeshProUGUI manaButtonText;
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown = false;
     private bool isManaOnCooldown = false;
     Dichuyennv1 player1;
+
     // Start is called before the first frame update
     void Start()
     {
-        //use item 
+        //use item
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -70,6 +100,7 @@ public class InventoryManager : MonoBehaviour
 
         // StartCoroutine(WaitForPlayerSpawn());
     }
+
     private void Update()
     {
         if (player1 == null)
@@ -118,6 +149,7 @@ public class InventoryManager : MonoBehaviour
             itemCursor.sprite = null;
         }
     }
+
     public void RefreshUI()
     {
         for (int i = 0; i < slots.Length; i++)
@@ -125,7 +157,9 @@ public class InventoryManager : MonoBehaviour
             try
             {
                 slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].GetItem().itemIcon;
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i]
+                    .GetItem()
+                    .itemIcon;
 
                 if (!items[i].GetItem().isStackable)
                 {
@@ -133,7 +167,17 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity().ToString();
+                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i]
+                        .GetQuantity()
+                        .ToString();
+                    if (items[i].GetItem() == healthItem) // Nếu item là healthItem
+                    {
+                        UpdateButtonQuantity(Btn_Health, items[i].GetItem());
+                    }
+                    else if (items[i].GetItem() == manaItem) // Nếu item là manaItem
+                    {
+                        UpdateButtonQuantity(Btn_Mana, items[i].GetItem());
+                    }
                 }
             }
             catch
@@ -144,7 +188,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
 
     public void AddItem(ItemClass item, int quantity)
     {
@@ -166,11 +209,11 @@ public class InventoryManager : MonoBehaviour
         }
 
         //// Cập nhật Firebase sau khi thêm vật phẩm
-        //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-        //if (firebaseInventory != null)
-        //{
-        //    firebaseInventory.AddItemToFirebase(item, quantity);
-        //}
+        FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+        if (firebaseInventory != null)
+        {
+            firebaseInventory.AddItemToFirebase(item, quantity);
+        }
 
         RefreshUI();
     }
@@ -200,17 +243,16 @@ public class InventoryManager : MonoBehaviour
             }
 
             // Cập nhật Firebase sau khi xóa vật phẩm
-            //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-            //if (firebaseInventory != null)
-            //{
-            //    firebaseInventory.RemoveItemFromFirebase(item, quantity);
-            //}
+            FirebaseInventoryManager1 firebaseInventory =
+                FindObjectOfType<FirebaseInventoryManager1>();
+            if (firebaseInventory != null)
+            {
+                firebaseInventory.RemoveItemFromFirebase(item, quantity);
+            }
         }
 
         RefreshUI();
     }
-
-
 
     private SlotClass ContainsItem(ItemClass item)
     {
@@ -241,11 +283,10 @@ public class InventoryManager : MonoBehaviour
     {
         originalSlot = GetClosestSlot();
 
-        if (originalSlot == null || originalSlot.GetItem() == null) return;
+        if (originalSlot == null || originalSlot.GetItem() == null)
+            return;
 
-        movingSlot.AddItem(
-            originalSlot.GetItem(),
-            originalSlot.GetQuantity());
+        movingSlot.AddItem(originalSlot.GetItem(), originalSlot.GetQuantity());
         originalSlot.RemoveItem();
 
         isMoving = true;
@@ -257,13 +298,17 @@ public class InventoryManager : MonoBehaviour
     {
         originalSlot = GetClosestSlot();
 
-        if (originalSlot == null || originalSlot.GetItem() == null) return;
+        if (originalSlot == null || originalSlot.GetItem() == null)
+            return;
         if (originalSlot.GetQuantity() <= 1)
         {
             return;
         }
 
-        movingSlot.AddItem(originalSlot.GetItem(), Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
+        movingSlot.AddItem(
+            originalSlot.GetItem(),
+            Mathf.CeilToInt(originalSlot.GetQuantity() / 2f)
+        );
 
         originalSlot.SubQuantity(Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
 
@@ -291,7 +336,7 @@ public class InventoryManager : MonoBehaviour
                     if (originalSlot.GetItem().isStackable)
                     {
                         int itemMaxStack = originalSlot.GetItem().maxStackQuantity; //Apple: 20
-                        int count = originalSlot.GetQuantity() + movingSlot.GetQuantity();// 25
+                        int count = originalSlot.GetQuantity() + movingSlot.GetQuantity(); // 25
 
                         if (count > itemMaxStack)
                         {
@@ -333,15 +378,20 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-
-
         isMoving = false;
         RefreshUI();
         return;
     }
+
     // use item
     public void UseHealth(ItemClass item)
     {
+        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        if (slot == null || slot.GetQuantity() <= 0)
+        {
+            Debug.Log("Không có vật phẩm Health để sử dụng!");
+            return;
+        }
         if (item is ConsumableClass consumable)
         {
             if (player1.currentHealth < player1.maxHealth)
@@ -354,7 +404,8 @@ public class InventoryManager : MonoBehaviour
                 RemoveItem(item, 1);
 
                 // Cập nhật Firebase về sự thay đổi này
-                FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+                FirebaseInventoryManager1 firebaseInventory =
+                    FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
                 {
                     firebaseInventory.RemoveItemFromFirebase(item, 1);
@@ -371,14 +422,16 @@ public class InventoryManager : MonoBehaviour
             }
             Debug.Log("Co item" + item);
         }
-        else
-        {
-            Debug.Log("Không tìm thấy vật phẩm");
-        }
     }
 
     public void UseMana(ItemClass item)
     {
+        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        if (slot == null || slot.GetQuantity() <= 0)
+        {
+            Debug.Log("Không có vật phẩm Mana để sử dụng!");
+            return;
+        }
         if (item is ConsumableClass consumable)
         {
             if (player1.currentMana < player1.maxMana)
@@ -390,11 +443,12 @@ public class InventoryManager : MonoBehaviour
                 RemoveItem(item, 1);
 
                 // Cập nhật Firebase về sự thay đổi này
-                //FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-                //if (firebaseInventory != null)
-                //{
-                //    firebaseInventory.RemoveItemFromFirebase(item, 1);
-                //}
+                FirebaseInventoryManager1 firebaseInventory =
+                    FindObjectOfType<FirebaseInventoryManager1>();
+                if (firebaseInventory != null)
+                {
+                    firebaseInventory.RemoveItemFromFirebase(item, 1);
+                }
 
                 UpdateButtonQuantity(Btn_Mana, item);
                 RefreshUI();
@@ -404,10 +458,6 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("Mana của bạn đã đầy!");
             }
-        }
-        else
-        {
-            Debug.Log("Không tìm thấy vật phẩm");
         }
     }
 
@@ -439,13 +489,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
     private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
     {
         float remainingTime = itemCooldownTime;
         // Trong khi còn thời gian hồi chiêu
         while (remainingTime > 0)
         {
-            remainingTime -= Time.deltaTime;  // Giảm thời gian còn lại
+            remainingTime -= Time.deltaTime; // Giảm thời gian còn lại
             button.interactable = false; // Tắt tương tác với nút
             buttonText.text = Mathf.Ceil(remainingTime).ToString(); // Cập nhật thời gian còn lại lên nút
 

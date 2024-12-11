@@ -17,7 +17,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
-    private string textTiepTuc = "Bây giờ còn hãy tìm đường tới Thành phố bỏ hoang và gặp người bí ẩn.";
 
     private bool isPanelVisible = false;
     private bool hasCompletedAppleQuest = false;
@@ -78,18 +77,12 @@ public class NPCAppleArmorQuest : MonoBehaviour
             else if (hasCompletedArmorQuest)
             {
                 questText.text = armorCompletionText;
-                questText.text = textTiepTuc;
             }
             else if (hasCompletedAppleQuest)
             {
                 questText.text = appleCompletionText;
             }
-            else
-            {
-                questText.text = appleQuestText;
-                appleCountText.gameObject.SetActive(true);
-                appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
-            }
+
 
             isPanelVisible = true;
         }
@@ -112,6 +105,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             questText.text = armorQuestText;
             armorCountText.gameObject.SetActive(true);
+            appleCountText.gameObject.SetActive(false);
             armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
 
             armorCountText.color = Color.white;
@@ -119,30 +113,37 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     private void OnConfirm()
+{
+    if (questPanel != null)
     {
-        if (questPanel != null)
-        {
-            questPanel.SetActive(false);
-            isPanelVisible = false;
+        questPanel.SetActive(false);
+        isPanelVisible = false;
 
-            if (hasCompletedArmorQuest)
+        if (hasCompletedArmorQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(30);
-                }
-                armorCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(30);
             }
-            else if (hasCompletedAppleQuest)
+            armorCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
+        }
+        else if (hasCompletedAppleQuest)
+        {
+            if (uiCoin != null)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(20);
-                }
-                appleCountText.gameObject.SetActive(false);
+                uiCoin.AddCoins(20);
             }
+            appleCountText.gameObject.SetActive(false);
+
+            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+            HideCompletionText();
         }
     }
+}
+
 
     public void CollectApple()
     {
@@ -155,7 +156,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
 
-            ShowCompletionText("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"); // Gọi hàm hiển thị thông báo
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
 
             if (uiCoin != null)
             {
@@ -175,7 +176,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = armorCompletionText;
             armorCountText.color = Color.yellow;
 
-            ShowCompletionText("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"); // Gọi hàm hiển thị thông báo
+            ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
 
             if (uiCoin != null)
             {
@@ -192,7 +193,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             completionText.gameObject.SetActive(true); // Hiển thị Text
 
             // Tắt Text sau 2 giây
-            Invoke(nameof(HideCompletionText), 2f);
+            // Invoke(nameof(HideCompletionText), 2f);
         }
     }
 
