@@ -64,7 +64,6 @@ public class Boss_Movement : MonoBehaviour
             StartCoroutine(StartAttack()); // Gọi tấn công
         }
         skillCooldownTimer -= Time.deltaTime;
-        Debug.Log(skillCooldownTimer);
     }
 
     void Patrol()
