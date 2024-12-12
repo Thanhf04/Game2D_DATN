@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject tokenPrefab; // Prefab của Token
-    [SerializeField] private GameObject panel;       // Panel chứa các Token
-    [SerializeField] private GameObject button;
+    [SerializeField]
+    private GameObject tokenPrefab; // Prefab của Token
+
+    [SerializeField]
+    private GameObject panel; // Panel chứa các Token
+
+    [SerializeField]
+    private GameObject button;
     private List<int> faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 };
     public static System.Random rnd = new System.Random(); // Để trộn danh sách
     private int[] visibleFaces = { -1, -2 }; // Các thẻ đang được lật lên
@@ -16,6 +21,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textNotification;
     UI_Coin ui;
     Quest_3 q3;
+
     void Start()
     {
         InitializeGame(); // Khởi tạo game
@@ -78,7 +84,6 @@ public class GameManager : MonoBehaviour
             textNotification.text = "Thẻ trùng nhau";
             textNotification.color = Color.yellow;
             StartCoroutine(StartNotification());
-
         }
 
         return success;
@@ -88,7 +93,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (Transform child in panel.transform)
         {
-
             Destroy(child.gameObject);
         }
     }
@@ -119,26 +123,30 @@ public class GameManager : MonoBehaviour
         parentTextNotification.SetActive(false);
         //NPC_Controller.isDialogue = false;
     }
+
     public void ResetVisibleFaces()
     {
         foreach (Transform child in panel.transform)
         {
             MainToken token = child.GetComponent<MainToken>();
-            if (token != null && !token.matched &&
-                (token.faceIndex == visibleFaces[0] || token.faceIndex == visibleFaces[1]))
+            if (
+                token != null
+                && !token.matched
+                && (token.faceIndex == visibleFaces[0] || token.faceIndex == visibleFaces[1])
+            )
             {
                 token.FlipDown(); // Úp lại thẻ
                 parentTextNotification.SetActive(true);
                 textNotification.text = "Thẻ không trùng nhau";
                 textNotification.color = Color.red;
                 StartCoroutine(StartNotification());
-
             }
         }
 
         visibleFaces[0] = -1;
         visibleFaces[1] = -2;
     }
+
     IEnumerator StartNotification()
     {
         yield return new WaitForSeconds(0.7f);

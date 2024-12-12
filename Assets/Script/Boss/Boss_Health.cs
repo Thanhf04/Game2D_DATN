@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Boss_Health : MonoBehaviour
 {
-    [SerializeField] private Slider HealthBoss;
-    [SerializeField] private GameObject Boss;
+    [SerializeField]
+    private Slider HealthBoss;
+
+    [SerializeField]
+    private GameObject Boss;
     public int maxHealth = 100;
     public int currentHealth;
     Animator animator;
     public GameObject prefabsItem;
     public GameObject PanelSkillBoss;
     Dichuyennv1 Player1;
+    public GameObject kt;
 
     // Tham chiếu đến script nhiệm vụ
     public NPCQuestSkill2 npcQuestskill2;
@@ -43,11 +48,20 @@ public class Boss_Health : MonoBehaviour
         HealthBoss.value = currentHealth;
     }
 
+    private IEnumerator ktg()
+    {
+        yield return new WaitForSeconds(3f);
+        kt.SetActive(false);
+        SceneManager.LoadScene("Login");
+    }
+
     public void Die()
     {
         Player1.LevelSlider(100);
         animator.SetBool("Death", true);
 
+        kt.SetActive(true);
+        StartCoroutine(ktg());
         // Cập nhật nhiệm vụ khi boss bị tiêu diệt
         if (CompareTag("Boss") && npcQuestskill2 != null)
         {
