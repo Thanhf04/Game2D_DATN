@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseMiniGame()
     {
+
         PanelManager.Instance.ClosePanel(panel);
         ResetGame();
         button.SetActive(false);

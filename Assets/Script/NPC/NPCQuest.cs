@@ -13,6 +13,7 @@ public class NPCQuest : MonoBehaviour
     public Text NVtimThoRenText;
     public Text completionText; // Text để hiển thị thông báo
     public UI_Coin uiCoin;
+    public static bool isQuest = false;
 
     private string initialQuestText =
         "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
@@ -80,10 +81,10 @@ public class NPCQuest : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("thuan");
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
+            isQuest = true;
 
             if (swordCount == 1 && !hasShownCongratulation)
             {
@@ -156,6 +157,7 @@ public class NPCQuest : MonoBehaviour
         {
             questPanel.SetActive(false);
             isPanelVisible = false;
+            isQuest = false;
 
             // Ẩn thông báo nếu đã hoàn thành nhiệm vụ
             if (hasReceivedReward)
@@ -200,6 +202,7 @@ public class NPCQuest : MonoBehaviour
         if (completionText != null)
         {
             completionText.text = message;
+            completionText.color = Color.yellow;
             completionText.gameObject.SetActive(true);
         }
     }

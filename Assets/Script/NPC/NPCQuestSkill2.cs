@@ -8,7 +8,10 @@ public class NPCQuestSkill2 : MonoBehaviour
     public Button continueButton;
     public Button confirmButton;
     public Text fireEnemyCountText;
+    public Text textNPCApple;
     public Text completionText; // Thêm Text hoàn thành
+
+    public static bool isNPCQuestSkill2 = false;
 
     public Image imageLock2;
 
@@ -58,6 +61,7 @@ public class NPCQuestSkill2 : MonoBehaviour
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
+            isNPCQuestSkill2 = true;
 
             if (hasCompletedQuest)
             {
@@ -66,6 +70,7 @@ public class NPCQuestSkill2 : MonoBehaviour
             }
             else
             {
+                textNPCApple.gameObject.SetActive(false);
                 questText.text = greetingText;
                 hasShownGreeting = true;
             }
@@ -95,6 +100,7 @@ public class NPCQuestSkill2 : MonoBehaviour
         {
             questPanel.SetActive(false);
             isPanelVisible = false;
+            isNPCQuestSkill2 = false;
             HideCompletionText(); // Ẩn Text hoàn thành khi nhiệm vụ được xác nhận
         }
     }

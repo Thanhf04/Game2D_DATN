@@ -81,21 +81,10 @@ public class Quest_3 : MonoBehaviour
         }
         uiCoin = FindObjectOfType<UI_Coin>();
     }
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if (hit.collider != null && hit.collider.gameObject == this.gameObject)
-            {
-                Debug.Log("NPC clicked!");
-                OnMouseDown();
-            }
-        }
-    }
+
     void OnMouseDown()
     {
-        Debug.Log("thuan");
+
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
@@ -142,7 +131,6 @@ public class Quest_3 : MonoBehaviour
 
         else if (dialogueStep == 3)
         {
-            Debug.Log("sói");
             currentCardText.gameObject.SetActive(false);
             GOwolf.gameObject.SetActive(true);
             questWolf.gameObject.SetActive(true);
@@ -231,24 +219,6 @@ public class Quest_3 : MonoBehaviour
             questInput.color = Color.yellow;
             hasCompletedQuestInput = true;
             Destroy(imageSkill3, 3f);
-        }
-    }
-    private void ShowCompletionText(string message)
-    {
-        if (completionText != null)
-        {
-            completionText.text = message;
-            completionText.gameObject.SetActive(true); // Hiển thị Text
-
-            // Tắt Text sau 2 giây
-            Invoke(nameof(HideCompletionText), 2f);
-        }
-    }
-    private void HideCompletionText()
-    {
-        if (completionText != null)
-        {
-            completionText.gameObject.SetActive(false);
         }
     }
 }

@@ -10,7 +10,9 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public Text appleCountText;
     public Text armorCountText;
     public Text completionText;
+    public Text nextText;
     public UI_Coin uiCoin;
+    public static bool isQuestAppleArmor = false;
 
     public Image lockSkill1;
 
@@ -65,6 +67,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
             armorCountText.text = "";
             armorCountText.gameObject.SetActive(false);
         }
+        if (nextText != null)
+        {
+            nextText.text = "";
+            nextText.gameObject.SetActive(false);
+        }
 
         uiCoin = FindObjectOfType<UI_Coin>();
 
@@ -101,6 +108,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
+            isQuestAppleArmor = true;
 
             if (!hasShownEncouragement && !hasCompletedAppleQuest)
             {
@@ -124,7 +132,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private void OnContinue()
     {
         // Load latest data from Firebase before continuing
-        LoadQuestStatusFromFirebase();
+        // LoadQuestStatusFromFirebase();
 
         // Debug logs to check if data is updated correctly
         Debug.Log("Apple Count from Firebase: " + appleCount);
@@ -141,6 +149,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         }
         else if (hasCompletedAppleQuest && !hasCompletedArmorQuest)
         {
+            completionText.text = "";
             questText.text = armorQuestText;
             armorCountText.gameObject.SetActive(true);
             appleCountText.gameObject.SetActive(false);
@@ -148,7 +157,10 @@ public class NPCAppleArmorQuest : MonoBehaviour
         }
         else if (hasCompletedAppleQuest && hasCompletedArmorQuest)
         {
+            completionText.text = "";
             questText.text = "Chúc mừng bạn đã hoàn thành tất cả nhiệm vụ!";
+            nextText.text = "Hãy đi đến NPC Nữ Chiến Binh để nhận nhiệm vụ mới";
+            nextText.gameObject.SetActive(true);
             appleCountText.gameObject.SetActive(false);
             armorCountText.gameObject.SetActive(false);
         }
@@ -161,6 +173,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         {
             questPanel.SetActive(false);
             isPanelVisible = false;
+            isQuestAppleArmor = false;
 
             // Update UI after quest completion
             if (hasCompletedArmorQuest)
@@ -202,7 +215,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             firebaseQuestManager.SetHasCompletedAppleQuest(true);
 
             // Update UI
-            ShowCompletionText("Báo cáo với Thợ rèn");
+            completionText.text = "Báo cáo với thợ rèn.";
 
             if (uiCoin != null)
             {

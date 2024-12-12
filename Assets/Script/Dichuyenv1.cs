@@ -218,8 +218,9 @@ public class Dichuyennv1 : MonoBehaviour
 
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
-            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput || OpenMiniGame_Input.isDialogue_MiniGameInput)
-
+            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
+            || OpenMiniGame_Input.isDialogue_MiniGameInput || Inventory.isInventoryOpen || NPCQuest.isQuest
+            || NPCAppleArmorQuest.isQuestAppleArmor || NPCQuestSkill2.isNPCQuestSkill2)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
