@@ -384,7 +384,6 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("Máu của bạn đã đầy!");
             }
-            Debug.Log("Co item" + item);
         }
 
     }

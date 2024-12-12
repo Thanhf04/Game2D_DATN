@@ -19,6 +19,7 @@ public class Dichuyennv1 : MonoBehaviour
     public GameObject quizGamePanel;
     public GameObject tbaoQuizGamePanel; // Panel thông báo (Tbaoquizz game)
 
+
     [SerializeField]
     private InventoryManager inventoryManager; // Tham chiếu đến InventoryManager
 
@@ -153,7 +154,6 @@ public class Dichuyennv1 : MonoBehaviour
         // Khởi tạo UI
         statsPanel.SetActive(false);
         //openPanelButton.onClick.AddListener(ToggleStatsPanel);
-
         //NPC
         npcQuest = FindObjectOfType<NPCQuest>();
         npcapple = FindObjectOfType<NPCAppleArmorQuest>();
@@ -194,20 +194,31 @@ public class Dichuyennv1 : MonoBehaviour
 
         if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
         {
-           // Dừng animation và âm thanh
-           anim.SetBool("isRunning", false);
-           playWalk.Stop();
-           playJump.Stop();
+            // Dừng animation và âm thanh
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            playJump.Stop();
 
-           // Ngăn player di chuyển hoặc thực hiện các hành động khác
-           rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
-           return;
+            // Ngăn player di chuyển hoặc thực hiện các hành động khác
+            rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
+            return;
         }
         float moveInput = Input.GetAxis("Horizontal");
 
+        //if (Quest_3.isWolfQuest)
+        //{
+        //    isJump = false;
+        //    anim.SetBool("isJump", false);
+        //    Debug.Log("Khóa");
+        //    return;
+
+        //}
+
+
+
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
-            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3)
+            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput || OpenMiniGame_Input.isDialogue_MiniGameInput)
 
         {
             isRunning = false;
@@ -260,24 +271,26 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Attack());
         }
-        if (Input.GetKeyDown(KeyCode.Q) && isAppleQuestComplete)
+        if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.hasCompletedAppleQuest == true)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
             }
         }
-        if (Input.GetKeyDown(KeyCode.E) && isAppleQuestComplete)
+        if (Input.GetKeyDown(KeyCode.E) && NPCQuestSkill2.hasCompletedQuest == true)
         {
             if (skill2Timer <= 0 && currentMana >= 30)
             {
+
                 Skill2();
             }
         }
-        if (Input.GetKeyDown(KeyCode.R) && isAppleQuestComplete)
+        if (Input.GetKeyDown(KeyCode.R) && Quest_3.hasCompletedQuestInput == true)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
             {
+
                 Skill3();
             }
         }
@@ -830,10 +843,10 @@ public class Dichuyennv1 : MonoBehaviour
         // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
         if (npcapple != null)
         {
+            isAppleQuestComplete = true;
             npcapple.CollectApple();
         }
     }
-
     public void UpdateArmor()
     {
         Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
@@ -869,13 +882,6 @@ public class Dichuyennv1 : MonoBehaviour
             Debug.LogWarning("Không tìm thấy InventoryManager!");
         }
     }
-
-    public void CompleteAppleQuest()
-    {
-        isAppleQuestComplete = true;
-        Debug.Log("Hoàn thành nhiệm vụ nhặt táo!");
-    }
-
     // Mở panel quiz game
     // Mở panel quiz game
     public void OpenQuizGamePanel()

@@ -22,33 +22,47 @@ public class MainToken : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // Nếu thẻ đã khớp hoặc đang lật lên, không làm gì cả
+        if (matched || imageRenderer.sprite != back)
+            return;
 
-        if (matched == false)
+        // Lật thẻ
+        imageRenderer.sprite = faces[faceIndex];
+        gameManager.AddVisibleFace(faceIndex);
+
+        // Kiểm tra nếu cả 2 thẻ đã được lật
+        if (gameManager.TwoCardsUp())
         {
-            if (imageRenderer.sprite == back)
+            bool match = gameManager.CheckMatch();
+            if (!match)
             {
-                if (gameManager.GetComponent<GameManager>().TwoCardsUp() == false)
-                {
-                    imageRenderer.sprite = faces[faceIndex];
-                    gameManager.GetComponent<GameManager>().AddVisibleFace(faceIndex);
-                    matched = gameManager.GetComponent<GameManager>().CheckMatch();
-                    if (matched)
-                    {
-                        StartCoroutine(WaitBeforeReset());
-                    }
-                }
+                // Nếu không khớp, úp lại sau một khoảng thời gian
+                StartCoroutine(FlipBackAfterDelay());
             }
             else
             {
-                imageRenderer.sprite = back;
-                gameManager.GetComponent<GameManager>().RemoveVisibleFace(faceIndex);
-                //gameManager.GetComponent<GameManager>().ResetGame();
+                // Nếu khớp, đánh dấu thẻ là đã khớp
+                matched = true;
+                StartCoroutine(WaitBeforeReset());
             }
         }
         IEnumerator WaitBeforeReset()
         {
-            yield return new WaitForSeconds(1f); // Wait for 1 second
+            yield return new WaitForSeconds(1.0f); // Wait for 1 second
             gameManager.GetComponent<GameManager>().ResetGame(); // Reset the game after the delay
         }
     }
+
+    public void FlipDown()
+    {
+        imageRenderer.sprite = back; // Đặt lại hình ảnh là mặt sau
+    }
+    private IEnumerator FlipBackAfterDelay()
+    {
+        yield return new WaitForSeconds(1.0f);// Chờ 1 giây
+
+        // Úp lại thẻ không khớp
+        gameManager.ResetVisibleFaces();
+    }
+
 }
