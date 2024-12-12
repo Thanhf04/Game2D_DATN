@@ -31,8 +31,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI healthButtonText;
     [SerializeField] private TextMeshProUGUI manaButtonText;
     private float itemCooldownTime = 2f;
-    private bool isHealthOnCooldown = false;
-    private bool isManaOnCooldown = false;
+    private bool isHealthOnCooldown;
+    private bool isManaOnCooldown;
     Dichuyennv1 player1;
 
     // Start is called before the first frame update

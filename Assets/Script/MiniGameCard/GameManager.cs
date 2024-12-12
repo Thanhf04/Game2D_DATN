@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void OpenMiniGame()
     {
-        panel.SetActive(true);
+        PanelManager.Instance.OpenPanel(panel);
         isMiniGame = true;
         button.SetActive(true);
         parentTextNotification.SetActive(true);
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseMiniGame()
     {
-        panel.SetActive(false);
+        PanelManager.Instance.ClosePanel(panel);
         ResetGame();
         button.SetActive(false);
         isMiniGame = false;

@@ -12,6 +12,8 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public Text completionText;
     public UI_Coin uiCoin;
 
+    public Image lockSkill1;
+
     private string encouragementText = "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
     private string appleQuestText = "Nhiệm vụ mới: Thu thập 3 quả táo để tiếp tục hành trình!";
     private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
@@ -176,6 +178,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 {
                     uiCoin.AddCoins(20); // Reward gold when completing apple quest
                 }
+                Destroy(lockSkill1);
                 appleCountText.gameObject.SetActive(false);
                 firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
             }
