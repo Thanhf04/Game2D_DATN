@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,44 +12,17 @@ public class GameManager : MonoBehaviour
     public static System.Random rnd = new System.Random(); // Để trộn danh sách
     private int[] visibleFaces = { -1, -2 }; // Các thẻ đang được lật lên
     public static bool isMiniGame = false;
+    public GameObject parentTextNotification;
+    public TextMeshProUGUI textNotification;
     UI_Coin ui;
-    public NPCAppleArmorQuest npcQuest;
-
-    private Quest_3 q3; // Khai báo biến q3 kiểu Quest_3
-
+    Quest_3 q3;
     void Start()
     {
         InitializeGame(); // Khởi tạo game
         ui = FindObjectOfType<UI_Coin>();
-        npcQuest = FindObjectOfType<NPCAppleArmorQuest>(); // Tìm NPCAppleArmorQuest từ scene
-
-        // Tìm Quest_3 trong scene
         q3 = FindObjectOfType<Quest_3>();
-        if (q3 == null)
-        {
-            Debug.Log("Quest_3 object not found. Creating a new instance...");
-
-            // Nếu không có, tạo Quest_3 mới từ Prefab hoặc từ mã
-            GameObject questPrefab = Resources.Load<GameObject>("Prefabs/Quest_3");  // Đảm bảo prefab có trong thư mục Resources
-            if (questPrefab != null)
-            {
-                q3 = Instantiate(questPrefab).GetComponent<Quest_3>();
-                Debug.Log("Quest_3 object created from prefab.");
-            }
-            else
-            {
-                Debug.LogWarning("Quest_3 prefab not found in Resources folder, using a default Quest_3.");
-                // Nếu không có prefab, có thể tạo một đối tượng mặc định từ mã
-                GameObject defaultQuest = new GameObject("Quest_3");
-                q3 = defaultQuest.AddComponent<Quest_3>();
-            }
-        }
-        else
-        {
-            Debug.Log("Quest_3 object found in the scene.");
-        }
+        textNotification.text = "";
     }
-
 
     private void InitializeGame()
     {
@@ -98,11 +73,14 @@ public class GameManager : MonoBehaviour
             visibleFaces[0] = -1;
             visibleFaces[1] = -2;
             success = true;
-            if (q3 != null)  // Kiểm tra xem q3 có tồn tại hay không trước khi gọi phương thức
-            {
-                q3.CompleteQuestCard();
-            }
+            q3.CompleteQuestCard();
+            parentTextNotification.SetActive(true);
+            textNotification.text = "Thẻ trùng nhau";
+            textNotification.color = Color.yellow;
+            StartCoroutine(StartNotification());
+
         }
+
         return success;
     }
 
@@ -110,6 +88,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Transform child in panel.transform)
         {
+
             Destroy(child.gameObject);
         }
     }
@@ -119,6 +98,7 @@ public class GameManager : MonoBehaviour
         ClearTokens();
         faceIndexes = new List<int> { 0, 1, 2, 3, 0, 1, 2, 3 };
         InitializeGame();
+        textNotification.text = "";
     }
 
     public void OpenMiniGame()
@@ -126,15 +106,42 @@ public class GameManager : MonoBehaviour
         PanelManager.Instance.OpenPanel(panel);
         isMiniGame = true;
         button.SetActive(true);
+        parentTextNotification.SetActive(true);
         ResetGame();
     }
 
     public void CloseMiniGame()
     {
         PanelManager.Instance.ClosePanel(panel);
-        ClearTokens();
+        ResetGame();
         button.SetActive(false);
         isMiniGame = false;
-        NPC_Controller.isDialogue = false;
+        parentTextNotification.SetActive(false);
+        //NPC_Controller.isDialogue = false;
+    }
+    public void ResetVisibleFaces()
+    {
+        foreach (Transform child in panel.transform)
+        {
+            MainToken token = child.GetComponent<MainToken>();
+            if (token != null && !token.matched &&
+                (token.faceIndex == visibleFaces[0] || token.faceIndex == visibleFaces[1]))
+            {
+                token.FlipDown(); // Úp lại thẻ
+                parentTextNotification.SetActive(true);
+                textNotification.text = "Thẻ không trùng nhau";
+                textNotification.color = Color.red;
+                StartCoroutine(StartNotification());
+
+            }
+        }
+
+        visibleFaces[0] = -1;
+        visibleFaces[1] = -2;
+    }
+    IEnumerator StartNotification()
+    {
+        yield return new WaitForSeconds(0.7f);
+        parentTextNotification.SetActive(false);
     }
 }

@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 503973875656891108}
   - component: {fileID: 5997258463557605307}
   - component: {fileID: 5749288621530672301}
+  - component: {fileID: 1569887740638910372}
   m_Layer: 0
   m_Name: Collider_Wolf
   m_TagString: Untagged
@@ -481,7 +482,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.37131977, y: 0.5583111}
+  m_Offset: {x: 0.034602165, y: 0.5583111}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -492,7 +493,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.5505047, y: 2.478195}
+  m_Size: {x: 2.7386608, y: 2.478195}
   m_EdgeRadius: 0
 --- !u!114 &5997258463557605307
 MonoBehaviour:
@@ -592,3 +593,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8113843356417542880}
   m_CullTransparentMesh: 1
+--- !u!114 &1569887740638910372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8113843356417542880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44efab54cd93f8c45aebf9415d0f26bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Wolf: {fileID: 0}

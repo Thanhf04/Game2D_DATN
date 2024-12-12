@@ -194,20 +194,31 @@ public class Dichuyennv1 : MonoBehaviour
 
         if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
         {
-           // Dừng animation và âm thanh
-           anim.SetBool("isRunning", false);
-           playWalk.Stop();
-           playJump.Stop();
+            // Dừng animation và âm thanh
+            anim.SetBool("isRunning", false);
+            playWalk.Stop();
+            playJump.Stop();
 
-           // Ngăn player di chuyển hoặc thực hiện các hành động khác
-           rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
-           return;
+            // Ngăn player di chuyển hoặc thực hiện các hành động khác
+            rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
+            return;
         }
         float moveInput = Input.GetAxis("Horizontal");
 
+        //if (Quest_3.isWolfQuest)
+        //{
+        //    isJump = false;
+        //    anim.SetBool("isJump", false);
+        //    Debug.Log("Khóa");
+        //    return;
+
+        //}
+
+
+
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
-            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3)
+            || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput || OpenMiniGame_Input.isDialogue_MiniGameInput)
 
         {
             isRunning = false;
