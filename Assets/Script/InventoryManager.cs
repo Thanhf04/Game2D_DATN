@@ -61,19 +61,18 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI manaButtonText;
     private float itemCooldownTime = 2f;
-    private bool isHealthOnCooldown = false;
-    private bool isManaOnCooldown = false;
+    private bool isHealthOnCooldown;
+    private bool isManaOnCooldown;
     Dichuyennv1 player1;
 
     // Start is called before the first frame update
     void Start()
     {
-        //use item
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
         manaButtonText.text = "";
-        //
+
         slots = new GameObject[slotsHolder.transform.childCount];
         items = new SlotClass[slots.Length];
 
@@ -97,8 +96,6 @@ public class InventoryManager : MonoBehaviour
         tempSlot = new SlotClass();
 
         RefreshUI();
-
-        // StartCoroutine(WaitForPlayerSpawn());
     }
 
     private void Update()
@@ -110,9 +107,9 @@ public class InventoryManager : MonoBehaviour
             {
                 return;
             }
-
             return;
         }
+
         if (Input.GetMouseButtonDown(0))
         {
             if (isMoving)
@@ -129,7 +126,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (isMoving)
             {
-                //EndMove();
+                // EndMove();
             }
             else
             {
@@ -170,11 +167,11 @@ public class InventoryManager : MonoBehaviour
                     slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i]
                         .GetQuantity()
                         .ToString();
-                    if (items[i].GetItem() == healthItem) // Nếu item là healthItem
+                    if (items[i].GetItem() == healthItem)
                     {
                         UpdateButtonQuantity(Btn_Health, items[i].GetItem());
                     }
-                    else if (items[i].GetItem() == manaItem) // Nếu item là manaItem
+                    else if (items[i].GetItem() == manaItem)
                     {
                         UpdateButtonQuantity(Btn_Mana, items[i].GetItem());
                     }
@@ -208,7 +205,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        //// Cập nhật Firebase sau khi thêm vật phẩm
         FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
         if (firebaseInventory != null)
         {
@@ -242,7 +238,6 @@ public class InventoryManager : MonoBehaviour
                 items[slotToRemoveIndex].RemoveItem();
             }
 
-            // Cập nhật Firebase sau khi xóa vật phẩm
             FirebaseInventoryManager1 firebaseInventory =
                 FindObjectOfType<FirebaseInventoryManager1>();
             if (firebaseInventory != null)
@@ -275,14 +270,12 @@ public class InventoryManager : MonoBehaviour
                 return items[i];
             }
         }
-
         return null;
     }
 
     private void BeginMove()
     {
         originalSlot = GetClosestSlot();
-
         if (originalSlot == null || originalSlot.GetItem() == null)
             return;
 
@@ -291,36 +284,30 @@ public class InventoryManager : MonoBehaviour
 
         isMoving = true;
         RefreshUI();
-        return;
     }
 
     private void BeginSplit()
     {
         originalSlot = GetClosestSlot();
-
         if (originalSlot == null || originalSlot.GetItem() == null)
             return;
+
         if (originalSlot.GetQuantity() <= 1)
-        {
             return;
-        }
 
         movingSlot.AddItem(
             originalSlot.GetItem(),
             Mathf.CeilToInt(originalSlot.GetQuantity() / 2f)
         );
-
         originalSlot.SubQuantity(Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
 
         isMoving = true;
         RefreshUI();
-        return;
     }
 
     private void EndMove()
     {
         originalSlot = GetClosestSlot();
-
         if (originalSlot == null)
         {
             AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
@@ -329,18 +316,16 @@ public class InventoryManager : MonoBehaviour
         {
             if (originalSlot.GetItem() != null)
             {
-                //If slot is the same item
                 if (originalSlot.GetItem() == movingSlot.GetItem())
                 {
-                    //If slot item is stackable
                     if (originalSlot.GetItem().isStackable)
                     {
-                        int itemMaxStack = originalSlot.GetItem().maxStackQuantity; //Apple: 20
-                        int count = originalSlot.GetQuantity() + movingSlot.GetQuantity(); // 25
+                        int itemMaxStack = originalSlot.GetItem().maxStackQuantity;
+                        int count = originalSlot.GetQuantity() + movingSlot.GetQuantity();
 
                         if (count > itemMaxStack)
                         {
-                            int remain = count - itemMaxStack; //5
+                            int remain = count - itemMaxStack;
                             originalSlot.SetQuantity(itemMaxStack);
                             movingSlot.SetQuantity(remain);
 
@@ -361,14 +346,12 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    //Swap
                     tempSlot.AddItem(originalSlot.GetItem(), originalSlot.GetQuantity());
                     originalSlot.AddItem(movingSlot.GetItem(), movingSlot.GetQuantity());
                     movingSlot.AddItem(tempSlot.GetItem(), tempSlot.GetQuantity());
                     tempSlot.RemoveItem();
 
                     RefreshUI();
-                    return;
                 }
             }
             else
@@ -380,30 +363,25 @@ public class InventoryManager : MonoBehaviour
 
         isMoving = false;
         RefreshUI();
-        return;
     }
 
-    // use item
     public void UseHealth(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        SlotClass slot = ContainsItem(item);
         if (slot == null || slot.GetQuantity() <= 0)
         {
             Debug.Log("Không có vật phẩm Health để sử dụng!");
             return;
         }
+
         if (item is ConsumableClass consumable)
         {
             if (player1.currentHealth < player1.maxHealth)
             {
                 player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
                 healthSlider.value = player1.currentHealth;
-                Debug.Log("Use HP");
-
-                // Giảm số lượng vật phẩm trong Inventory
                 RemoveItem(item, 1);
 
-                // Cập nhật Firebase về sự thay đổi này
                 FirebaseInventoryManager1 firebaseInventory =
                     FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
@@ -412,9 +390,7 @@ public class InventoryManager : MonoBehaviour
                 }
 
                 UpdateButtonQuantity(Btn_Health, item);
-                RefreshUI();
                 StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
-                Debug.Log("1");
             }
             else
             {
@@ -425,12 +401,13 @@ public class InventoryManager : MonoBehaviour
 
     public void UseMana(ItemClass item)
     {
-        SlotClass slot = ContainsItem(item); // Kiểm tra xem có vật phẩm hay không
+        SlotClass slot = ContainsItem(item);
         if (slot == null || slot.GetQuantity() <= 0)
         {
             Debug.Log("Không có vật phẩm Mana để sử dụng!");
             return;
         }
+
         if (item is ConsumableClass consumable)
         {
             if (player1.currentMana < player1.maxMana)
@@ -438,10 +415,8 @@ public class InventoryManager : MonoBehaviour
                 player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
                 manaSlider.value = player1.currentMana;
 
-                // Giảm số lượng vật phẩm trong Inventory
                 RemoveItem(item, 1);
 
-                // Cập nhật Firebase về sự thay đổi này
                 FirebaseInventoryManager1 firebaseInventory =
                     FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
@@ -450,8 +425,7 @@ public class InventoryManager : MonoBehaviour
                 }
 
                 UpdateButtonQuantity(Btn_Mana, item);
-                RefreshUI();
-                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, true));
+                StartCoroutine(ItemCooldown(Btn_Mana, manaButtonText, false));
             }
             else
             {
@@ -462,29 +436,28 @@ public class InventoryManager : MonoBehaviour
 
     private void UpdateButtonQuantity(Button button, ItemClass item)
     {
-        // Kiểm tra số lượng còn lại của item
         SlotClass slot = ContainsItem(item);
         TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
         if (slot != null)
         {
-            // Lấy số lượng còn lại
             int quantity = slot.GetQuantity();
-
             if (buttonText != null)
             {
-                // Cập nhật số lượng item trên button
                 if (quantity > 0)
                 {
-                    buttonText.text = quantity.ToString(); // Hiển thị số lượng còn lại
+                    buttonText.text = quantity.ToString();
+                }
+                else
+                {
+                    buttonText.text = "0";
                 }
             }
         }
         else
         {
-            // Nếu không tìm thấy item, đặt số lượng là 0
             if (buttonText != null)
             {
-                buttonText.text = "0"; // Đặt số lượng là 0 khi item không có trong túi
+                buttonText.text = "0";
             }
         }
     }
@@ -492,17 +465,15 @@ public class InventoryManager : MonoBehaviour
     private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
     {
         float remainingTime = itemCooldownTime;
-        // Trong khi còn thời gian hồi chiêu
         while (remainingTime > 0)
         {
-            remainingTime -= Time.deltaTime; // Giảm thời gian còn lại
-            button.interactable = false; // Tắt tương tác với nút
-            buttonText.text = Mathf.Ceil(remainingTime).ToString(); // Cập nhật thời gian còn lại lên nút
-
-            yield return null; // Chờ đến frame tiếp theo
+            remainingTime -= Time.deltaTime;
+            button.interactable = false;
+            buttonText.text = Mathf.Ceil(remainingTime).ToString();
+            yield return null;
         }
-        // Sau khi hết thời gian hồi chiêu
-        button.interactable = true; // Bật lại nút
+
+        button.interactable = true;
         buttonText.text = "";
 
         if (isHealth)

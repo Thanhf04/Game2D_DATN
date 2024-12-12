@@ -130,7 +130,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
 
         string json = JsonUtility.ToJson(new InventoryData(items));
         reference
-            .Child("users")
+            .Child("players")
             .Child(username)
             .Child("inventory")
             .SetRawJsonValueAsync(json)
@@ -148,13 +148,14 @@ public class FirebaseInventoryManager1 : MonoBehaviour
     }
 
     // Tải kho đồ từ Firebase
+    // Tải kho đồ từ Firebase
     private void LoadInventoryFromFirebase(string username)
     {
         if (reference == null || string.IsNullOrEmpty(username))
             return;
 
         reference
-            .Child("users")
+            .Child("players")
             .Child(username)
             .Child("inventory")
             .GetValueAsync()
@@ -176,20 +177,25 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                         foreach (var slot in items)
                         {
                             if (slot.GetItem() != null)
+                            {
                                 Debug.Log(
                                     "Item: "
                                         + slot.GetItem().itemName
                                         + ", Quantity: "
                                         + slot.GetQuantity()
                                 );
+                            }
+                            else
+                            {
+                                Debug.Log(
+                                    "Empty slot at index: " + System.Array.IndexOf(items, slot)
+                                );
+                            }
                         }
 
                         // Cập nhật UI trong InventoryManager
-                        InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
-                        if (inventoryManager != null)
-                        {
-                            inventoryManager.RefreshUI(); // Làm mới UI trong InventoryManager
-                        }
+                        // Đây là phần bạn cần chú ý để gọi lại RefreshUI
+                        RefreshUI();
 
                         // Gọi lại RefreshUI trong FirebaseInventoryManager1
                         RefreshUI();
@@ -203,7 +209,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Lỗi khi tải dữ liệu kho đồ từ Firebase.");
+                    Debug.LogError("Lỗi khi tải kho đồ từ Firebase.");
                 }
             });
     }

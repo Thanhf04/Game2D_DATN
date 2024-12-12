@@ -1,43 +1,19 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
     public GameObject inventoryPanel; // Tham chiếu đến Canvas của bạn
-    public Button toggleButton; // Tham chiếu đến Button
+    public static bool isInventoryOpen = false;
 
-    private bool isInventoryVisible = false;
-
-    void Start()
+    public void OpenInventory()
     {
-        // Đảm bảo Canvas được tắt khi khởi động
-        inventoryPanel.SetActive(false);
-
-        // Gán sự kiện cho Button
-        //toggleButton.onClick.AddListener(ToggleInventory);
+        PanelManager.Instance.OpenPanel(inventoryPanel);
+        isInventoryOpen = true;
     }
 
-    void Update()
+    public void CloseInventory()
     {
-        // Kiểm tra nếu người chơi nhấn phím "B"
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            ToggleInventory();
-        }
-    }
-
-    // Hàm bật/tắt Canvas
-    public void ToggleInventory()
-    {
-        // Lấy trạng thái của Panel hiện tại và thay đổi nó
-
-        if (!isInventoryVisible)
-        {
-            PanelManager.Instance.OpenPanel(inventoryPanel);
-        }
-        else
-        {
-            PanelManager.Instance.ClosePanel(inventoryPanel);
-        }
+        PanelManager.Instance.ClosePanel(inventoryPanel);
+        isInventoryOpen = false;
     }
 }

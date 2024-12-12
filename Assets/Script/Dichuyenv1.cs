@@ -227,6 +227,10 @@ public class Dichuyennv1 : MonoBehaviour
             || Quest_3.isQuest3
             || OpenMiniGame_Input.isMiniGameInput
             || OpenMiniGame_Input.isDialogue_MiniGameInput
+            || Inventory.isInventoryOpen
+            || NPCQuest.isQuest
+            || NPCAppleArmorQuest.isQuestAppleArmor
+            || NPCQuestSkill2.isNPCQuestSkill2
         )
         {
             isRunning = false;
