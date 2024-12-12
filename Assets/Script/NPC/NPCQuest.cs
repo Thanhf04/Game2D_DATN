@@ -137,14 +137,14 @@ public class NPCQuest : MonoBehaviour
             hasReceivedReward = true;
             monsterCountText.gameObject.SetActive(false);
         }
-        else if (hasReceivedReward)
+        else if (hasReceivedReward && !hasShownContinuareText)
         {
-            questText.text = finalEncouragementText;
-        
-            HideCompletionMessage();
+            questText.text = continuareText;
+            NVtimThoRenText.gameObject.SetActive(true); // Hiển thị text
+            NVtimThoRenText.text = continuareText;
             hasShownContinuareText = true;
-        } else if (hasShownContinuareText){
-             questText.text = continuareText;
+            // Bắt đầu coroutine để ẩn text sau 10 giây
+            StartCoroutine(HideContinuareTextAfterDelay());
         }
     }
 }
@@ -194,18 +194,6 @@ public class NPCQuest : MonoBehaviour
         }
     }
 
-    // private IEnumerator ShowCompletionMessage(string message)
-    // {
-    //     if (completionText != null)
-    //     {
-    //         completionText.text = message;
-    //         completionText.gameObject.SetActive(true);
-
-    //         yield return new WaitForSeconds(2); // Chờ 2 giây
-
-    //         completionText.gameObject.SetActive(false);
-    //     }
-    // }
     private void ShowCompletionMessage(string message)
 {
     if (completionText != null)
@@ -222,4 +210,13 @@ private void HideCompletionMessage()
         completionText.gameObject.SetActive(false);
     }
 }
+private IEnumerator HideContinuareTextAfterDelay()
+{
+    yield return new WaitForSeconds(10f); // Đợi 10 giây
+    if (NVtimThoRenText != null)
+    {
+        NVtimThoRenText.gameObject.SetActive(false); // Ẩn text
+    }
+}
+
 }
