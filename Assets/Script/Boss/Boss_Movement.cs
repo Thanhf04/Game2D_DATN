@@ -36,6 +36,7 @@ public class Boss_Movement : MonoBehaviour
 
     void Start()
     {
+        skillCooldownTimer = skillCooldown;
         animator = GetComponent<Animator>();
 
 
@@ -53,16 +54,17 @@ public class Boss_Movement : MonoBehaviour
         {
             Patrol();
         }
-        skillCooldownTimer -= Time.deltaTime;
         if (skillCooldownTimer <= 0f && IsPlayerInAttackRange())
         {
             UseSkill();
-            skillCooldownTimer = skillCooldown;
+            //skillCooldownTimer = skillCooldown;
         }
         if (IsPlayerInAttackRange())
         {
             StartCoroutine(StartAttack()); // Gọi tấn công
         }
+        skillCooldownTimer -= Time.deltaTime;
+        Debug.Log(skillCooldownTimer);
     }
 
     void Patrol()
@@ -122,6 +124,7 @@ public class Boss_Movement : MonoBehaviour
 
     void UseSkill()
     {
+        Debug.Log("Spam skill");
         int randomSkill = Random.Range(1, 6);
         switch (randomSkill)
         {
