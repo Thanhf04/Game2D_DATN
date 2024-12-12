@@ -18,8 +18,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
 
+    public Image imageLock1;
+
+
     private bool isPanelVisible = false;
-    private bool hasCompletedAppleQuest = false;
+    public static bool hasCompletedAppleQuest = false;
     private bool hasCompletedArmorQuest = false;
     private bool hasShownEncouragement = false;
 
@@ -113,36 +116,38 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     private void OnConfirm()
-{
-    if (questPanel != null)
     {
-        questPanel.SetActive(false);
-        isPanelVisible = false;
-
-        if (hasCompletedArmorQuest)
+        if (questPanel != null)
         {
-            if (uiCoin != null)
-            {
-                uiCoin.AddCoins(30);
-            }
-            armorCountText.gameObject.SetActive(false);
+            questPanel.SetActive(false);
+            isPanelVisible = false;
 
-            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
-            HideCompletionText();
-        }
-        else if (hasCompletedAppleQuest)
-        {
-            if (uiCoin != null)
+            if (hasCompletedArmorQuest)
             {
-                uiCoin.AddCoins(20);
-            }
-            appleCountText.gameObject.SetActive(false);
+                if (uiCoin != null)
+                {
+                    uiCoin.AddCoins(30);
+                }
+                armorCountText.gameObject.SetActive(false);
 
-            // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
-            HideCompletionText();
+                // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+                HideCompletionText();
+            }
+            else if (hasCompletedAppleQuest)
+            {
+                if (uiCoin != null)
+                {
+                    uiCoin.AddCoins(20);
+
+
+                }
+                appleCountText.gameObject.SetActive(false);
+
+                // Ẩn thông báo hoàn thành khi nhiệm vụ đã được báo cáo
+                HideCompletionText();
+            }
         }
     }
-}
 
 
     public void CollectApple()
@@ -155,6 +160,8 @@ public class NPCAppleArmorQuest : MonoBehaviour
             hasCompletedAppleQuest = true;
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
+            Destroy(imageLock1);
+
 
             ShowCompletionText("Báo cáo với Thợ rèn"); // Gọi hàm hiển thị thông báo
 

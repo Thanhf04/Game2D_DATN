@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4484033341897115453}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 2181330120576706613}
   - component: {fileID: 8702918284073640589}
   - component: {fileID: 910164250920884273}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6168589572593785658}
   - component: {fileID: 3381873287412989487}
-  m_Layer: 6
+  - component: {fileID: 6174692453324926258}
+  m_Layer: 3
   m_Name: HealthBoss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,6 +202,19 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6174692453324926258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3139938839757234669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b02d669fee6b2f4d92024a28c0a621c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 7848322691208232323}
 --- !u!1 &4356215831049766077
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +226,7 @@ GameObject:
   - component: {fileID: 8900087283311627971}
   - component: {fileID: 2319476780699256064}
   - component: {fileID: 3029243418922942339}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +302,7 @@ GameObject:
   - component: {fileID: 8791069856331157692}
   - component: {fileID: 4909522117155114821}
   - component: {fileID: 7652998409198408395}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +403,7 @@ GameObject:
   - component: {fileID: 300113974432316925}
   - component: {fileID: 5877428248435906780}
   - component: {fileID: 5323538323068291570}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +483,7 @@ GameObject:
   - component: {fileID: 4179456450177716154}
   - component: {fileID: 5999959650235669395}
   - component: {fileID: 4457631731095402921}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Elite_monster
   m_TagString: Boss
   m_Icon: {fileID: 0}
@@ -532,8 +546,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1222731409
-  m_SortingLayer: 7
-  m_SortingOrder: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -583,7 +597,7 @@ MonoBehaviour:
   maxHealth: 10
   currentHealth: 0
   prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
-  Panel_KillBoss: {fileID: 0}
+  PanelSkillBoss: {fileID: 0}
 --- !u!114 &3582688213973200550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,7 +614,7 @@ MonoBehaviour:
   attackRadius: 2.01
   Player:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 128
   damageBoss: 5
 --- !u!114 &4179456450177716154
 MonoBehaviour:
@@ -712,7 +726,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4464063333393830357}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: attackPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}

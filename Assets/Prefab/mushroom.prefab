@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6084610710036852710}
   - component: {fileID: 8019095374826267491}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: dame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2622493764526993383}
   - component: {fileID: 7960490976052962195}
   - component: {fileID: 4823599389561462904}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1152193564678820246}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -0.069999695, y: 0}
+  m_AnchoredPosition: {x: -0.06999588, y: 0}
   m_SizeDelta: {x: 0.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6014647315476081586
@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 3774899000770307359}
   - component: {fileID: 181102793486035742}
   - component: {fileID: 6110118653514320849}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 3596304809135035335}
   - component: {fileID: 4647822840756991786}
   - component: {fileID: 7996512454369655878}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: CanvasEnmey (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 5192177271319977302}
   - component: {fileID: 754269614285079369}
   - component: {fileID: 212439382932920501}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mushroom
   m_TagString: enemy
   m_Icon: {fileID: 0}
@@ -444,7 +444,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1596491877
-  m_SortingLayer: 4
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 4723107735738678597, guid: f8b30c2afe165d645b54d500a9c30862, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -541,6 +541,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55605fb16d50a0e459f958edee3a1566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  start: 0
+  end: 0
+  isRight: 0
+  speed: 0
+  attackRange: 1.2
+  chaseRange: 2
 --- !u!114 &5192177271319977302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,8 +561,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
-  healthSlider: {fileID: 0}
+  healthSlider: {fileID: 3537243832446458229}
   damageAmount: 1
+  prefabsItem: {fileID: 0}
+  respawnManager: {fileID: 0}
 --- !u!95 &754269614285079369
 Animator:
   serializedVersion: 5
@@ -590,7 +598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d37c7e049e94d40bf41502e64ba4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 10
 --- !u!1 &9215104215257871748
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,7 +608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7131133474535973512}
   - component: {fileID: 3537243832446458229}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Health_Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,8 +633,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchoredPosition: {x: 0.77, y: 0}
+  m_SizeDelta: {x: 106.47, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3537243832446458229
 MonoBehaviour:

@@ -13,6 +13,9 @@ public class FillInTheBlankGame : MonoBehaviour
     public GameObject player;
     private Dichuyennv1 dichuyen1Script;
 
+    public GameObject inventory;
+    private Inventory inventoryScript;
+
     public GameObject rewardPanel; // Panel hiển thị phần thưởng
     public TextMeshProUGUI rewardText; // Văn bản trong panel phần thưởng
 
@@ -40,6 +43,7 @@ public class FillInTheBlankGame : MonoBehaviour
         nextButton.onClick.AddListener(ShowNextDialogue); // Nút "Tiếp theo"
 
         dichuyen1Script = player.GetComponent<Dichuyennv1>();
+        inventoryScript = inventory.GetComponent<Inventory>();
     }
 
     void Update()
@@ -56,7 +60,7 @@ public class FillInTheBlankGame : MonoBehaviour
         }
 
         // Kiểm tra nếu người chơi đã trả lời đúng 5 câu
-        if (correctAnswers == 5 && !isMiniGameActive)
+        if (correctAnswers == 3 && !isMiniGameActive)
         {
             GrantReward(); // Gọi hàm thưởng
             isMiniGameActive = true;
@@ -98,6 +102,10 @@ public class FillInTheBlankGame : MonoBehaviour
             {
                 dichuyen1Script.enabled = false;
             }
+            if (inventoryScript != null)
+            {
+                inventoryScript.enabled = false;
+            }
         }
 
         if (isMiniGameActive == true)
@@ -107,6 +115,7 @@ public class FillInTheBlankGame : MonoBehaviour
             dialogueText.text = ""; // Xóa văn bản đối thoại
             nextButton.gameObject.SetActive(false); // Ẩn nút "Tiếp theo"
             dichuyen1Script.enabled = true;
+            inventoryScript.enabled = true;
         }
     }
 
