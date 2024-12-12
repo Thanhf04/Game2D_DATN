@@ -5962,7 +5962,7 @@ Transform:
   m_GameObject: {fileID: 1446645212}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: -0.7, z: 0}
+  m_LocalPosition: {x: 6, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6009,7 +6009,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Sprite: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
+  m_Sprite: {fileID: -1183191301, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6396,11 +6396,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3656174017654903996, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5946091815892355241, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_text
-      value: "Titan L\u1EEDa"
+      value: "B\xF3ng ma"
       objectReference: {fileID: 0}
     - target: {fileID: 5992191445165054675, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6421,22 +6421,22 @@ PrefabInstance:
     - target: {fileID: 6030750110239347143, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
+      objectReference: {fileID: -1183191301, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -840.81
+      value: -853.5
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -99.82
+      value: -112.51
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -337.60077
+      value: -337.6
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 23.400002
+      value: 20.765
       objectReference: {fileID: 0}
     - target: {fileID: 9201616541321354330, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_text
@@ -6712,11 +6712,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3656174017654903996, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5946091815892355241, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_text
-      value: "Titan L\u1EEDa"
+      value: "B\xF3ng ma"
       objectReference: {fileID: 0}
     - target: {fileID: 5992191445165054675, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6737,22 +6737,22 @@ PrefabInstance:
     - target: {fileID: 6030750110239347143, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1774436861, guid: 43f7164be4c422b4fa59eeb76c0b4e1d, type: 3}
+      objectReference: {fileID: -1183191301, guid: 1914d95466e3d4341a618c35a56d5f82, type: 3}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -840.81
+      value: -858.15
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -99.82
+      value: -108.8
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -337.60077
+      value: -337.6
       objectReference: {fileID: 0}
     - target: {fileID: 9168350139763343709, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 23.400002
+      value: 25.7
       objectReference: {fileID: 0}
     - target: {fileID: 9201616541321354330, guid: 954e4ef5b4ba7ae42b78f4a3c5916075, type: 3}
       propertyPath: m_text
