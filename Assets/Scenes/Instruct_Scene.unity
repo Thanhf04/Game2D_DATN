@@ -3592,6 +3592,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: 1001786169
       objectReference: {fileID: 0}
+    - target: {fileID: 4544689521858434071, guid: 8afeedf601350934c86fec0beb2519a9, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5136669374345426054, guid: 8afeedf601350934c86fec0beb2519a9, type: 3}
       propertyPath: m_Name
       value: Idle_9

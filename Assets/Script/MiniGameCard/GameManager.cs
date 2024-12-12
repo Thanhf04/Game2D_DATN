@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(StartNotification());
 
         }
-
         return success;
     }
 
@@ -103,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void OpenMiniGame()
     {
-        PanelManager.Instance.OpenPanel(panel);
+        panel.SetActive(true);
         isMiniGame = true;
         button.SetActive(true);
         parentTextNotification.SetActive(true);
@@ -112,7 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseMiniGame()
     {
-        PanelManager.Instance.ClosePanel(panel);
+        panel.SetActive(false);
         ResetGame();
         button.SetActive(false);
         isMiniGame = false;

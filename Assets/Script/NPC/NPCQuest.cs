@@ -80,6 +80,7 @@ public class NPCQuest : MonoBehaviour
 
     void OnMouseDown()
     {
+        Debug.Log("thuan");
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
