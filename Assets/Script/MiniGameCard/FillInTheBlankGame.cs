@@ -43,7 +43,16 @@ public class FillInTheBlankGame : MonoBehaviour
         nextButton.onClick.AddListener(ShowNextDialogue); // Nút "Tiếp theo"
 
         dichuyen1Script = player.GetComponent<Dichuyennv1>();
-        inventoryScript = inventory.GetComponent<Inventory>();
+        Inventory inventoryComponent = FindObjectOfType<Inventory>();
+        if (inventoryComponent != null)
+        {
+            inventory = inventoryComponent.gameObject;
+            inventoryScript = inventoryComponent;
+        }
+        else
+        {
+            Debug.LogError("Inventory component not found in the scene!");
+        }
     }
 
     void Update()
@@ -80,7 +89,7 @@ public class FillInTheBlankGame : MonoBehaviour
         {
             dialoguePanel.SetActive(true);
             dialogueText.text =
-                "Chào bạn! Bạn muốn chơi trò chơi điền vào chỗ trống không? Nhấn xác nhận để bắt đầu.";
+                "Trước khi để bạn có thể đi đối đâu với con quỷ đó tôi phải kiểm tra sức mạnh, trí tuệ của bạn";
             isDialogueActive = true;
             nextButton.gameObject.SetActive(true); // Hiển thị nút "Tiếp theo"
         }
@@ -171,7 +180,7 @@ public class FillInTheBlankGame : MonoBehaviour
     void GrantReward()
     {
         // Hiển thị phần thưởng
-        rewardText.text = "Chúc mừng! Bạn đã trả lời đúng 5 câu!";
+        rewardText.text = "Chức mừng bạn đã vượt qua thử thách";
         rewardPanel.SetActive(true);
 
         // Ẩn các thành phần câu hỏi
@@ -195,8 +204,7 @@ public class FillInTheBlankGame : MonoBehaviour
     {
         // Hiển thị panel hội thoại NPC và gợi ý
         dialoguePanel.SetActive(true);
-        dialogueText.text =
-            "Chúc mừng! Để đi qua vùng đất mới, bạn cần tìm cây cầu đá ở phía Tây Nam.";
+        dialogueText.text = "Bạn cần phải vượt qua 1 thử thách nữa để có thể đi đến đó";
         nextButton.gameObject.SetActive(true); // Hiển thị nút "Tiếp theo"
     }
 
