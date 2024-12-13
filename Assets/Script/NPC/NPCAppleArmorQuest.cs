@@ -77,6 +77,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
         // Load quest status from Firebase when the game starts
         LoadQuestStatusFromFirebase();
+
     }
 
     // Load quest status from Firebase

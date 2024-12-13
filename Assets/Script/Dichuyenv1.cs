@@ -9,10 +9,14 @@ public class Dichuyennv1 : MonoBehaviour
 {
     #region Khai báo các biến
 
+    public Dichuyennv1 playerStats;
+    private FirebaseManager1 firebaseManager1;
+    private string username = ""; // Đây là ID người chơi, bạn có thể lấy từ hệ thống đăng nhập
     //nhiemvu
+    public PlayerStatsManager playerStatsManager1;
     private NPCQuest npcQuest;
-    private bool isQuest1Complete = false;
-    private bool isAppleQuestComplete = false;
+    public bool isQuest1Complete = false;
+    public bool isAppleQuestComplete = false;
     private NPCAppleArmorQuest npcapple;
     private bool isPlayerNearby = false;
     private GameObject currentChest;
@@ -126,9 +130,9 @@ public class Dichuyennv1 : MonoBehaviour
     public float skill2Cooldown = 3f;
     public float skill3Cooldown = 5f;
 
-    private float skill1Timer;
-    private float skill2Timer;
-    private float skill3Timer;
+    public float skill1Timer;
+    public float skill2Timer;
+    public float skill3Timer;
 
     public Image skill1Image;
     public Image skill2Image;
@@ -137,11 +141,19 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
+
+
     #endregion
     void Start()
     {
+        firebaseManager1 = FindObjectOfType<FirebaseManager1>();
+        playerStatsManager1 = FindObjectOfType<PlayerStatsManager>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+
+
+
         isRunning = false;
         isRoll = false;
         isJump = false;
@@ -186,11 +198,31 @@ public class Dichuyennv1 : MonoBehaviour
         ChisoPanel.SetActive(false);
         //ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
+
+
     }
 
+    private void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
+    {
+        if (playerData != null)
+        {
+            // Cập nhật thông tin người chơi vào script Dichuyennv1
+            firebaseManager1.UpdatePlayerStats(playerData, this);
+            //Debug.Log("Player data loaded and updated successfully.");
+        }
+        else
+        {
+            Debug.LogWarning("Player data not found or loading failed.");
+        }
+    }
     void Update()
     {
 
+        {
+            //Gọi hàm LoadPlayerData từ FirebaseManager1
+            firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
+
+        }
 
         if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
         {
@@ -203,7 +235,7 @@ public class Dichuyennv1 : MonoBehaviour
             rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
             return;
         }
-        float moveInput = Input.GetAxis("Horizontal");
+
 
         //if (Quest_3.isWolfQuest)
         //{
@@ -220,7 +252,7 @@ public class Dichuyennv1 : MonoBehaviour
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
             || OpenMiniGame_Input.isDialogue_MiniGameInput || Inventory.isInventoryOpen || NPCQuest.isQuest
-            || NPCAppleArmorQuest.isQuestAppleArmor || NPCQuestSkill2.isNPCQuestSkill2 || Boss_Health.isDeath)
+            || NPCAppleArmorQuest.isQuestAppleArmor || NPCQuestSkill2.isNPCQuestSkill2)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
@@ -229,6 +261,7 @@ public class Dichuyennv1 : MonoBehaviour
             return;
         }
         // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
+        float moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         isRunning = moveInput != 0;
         anim.SetBool("isRunning", isRunning);
@@ -271,31 +304,36 @@ public class Dichuyennv1 : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isRoll && !IsPointerOverUI() && isQuest1Complete) // Phải hoàn thành nhiệm vụ 1 mới tấn công
         {
             StartCoroutine(Attack());
+            string userName = PlayerPrefs.GetString("username", "");
+            firebaseManager1.SavePlayerData(this);
+
         }
-        //skill1
         if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.hasCompletedAppleQuest == true)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
+                //firebaseManager1.SavePlayerData(this);
+
             }
         }
-        //skill2
         if (Input.GetKeyDown(KeyCode.E) && NPCQuestSkill2.hasCompletedQuest == true)
         {
             if (skill2Timer <= 0 && currentMana >= 30)
             {
 
                 Skill2();
+                //firebaseManager1.SavePlayerData(this);
+
             }
         }
-        //skill3
         if (Input.GetKeyDown(KeyCode.R) && Quest_3.hasCompletedQuestInput == true)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
             {
 
                 Skill3();
+                //firebaseManager1.SavePlayerData(this);
             }
         }
 
@@ -369,6 +407,8 @@ public class Dichuyennv1 : MonoBehaviour
             ShootFireBullet();
             skill1Timer = skill1Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
+            //firebaseManager1.SavePlayerData(username, this);
+
         }
     }
 
@@ -534,12 +574,15 @@ public class Dichuyennv1 : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-
+        //firebaseManager1.SavePlayerData(username, this);
         if (currentHealth <= 0)
         {
             Die();
+            // Save data after decreasing mana
         }
+        firebaseManager1.SavePlayerData(this);
         healthSlider.value = currentHealth;
+
     }
 
     void Die()
@@ -604,6 +647,7 @@ public class Dichuyennv1 : MonoBehaviour
             healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
+            //firebaseManager1.SavePlayerData(this);
         }
         else
         {
@@ -620,6 +664,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
             upgradePoints++;
             UpdateStatsText();
+
         }
     }
 
@@ -632,6 +677,7 @@ public class Dichuyennv1 : MonoBehaviour
             manaSlider.maxValue = maxMana;
             upgradePoints--;
             UpdateStatsText();
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing mana
         }
         else
         {
@@ -648,6 +694,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
             upgradePoints++;
             UpdateStatsText();
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after decreasing mana
         }
     }
 
@@ -658,6 +705,7 @@ public class Dichuyennv1 : MonoBehaviour
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing damage
         }
         else
         {
@@ -667,15 +715,17 @@ public class Dichuyennv1 : MonoBehaviour
 
     void DecreaseDamage()
     {
-        if (damageAmount > 0 && upgradePoints < level + 5)
+        if (damageAmount > 1 && upgradePoints < level + 5)
         {
-            damageAmount -= 10;
+            damageAmount = Mathf.Max(10, damageAmount - 10); // Ensure damage doesn't go below 10
             upgradePoints++;
             UpdateStatsText();
+            //firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing damage
         }
     }
 
-    void UpdateStatsText()
+
+    public void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
@@ -706,12 +756,14 @@ public class Dichuyennv1 : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
-
+        //firebaseManager1.SavePlayerData(playerId, this);
         if (currentHealth <= 0)
         {
             Die();
+
         }
     }
+
 
     public void StartSound()
     {
@@ -766,8 +818,13 @@ public class Dichuyennv1 : MonoBehaviour
         if (npcQuest != null && !isQuest1Complete)
         {
             npcQuest.FindSword();
-            isQuest1Complete = true; // Đánh dấu nhiệm vụ đã hoàn thành
+            isQuest1Complete = true;
+            firebaseManager1.SavePlayerData(this);
+            //Debug.Log(this);
+            ////SaveQuestStatus();
+
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -911,4 +968,19 @@ public class Dichuyennv1 : MonoBehaviour
         tbaoQuizGamePanel.SetActive(false); // Ẩn panel thông báo
         OpenQuizGamePanel(); // Mở panel quiz game
     }
+
+    //public void LoadPlayerData(string playerID)
+    //{
+    //    if (firebaseManager1 == null)
+    //    {
+    //        Debug.LogError("FirebaseManager1 hoặc Dichuyennv1 chưa được khởi tạo.");
+    //        return;
+    //    }
+
+    //    // Gọi hàm LoadPlayerData từ FirebaseManager1
+    //    firebaseManager1.LoadPlayerData(playerID, this);
+    //}
 }
+
+
+//    currentHealth expCurrent isQuest1Complete isAppleQuestComplete

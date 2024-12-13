@@ -80,6 +80,10 @@ public class NPCQuest : MonoBehaviour
 
         uiCoin = FindObjectOfType<UI_Coin>();
     }
+    private void Update()
+    {
+
+    }
 
     void OnMouseDown()
     {
