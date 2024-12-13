@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+
     [SerializeField] private GameObject slotsHolder;
     [SerializeField] private ItemClass itemToAdd;
     [SerializeField] private ItemClass itemToRemove;
@@ -16,6 +17,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private SlotClass tempSlot;
 
     public Image itemCursor;
+    private FirebaseManager1 firebaseManager;
+
 
     [SerializeField] private GameObject[] slots;
     public bool isMoving;
@@ -34,10 +37,16 @@ public class InventoryManager : MonoBehaviour
     private bool isHealthOnCooldown;
     private bool isManaOnCooldown;
     Dichuyennv1 player1;
+    //FirebaseManager1 firebaseManager1;
+    //private string playerId = "";
 
     // Start is called before the first frame update
     void Start()
     {
+        firebaseManager = FindObjectOfType<FirebaseManager1>(); // Tìm đối tượng FirebaseManager1
+
+        // Tải dữ liệu người chơi từ Firebase
+        firebaseManager.LoadPlayerData(OnPlayerDataLoaded);
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -67,9 +76,34 @@ public class InventoryManager : MonoBehaviour
 
         RefreshUI();
     }
-
-    private void Update()
+    private void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
     {
+        if (playerData != null)
+        {
+            // Cập nhật các thông tin về sức khỏe, mana và các vật phẩm
+            player1.currentHealth = playerData.currentHealth;
+            player1.currentMana = playerData.currentMana;
+            player1.maxHealth = playerData.maxHealth;
+            player1.maxMana = playerData.maxMana;
+
+            // Giả sử bạn có cách lưu trữ các vật phẩm từ PlayerData vào kho (items).
+            // Cập nhật dữ liệu các vật phẩm
+            // Ví dụ:
+            // AddItem(item, quantity); (Đảm bảo bạn có phương thức để thêm item từ PlayerData)
+        }
+        else
+        {
+            Debug.LogWarning("Player data not found or loading failed.");
+        }
+    } 
+        private void Update()
+    {
+
+        {
+            //Gọi hàm LoadPlayerData từ FirebaseManager1
+            //firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
+
+        }
         if (player1 == null)
         {
             player1 = FindObjectOfType<Dichuyennv1>();
@@ -340,13 +374,14 @@ public class InventoryManager : MonoBehaviour
                 player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
                 healthSlider.value = player1.currentHealth;
                 RemoveItem(item, 1);
-
+                 // Save data after decreasing mana
                 FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+                firebaseManager.SavePlayerData(player1);
                 if (firebaseInventory != null)
                 {
                     firebaseInventory.RemoveItemFromFirebase(item, 1);
                 }
-
+                
                 UpdateButtonQuantity(Btn_Health, item);
                 StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
@@ -374,7 +409,7 @@ public class InventoryManager : MonoBehaviour
                 manaSlider.value = player1.currentMana;
 
                 RemoveItem(item, 1);
-
+                firebaseManager.SavePlayerData(player1);
                 FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
                 {

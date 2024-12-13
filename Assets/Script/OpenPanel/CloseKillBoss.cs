@@ -6,5 +6,6 @@ public class CloseKillBoss : MonoBehaviour
     public void Close()
     {
         PanelKillBoss.SetActive(false);
+        Boss_Health.isDeath = false;
     }
 }

@@ -14,7 +14,7 @@ public class NPCQuest : MonoBehaviour
     public Text completionText; // Text để hiển thị thông báo
     public UI_Coin uiCoin;
     public static bool isQuest = false;
-    private NPCQuestFirebase npcQuestFirebase;
+
     private string initialQuestText =
         "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
     private string secondQuestText = "Nhiệm vụ đầu tiên của bạn là tìm lại thanh kiếm đã mất.";
@@ -36,11 +36,11 @@ public class NPCQuest : MonoBehaviour
 
     private int swordCount = 0;
     private int monsterKillCount = 0;
+    private NPCQuestFirebase npcQuestFirebase;
+
 
     void Start()
-
     {
-        npcQuestFirebase = FindObjectOfType<NPCQuestFirebase>();
         if (questPanel != null)
         {
             questPanel.SetActive(false);
@@ -80,26 +80,28 @@ public class NPCQuest : MonoBehaviour
 
         uiCoin = FindObjectOfType<UI_Coin>();
     }
+    private void Update()
+    {
+
+    }
 
     void OnMouseDown()
     {
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
+            isQuest = true;
 
-            if (npcQuestFirebase != null)
+            if (swordCount == 1 && !hasShownCongratulation)
             {
-                if (npcQuestFirebase.GetSwordCount() == 1 && !hasShownCongratulation)
-                {
-                    questText.text = congratulationText;
-                    hasShownCongratulation = true;
-                    isQuestStarted = false;
-                }
-                else if (npcQuestFirebase.GetSwordCount() == 0)
-                {
-                    questText.text = initialQuestText;
-                    isPanelVisible = true;
-                }
+                questText.text = congratulationText;
+                hasShownCongratulation = true;
+                isQuestStarted = false;
+            }
+            else if (swordCount == 0)
+            {
+                questText.text = initialQuestText;
+                isPanelVisible = true;
             }
         }
     }
@@ -108,10 +110,6 @@ public class NPCQuest : MonoBehaviour
     {
         if (questPanel != null)
         {
-            int swordCount = npcQuestFirebase.GetSwordCount();
-            int monsterKillCount = npcQuestFirebase.GetMonsterKillCount();
-
-            // Kiểm tra trạng thái ban đầu, chưa bắt đầu nhiệm vụ và chưa tìm kiếm kiếm
             if (!isQuestStarted && swordCount == 0)
             {
                 questText.text = secondQuestText;
@@ -124,7 +122,6 @@ public class NPCQuest : MonoBehaviour
                 // Ẩn thông báo khi bắt đầu nhiệm vụ mới
                 HideCompletionMessage();
             }
-            // Trường hợp tiếp theo khi đã tìm kiếm kiếm và cần giết quái
             else if (swordCount == 1 && monsterKillCount < 5)
             {
                 questText.text = thirdQuestText;
@@ -137,7 +134,6 @@ public class NPCQuest : MonoBehaviour
                 // Ẩn thông báo khi tiếp tục nhiệm vụ
                 HideCompletionMessage();
             }
-            // Trường hợp hoàn thành nhiệm vụ và nhận phần thưởng
             else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
             {
                 questText.text = rewardCompletionText;
@@ -148,38 +144,18 @@ public class NPCQuest : MonoBehaviour
                 }
                 hasReceivedReward = true;
                 monsterCountText.gameObject.SetActive(false);
-
-                // Lưu trạng thái nhiệm vụ vào Firebase khi nhiệm vụ hoàn thành
-                npcQuestFirebase.SaveQuestStatus();
             }
-            // Trường hợp sau khi đã nhận thưởng và cần tiếp tục nhiệm vụ
             else if (hasReceivedReward && !hasShownContinuareText)
             {
                 questText.text = continuareText;
                 NVtimThoRenText.gameObject.SetActive(true); // Hiển thị text
                 NVtimThoRenText.text = continuareText;
                 hasShownContinuareText = true;
-
                 // Bắt đầu coroutine để ẩn text sau 10 giây
                 StartCoroutine(HideContinuareTextAfterDelay());
-
-                // Lưu trạng thái nhiệm vụ hoàn thành vào Firebase
-                npcQuestFirebase.SaveQuestStatus();
-            }
-
-            // Đảm bảo rằng nút "Continue" được kích hoạt khi cần thiết (sau khi hoàn thành nhiệm vụ và nhận phần thưởng)
-            if (hasReceivedReward)
-            {
-                continueButton.interactable = true;  // Giả sử bạn có một Button gọi là continueButton
-            }
-            else
-            {
-                continueButton.interactable = false; // Tắt nút nếu chưa hoàn thành nhiệm vụ
             }
         }
     }
-
-
 
     private void OnConfirm()
     {
@@ -214,7 +190,6 @@ public class NPCQuest : MonoBehaviour
 
     public void KillMonster()
     {
-        npcQuestFirebase.SetMonsterKillCount(npcQuestFirebase.GetMonsterKillCount() + 1);
         monsterKillCount++;
         monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
 
@@ -225,7 +200,6 @@ public class NPCQuest : MonoBehaviour
             // Hiển thị thông báo hoàn thành nhiệm vụ
             // StartCoroutine(ShowCompletionMessage("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"));
             ShowCompletionMessage("Báo cáo cho Trưởng làng");
-            npcQuestFirebase.SaveQuestStatus();
         }
     }
 
