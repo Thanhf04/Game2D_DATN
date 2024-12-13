@@ -220,7 +220,7 @@ public class Dichuyennv1 : MonoBehaviour
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
             || OpenMiniGame_Input.isDialogue_MiniGameInput || Inventory.isInventoryOpen || NPCQuest.isQuest
-            || NPCAppleArmorQuest.isQuestAppleArmor || NPCQuestSkill2.isNPCQuestSkill2)
+            || NPCAppleArmorQuest.isQuestAppleArmor || NPCQuestSkill2.isNPCQuestSkill2 || Boss_Health.isDeath)
         {
             isRunning = false;
             anim.SetBool("isRunning", false);
@@ -272,6 +272,7 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Attack());
         }
+        //skill1
         if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.hasCompletedAppleQuest == true)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
@@ -279,6 +280,7 @@ public class Dichuyennv1 : MonoBehaviour
                 Skill1();
             }
         }
+        //skill2
         if (Input.GetKeyDown(KeyCode.E) && NPCQuestSkill2.hasCompletedQuest == true)
         {
             if (skill2Timer <= 0 && currentMana >= 30)
@@ -287,6 +289,7 @@ public class Dichuyennv1 : MonoBehaviour
                 Skill2();
             }
         }
+        //skill3
         if (Input.GetKeyDown(KeyCode.R) && Quest_3.hasCompletedQuestInput == true)
         {
             if (skill3Timer <= 0 && currentMana >= 30)
