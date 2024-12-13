@@ -48723,16 +48723,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: username
+      value: giap123
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: quizGamePanel
       value: 
       objectReference: {fileID: 834312308}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: isQuest1Complete
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: tbaoQuizGamePanel
       value: 
       objectReference: {fileID: 1778879010}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: isAppleQuestComplete
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6073535254716935610, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6435450260794138107, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

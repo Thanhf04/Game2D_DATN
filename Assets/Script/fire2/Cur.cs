@@ -11,46 +11,97 @@ public class FirebaseManager1 : MonoBehaviour
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            reference = FirebaseDatabase.DefaultInstance.RootReference;
-            Debug.Log("Firebase Initialized");
+            if (task.Result == Firebase.DependencyStatus.Available)
+            {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                reference = FirebaseDatabase.DefaultInstance.RootReference;
+                Debug.Log("Firebase Initialized");
+            }
+            else
+            {
+                Debug.LogError("Firebase initialization failed: " + task.Result);
+            }
         });
     }
 
     // Lưu dữ liệu người chơi lên Firebase
-    public void SavePlayerData(string playerId, Dichuyennv1 playerStats)
+    public void SavePlayerData(string username, Dichuyennv1 playerStats)
     {
+        if (playerStats == null)
+        {
+            Debug.LogError("playerStats is null");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(username))
+        {
+            Debug.LogError("username is null or empty");
+            return;
+        }
+
         // Tạo đối tượng PlayerData bao gồm các trạng thái nhiệm vụ và kỹ năng
         PlayerData playerData = new PlayerData(playerStats);
         string json = JsonUtility.ToJson(playerData);
-        reference.Child("players").Child(playerId).SetRawJsonValueAsync(json);
-        Debug.Log("Player data saved to Firebase");
+
+        // Kiểm tra xem reference có null không
+        if (reference != null)
+        {
+            reference.Child("players").Child(username).SetRawJsonValueAsync(json);
+            Debug.Log("Player data saved to Firebase");
+        }
+        else
+        {
+            Debug.LogError("Firebase reference is not initialized.");
+        }
     }
 
     // Tải dữ liệu người chơi từ Firebase
-    public void LoadPlayerData(string playerId, Dichuyennv1 playerStats)
+    public void LoadPlayerData(string username, Dichuyennv1 playerStats)
     {
-        reference.Child("players").Child(playerId).GetValueAsync().ContinueWithOnMainThread(task =>
+        if (string.IsNullOrEmpty(username))
         {
-            if (task.IsCompleted)
+            Debug.LogError("username is null or empty");
+            return;
+        }
+
+        if (reference != null)
+        {
+            reference.Child("players").Child(username).GetValueAsync().ContinueWithOnMainThread(task =>
             {
-                DataSnapshot snapshot = task.Result;
-                if (snapshot.Exists)
+                if (task.IsCompleted)
                 {
-                    PlayerData playerData = JsonUtility.FromJson<PlayerData>(snapshot.GetRawJsonValue());
-                    UpdatePlayerStats(playerData, playerStats);
+                    DataSnapshot snapshot = task.Result;
+                    if (snapshot.Exists)
+                    {
+                        PlayerData playerData = JsonUtility.FromJson<PlayerData>(snapshot.GetRawJsonValue());
+                        UpdatePlayerStats(playerData, playerStats);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Player data not found in Firebase");
+                    }
                 }
                 else
                 {
-                    Debug.LogWarning("Player data not found in Firebase");
+                    Debug.LogError("Failed to load player data: " + task.Exception);
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            Debug.LogError("Firebase reference is not initialized.");
+        }
     }
 
     // Cập nhật dữ liệu người chơi trong game sau khi tải từ Firebase
     private void UpdatePlayerStats(PlayerData playerData, Dichuyennv1 playerStats)
     {
+        if (playerStats == null)
+        {
+            Debug.LogError("playerStats is null!");
+            return;
+        }
+
         // Cập nhật các thông tin cơ bản của người chơi
         playerStats.currentHealth = playerData.currentHealth;
         playerStats.currentMana = playerData.currentMana;

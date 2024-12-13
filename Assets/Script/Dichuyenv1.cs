@@ -10,7 +10,7 @@ public class Dichuyennv1 : MonoBehaviour
     //#region Khai báo các biến
     
     private FirebaseManager1 firebaseManager1;
-    private string playerId = "player123"; // Đây là ID người chơi, bạn có thể lấy từ hệ thống đăng nhập
+    public string username;  // Thêm biến username
     //nhiemvu
     private NPCQuest npcQuest;
     public bool isQuest1Complete = false;
@@ -537,6 +537,8 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            //firebaseManager1.SavePlayerData(playerId, this);
+
         }
         healthSlider.value = currentHealth;
     }
@@ -603,7 +605,7 @@ public class Dichuyennv1 : MonoBehaviour
             healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this); // Save data after updating health
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after updating health
         }
         else
         {
@@ -620,7 +622,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
             upgradePoints++;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing health
+            //firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing health
         }
     }
 
@@ -633,7 +635,7 @@ public class Dichuyennv1 : MonoBehaviour
             manaSlider.maxValue = maxMana;
             upgradePoints--;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing mana
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing mana
         }
         else
         {
@@ -650,7 +652,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
             upgradePoints++;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this); // Save data after decreasing mana
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after decreasing mana
         }
     }
 
@@ -661,7 +663,7 @@ public class Dichuyennv1 : MonoBehaviour
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing damage
+            //firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing damage
         }
         else
         {
@@ -676,7 +678,7 @@ public class Dichuyennv1 : MonoBehaviour
             damageAmount = Mathf.Max(10, damageAmount - 10); // Ensure damage doesn't go below 10
             upgradePoints++;
             UpdateStatsText();
-            firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing damage
+            //firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing damage
         }
     }
 
@@ -708,18 +710,39 @@ public class Dichuyennv1 : MonoBehaviour
         expSlider.maxValue = expMax;
     }
 
-    public void TakeDamageTrap(int damage)
+    void TakeDamageTrap(int damage)
     {
+        // Kiểm tra xem firebaseManager1 có null không
+        if (firebaseManager1 == null)
+        {
+            Debug.LogError("firebaseManager1 is not initialized!");
+            return;
+        }
+
+        // Kiểm tra xem username có null không
+        if (string.IsNullOrEmpty(username))
+        {
+            Debug.LogError("username is null or empty!");
+            return;
+        }
+
+        // Giảm máu
         currentHealth -= damage;
         Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
 
+        // Kiểm tra chết hay không
         if (currentHealth <= 0)
         {
             Die();
-            firebaseManager1.SavePlayerData(playerId, this);
+            firebaseManager1.SavePlayerData(username, this); // Lưu dữ liệu khi chết
         }
-}
-       
+        else
+        {
+            firebaseManager1.SavePlayerData(username, this); // Lưu dữ liệu nếu không chết
+        }
+    }
+
+
 
     public void StartSound()
     {
