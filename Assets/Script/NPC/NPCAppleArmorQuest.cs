@@ -129,10 +129,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     // Handle continue button click
+    // Handle continue button click
     private void OnContinue()
     {
         // Load latest data from Firebase before continuing
-        // LoadQuestStatusFromFirebase();
+        LoadQuestStatusFromFirebase();
 
         // Debug logs to check if data is updated correctly
         Debug.Log("Apple Count from Firebase: " + appleCount);
@@ -165,6 +166,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             armorCountText.gameObject.SetActive(false);
         }
     }
+
 
     // Handle confirm button click
     private void OnConfirm()

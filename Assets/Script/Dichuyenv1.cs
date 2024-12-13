@@ -7,12 +7,14 @@ using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
 {
-    #region Khai báo các biến
-
+    //#region Khai báo các biến
+    
+    private FirebaseManager1 firebaseManager1;
+    private string playerId = "player123"; // Đây là ID người chơi, bạn có thể lấy từ hệ thống đăng nhập
     //nhiemvu
     private NPCQuest npcQuest;
-    private bool isQuest1Complete = false;
-    private bool isAppleQuestComplete = false;
+    public bool isQuest1Complete = false;
+    public bool isAppleQuestComplete = false;
     private NPCAppleArmorQuest npcapple;
     private bool isPlayerNearby = false;
     private GameObject currentChest;
@@ -126,9 +128,9 @@ public class Dichuyennv1 : MonoBehaviour
     public float skill2Cooldown = 3f;
     public float skill3Cooldown = 5f;
 
-    private float skill1Timer;
-    private float skill2Timer;
-    private float skill3Timer;
+    public float skill1Timer;
+    public float skill2Timer;
+    public float skill3Timer;
 
     public Image skill1Image;
     public Image skill2Image;
@@ -137,7 +139,7 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill1CooldownText;
     public Text skill2CooldownText;
     public Text skill3CooldownText;
-    #endregion
+    //#endregion
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -601,6 +603,7 @@ public class Dichuyennv1 : MonoBehaviour
             healthSlider.maxValue = maxHealth;
             upgradePoints--;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this); // Save data after updating health
         }
         else
         {
@@ -617,6 +620,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
             upgradePoints++;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing health
         }
     }
 
@@ -629,6 +633,7 @@ public class Dichuyennv1 : MonoBehaviour
             manaSlider.maxValue = maxMana;
             upgradePoints--;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing mana
         }
         else
         {
@@ -645,6 +650,7 @@ public class Dichuyennv1 : MonoBehaviour
             currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
             upgradePoints++;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this); // Save data after decreasing mana
         }
     }
 
@@ -655,6 +661,7 @@ public class Dichuyennv1 : MonoBehaviour
             damageAmount += 10;
             upgradePoints--;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this); // Save data after increasing damage
         }
         else
         {
@@ -664,15 +671,17 @@ public class Dichuyennv1 : MonoBehaviour
 
     void DecreaseDamage()
     {
-        if (damageAmount > 0 && upgradePoints < level + 5)
+        if (damageAmount > 1 && upgradePoints < level + 5)
         {
-            damageAmount -= 10;
+            damageAmount = Mathf.Max(10, damageAmount - 10); // Ensure damage doesn't go below 10
             upgradePoints++;
             UpdateStatsText();
+            firebaseManager1.SavePlayerData(playerId, this);// Save data after decreasing damage
         }
     }
 
-    void UpdateStatsText()
+
+    public void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
@@ -707,8 +716,10 @@ public class Dichuyennv1 : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            firebaseManager1.SavePlayerData(playerId, this);
         }
-    }
+}
+       
 
     public void StartSound()
     {
@@ -764,7 +775,10 @@ public class Dichuyennv1 : MonoBehaviour
         {
             npcQuest.FindSword();
             isQuest1Complete = true; // Đánh dấu nhiệm vụ đã hoàn thành
+            //SaveQuestStatus();
+
         }
+     
     }
 
     private void OnTriggerEnter2D(Collider2D other)
