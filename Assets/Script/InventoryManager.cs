@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+
     [SerializeField] private GameObject slotsHolder;
     [SerializeField] private ItemClass itemToAdd;
     [SerializeField] private ItemClass itemToRemove;
@@ -34,6 +35,8 @@ public class InventoryManager : MonoBehaviour
     private bool isHealthOnCooldown;
     private bool isManaOnCooldown;
     Dichuyennv1 player1;
+    FirebaseManager1 firebaseManager1;
+    private string playerId = "";
 
     // Start is called before the first frame update
     void Start()
@@ -340,7 +343,7 @@ public class InventoryManager : MonoBehaviour
                 player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
                 healthSlider.value = player1.currentHealth;
                 RemoveItem(item, 1);
-
+                //firebaseManager1.SavePlayerData(playerId, this); // Save data after decreasing mana
                 FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
                 {

@@ -36,6 +36,8 @@ public class NPCQuest : MonoBehaviour
 
     private int swordCount = 0;
     private int monsterKillCount = 0;
+    private NPCQuestFirebase npcQuestFirebase;
+
 
     void Start()
     {
@@ -77,6 +79,10 @@ public class NPCQuest : MonoBehaviour
         }
 
         uiCoin = FindObjectOfType<UI_Coin>();
+    }
+    private void Update()
+    {
+
     }
 
     void OnMouseDown()

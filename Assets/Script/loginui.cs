@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Firebase;
+﻿using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using TMPro;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoginUI : MonoBehaviour
 {
@@ -212,10 +212,10 @@ public class LoginUI : MonoBehaviour
             SceneManager.LoadScene(sceneName); // Tải lại scene mà người chơi đã lưu trước đó
         }
         else
-        {   
+        {
             Debug.LogWarning("Không tìm thấy scene cho người chơi: " + username);
             // Nếu không tìm thấy scene đã lưu, có thể chuyển đến scene mặc định
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(3);
         }
     }
 

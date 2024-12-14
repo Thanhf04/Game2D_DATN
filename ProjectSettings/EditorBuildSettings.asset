@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneBoss.unity
     guid: 2d62d779e99ca59408f498cd9a15523a
+  - enabled: 1
+    path: Assets/Scenes/EndTimeline.unity
+    guid: c32fadb2616ed8a479efb3db2e91f0df
   m_configObjects: {}
