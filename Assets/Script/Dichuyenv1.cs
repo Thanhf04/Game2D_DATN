@@ -150,10 +150,6 @@ public class Dichuyennv1 : MonoBehaviour
         playerStatsManager1 = FindObjectOfType<PlayerStatsManager>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-
-
-
-
         isRunning = false;
         isRoll = false;
         isJump = false;
@@ -201,7 +197,6 @@ public class Dichuyennv1 : MonoBehaviour
 
 
     }
-
     private void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
     {
         if (playerData != null)
@@ -220,7 +215,7 @@ public class Dichuyennv1 : MonoBehaviour
 
         {
             //Gọi hàm LoadPlayerData từ FirebaseManager1
-            firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
+            // firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
 
         }
 
@@ -235,19 +230,6 @@ public class Dichuyennv1 : MonoBehaviour
             rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
             return;
         }
-
-
-        //if (Quest_3.isWolfQuest)
-        //{
-        //    isJump = false;
-        //    anim.SetBool("isJump", false);
-        //    Debug.Log("Khóa");
-        //    return;
-
-        //}
-
-
-
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
@@ -556,8 +538,6 @@ public class Dichuyennv1 : MonoBehaviour
             }
             playAttack_Fire3.Play();
             rbFireHand.gravityScale = 1f;
-            // Vector2 fireDirection = new Vector2(transform.localScale.x, -1);
-            // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
             StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana;
@@ -571,31 +551,42 @@ public class Dichuyennv1 : MonoBehaviour
         Destroy(fireHand);
     }
 
-    public void TakeDamage(int amount)
+   public void TakeDamage(int amount)
+{
+    currentHealth -= amount;
+
+    if (currentHealth <= 0)
     {
-        currentHealth -= amount;
-        //firebaseManager1.SavePlayerData(username, this);
-        if (currentHealth <= 0)
-        {
-            Die();
-            // Save data after decreasing mana
-        }
-        firebaseManager1.SavePlayerData(this);
+        Die();
+    }
+    else
+    {
         healthSlider.value = currentHealth;
-
+        firebaseManager1.SavePlayerData(this);
     }
-
-    void Die()
+}
+void Die()
+{
+    Debug.Log("Player is dead");
+    Animator animator = GetComponent<Animator>();
+    if (animator != null)
     {
-        Debug.Log("Player is dead");
-        ShowGameOverPanel();
+        animator.SetBool("isDie", true);
     }
+    StartCoroutine(ShowGameOverPanelAfterDelay(2f));
+}
 
-    void ShowGameOverPanel()
-    {
-        gameOverPanel.SetActive(true);
-        Time.timeScale = 0f; // Tạm dừng game
-    }
+IEnumerator ShowGameOverPanelAfterDelay(float delay)
+{
+    yield return new WaitForSeconds(delay);
+    ShowGameOverPanel();
+}
+
+void ShowGameOverPanel()
+{
+    gameOverPanel.SetActive(true);
+    Time.timeScale = 0f; // Tạm dừng game
+}
 
     void OnTryAgain()
     {
@@ -981,6 +972,4 @@ public class Dichuyennv1 : MonoBehaviour
     //    firebaseManager1.LoadPlayerData(playerID, this);
     //}
 }
-
-
 //    currentHealth expCurrent isQuest1Complete isAppleQuestComplete
