@@ -84,6 +84,7 @@ public class Quest_3 : MonoBehaviour
 
     void OnMouseDown()
     {
+
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
@@ -130,7 +131,6 @@ public class Quest_3 : MonoBehaviour
 
         else if (dialogueStep == 3)
         {
-            Debug.Log("sói");
             currentCardText.gameObject.SetActive(false);
             GOwolf.gameObject.SetActive(true);
             questWolf.gameObject.SetActive(true);
@@ -219,24 +219,6 @@ public class Quest_3 : MonoBehaviour
             questInput.color = Color.yellow;
             hasCompletedQuestInput = true;
             Destroy(imageSkill3, 3f);
-        }
-    }
-    private void ShowCompletionText(string message)
-    {
-        if (completionText != null)
-        {
-            completionText.text = message;
-            completionText.gameObject.SetActive(true); // Hiển thị Text
-
-            // Tắt Text sau 2 giây
-            Invoke(nameof(HideCompletionText), 2f);
-        }
-    }
-    private void HideCompletionText()
-    {
-        if (completionText != null)
-        {
-            completionText.gameObject.SetActive(false);
         }
     }
 }

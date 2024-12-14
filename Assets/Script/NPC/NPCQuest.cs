@@ -13,6 +13,7 @@ public class NPCQuest : MonoBehaviour
     public Text NVtimThoRenText;
     public Text completionText; // Text để hiển thị thông báo
     public UI_Coin uiCoin;
+    public static bool isQuest = false;
 
     private string initialQuestText =
         "Xin chào chàng hiệp sĩ, bạn là người được chọn để giải cứu vùng đất này.";
@@ -83,6 +84,7 @@ public class NPCQuest : MonoBehaviour
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
+            isQuest = true;
 
             if (swordCount == 1 && !hasShownCongratulation)
             {
@@ -98,71 +100,72 @@ public class NPCQuest : MonoBehaviour
         }
     }
 
- private void OnContinue()
-{
-    if (questPanel != null)
+    private void OnContinue()
     {
-        if (!isQuestStarted && swordCount == 0)
+        if (questPanel != null)
         {
-            questText.text = secondQuestText;
-            isQuestStarted = true;
-
-            swordCountText.gameObject.SetActive(true);
-            swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
-            swordCountText.color = Color.white;
-
-            // Ẩn thông báo khi bắt đầu nhiệm vụ mới
-            HideCompletionMessage();
-        }
-        else if (swordCount == 1 && monsterKillCount < 5)
-        {
-            questText.text = thirdQuestText;
-
-            swordCountText.gameObject.SetActive(false);
-            monsterCountText.gameObject.SetActive(true);
-            monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
-            monsterCountText.color = Color.white;
-
-            // Ẩn thông báo khi tiếp tục nhiệm vụ
-            HideCompletionMessage();
-        }
-        else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
-        {
-            questText.text = rewardCompletionText;
-
-            if (uiCoin != null)
+            if (!isQuestStarted && swordCount == 0)
             {
-                uiCoin.AddCoins(50);
+                questText.text = secondQuestText;
+                isQuestStarted = true;
+
+                swordCountText.gameObject.SetActive(true);
+                swordCountText.text = "Số kiếm đã tìm được: " + swordCount + "/1";
+                swordCountText.color = Color.white;
+
+                // Ẩn thông báo khi bắt đầu nhiệm vụ mới
+                HideCompletionMessage();
             }
-            hasReceivedReward = true;
-            monsterCountText.gameObject.SetActive(false);
-        }
-        else if (hasReceivedReward && !hasShownContinuareText)
-        {
-            questText.text = continuareText;
-            NVtimThoRenText.gameObject.SetActive(true); // Hiển thị text
-            NVtimThoRenText.text = continuareText;
-            hasShownContinuareText = true;
-            // Bắt đầu coroutine để ẩn text sau 10 giây
-            StartCoroutine(HideContinuareTextAfterDelay());
+            else if (swordCount == 1 && monsterKillCount < 5)
+            {
+                questText.text = thirdQuestText;
+
+                swordCountText.gameObject.SetActive(false);
+                monsterCountText.gameObject.SetActive(true);
+                monsterCountText.text = "Số quái cần giết: " + monsterKillCount + "/5";
+                monsterCountText.color = Color.white;
+
+                // Ẩn thông báo khi tiếp tục nhiệm vụ
+                HideCompletionMessage();
+            }
+            else if (swordCount == 1 && monsterKillCount >= 5 && !hasReceivedReward)
+            {
+                questText.text = rewardCompletionText;
+
+                if (uiCoin != null)
+                {
+                    uiCoin.AddCoins(50);
+                }
+                hasReceivedReward = true;
+                monsterCountText.gameObject.SetActive(false);
+            }
+            else if (hasReceivedReward && !hasShownContinuareText)
+            {
+                questText.text = continuareText;
+                NVtimThoRenText.gameObject.SetActive(true); // Hiển thị text
+                NVtimThoRenText.text = continuareText;
+                hasShownContinuareText = true;
+                // Bắt đầu coroutine để ẩn text sau 10 giây
+                StartCoroutine(HideContinuareTextAfterDelay());
+            }
         }
     }
-}
 
     private void OnConfirm()
-{
-    if (questPanel != null)
     {
-        questPanel.SetActive(false);
-        isPanelVisible = false;
-
-        // Ẩn thông báo nếu đã hoàn thành nhiệm vụ
-        if (hasReceivedReward)
+        if (questPanel != null)
         {
-            HideCompletionMessage();
+            questPanel.SetActive(false);
+            isPanelVisible = false;
+            isQuest = false;
+
+            // Ẩn thông báo nếu đã hoàn thành nhiệm vụ
+            if (hasReceivedReward)
+            {
+                HideCompletionMessage();
+            }
         }
     }
-}
 
     public void FindSword()
     {
@@ -195,28 +198,29 @@ public class NPCQuest : MonoBehaviour
     }
 
     private void ShowCompletionMessage(string message)
-{
-    if (completionText != null)
     {
-        completionText.text = message;
-        completionText.gameObject.SetActive(true);
+        if (completionText != null)
+        {
+            completionText.text = message;
+            completionText.color = Color.yellow;
+            completionText.gameObject.SetActive(true);
+        }
     }
-}
 
-private void HideCompletionMessage()
-{
-    if (completionText != null)
+    private void HideCompletionMessage()
     {
-        completionText.gameObject.SetActive(false);
+        if (completionText != null)
+        {
+            completionText.gameObject.SetActive(false);
+        }
     }
-}
-private IEnumerator HideContinuareTextAfterDelay()
-{
-    yield return new WaitForSeconds(10f); // Đợi 10 giây
-    if (NVtimThoRenText != null)
+    private IEnumerator HideContinuareTextAfterDelay()
     {
-        NVtimThoRenText.gameObject.SetActive(false); // Ẩn text
+        yield return new WaitForSeconds(10f); // Đợi 10 giây
+        if (NVtimThoRenText != null)
+        {
+            NVtimThoRenText.gameObject.SetActive(false); // Ẩn text
+        }
     }
-}
 
 }
