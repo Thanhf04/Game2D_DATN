@@ -21,7 +21,7 @@ public class SliderMinMaxData : MonoBehaviour
 
         if (string.IsNullOrEmpty(username))
         {
-            Debug.LogError("Username is empty. Cannot load slider data.");
+            Debug.Log("Username is empty. Cannot load slider data.");
             return;
         }
 
@@ -54,7 +54,7 @@ public class SliderMinMaxData : MonoBehaviour
     {
         if (string.IsNullOrEmpty(username) || databaseReference == null)
         {
-            Debug.LogError("SaveSliderMinMax failed: Username is empty or Firebase is not initialized.");
+            Debug.Log("SaveSliderMinMax failed: Username is empty or Firebase is not initialized.");
             return;
         }
 

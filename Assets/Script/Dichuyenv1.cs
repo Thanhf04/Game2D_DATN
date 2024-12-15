@@ -206,7 +206,7 @@ public class Dichuyennv1 : MonoBehaviour
     //    firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
     //}
     private bool isDataLoaded = false;
-    private void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
+    public void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
     {
         if (playerData != null)
         {
@@ -1050,4 +1050,3 @@ public class Dichuyennv1 : MonoBehaviour
 
 
 //    currentHealth expCurrent isQuest1Complete isAppleQuestComplete
-

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class QuizGame : MonoBehaviour
@@ -28,7 +27,7 @@ public class QuizGame : MonoBehaviour
         saveloadgame = FindObjectOfType<Saveloadgame>();
         if (saveloadgame == null)
         {
-            Debug.LogError("Saveloadgame không được tìm thấy trong scene!");
+            Debug.Log("Saveloadgame không được tìm thấy trong scene!");
         }
         quizPanel.SetActive(false);
         messagePanel.SetActive(false);
