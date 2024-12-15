@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
+using UnityEngine.SceneManagement;  // Để quản lý việc chuyển cảnh
 using UnityEngine.UI;
 
 public class PlayerDataTest : MonoBehaviour
@@ -19,7 +19,6 @@ public class PlayerDataTest : MonoBehaviour
     public Slider expSlider;     // Slider cho exp
     public GameObject player;    // Nhân vật trong game
 
-    // Các biến public cho phép bạn thay đổi giá trị Gold và Diamond từ Unity Editor
     public int gold = 0;
     public int diamond = 0;
 
@@ -27,33 +26,31 @@ public class PlayerDataTest : MonoBehaviour
     private string username;
     private Vector3 lastSavedPosition;
 
-    // Kiểm tra xem player có được gán chưa trước khi truy cập
     private async void Start()
     {
         // Kiểm tra và khởi tạo Firebase
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus == DependencyStatus.Available)
         {
-            // Khởi tạo reference của Firebase Database sau khi Firebase đã sẵn sàng
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         }
         else
         {
             Debug.LogError("Firebase không thể khởi tạo: " + dependencyStatus);
-            return;  // Dừng lại nếu Firebase không khởi tạo được
+            return;
         }
 
         // Lấy username từ PlayerPrefs
         username = PlayerPrefs.GetString("username", "");
 
-        // Kiểm tra username có hợp lệ không
+        // Kiểm tra username hợp lệ
         if (string.IsNullOrEmpty(username))
         {
             Debug.LogError("Username is empty. Cannot load player data.");
             return;
         }
 
-        // Kiểm tra xem player có null không trước khi thao tác
+        // Kiểm tra player
         if (player == null)
         {
             Debug.LogError("Player GameObject is null. Cannot track position.");
@@ -65,32 +62,15 @@ public class PlayerDataTest : MonoBehaviour
         if (energySlider != null) energySlider.onValueChanged.AddListener(UpdateEnergy);
         if (expSlider != null) expSlider.onValueChanged.AddListener(UpdateExp);
 
-        // Kiểm tra nếu databaseReference đã được khởi tạo và player không phải là null
-        if (databaseReference != null && !string.IsNullOrEmpty(username))
-        {
-            // Chờ đợi dữ liệu người chơi được tải từ Firebase
-            await LoadPlayerDataFromFirebase(username);
-
-            // Tải vị trí người chơi từ Firebase sau khi tải các dữ liệu khác
-            await LoadPlayerPositionFromFirebase(username);
-        }
-        else
-        {
-            Debug.LogError("DatabaseReference is null or Username is invalid. Cannot load player data.");
-        }
+        // Lấy dữ liệu người chơi từ Firebase khi game bắt đầu
+        await LoadPlayerDataFromFirebase(username);
+        await LoadPlayerPositionFromFirebase(username);
 
         // Lưu vị trí ban đầu của người chơi
-        if (player != null)
-        {
-            lastSavedPosition = player.transform.position;
-        }
-        else
-        {
-            Debug.LogError("Player GameObject is null. Cannot track position.");
-        }
+        lastSavedPosition = player.transform.position;
     }
 
-    // Cập nhật các giá trị khi slider thay đổi
+    // Cập nhật giá trị khi slider thay đổi
     private void UpdateHealth(float value)
     {
         if (healthText != null)
@@ -140,7 +120,6 @@ public class PlayerDataTest : MonoBehaviour
             return;
         }
 
-        // Lưu dữ liệu vào Firebase
         await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
     }
 
@@ -149,7 +128,6 @@ public class PlayerDataTest : MonoBehaviour
     {
         if (string.IsNullOrEmpty(username) || databaseReference == null || player == null) return;
 
-        // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
         var positionDict = new Dictionary<string, object>
         {
             { "PositionX", position.x },
@@ -157,7 +135,6 @@ public class PlayerDataTest : MonoBehaviour
             { "PositionZ", position.z }
         };
 
-        // Lưu thông tin vị trí vào Firebase
         await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
     }
 
@@ -166,7 +143,6 @@ public class PlayerDataTest : MonoBehaviour
     {
         if (string.IsNullOrEmpty(username) || databaseReference == null) return;
 
-        // Lưu tên scene vào Firebase
         await databaseReference.Child("players").Child(username).Child("Scene").SetValueAsync(sceneName);
     }
 
@@ -189,9 +165,9 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
                 if (healthSlider != null)
-                    healthSlider.value = health;  // Cập nhật giá trị cho slider health
+                    healthSlider.value = health;
                 if (healthText != null)
-                    healthText.text = "Health: " + health.ToString();  // Hiển thị giá trị trên UI
+                    healthText.text = "Health: " + health.ToString();
             }
 
             // Lấy và cập nhật giá trị Energy
@@ -199,9 +175,9 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
                 if (energySlider != null)
-                    energySlider.value = energy;  // Cập nhật giá trị cho slider energy
+                    energySlider.value = energy;
                 if (energyText != null)
-                    energyText.text = "Energy: " + energy.ToString();  // Hiển thị giá trị trên UI
+                    energyText.text = "Energy: " + energy.ToString();
             }
 
             // Lấy và cập nhật giá trị EXP
@@ -209,27 +185,27 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
                 if (expSlider != null)
-                    expSlider.value = exp;  // Cập nhật giá trị cho slider
+                    expSlider.value = exp;
                 if (expText != null)
-                    expText.text = "EXP: " + exp.ToString();  // Hiển thị giá trị trên UI
+                    expText.text = "EXP: " + exp.ToString();
             }
 
             // Lấy và cập nhật giá trị Gold
             if (snapshot.Child("Gold").Exists)
             {
                 int gold = int.Parse(snapshot.Child("Gold").Value.ToString());
-                this.gold = gold;  // Cập nhật giá trị Gold
+                this.gold = gold;
                 if (goldText != null)
-                    goldText.text = "Gold: " + gold.ToString();  // Hiển thị Gold trên UI
+                    goldText.text = "Gold: " + gold.ToString();
             }
 
             // Lấy và cập nhật giá trị Diamond
             if (snapshot.Child("Diamond").Exists)
             {
                 int diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
-                this.diamond = diamond;  // Cập nhật giá trị Diamond
+                this.diamond = diamond;
                 if (diamondText != null)
-                    diamondText.text = "Diamond: " + diamond.ToString();  // Hiển thị Diamond trên UI
+                    diamondText.text = "Diamond: " + diamond.ToString();
             }
         }
         else
