@@ -1,9 +1,9 @@
 ﻿using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+using System;
 
 public class FirebaseQuestManager : MonoBehaviour
 {
@@ -15,8 +15,7 @@ public class FirebaseQuestManager : MonoBehaviour
 
     void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             if (task.IsFaulted || task.IsCanceled)
             {
                 Debug.LogError("Firebase initialization failed.");
@@ -41,8 +40,7 @@ public class FirebaseQuestManager : MonoBehaviour
     {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference.Child("quests").Child(userName);
 
-        reference.GetValueAsync().ContinueWithOnMainThread(task =>
-        {
+        reference.GetValueAsync().ContinueWithOnMainThread(task => {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
@@ -88,8 +86,7 @@ public class FirebaseQuestManager : MonoBehaviour
             { "hasCompletedArmorQuest", hasCompletedArmorQuest }
         };
 
-        reference.SetValueAsync(questData).ContinueWithOnMainThread(task =>
-        {
+        reference.SetValueAsync(questData).ContinueWithOnMainThread(task => {
             if (task.IsCompleted)
             {
                 Debug.Log("Quest status saved to Firebase successfully.");

@@ -149,26 +149,12 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                     // Cập nhật kho đồ từ dữ liệu tải về
                     items = inventoryData.items;
 
-                    // Debug log để kiểm tra các item
-                    Debug.Log("Loaded inventory items:");
-                    foreach (var slot in items)
+                    // Cập nhật lại UI của InventoryManager
+                    InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+                    if (inventoryManager != null)
                     {
-                        if (slot.GetItem() != null)
-                        {
-                            Debug.Log("Item: " + slot.GetItem().itemName + ", Quantity: " + slot.GetQuantity());
-                        }
-                        else
-                        {
-                            Debug.Log("Empty slot at index: " + System.Array.IndexOf(items, slot));
-                        }
+                        inventoryManager.SetInventoryItems(items);
                     }
-
-                    // Cập nhật UI trong InventoryManager
-                    // Đây là phần bạn cần chú ý để gọi lại RefreshUI
-                    RefreshUI();
-
-                    // Gọi lại RefreshUI trong FirebaseInventoryManager1
-                    RefreshUI();
 
                     Debug.Log("Kho đồ đã được tải từ Firebase.");
                 }
@@ -183,7 +169,6 @@ public class FirebaseInventoryManager1 : MonoBehaviour
             }
         });
     }
-
 
     // Đồng bộ hóa AddItem từ InventoryManager
     public void AddItemToFirebase(ItemClass item, int quantity)

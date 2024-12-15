@@ -99,13 +99,13 @@ public class LoginUI : MonoBehaviour
         }
         catch (FirebaseException firebaseEx)
         {
-            UpdateFeedback($"Firebase Error: {firebaseEx.Message}");
-            Debug.LogError($"Firebase Error: {firebaseEx.Message}");
+            UpdateFeedback($"Đăng nhập gặp lỗi: sai mật khẩu");
+            Debug.Log($"Firebase Error: {firebaseEx.Message}");
         }
         catch (System.Exception ex)
         {
-            UpdateFeedback($"Đăng nhập gặp lỗi: {ex.Message}");
-            Debug.LogError($"Error: {ex.Message}");
+            UpdateFeedback($"Đăng nhập gặp lỗi: sai mật khẩu");
+            Debug.Log($"Error: {ex.Message}");
         }
     }
 

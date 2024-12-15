@@ -1,37 +1,12 @@
 ﻿using UnityEngine;
-using Firebase.Auth;
 using UnityEngine.SceneManagement;
 
-public class LogoutUI : MonoBehaviour
+public class Logout : MonoBehaviour
 {
-    private FirebaseAuth auth;  // Firebase Auth instance
-
-    private void Start()
+    // Hàm chỉ chuyển màn hình về màn hình đăng nhập mà không đăng xuất
+    public void GoToLoginScene()
     {
-        // Lấy instance FirebaseAuth
-        auth = FirebaseAuth.DefaultInstance;
-    }
-
-    // Hàm để đăng xuất
-    public void LogoutUser()
-    {
-        // Kiểm tra xem người dùng có đăng nhập hay không
-        if (auth.CurrentUser != null)
-        {
-
-            auth.SignOut();
-            Debug.Log("Người dùng đã đăng xuất.");
-
-
-            PlayerPrefs.DeleteKey("username");
-            PlayerPrefs.Save();
-
-
-            SceneManager.LoadScene("SampleScene");
-        }
-        else
-        {
-            Debug.LogWarning("Không có người dùng nào đang đăng nhập.");
-        }
+        // Chuyển đến màn hình đăng nhập (bạn thay "LoginScene" bằng tên cảnh của bạn)
+        SceneManager.LoadScene(0);  // Thay "LoginScene" bằng tên của màn hình đăng nhập của bạn
     }
 }
