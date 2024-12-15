@@ -14,6 +14,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public UI_Coin uiCoin;
     public static bool isQuestAppleArmor = false;
 
+    // private FirebaseManager1 firebaseManager1;
     public Image lockSkill1;
 
     private string encouragementText =
@@ -25,18 +26,18 @@ public class NPCAppleArmorQuest : MonoBehaviour
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
 
     private bool isPanelVisible = false;
-    public static bool hasCompletedAppleQuest = false;
-    private bool hasCompletedArmorQuest = false;
-    private bool hasShownEncouragement = false;
+    public static bool isCompletedAppleQuest = false;
+    public bool isCompletedArmorQuest = false;
+    private bool isShownEncouragement = false;
 
     private int appleCount = 0;
     private int armorCount = 0;
 
-    private FirebaseQuestManager firebaseQuestManager;
+    //private FirebaseQuestManager firebaseQuestManager;
 
     void Start()
     {
-        firebaseQuestManager = FindObjectOfType<FirebaseQuestManager>();
+        // firebaseManager1 = FindObjectOfType<FirebaseManager1>();
 
         if (questPanel != null)
         {
@@ -78,31 +79,31 @@ public class NPCAppleArmorQuest : MonoBehaviour
         uiCoin = FindObjectOfType<UI_Coin>();
 
         // Load quest status from Firebase when the game starts
-        LoadQuestStatusFromFirebase();
+        //LoadQuestStatusFromFirebase();
     }
 
     // Load quest status from Firebase
-    private void LoadQuestStatusFromFirebase()
-    {
-        // // Get the quest data from Firebase
-        // appleCount = firebaseQuestManager.GetAppleCount();
-        // armorCount = firebaseQuestManager.GetArmorCount();
-        // hasCompletedAppleQuest = firebaseQuestManager.GetHasCompletedAppleQuest();
-        // hasCompletedArmorQuest = firebaseQuestManager.GetHasCompletedArmorQuest();
+    //private void LoadQuestStatusFromFirebase()
+    //{
+    //    // Get the quest data from Firebase
+    //    appleCount = firebaseQuestManager.GetAppleCount();
+    //    armorCount = firebaseQuestManager.GetArmorCount();
+    //    hasCompletedAppleQuest = firebaseQuestManager.GetHasCompletedAppleQuest();
+    //    hasCompletedArmorQuest = firebaseQuestManager.GetHasCompletedArmorQuest();
 
-        // Update UI if there is data from Firebase
-        if (hasCompletedAppleQuest)
-        {
-            appleCountText.color = Color.yellow;
-            appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
-        }
+    //    // Update UI if there is data from Firebase
+    //    if (hasCompletedAppleQuest)
+    //    {
+    //        appleCountText.color = Color.yellow;
+    //        appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
+    //    }
 
-        if (hasCompletedArmorQuest)
-        {
-            armorCountText.color = Color.yellow;
-            armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
-        }
-    }
+    //    if (hasCompletedArmorQuest)
+    //    {
+    //        armorCountText.color = Color.yellow;
+    //        armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
+    //    }
+    //}
 
     // Handle NPC interaction
     void OnMouseDown()
@@ -112,16 +113,16 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questPanel.SetActive(true);
             isQuestAppleArmor = true;
 
-            if (!hasShownEncouragement && !hasCompletedAppleQuest)
+            if (!isShownEncouragement && !isCompletedAppleQuest)
             {
                 questText.text = encouragementText;
-                hasShownEncouragement = true;
+                isShownEncouragement = true;
             }
-            else if (hasCompletedArmorQuest)
+            else if (isCompletedArmorQuest)
             {
                 questText.text = armorCompletionText;
             }
-            else if (hasCompletedAppleQuest)
+            else if (isCompletedAppleQuest)
             {
                 questText.text = appleCompletionText;
             }
@@ -131,25 +132,26 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     // Handle continue button click
+    // Handle continue button click
     private void OnContinue()
     {
         // Load latest data from Firebase before continuing
-        // LoadQuestStatusFromFirebase();
+        //LoadQuestStatusFromFirebase();
 
         // Debug logs to check if data is updated correctly
         // Debug.Log("Apple Count from Firebase: " + appleCount);
         // Debug.Log("Armor Count from Firebase: " + armorCount);
-        // Debug.Log("Has Completed Apple Quest: " + hasCompletedAppleQuest);
-        // Debug.Log("Has Completed Armor Quest: " + hasCompletedArmorQuest);
+        // Debug.Log("Has Completed Apple Quest: " + isCompletedAppleQuest);
+        // Debug.Log("Has Completed Armor Quest: " + isCompletedArmorQuest);
 
         // Check quest status and update UI accordingly
-        if (!hasCompletedAppleQuest)
+        if (!isCompletedAppleQuest)
         {
             questText.text = appleQuestText;
             appleCountText.gameObject.SetActive(true);
             appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
         }
-        else if (hasCompletedAppleQuest && !hasCompletedArmorQuest)
+        else if (isCompletedAppleQuest && !isCompletedArmorQuest)
         {
             completionText.text = "";
             questText.text = armorQuestText;
@@ -157,7 +159,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             appleCountText.gameObject.SetActive(false);
             armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
         }
-        else if (hasCompletedAppleQuest && hasCompletedArmorQuest)
+        else if (isCompletedAppleQuest && isCompletedArmorQuest)
         {
             completionText.text = "";
             questText.text = "Chúc mừng bạn đã hoàn thành tất cả nhiệm vụ!";
@@ -178,16 +180,16 @@ public class NPCAppleArmorQuest : MonoBehaviour
             isQuestAppleArmor = false;
 
             // Update UI after quest completion
-            if (hasCompletedArmorQuest)
+            if (isCompletedArmorQuest)
             {
                 if (uiCoin != null)
                 {
                     PlayerStats.Instance.gold += 30; // Reward gold when completing armor quest
                 }
                 armorCountText.gameObject.SetActive(false);
-                firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
+                //firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
             }
-            else if (hasCompletedAppleQuest)
+            else if (isCompletedAppleQuest)
             {
                 if (uiCoin != null)
                 {
@@ -195,7 +197,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
                 }
                 Destroy(lockSkill1);
                 appleCountText.gameObject.SetActive(false);
-                firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
+                //firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
             }
         }
     }
@@ -206,15 +208,15 @@ public class NPCAppleArmorQuest : MonoBehaviour
         appleCount++;
         appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
 
-        if (appleCount >= 3 && !hasCompletedAppleQuest)
+        if (appleCount >= 3 && !isCompletedAppleQuest)
         {
-            hasCompletedAppleQuest = true;
+            isCompletedAppleQuest = true;
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
 
             // Save quest status to Firebase
-            firebaseQuestManager.SetAppleCount(appleCount);
-            firebaseQuestManager.SetHasCompletedAppleQuest(true);
+            //firebaseQuestManager.SetAppleCount(appleCount);
+            //firebaseQuestManager.SetHasCompletedAppleQuest(true);
 
             // Update UI
             completionText.text = "Báo cáo với thợ rèn.";
@@ -232,13 +234,13 @@ public class NPCAppleArmorQuest : MonoBehaviour
         armorCount++;
         armorCountText.text = "Số giáp đã thu thập: " + armorCount + "/1";
 
-        if (armorCount >= 1 && !hasCompletedArmorQuest)
+        if (armorCount >= 1 && !isCompletedArmorQuest)
         {
-            hasCompletedArmorQuest = true;
+            isCompletedArmorQuest = true;
             questText.text = armorCompletionText;
             armorCountText.color = Color.yellow;
-            firebaseQuestManager.SetArmorCount(armorCount);
-            firebaseQuestManager.SetHasCompletedArmorQuest(true);
+            //firebaseQuestManager.SetArmorCount(armorCount);
+            //firebaseQuestManager.SetHasCompletedArmorQuest(true);
             ShowCompletionText("Báo cáo với Thợ rèn");
 
             if (uiCoin != null)
@@ -284,11 +286,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
         // Update quest completion status
         if (questText != null)
         {
-            if (hasCompletedAppleQuest)
+            if (isCompletedAppleQuest)
             {
                 questText.text = appleCompletionText;
             }
-            else if (hasCompletedArmorQuest)
+            else if (isCompletedArmorQuest)
             {
                 questText.text = armorCompletionText;
             }
@@ -301,7 +303,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
         // Show completion text if a quest is completed
         if (completionText != null)
         {
-            if (hasCompletedAppleQuest || hasCompletedArmorQuest)
+            if (isCompletedAppleQuest || isCompletedArmorQuest)
             {
                 completionText.gameObject.SetActive(true);
                 completionText.text = "Chúc mừng bạn đã hoàn thành nhiệm vụ!";

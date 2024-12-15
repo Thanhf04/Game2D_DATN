@@ -1,10 +1,10 @@
 ﻿using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
-using UnityEngine;
-using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class NPCQuestFirebase : MonoBehaviour
 {
@@ -17,9 +17,11 @@ public class NPCQuestFirebase : MonoBehaviour
     private int monsterKillCount = 0;
     private bool hasReceivedReward = false;
 
+
     void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsFaulted || task.IsCanceled)
             {
                 Debug.LogError("Firebase initialization failed.");
@@ -57,7 +59,8 @@ public class NPCQuestFirebase : MonoBehaviour
         };
 
         // Sử dụng SetValueAsync để cập nhật dữ liệu
-        reference.SetValueAsync(questData).ContinueWithOnMainThread(task => {
+        reference.SetValueAsync(questData).ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
                 Debug.Log("Quest status saved successfully.");
@@ -80,7 +83,8 @@ public class NPCQuestFirebase : MonoBehaviour
         }
 
         // Tải dữ liệu quest từ Firebase
-        FirebaseDatabase.DefaultInstance.RootReference.Child("quests").Child(userName).GetValueAsync().ContinueWithOnMainThread(task => {
+        FirebaseDatabase.DefaultInstance.RootReference.Child("quests").Child(userName).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;

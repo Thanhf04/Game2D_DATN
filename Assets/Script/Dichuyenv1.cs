@@ -7,14 +7,14 @@ using UnityEngine.UI;
 
 public class Dichuyennv1 : MonoBehaviour
 {
-    #region Khai báo các biến
+    // #region Khai báo các biến
 
     //nhiemvu
     private NPCQuest npcQuest;
-    private bool isQuest1Complete = false;
-    private bool isAppleQuestComplete = false;
+    public bool isQuest1Complete = false;
+    public bool isAppleQuestComplete = false;
     private NPCAppleArmorQuest npcapple;
-    private bool isPlayerNearby = false;
+    public bool isPlayerNearby = false;
     private GameObject currentChest;
     public GameObject quizGamePanel;
     public GameObject tbaoQuizGamePanel; // Panel thông báo (Tbaoquizz game)
@@ -126,9 +126,9 @@ public class Dichuyennv1 : MonoBehaviour
     public float skill2Cooldown = 3f;
     public float skill3Cooldown = 5f;
 
-    private float skill1Timer;
-    private float skill2Timer;
-    private float skill3Timer;
+    public float skill1Timer;
+    public float skill2Timer;
+    public float skill3Timer;
 
     public Image skill1Image;
     public Image skill2Image;
@@ -138,29 +138,28 @@ public class Dichuyennv1 : MonoBehaviour
     public Text skill2CooldownText;
     public Text skill3CooldownText;
 
-    public float moveInput;
-    #endregion
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
         isRunning = false;
         isRoll = false;
         isJump = false;
-        #region đóng tương tác với slider
+
         healthSlider.interactable = false;
         manaSlider.interactable = false;
         expSlider.interactable = false;
-        #endregion
         StartSound();
+
         // Khởi tạo UI
         statsPanel.SetActive(false);
-        //openPanelButton.onClick.AddListener(ToggleStatsPanel);
-        //NPC
+
+        // NPC
         npcQuest = FindObjectOfType<NPCQuest>();
         npcapple = FindObjectOfType<NPCAppleArmorQuest>();
         isQuest1Complete = false;
-        // isQuest3Complete = false;
+
         increaseHealthButton.onClick.AddListener(IncreaseHealth);
         decreaseHealthButton.onClick.AddListener(DecreaseHealth);
         increaseManaButton.onClick.AddListener(IncreaseMana);
@@ -179,8 +178,6 @@ public class Dichuyennv1 : MonoBehaviour
         currentLevel = level;
         UpdateStatsText();
 
-        // notificationText.text = "";
-
         gameOverPanel.SetActive(false);
 
         // Gán các sự kiện cho các nút
@@ -189,7 +186,6 @@ public class Dichuyennv1 : MonoBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
         ChisoPanel.SetActive(false);
-        //ChisoButton.onClick.AddListener(ToggleStatsDisplay);
         exitButton.onClick.AddListener(ClosePanel);
     }
 
@@ -206,7 +202,6 @@ public class Dichuyennv1 : MonoBehaviour
             rb.velocity = Vector2.zero; // Giữ nhân vật đứng yên
             return;
         }
-        moveInput = Input.GetAxis("Horizontal");
 
         //if (Quest_3.isWolfQuest)
         //{
@@ -244,6 +239,7 @@ public class Dichuyennv1 : MonoBehaviour
             return;
         }
         // Điều khiển di chuyển và trạng thái di chuyển (kể cả khi đang nhảy)
+        float moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         isRunning = moveInput != 0;
         anim.SetBool("isRunning", isRunning);
@@ -287,7 +283,7 @@ public class Dichuyennv1 : MonoBehaviour
         {
             StartCoroutine(Attack());
         }
-        if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.hasCompletedAppleQuest == true)
+        if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.isCompletedAppleQuest == true)
         {
             if (skill1Timer <= 0 && currentMana >= 20)
             {
@@ -343,6 +339,7 @@ public class Dichuyennv1 : MonoBehaviour
             skill1Timer -= Time.deltaTime;
             skill1CooldownText.text = Mathf.Ceil(skill1Timer).ToString(); // Hiển thị thời gian còn lại
             skill1Image.fillAmount = skill1Timer / skill1Cooldown; // Cập nhật hình ảnh skill1
+            //firebaseManager1.SavePlayerData(this);
         }
         else
         {
@@ -354,6 +351,7 @@ public class Dichuyennv1 : MonoBehaviour
             skill2Timer -= Time.deltaTime;
             skill2CooldownText.text = Mathf.Ceil(skill2Timer).ToString();
             skill2Image.fillAmount = skill2Timer / skill2Cooldown;
+            //firebaseManager1.SavePlayerData(this);
         }
         else
         {
@@ -550,10 +548,11 @@ public class Dichuyennv1 : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-
+        //firebaseManager1.SavePlayerData(username, this);
         if (currentHealth <= 0)
         {
             Die();
+            // Save data after decreasing mana
         }
         healthSlider.value = currentHealth;
         PlayerStats.Instance.hp = currentHealth;
@@ -695,7 +694,7 @@ public class Dichuyennv1 : MonoBehaviour
 
     void DecreaseDamage()
     {
-        if (damageAmount > 0 && upgradePoints < level + 5)
+        if (damageAmount > 1 && upgradePoints < level + 5)
         {
             damageAmount -= 10;
             PlayerStats.Instance.damage = damageAmount;
@@ -705,7 +704,7 @@ public class Dichuyennv1 : MonoBehaviour
         }
     }
 
-    void UpdateStatsText()
+    public void UpdateStatsText()
     {
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
@@ -730,7 +729,7 @@ public class Dichuyennv1 : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log("Player mất máu! Máu còn lại: " + currentHealth);
-
+        //firebaseManager1.SavePlayerData(playerId, this);
         if (currentHealth <= 0)
         {
             Die();
@@ -938,4 +937,24 @@ public class Dichuyennv1 : MonoBehaviour
         tbaoQuizGamePanel.SetActive(false); // Ẩn panel thông báo
         OpenQuizGamePanel(); // Mở panel quiz game
     }
+
+    // Phương thức cập nhật UI sau khi dữ liệu người chơi được tải
+    //private void UpdateUI(FirebaseManager1.PlayerData playerData)
+    //{
+    //    if (playerData != null)
+    //    {
+    //        // Cập nhật các trường UI với dữ liệu người chơi
+    //        healthText.text = "Health: " + playerData.currentHealth;
+    //        manaText.text = "Mana: " + playerData.currentMana;
+    //        levelText.text = "Level: " + playerData.level;
+    //        expText.text = "EXP: " + playerData.expCurrent + "/" + playerData.expMax;
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Player data is null, UI will not be updated.");
+    //    }
+    //}
 }
+
+
+//    currentHealth expCurrent isQuest1Complete isAppleQuestComplete

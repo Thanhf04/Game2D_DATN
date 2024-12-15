@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Firebase;
+﻿using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using TMPro;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoginUI : MonoBehaviour
 {
@@ -99,13 +99,13 @@ public class LoginUI : MonoBehaviour
         }
         catch (FirebaseException firebaseEx)
         {
-            UpdateFeedback($"Firebase Error: {firebaseEx.Message}");
-            Debug.LogError($"Firebase Error: {firebaseEx.Message}");
+            UpdateFeedback($"Đăng nhập gặp lỗi: sai mật khẩu");
+            Debug.Log($"Firebase Error: {firebaseEx.Message}");
         }
         catch (System.Exception ex)
         {
-            UpdateFeedback($"Đăng nhập gặp lỗi: {ex.Message}");
-            Debug.LogError($"Error: {ex.Message}");
+            UpdateFeedback($"Đăng nhập gặp lỗi: sai mật khẩu");
+            Debug.Log($"Error: {ex.Message}");
         }
     }
 
@@ -212,10 +212,10 @@ public class LoginUI : MonoBehaviour
             SceneManager.LoadScene(sceneName); // Tải lại scene mà người chơi đã lưu trước đó
         }
         else
-        {   
+        {
             Debug.LogWarning("Không tìm thấy scene cho người chơi: " + username);
             // Nếu không tìm thấy scene đã lưu, có thể chuyển đến scene mặc định
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(3);
         }
     }
 

@@ -35,6 +35,8 @@ public class NPCQuest : MonoBehaviour
     private int swordCount = 0;
     private int monsterKillCount = 0;
 
+    // private NPCQuestFirebase npcQuestFirebase;
+
     void Start()
     {
         if (questPanel != null)
@@ -74,6 +76,8 @@ public class NPCQuest : MonoBehaviour
             completionText.gameObject.SetActive(false); // Ẩn thông báo ban đầu
         }
     }
+
+    private void Update() { }
 
     void OnMouseDown()
     {

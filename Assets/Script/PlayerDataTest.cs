@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase;
 using Firebase.Database;
@@ -26,6 +26,7 @@ public class PlayerDataTest : MonoBehaviour
     private DatabaseReference databaseReference;
     private string username;
     private Vector3 lastSavedPosition;
+    private bool isFirebaseInitialized = false; // Biến để kiểm tra Firebase đã khởi tạo chưa
 
     // Kiểm tra xem player có được gán chưa trước khi truy cập
     private async void Start()
@@ -36,6 +37,8 @@ public class PlayerDataTest : MonoBehaviour
         {
             // Khởi tạo reference của Firebase Database sau khi Firebase đã sẵn sàng
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+            isFirebaseInitialized = true; // Đánh dấu Firebase đã được khởi tạo thành công
+            Debug.Log("Firebase initialized successfully.");
         }
         else
         {
@@ -69,12 +72,11 @@ public class PlayerDataTest : MonoBehaviour
             expSlider.onValueChanged.AddListener(UpdateExp);
 
         // Kiểm tra nếu databaseReference đã được khởi tạo và player không phải là null
-        if (databaseReference != null && !string.IsNullOrEmpty(username))
+        if (isFirebaseInitialized && !string.IsNullOrEmpty(username))
         {
-            // Chờ đợi dữ liệu người chơi được tải từ Firebase
+            //Tải dữ liệu người chơi từ Firebase
             await LoadPlayerDataFromFirebase(username);
-
-            // Tải vị trí người chơi từ Firebase sau khi tải các dữ liệu khác
+            //Tải vị trí người chơi từ Firebase
             await LoadPlayerPositionFromFirebase(username);
         }
         else
@@ -139,11 +141,9 @@ public class PlayerDataTest : MonoBehaviour
     // Lưu dữ liệu người chơi vào Firebase
     private async void SavePlayerData(string field, int value)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null)
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null)
         {
-            Debug.LogError(
-                "SavePlayerData failed: Username is empty or Firebase is not initialized."
-            );
+            Debug.LogError("SavePlayerData failed: Firebase not initialized or Username is empty.");
             return;
         }
 
@@ -154,7 +154,12 @@ public class PlayerDataTest : MonoBehaviour
     // Lưu vị trí của người chơi vào Firebase
     private async void SavePlayerPosition(Vector3 position)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null || player == null)
+        if (
+            !isFirebaseInitialized
+            || string.IsNullOrEmpty(username)
+            || databaseReference == null
+            || player == null
+        )
             return;
 
         // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
@@ -176,7 +181,7 @@ public class PlayerDataTest : MonoBehaviour
     // Lưu tên scene hiện tại vào Firebase
     private async void SavePlayerScene(string sceneName)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null)
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null)
             return;
 
         // Lưu tên scene vào Firebase
@@ -190,9 +195,11 @@ public class PlayerDataTest : MonoBehaviour
     // Tải lại tất cả dữ liệu người chơi từ Firebase
     private async Task LoadPlayerDataFromFirebase(string username)
     {
-        if (databaseReference == null || string.IsNullOrEmpty(username))
+        if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username))
         {
-            Debug.LogError("Database reference or username is null. Cannot load player data.");
+            Debug.LogError(
+                "Firebase is not initialized or username is invalid. Cannot load player data."
+            );
             return;
         }
 
@@ -258,10 +265,15 @@ public class PlayerDataTest : MonoBehaviour
     // Tải vị trí của người chơi từ Firebase
     private async Task LoadPlayerPositionFromFirebase(string username)
     {
-        if (databaseReference == null || string.IsNullOrEmpty(username) || player == null)
+        if (
+            !isFirebaseInitialized
+            || databaseReference == null
+            || string.IsNullOrEmpty(username)
+            || player == null
+        )
         {
             Debug.LogError(
-                "Database reference, username or player object is null. Cannot load player position."
+                "Firebase is not initialized or Database reference, username, or player object is null."
             );
             return;
         }
@@ -291,9 +303,18 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
+    private bool isDataLoaded = false;
+
     // Kiểm tra và lưu vị trí người chơi mỗi frame nếu có thay đổi
     private void Update()
     {
+        //if (!isDataLoaded && isFirebaseInitialized)
+        //{
+        //    LoadPlayerDataFromFirebase(username);
+        //    LoadPlayerPositionFromFirebase(username);
+        //    isDataLoaded = true;
+        //}
+
         if (player != null)
         {
             Vector3 currentPosition = player.transform.position;

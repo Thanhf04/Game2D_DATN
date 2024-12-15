@@ -16,6 +16,7 @@ public class Boss_Health : MonoBehaviour
     public GameObject prefabsItem;
     public GameObject PanelSkillBoss;
     Dichuyennv1 Player1;
+    public static bool isDeath = false;
 
     // Tham chiếu đến script nhiệm vụ
     public NPCQuestSkill2 npcQuestskill2;
@@ -51,6 +52,7 @@ public class Boss_Health : MonoBehaviour
     {
         Player1.LevelSlider(100);
         animator.SetBool("Death", true);
+        isDeath = true;
         // Cập nhật nhiệm vụ khi boss bị tiêu diệt
         if (CompareTag("Boss") && npcQuestskill2 != null)
         {
