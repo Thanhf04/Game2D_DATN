@@ -1,8 +1,8 @@
 ﻿using Firebase;
 using Firebase.Database;
+using System.Threading.Tasks;  // Thêm dòng này để sử dụng Task
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading.Tasks;  // Thêm dòng này để sử dụng Task
 
 public class UI_Coin : MonoBehaviour
 {
@@ -61,7 +61,8 @@ public class UI_Coin : MonoBehaviour
     private void InitializeFirebase()
     {
         // Kiểm tra trạng thái Firebase và khởi tạo Firebase Database
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        {
             FirebaseApp app = FirebaseApp.DefaultInstance;
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         });
