@@ -9,8 +9,9 @@ public class UI_Shop : MonoBehaviour
     private Transform ShopItem;
     private InventoryManager inventoryManager;
     private Dictionary<Model_Shop.ItemType, ConsumableClass> itemTypeToConsumable;
-    [SerializeField] private UI_Coin uiCoin;
 
+    [SerializeField]
+    private UI_Coin uiCoin;
 
     private void Awake()
     {
@@ -31,12 +32,32 @@ public class UI_Shop : MonoBehaviour
             { Model_Shop.ItemType.MP_1, Resources.Load<ConsumableClass>("Items/MP_1") }
         };
     }
+
     private void Start()
     {
-        CreateItemButton(Model_Shop.ItemType.HP_1, Model_Shop.GetSprite(Model_Shop.ItemType.HP_1), "Bình hồi HP", Model_Shop.GetCost(Model_Shop.ItemType.HP_1), 75);
-        CreateItemButton(Model_Shop.ItemType.MP_1, Model_Shop.GetSprite(Model_Shop.ItemType.MP_1), "Bình hồi MP", Model_Shop.GetCost(Model_Shop.ItemType.MP_1), 130);
+        CreateItemButton(
+            Model_Shop.ItemType.HP_1,
+            Model_Shop.GetSprite(Model_Shop.ItemType.HP_1),
+            "Bình hồi HP",
+            Model_Shop.GetCost(Model_Shop.ItemType.HP_1),
+            75
+        );
+        CreateItemButton(
+            Model_Shop.ItemType.MP_1,
+            Model_Shop.GetSprite(Model_Shop.ItemType.MP_1),
+            "Bình hồi MP",
+            Model_Shop.GetCost(Model_Shop.ItemType.MP_1),
+            130
+        );
     }
-    private void CreateItemButton(Model_Shop.ItemType itemType, Sprite itemSprite, string itemName, int itemPrice, int positionIndex)
+
+    private void CreateItemButton(
+        Model_Shop.ItemType itemType,
+        Sprite itemSprite,
+        string itemName,
+        int itemPrice,
+        int positionIndex
+    )
     {
         Transform shopItemTransform = Instantiate(ShopItem, container);
         shopItemTransform.gameObject.SetActive(true);
@@ -46,7 +67,10 @@ public class UI_Shop : MonoBehaviour
         shopItemRectTransform.anchoredPosition = new Vector2(0, shopItemHeight - positionIndex);
 
         shopItemTransform.Find("Title_Item").GetComponent<TextMeshProUGUI>().SetText(itemName);
-        shopItemTransform.Find("PriceText_Item").GetComponent<TextMeshProUGUI>().SetText(itemPrice.ToString());
+        shopItemTransform
+            .Find("PriceText_Item")
+            .GetComponent<TextMeshProUGUI>()
+            .SetText(itemPrice.ToString());
         shopItemTransform.Find("Image_Item").GetComponent<Image>().sprite = itemSprite;
 
         Button buttonBuyItem = shopItemTransform.GetComponent<Button>();
@@ -54,7 +78,6 @@ public class UI_Shop : MonoBehaviour
         {
             TryItem(itemType);
         });
-
     }
 
     public void TryItem(Model_Shop.ItemType itemType)
@@ -74,5 +97,4 @@ public class UI_Shop : MonoBehaviour
             }
         }
     }
-
 }

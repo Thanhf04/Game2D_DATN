@@ -7,11 +7,11 @@ public class GameAssets : MonoBehaviour
     {
         get
         {
-            if (instance == null) instance = Instantiate(Resources.Load<GameAssets>("GameAssets"));
+            if (instance == null)
+                instance = Instantiate(Resources.Load<GameAssets>("GameAssets"));
             return instance;
         }
     }
     public Sprite s_HP_1;
     public Sprite s_MP_1;
-
 }

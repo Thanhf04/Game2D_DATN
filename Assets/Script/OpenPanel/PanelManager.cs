@@ -17,6 +17,7 @@ public class PanelManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     public void OpenPanel(GameObject panel)
     {
         if (currentPanel != null && currentPanel != panel)
@@ -43,7 +44,6 @@ public class PanelManager : MonoBehaviour
         {
             currentPanel.SetActive(false);
             currentPanel = null; // Xóa tham chiếu khi panel đóng
-
         }
     }
 }

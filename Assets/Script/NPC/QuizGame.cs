@@ -20,9 +20,16 @@ public class QuizGame : MonoBehaviour
 
     private int currentQuestionIndex = 0;
     private int correctAnswers = 0;
+    Saveloadgame saveloadgame;
 
     void Start()
     {
+        saveloadgame = FindAnyObjectByType<Saveloadgame>();
+        saveloadgame = FindObjectOfType<Saveloadgame>();
+        if (saveloadgame == null)
+        {
+            Debug.LogError("Saveloadgame không được tìm thấy trong scene!");
+        }
         quizPanel.SetActive(false);
         messagePanel.SetActive(false);
         confirmButton.onClick.AddListener(StartQuiz);
@@ -61,7 +68,11 @@ public class QuizGame : MonoBehaviour
         }
         else
         {
-            CreateFeedback(currentQuestionIndex, "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.", false);
+            CreateFeedback(
+                currentQuestionIndex,
+                "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.",
+                false
+            );
             StartCoroutine(HandleWrongAnswer());
             return;
         }
@@ -79,7 +90,7 @@ public class QuizGame : MonoBehaviour
         {
             quizPanel.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            SceneManager.LoadScene(4);
+            saveloadgame.ChangeScene("Player2");
         }
         else
         {
@@ -106,7 +117,7 @@ public class QuizGame : MonoBehaviour
 
     void ResetQuiz()
     {
-correctAnswers = 0;
+        correctAnswers = 0;
         currentQuestionIndex = 0;
         ShowQuestion();
         UpdateScore();
@@ -116,7 +127,9 @@ correctAnswers = 0;
     {
         if (collision.collider.CompareTag("Player"))
         {
-            ShowMessage("Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa.");
+            ShowMessage(
+                "Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa."
+            );
         }
     }
 

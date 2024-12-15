@@ -16,9 +16,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
     public Image lockSkill1;
 
-    private string encouragementText = "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
+    private string encouragementText =
+        "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
     private string appleQuestText = "Nhiệm vụ mới: Thu thập 3 quả táo để tiếp tục hành trình!";
-    private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
+    private string appleCompletionText =
+        "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
 
@@ -82,11 +84,11 @@ public class NPCAppleArmorQuest : MonoBehaviour
     // Load quest status from Firebase
     private void LoadQuestStatusFromFirebase()
     {
-        // Get the quest data from Firebase
-        appleCount = firebaseQuestManager.GetAppleCount();
-        armorCount = firebaseQuestManager.GetArmorCount();
-        hasCompletedAppleQuest = firebaseQuestManager.GetHasCompletedAppleQuest();
-        hasCompletedArmorQuest = firebaseQuestManager.GetHasCompletedArmorQuest();
+        // // Get the quest data from Firebase
+        // appleCount = firebaseQuestManager.GetAppleCount();
+        // armorCount = firebaseQuestManager.GetArmorCount();
+        // hasCompletedAppleQuest = firebaseQuestManager.GetHasCompletedAppleQuest();
+        // hasCompletedArmorQuest = firebaseQuestManager.GetHasCompletedArmorQuest();
 
         // Update UI if there is data from Firebase
         if (hasCompletedAppleQuest)
@@ -135,10 +137,10 @@ public class NPCAppleArmorQuest : MonoBehaviour
         // LoadQuestStatusFromFirebase();
 
         // Debug logs to check if data is updated correctly
-        Debug.Log("Apple Count from Firebase: " + appleCount);
-        Debug.Log("Armor Count from Firebase: " + armorCount);
-        Debug.Log("Has Completed Apple Quest: " + hasCompletedAppleQuest);
-        Debug.Log("Has Completed Armor Quest: " + hasCompletedArmorQuest);
+        // Debug.Log("Apple Count from Firebase: " + appleCount);
+        // Debug.Log("Armor Count from Firebase: " + armorCount);
+        // Debug.Log("Has Completed Apple Quest: " + hasCompletedAppleQuest);
+        // Debug.Log("Has Completed Armor Quest: " + hasCompletedArmorQuest);
 
         // Check quest status and update UI accordingly
         if (!hasCompletedAppleQuest)
@@ -180,7 +182,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             {
                 if (uiCoin != null)
                 {
-                    uiCoin.AddCoins(30); // Reward gold when completing armor quest
+                    PlayerStats.Instance.gold += 30; // Reward gold when completing armor quest
                 }
                 armorCountText.gameObject.SetActive(false);
                 firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
@@ -189,7 +191,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             {
                 if (uiCoin != null)
                 {
-                    uiCoin.AddCoins(20); // Reward gold when completing apple quest
+                    PlayerStats.Instance.gold += 20; // Reward gold when completing apple quest
                 }
                 Destroy(lockSkill1);
                 appleCountText.gameObject.SetActive(false);
@@ -219,7 +221,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
             if (uiCoin != null)
             {
-                uiCoin.AddCoins(20); // Reward gold when completing the apple quest
+                PlayerStats.Instance.gold += 20; // Reward gold when completing the apple quest
             }
         }
     }
@@ -241,7 +243,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
             if (uiCoin != null)
             {
-                uiCoin.AddCoins(30);
+                PlayerStats.Instance.gold += 30;
             }
         }
     }

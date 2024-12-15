@@ -10,8 +10,10 @@ public class HealthBarControl : MonoBehaviour
         Vector3 enemyScale = enemy.localScale;
 
         // Cố định scale của thanh máu theo hướng X
-        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(enemyScale.x),
-                                           transform.localScale.y,
-                                           transform.localScale.z);
+        transform.localScale = new Vector3(
+            Mathf.Abs(transform.localScale.x) * Mathf.Sign(enemyScale.x),
+            transform.localScale.y,
+            transform.localScale.z
+        );
     }
 }

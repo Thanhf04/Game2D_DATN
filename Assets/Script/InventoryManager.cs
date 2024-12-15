@@ -63,7 +63,6 @@ public class InventoryManager : MonoBehaviour
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown;
     private bool isManaOnCooldown;
-    Dichuyennv1 player1;
 
     // Start is called before the first frame update
     void Start()
@@ -100,16 +99,6 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (player1 == null)
-        {
-            player1 = FindObjectOfType<Dichuyennv1>();
-            if (player1 == null)
-            {
-                return;
-            }
-            return;
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
             if (isMoving)
@@ -376,10 +365,14 @@ public class InventoryManager : MonoBehaviour
 
         if (item is ConsumableClass consumable)
         {
-            if (player1.currentHealth < player1.maxHealth)
+            if (PlayerStats.Instance.hp < PlayerStats.Instance.maxHp)
             {
-                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
-                healthSlider.value = player1.currentHealth;
+                PlayerStats.Instance.hp = Mathf.Min(
+                    PlayerStats.Instance.hp + 50,
+                    PlayerStats.Instance.maxHp
+                );
+                healthSlider.value = PlayerStats.Instance.hp;
+                PlayerStats.Instance.SaveStats();
                 RemoveItem(item, 1);
 
                 FirebaseInventoryManager1 firebaseInventory =
@@ -410,10 +403,14 @@ public class InventoryManager : MonoBehaviour
 
         if (item is ConsumableClass consumable)
         {
-            if (player1.currentMana < player1.maxMana)
+            if (PlayerStats.Instance.mana < PlayerStats.Instance.maxMana)
             {
-                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
-                manaSlider.value = player1.currentMana;
+                PlayerStats.Instance.mana = Mathf.Min(
+                    PlayerStats.Instance.mana + 50,
+                    PlayerStats.Instance.maxMana
+                );
+                manaSlider.value = PlayerStats.Instance.mana;
+                PlayerStats.Instance.SaveStats();
 
                 RemoveItem(item, 1);
 

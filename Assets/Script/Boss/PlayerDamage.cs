@@ -7,11 +7,7 @@ public class PlayerDamage : MonoBehaviour
     public float attackRadius = 1f;
     Animator animator;
     Boss_Health health;
-    Dichuyennv1 player1;
-    private void Start()
-    {
-        player1 = FindObjectOfType<Dichuyennv1>();
-    }
+
     public void Attack()
     {
         if (attackPoint == null)
@@ -25,7 +21,7 @@ public class PlayerDamage : MonoBehaviour
             health = hit.GetComponent<Boss_Health>();
             if (health != null)
             {
-                health.TakeDamage(player1.damageAmount);
+                health.TakeDamage(PlayerStats.Instance.damage);
             }
         }
     }
@@ -35,7 +31,5 @@ public class PlayerDamage : MonoBehaviour
         if (attackPoint == null)
             return;
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
-
     }
-
 }

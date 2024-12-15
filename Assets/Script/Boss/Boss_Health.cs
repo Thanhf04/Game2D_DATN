@@ -35,9 +35,9 @@ public class Boss_Health : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth -= (int)damage;
         if (currentHealth <= 0)
         {
             Die();

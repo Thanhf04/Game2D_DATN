@@ -15,12 +15,14 @@ public class Quest_3 : MonoBehaviour
     public GameObject GOwolf;
     UI_Coin uiCoin;
 
-    [SerializeField] private Image imageSkill3;
+    [SerializeField]
+    private Image imageSkill3;
 
     // đối thoại
     private string encouragementText = "Xin chào, ta là một thương nhân của vùng đất này!";
     private string encouragementText1 = "Hãy giúp ta truy tìm những thẻ bị thất lạc ở chỗ Cô Suna.";
-    private string encouragementText2 = "Sau khi hoàn thành hãy quay về đây ta có món quà dành cho cậu.";
+    private string encouragementText2 =
+        "Sau khi hoàn thành hãy quay về đây ta có món quà dành cho cậu.";
     private string quest1 = "Nhiệm vụ hiện tại của bạn là lật 4 cặp thẻ.";
     private string CompleteText = "Phần thưởng của bạn là 100 vàng";
     private string quest2 = "Hãy giúp ta đưa chú chó này an toàn đến Cô Suna";
@@ -84,7 +86,6 @@ public class Quest_3 : MonoBehaviour
 
     void OnMouseDown()
     {
-
         if (questPanel != null && !isPanelVisible)
         {
             questPanel.SetActive(true);
@@ -120,15 +121,12 @@ public class Quest_3 : MonoBehaviour
             // Kiểm tra nếu đủ 4 thẻ mới chuyển qua bước tiếp theo
             if (currentCard == 4)
             {
-
                 currentCardText.color = Color.yellow;
                 currentCardText.text = "Bạn đã hoàn thành nhiệm vụ lật thẻ";
-                uiCoin.AddCoins(100);
+                PlayerStats.Instance.gold += 100;
                 dialogueStep = 3;
-
             }
         }
-
         else if (dialogueStep == 3)
         {
             currentCardText.gameObject.SetActive(false);
@@ -144,8 +142,9 @@ public class Quest_3 : MonoBehaviour
                 GOwolf.gameObject.SetActive(false);
                 questText.text = CompleteText;
                 dialogueStep = 4;
-                uiCoin.AddCoins(50);
-                questWolf.text = "Bạn đã hoàn thành nhiệm vụ, hãy quay về Thương Nhân để trả nhiệm vụ";
+                PlayerStats.Instance.gold += 100;
+                questWolf.text =
+                    "Bạn đã hoàn thành nhiệm vụ, hãy quay về Thương Nhân để trả nhiệm vụ";
             }
         }
         else if (dialogueStep == 4)
@@ -153,25 +152,24 @@ public class Quest_3 : MonoBehaviour
             questWolf.text = "";
             questInput.gameObject.SetActive(true);
             questInput.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành 0/3 câu hỏi";
-            questText.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành 3 câu hỏi và trở về đây để nhận thưởng.";
+            questText.text =
+                "Hãy đến NPC Nhà nghiên cứu hoàn thành 3 câu hỏi và trở về đây để nhận thưởng.";
             if (hasCompletedQuestInput == true)
             {
-                uiCoin.AddCoins(50);
+                PlayerStats.Instance.gold += 50;
                 questInput.text = "Bạn đã hoàn thành nhiệm vụ";
                 dialogueStep = 5;
             }
-
         }
         else if (dialogueStep == 5)
         {
             questFinal.gameObject.SetActive(true);
             questInput.gameObject.SetActive(false);
             questFinal.text = "Bạn hãy di chuyển đến cuối map.";
-            questText.text = "Bạn hãy di chuyển đến cuối map và hoàn thành nhiệm vụ để qua vùng đất tiếp theo.";
-
+            questText.text =
+                "Bạn hãy di chuyển đến cuối map và hoàn thành nhiệm vụ để qua vùng đất tiếp theo.";
         }
     }
-
 
     private void OnConfirm()
     {
@@ -191,6 +189,7 @@ public class Quest_3 : MonoBehaviour
         }
         isQuest3 = false;
     }
+
     public void CompleteQuestCard()
     {
         currentCard++;
@@ -202,6 +201,7 @@ public class Quest_3 : MonoBehaviour
             hasCompletedCardQuest = true;
         }
     }
+
     public void CompleteWolf()
     {
         hasCompletedWolfQuest = true;
@@ -209,10 +209,12 @@ public class Quest_3 : MonoBehaviour
         questWolf.color = Color.yellow;
         isWolfQuest = false;
     }
+
     public void CompleteQuestInput()
     {
         currenCorrectInput++;
-        questInput.text = "Hãy đến NPC Nhà nghiên cứu hoàn thành " + currenCorrectInput + "/3 câu hỏi";
+        questInput.text =
+            "Hãy đến NPC Nhà nghiên cứu hoàn thành " + currenCorrectInput + "/3 câu hỏi";
         if (currenCorrectInput == 3)
         {
             questInput.text = "Bạn đã hoàn thành nhiệm vụ";

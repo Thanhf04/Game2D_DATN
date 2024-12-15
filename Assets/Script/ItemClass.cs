@@ -1,7 +1,6 @@
-
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName ="New Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "New Item")]
 public abstract class ItemClass : ScriptableObject
 {
     public string itemName;

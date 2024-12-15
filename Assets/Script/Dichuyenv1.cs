@@ -85,17 +85,18 @@ public class Dichuyennv1 : MonoBehaviour
     public Slider healthSlider;
     public Slider manaSlider;
     public Slider expSlider;
-    public int maxHealth = 100;
+
+    private int maxHealth = 0;
     public int currentHealth;
-    public int maxMana = 100;
-    public int currentMana;
-    public float expMax = 100;
-    public float expCurrent = 0;
+    private int maxMana = 0;
+    private int currentMana;
+    private float expMax = 0;
+    private float expCurrent = 0;
+    private int damageAmount = 10;
 
     [SerializeField]
     public TextMeshProUGUI textLevel;
     public TextMeshProUGUI textExp;
-    public int damageAmount = 10;
     public int damageTrap = 20;
     private GameObject currentFireBreath;
 
@@ -167,10 +168,13 @@ public class Dichuyennv1 : MonoBehaviour
         increaseDamethButton.onClick.AddListener(IncreaseDame);
         decreaseDamethButton.onClick.AddListener(DecreaseDamage);
 
-        SetSlider();
-        currentHealth = maxHealth;
-        currentMana = maxMana;
-        expSlider.value = expCurrent;
+        currentHealth = PlayerStats.Instance.hp;
+        currentMana = PlayerStats.Instance.mana;
+        expCurrent = PlayerStats.Instance.exp;
+        maxHealth = PlayerStats.Instance.maxHp;
+        maxMana = PlayerStats.Instance.maxMana;
+        expMax = PlayerStats.Instance.maxExp;
+
         textExp.SetText(expCurrent + "%");
         currentLevel = level;
         UpdateStatsText();
@@ -467,6 +471,8 @@ public class Dichuyennv1 : MonoBehaviour
             StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
             //currentMana -= 20; // Giảm mana khi sử dụng kỹ năng
             manaSlider.value = currentMana -= 20;
+            PlayerStats.Instance.mana = currentMana;
+            PlayerStats.Instance.SaveStats();
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
     }
@@ -493,6 +499,8 @@ public class Dichuyennv1 : MonoBehaviour
                 playAttack_Fire2.Play();
                 // currentMana -= 30; // Giảm mana khi sử dụng kỹ năng
                 manaSlider.value = currentMana -= 30;
+                PlayerStats.Instance.mana = currentMana;
+                PlayerStats.Instance.SaveStats();
                 UpdateStatsText(); // Cập nhật giao diện người dùng
             }
         }
@@ -526,6 +534,8 @@ public class Dichuyennv1 : MonoBehaviour
             // rbFireHand.velocity = fireDirection * (bulletSpeed * 0.5f);
             StartCoroutine(DestroyFireHandAfterTime(fireHand, 2.5f));
             currentMana -= 10; // Giảm mana khi sử dụng kỹ năng
+            PlayerStats.Instance.mana = currentMana;
+            PlayerStats.Instance.SaveStats();
             manaSlider.value = currentMana;
             UpdateStatsText(); // Cập nhật giao diện người dùng
         }
@@ -546,6 +556,8 @@ public class Dichuyennv1 : MonoBehaviour
             Die();
         }
         healthSlider.value = currentHealth;
+        PlayerStats.Instance.hp = currentHealth;
+        PlayerStats.Instance.SaveStats();
     }
 
     void Die()
@@ -608,8 +620,10 @@ public class Dichuyennv1 : MonoBehaviour
             maxHealth += 100;
             currentHealth = Mathf.Min(maxHealth, currentHealth + 100);
             healthSlider.maxValue = maxHealth;
+            PlayerStats.Instance.hp = currentHealth;
             upgradePoints--;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
         else
         {
@@ -624,8 +638,10 @@ public class Dichuyennv1 : MonoBehaviour
             maxHealth = Mathf.Max(100, maxHealth - 100);
             healthSlider.maxValue = maxHealth;
             currentHealth = Mathf.Clamp(currentHealth - 100, 1, maxHealth);
+            PlayerStats.Instance.hp = currentHealth;
             upgradePoints++;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
     }
 
@@ -636,8 +652,10 @@ public class Dichuyennv1 : MonoBehaviour
             maxMana += 100;
             currentMana = Mathf.Min(maxMana, currentMana + 50);
             manaSlider.maxValue = maxMana;
+            PlayerStats.Instance.mana = currentMana;
             upgradePoints--;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
         else
         {
@@ -652,8 +670,10 @@ public class Dichuyennv1 : MonoBehaviour
             maxMana = Mathf.Max(100, maxMana - 100);
             manaSlider.maxValue = maxMana;
             currentMana = Mathf.Clamp(currentMana - 100, 1, maxMana);
+            PlayerStats.Instance.hp = currentMana;
             upgradePoints++;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
     }
 
@@ -663,7 +683,9 @@ public class Dichuyennv1 : MonoBehaviour
         {
             damageAmount += 10;
             upgradePoints--;
+            PlayerStats.Instance.damage = damageAmount;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
         else
         {
@@ -676,8 +698,10 @@ public class Dichuyennv1 : MonoBehaviour
         if (damageAmount > 0 && upgradePoints < level + 5)
         {
             damageAmount -= 10;
+            PlayerStats.Instance.damage = damageAmount;
             upgradePoints++;
             UpdateStatsText();
+            PlayerStats.Instance.SaveStats();
         }
     }
 
@@ -688,6 +712,7 @@ public class Dichuyennv1 : MonoBehaviour
         damaText.text = ((damageAmount - 10) / 10).ToString();
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
+        PlayerStats.Instance.SaveStats();
     }
 
     void ShowNotification(string message)
@@ -699,13 +724,6 @@ public class Dichuyennv1 : MonoBehaviour
     void ClearNotification()
     {
         notificationText.text = ""; // Xóa thông báo
-    }
-
-    public void SetSlider()
-    {
-        healthSlider.maxValue = maxHealth;
-        manaSlider.maxValue = maxMana;
-        expSlider.maxValue = expMax;
     }
 
     public void TakeDamageTrap(int damage)
@@ -758,6 +776,7 @@ public class Dichuyennv1 : MonoBehaviour
         healthInfoText.text = $"Máu:  {currentHealth}/{maxHealth}";
         manaInfoText.text = $"Năng lượng:  {currentMana}/{maxMana}";
         damageInfoText.text = $"Sát thương:  {damageAmount}";
+        PlayerStats.Instance.SaveStats();
     }
 
     public void ClosePanel()

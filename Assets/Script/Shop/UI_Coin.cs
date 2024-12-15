@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class UI_Coin : MonoBehaviour
 {
-    [SerializeField] private int StartingCoins = 0; // Số coin bắt đầu
-    private int currentCoins = 0;
+    [SerializeField]
+    private int StartingCoins = 0; // Số coin bắt đầu
 
     [Header("UI References")]
     public GameObject panelNotification;
@@ -16,8 +16,6 @@ public class UI_Coin : MonoBehaviour
 
     private void Awake()
     {
-        currentCoins = StartingCoins;
-
         // Gán sự kiện cho nút đóng
         if (btn_Close != null)
         {
@@ -27,27 +25,29 @@ public class UI_Coin : MonoBehaviour
 
     private void Start()
     {
-        AddCoins(100);
+        // AddCoins(100);
         // Debug.Log("Coins Initialized");
     }
 
-    public void AddCoins(int amount)
-    {
-        currentCoins += amount;
-        CoinChanged?.Invoke(currentCoins); // Gọi sự kiện khi thay đổi số coin
-    }
+    // public void AddCoins(int amount)
+    // {
+    //     PlayerStats.Instance.gold += amount;
+    //     CoinChanged?.Invoke(PlayerStats.Instance.gold); // Gọi sự kiện khi thay đổi số coin
+    //     PlayerStats.Instance.SaveStats();
+    // }
 
     public bool SubTractCoins(int amount, Model_Shop.ItemType itemType)
     {
-        if (currentCoins >= amount)
+        if (PlayerStats.Instance.gold >= amount)
         {
-            currentCoins -= amount;
-            CoinChanged?.Invoke(currentCoins);
+            PlayerStats.Instance.gold -= amount;
+            PlayerStats.Instance.SaveStats();
+            CoinChanged?.Invoke(PlayerStats.Instance.gold);
 
-            Debug.Log($"Buy Item Success | Coin: {currentCoins} | Item: {itemType}");
+            Debug.Log($"Buy Item Success | Coin: {PlayerStats.Instance.gold} | Item: {itemType}");
             return true;
         }
-        else if (currentCoins <= 0)
+        else if (PlayerStats.Instance.gold <= 0)
         {
             Debug.Log("You don't have money");
             panelNotification.SetActive(true);
@@ -65,8 +65,9 @@ public class UI_Coin : MonoBehaviour
 
     public int GetCurrentCoins()
     {
-        return currentCoins;
+        return PlayerStats.Instance.gold;
     }
+
     public void ClosePanel()
     {
         panelNotification.SetActive(false);

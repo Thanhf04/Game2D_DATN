@@ -37,9 +37,9 @@ public class Enemy : MonoBehaviour
     }
 
     // Hàm nhận sát thương
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth -= (int)damage;
         if (currentHealth <= 0)
         {
             currentHealth = 0;

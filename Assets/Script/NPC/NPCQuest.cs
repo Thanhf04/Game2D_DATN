@@ -12,7 +12,6 @@ public class NPCQuest : MonoBehaviour
     public Text monsterCountText;
     public Text NVtimThoRenText;
     public Text completionText; // Text để hiển thị thông báo
-    public UI_Coin uiCoin;
     public static bool isQuest = false;
 
     private string initialQuestText =
@@ -27,12 +26,11 @@ public class NPCQuest : MonoBehaviour
         "Chúc mừng chàng trai, bây giờ bạn có thể tiếp tục cuộc hành trình rồi.";
     private string continuareText = "Còn hãy đi tìm người thợ rèn để học tập thêm.";
 
-    private bool isPanelVisible = false;
-    private bool isQuestStarted = false;
-    private bool hasShownCongratulation = false;
-    private bool hasReceivedReward = false;
-    private bool hasShownContinuareText = false;
+    private bool isPanelVisible = false; // check panel
+    private bool isQuestStarted = false; // check trang thai nv nhan nv hay chua
 
+    private bool hasReceivedReward = false; // check nhiem vu giet quai
+    private bool hasShownContinuareText = false; // dk tim thoi ren
 
     private int swordCount = 0;
     private int monsterKillCount = 0;
@@ -75,8 +73,6 @@ public class NPCQuest : MonoBehaviour
         {
             completionText.gameObject.SetActive(false); // Ẩn thông báo ban đầu
         }
-
-        uiCoin = FindObjectOfType<UI_Coin>();
     }
 
     void OnMouseDown()
@@ -86,10 +82,10 @@ public class NPCQuest : MonoBehaviour
             questPanel.SetActive(true);
             isQuest = true;
 
-            if (swordCount == 1 && !hasShownCongratulation)
+            if (swordCount == 1 && !PlayerStats.Instance.hasShownCongratulation)
             {
                 questText.text = congratulationText;
-                hasShownCongratulation = true;
+                PlayerStats.Instance.hasShownCongratulation = true;
                 isQuestStarted = false;
             }
             else if (swordCount == 0)
@@ -132,10 +128,7 @@ public class NPCQuest : MonoBehaviour
             {
                 questText.text = rewardCompletionText;
 
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(50);
-                }
+                PlayerStats.Instance.gold += 50;
                 hasReceivedReward = true;
                 monsterCountText.gameObject.SetActive(false);
             }
@@ -214,6 +207,7 @@ public class NPCQuest : MonoBehaviour
             completionText.gameObject.SetActive(false);
         }
     }
+
     private IEnumerator HideContinuareTextAfterDelay()
     {
         yield return new WaitForSeconds(10f); // Đợi 10 giây
@@ -222,5 +216,4 @@ public class NPCQuest : MonoBehaviour
             NVtimThoRenText.gameObject.SetActive(false); // Ẩn text
         }
     }
-
 }
