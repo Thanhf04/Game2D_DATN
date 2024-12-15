@@ -218,7 +218,7 @@ public class Quest_3 : MonoBehaviour
             questInput.text = "Bạn đã hoàn thành nhiệm vụ";
             questInput.color = Color.yellow;
             hasCompletedQuestInput = true;
-            Destroy(imageSkill3, 3f);
+            Destroy(imageSkill3, 1f);
         }
     }
 }

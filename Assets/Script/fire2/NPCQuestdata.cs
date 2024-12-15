@@ -17,6 +17,7 @@ public class NPCQuestFirebase : MonoBehaviour
     private int monsterKillCount = 0;
     private bool hasReceivedReward = false;
 
+
     void Start()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>

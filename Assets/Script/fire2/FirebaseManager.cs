@@ -1,4 +1,4 @@
-﻿using Firebase;
+using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
@@ -10,7 +10,6 @@ public class FirebaseManager1 : MonoBehaviour
     private bool isFirebaseInitialized = false;
 
     void Start()
-
     {
         // Kiểm tra và khởi tạo Firebase
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
@@ -29,7 +28,6 @@ public class FirebaseManager1 : MonoBehaviour
         });
     }
 
-
     // Lưu dữ liệu người chơi lên Firebase
     public void SavePlayerData(Dichuyennv1 playerStats)
     {
@@ -46,15 +44,26 @@ public class FirebaseManager1 : MonoBehaviour
         // Kiểm tra nếu Firebase chưa được khởi tạo
         if (!isFirebaseInitialized)
         {
-            Debug.LogError("Firebase Database reference is not initialized.");
+            Debug.Log("Firebase Database reference is not initialized.");
             return;
         }
 
         // Tạo đối tượng PlayerData bao gồm các trạng thái nhiệm vụ và kỹ năng
         PlayerData playerData = new PlayerData(playerStats);
         string json = JsonUtility.ToJson(playerData);
-        reference.Child("players").Child(username).SetRawJsonValueAsync(json);
-        Debug.Log("Player data saved to Firebase");
+
+        // Lưu dữ liệu vào Firebase
+        reference.Child("player").Child(username).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
+            {
+                //Debug.LogError("Error saving player data: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                //Debug.Log("Player data saved to Firebase successfully.");
+            }
+        });
     }
 
     // Tải dữ liệu người chơi từ Firebase
@@ -66,7 +75,7 @@ public class FirebaseManager1 : MonoBehaviour
         // Kiểm tra nếu username là null hoặc rỗng
         if (string.IsNullOrEmpty(username))
         {
-            Debug.LogError("Username is null or empty.");
+            Debug.Log("Username is null or empty.");
             onDataLoaded?.Invoke(null); // Gửi giá trị null nếu username không hợp lệ
             return;
         }
@@ -74,16 +83,16 @@ public class FirebaseManager1 : MonoBehaviour
         // Kiểm tra nếu Firebase chưa được khởi tạo
         if (!isFirebaseInitialized)
         {
-            Debug.LogError("Firebase Database reference is not initialized.");
+            Debug.Log("Firebase Database reference is not initialized.");
             onDataLoaded?.Invoke(null); // Gửi giá trị null nếu Firebase chưa được khởi tạo
             return;
         }
 
-        reference.Child("players").Child(username).GetValueAsync().ContinueWithOnMainThread(task =>
+        reference.Child("player").Child(username).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted)
             {
-                Debug.LogError("Error loading player data: " + task.Exception);
+                Debug.Log("Error loading player data: " + task.Exception);
                 onDataLoaded?.Invoke(null); // Gửi giá trị null nếu có lỗi
             }
             else if (task.IsCompleted)
@@ -109,7 +118,7 @@ public class FirebaseManager1 : MonoBehaviour
     {
         if (playerData == null || playerStats == null)
         {
-            Debug.LogError("Player data or player stats is null");
+            Debug.Log("Player data or player stats is null");
             return;
         }
 
@@ -127,16 +136,10 @@ public class FirebaseManager1 : MonoBehaviour
         // Cập nhật trạng thái nhiệm vụ và kỹ năng
         playerStats.isQuest1Complete = playerData.isQuest1Complete;
         playerStats.isAppleQuestComplete = playerData.isAppleQuestComplete;
-
+        playerStats.isPlayerNearby = playerData.isPlayerNearby;
+        //playerStats.hasCompletedQuestInput = playerData.hasCompletedQuestInput;
         // Cập nhật các thông số kỹ năng
-        playerStats.skill1Cooldown = playerData.skill1Cooldown;
-        playerStats.skill2Cooldown = playerData.skill2Cooldown;
-        playerStats.skill3Cooldown = playerData.skill3Cooldown;
 
-        // Cập nhật các timer kỹ năng
-        playerStats.skill1Timer = playerData.skill1Timer;
-        playerStats.skill2Timer = playerData.skill2Timer;
-        playerStats.skill3Timer = playerData.skill3Timer;
 
         // Cập nhật UI và các thay đổi liên quan đến dữ liệu người chơi
         playerStats.UpdateStatsText();  // Cập nhật UI sau khi tải dữ liệu
@@ -156,47 +159,35 @@ public class FirebaseManager1 : MonoBehaviour
         public int upgradePoints;
         public float expCurrent;
         public float expMax;
+        //public List<ItemData> items;
 
         // Các trạng thái nhiệm vụ
         public bool isQuest1Complete;
         public bool isAppleQuestComplete;
-
+        public bool isPlayerNearby;
+        //public bool hasCompletedQuestInput;
         // Các thông số cooldown kỹ năng
-        public float skill1Cooldown;
-        public float skill2Cooldown;
-        public float skill3Cooldown;
 
-        // Các timer cho kỹ năng
-        public float skill1Timer;
-        public float skill2Timer;
-        public float skill3Timer;
 
         // Constructor để chuyển đổi từ dữ liệu người chơi trong game sang Firebase
         public PlayerData(Dichuyennv1 playerStats)
         {
-            currentHealth = playerStats.currentHealth;
-            currentMana = playerStats.currentMana;
-            maxHealth = playerStats.maxHealth;
-            maxMana = playerStats.maxMana;
-            damageAmount = playerStats.damageAmount;
-            level = playerStats.level;
-            upgradePoints = playerStats.upgradePoints;
-            expCurrent = playerStats.expCurrent;
-            expMax = playerStats.expMax;
+            // Cập nhật giá trị ban đầu cho health và mana
+            currentHealth = playerStats?.currentHealth ?? 100;  // Nếu playerStats không có giá trị, gán 100
+            currentMana = playerStats?.currentMana ?? 100;      // Nếu playerStats không có giá trị, gán 100
+            maxHealth = playerStats?.maxHealth ?? 100;
+            maxMana = playerStats?.maxMana ?? 100;
+            damageAmount = playerStats?.damageAmount ?? 5;  // Ví dụ, giá trị mặc định là 10
+            level = playerStats?.level ?? 1;                 // Mặc định cấp độ là 1
+            upgradePoints = playerStats?.upgradePoints ?? 0;
+            expCurrent = playerStats?.expCurrent ?? 0f;
+            expMax = playerStats?.expMax ?? 100f;  // Ví dụ, mức tối đa exp là 100
 
             // Nhiệm vụ
-            isQuest1Complete = playerStats.isQuest1Complete;
-            isAppleQuestComplete = playerStats.isAppleQuestComplete;
-
-            // Kỹ năng
-            skill1Cooldown = playerStats.skill1Cooldown;
-            skill2Cooldown = playerStats.skill2Cooldown;
-            skill3Cooldown = playerStats.skill3Cooldown;
-
-            // Timer kỹ năng
-            skill1Timer = playerStats.skill1Timer;
-            skill2Timer = playerStats.skill2Timer;
-            skill3Timer = playerStats.skill3Timer;
+            isQuest1Complete = playerStats?.isQuest1Complete ?? false;
+            isAppleQuestComplete = playerStats?.isAppleQuestComplete ?? false;
+            isPlayerNearby = playerStats?.isPlayerNearby ?? false;
+            //hasCompletedQuestInput=playerStats?.hasCompletedQuestInput ?? false;
         }
     }
 }

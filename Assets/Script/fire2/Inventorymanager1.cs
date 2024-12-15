@@ -9,6 +9,7 @@ public class PlayerProfileManager : MonoBehaviour
     private DatabaseReference databaseReference;  // Firebase Database reference
     private string username;  // Lưu username của người chơi
 
+
     // Các giá trị cần lưu vào Firebase
     public int playerHealth = 0;  // Giá trị mặc định
     public int playerMana = 0;    // Giá trị mặc định
@@ -86,6 +87,7 @@ public class PlayerProfileManager : MonoBehaviour
         {
             Debug.LogError("Username không hợp lệ!");
             return;
+            
         }
 
         // Tạo reference đến dữ liệu người chơi trong Firebase
