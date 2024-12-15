@@ -149,7 +149,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             questText.text = appleQuestText;
             appleCountText.gameObject.SetActive(true);
             appleCountText.text = "Số táo đã thu thập: " + appleCount + "/3";
-            firebaseManager1.SavePlayerData(dichuyen1);
+            //firebaseManager1.SavePlayerData(dichuyen1);
         }
         else if (isCompletedAppleQuest && !isCompletedArmorQuest)
         {
