@@ -28,6 +28,10 @@ public class PlayerDataTest : MonoBehaviour
     private Vector3 lastSavedPosition;
     private bool isFirebaseInitialized = false;  // Biến để kiểm tra Firebase đã khởi tạo chưa
 
+    // Cờ kiểm tra có thay đổi dữ liệu không
+    private bool hasPositionChanged = false;
+    private bool hasStatsChanged = false;
+
     // Kiểm tra xem player có được gán chưa trước khi truy cập
     private async void Start()
     {
@@ -72,9 +76,9 @@ public class PlayerDataTest : MonoBehaviour
         if (isFirebaseInitialized && !string.IsNullOrEmpty(username))
         {
             //Tải dữ liệu người chơi từ Firebase
-           await LoadPlayerDataFromFirebase(username);
+            await LoadPlayerDataFromFirebase(username);
             //Tải vị trí người chơi từ Firebase
-           await LoadPlayerPositionFromFirebase(username);
+            await LoadPlayerPositionFromFirebase(username);
         }
         else
         {
@@ -98,7 +102,12 @@ public class PlayerDataTest : MonoBehaviour
         if (healthText != null)
             healthText.text = "Health: " + value.ToString("F0");
 
-        SavePlayerData("HealthCurrent", (int)value);  // Lưu giá trị health vào Firebase
+        // Kiểm tra thay đổi giá trị và đánh dấu đã thay đổi
+        if (healthSlider.value != value)
+        {
+            healthSlider.value = value;
+            hasStatsChanged = true;  // Đánh dấu có thay đổi
+        }
     }
 
     private void UpdateEnergy(float value)
@@ -106,7 +115,12 @@ public class PlayerDataTest : MonoBehaviour
         if (energyText != null)
             energyText.text = "Energy: " + value.ToString("F0");
 
-        SavePlayerData("EnergyCurrent", (int)value);  // Lưu giá trị energy vào Firebase
+        // Kiểm tra thay đổi giá trị và đánh dấu đã thay đổi
+        if (energySlider.value != value)
+        {
+            energySlider.value = value;
+            hasStatsChanged = true;
+        }
     }
 
     private void UpdateExp(float value)
@@ -114,7 +128,12 @@ public class PlayerDataTest : MonoBehaviour
         if (expText != null)
             expText.text = "EXP: " + value.ToString("F0");
 
-        SavePlayerData("Exp", (int)value);  // Lưu giá trị exp vào Firebase
+        // Kiểm tra thay đổi giá trị và đánh dấu đã thay đổi
+        if (expSlider.value != value)
+        {
+            expSlider.value = value;
+            hasStatsChanged = true;
+        }
     }
 
     private void UpdateGold(int value)
@@ -122,7 +141,12 @@ public class PlayerDataTest : MonoBehaviour
         if (goldText != null)
             goldText.text = "Gold: " + value.ToString();
 
-        SavePlayerData("Gold", value); // Lưu giá trị Gold vào Firebase
+        // Kiểm tra thay đổi giá trị và đánh dấu đã thay đổi
+        if (this.gold != value)
+        {
+            this.gold = value;
+            hasStatsChanged = true;
+        }
     }
 
     private void UpdateDiamond(int value)
@@ -130,7 +154,12 @@ public class PlayerDataTest : MonoBehaviour
         if (diamondText != null)
             diamondText.text = "Diamond: " + value.ToString();
 
-        SavePlayerData("Diamond", value); // Lưu giá trị Diamond vào Firebase
+        // Kiểm tra thay đổi giá trị và đánh dấu đã thay đổi
+        if (this.diamond != value)
+        {
+            this.diamond = value;
+            hasStatsChanged = true;
+        }
     }
 
     // Lưu dữ liệu người chơi vào Firebase
@@ -268,30 +297,28 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
-    private bool isDataLoaded = false;
-    // Kiểm tra và lưu vị trí người chơi mỗi frame nếu có thay đổi
     private void Update()
     {
-        //if (!isDataLoaded && isFirebaseInitialized)
-        //{
-        //    LoadPlayerDataFromFirebase(username);
-        //    LoadPlayerPositionFromFirebase(username);
-        //    isDataLoaded = true;
-        //}
-
-        if (player != null)
+        // Lưu vị trí người chơi nếu có thay đổi
+        if (hasPositionChanged)
         {
-            Vector3 currentPosition = player.transform.position;
-
-            // Kiểm tra sự thay đổi vị trí
-            if (Vector3.Distance(currentPosition, lastSavedPosition) > 0.1f) // Chỉ lưu khi có thay đổi vị trí
-            {
-                SavePlayerPosition(currentPosition);
-                lastSavedPosition = currentPosition; // Cập nhật vị trí đã lưu
-            }
-
-            // Lưu tên scene hiện tại vào Firebase khi chuyển màn hình
-            SavePlayerScene(SceneManager.GetActiveScene().name);
+            SavePlayerPosition(player.transform.position);
+            lastSavedPosition = player.transform.position; // Cập nhật vị trí đã lưu
+            hasPositionChanged = false;  // Đánh dấu đã lưu
         }
+
+        // Lưu dữ liệu stats nếu có thay đổi
+        if (hasStatsChanged)
+        {
+            SavePlayerData("HealthCurrent", (int)healthSlider.value);
+            SavePlayerData("EnergyCurrent", (int)energySlider.value);
+            SavePlayerData("Exp", (int)expSlider.value);
+            SavePlayerData("Gold", gold);
+            SavePlayerData("Diamond", diamond);
+            hasStatsChanged = false;  // Đánh dấu đã lưu
+        }
+
+        // Lưu tên scene hiện tại vào Firebase khi chuyển màn hình
+        SavePlayerScene(SceneManager.GetActiveScene().name);
     }
 }
