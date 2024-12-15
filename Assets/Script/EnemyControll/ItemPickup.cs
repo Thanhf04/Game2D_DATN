@@ -4,6 +4,7 @@ public class ItemPickup : MonoBehaviour
 {
     public int Coin;
     private UI_Coin uiCoin;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -11,13 +12,13 @@ public class ItemPickup : MonoBehaviour
             Pickup();
         }
     }
+
     void Pickup()
     {
-        uiCoin.AddCoins(Coin);
-        Debug.Log("Item pick up");
-        Debug.Log("Coin:" + Coin);
+        PlayerStats.Instance.gold += 100;
         Destroy(gameObject);
     }
+
     private void Start()
     {
         uiCoin = FindObjectOfType<UI_Coin>();

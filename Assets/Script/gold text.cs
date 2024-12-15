@@ -1,12 +1,12 @@
-﻿using Firebase.Database;
+﻿using System; // Để sử dụng Exception và các kiểu dữ liệu như Convert
+using System.Collections.Generic; // Để sử dụng Dictionary
+using Firebase.Database;
 using TMPro;
 using UnityEngine;
-using System; // Để sử dụng Exception và các kiểu dữ liệu như Convert
-using System.Collections.Generic; // Để sử dụng Dictionary
 
 public class Player3 : MonoBehaviour
 {
-    public TextMeshProUGUI goldText;  // Text để hiển thị gold
+    public TextMeshProUGUI goldText; // Text để hiển thị gold
 
     private DatabaseReference databaseReference;
     private string username;
@@ -30,7 +30,10 @@ public class Player3 : MonoBehaviour
     {
         try
         {
-            var snapshot = await databaseReference.Child("characters").Child(username).GetValueAsync();
+            var snapshot = await databaseReference
+                .Child("characters")
+                .Child(username)
+                .GetValueAsync();
 
             if (snapshot.Exists)
             {
@@ -75,7 +78,11 @@ public class Player3 : MonoBehaviour
         // Cập nhật giá trị gold trên Firebase
         try
         {
-            await databaseReference.Child("characters").Child(username).Child("gold").SetValueAsync(newGoldValue);
+            await databaseReference
+                .Child("characters")
+                .Child(username)
+                .Child("gold")
+                .SetValueAsync(newGoldValue);
             Debug.Log("Gold đã được cập nhật trên Firebase.");
 
             // Sau khi cập nhật Firebase, cập nhật lại UI

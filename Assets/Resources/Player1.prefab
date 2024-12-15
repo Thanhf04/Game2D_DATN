@@ -1126,15 +1126,9 @@ MonoBehaviour:
   healthSlider: {fileID: 3727628083030222106}
   manaSlider: {fileID: 50341388188801143}
   expSlider: {fileID: 6463134651474476217}
-  maxHealth: 100
-  currentHealth: 100
-  maxMana: 100
-  currentMana: 100
-  expMax: 100
-  expCurrent: 0
+  currentHealth: 0
   textLevel: {fileID: 4622147891302851420}
   textExp: {fileID: 8065223221535033573}
-  damageAmount: 10
   damageTrap: 20
   level: 1
   currentLevel: 1
@@ -1161,6 +1155,7 @@ MonoBehaviour:
   skill1CooldownText: {fileID: 7226372181953794399}
   skill2CooldownText: {fileID: 4278483182084296310}
   skill3CooldownText: {fileID: 2445024903085022730}
+  moveInput: 0
 --- !u!114 &6073535254716935610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,7 +1570,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 2087710978050009072}
-  toggleButton: {fileID: 6435450260794138107}
 --- !u!114 &5537508462075078972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589,7 +1583,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 2087710978050009072}
-  toggleButton: {fileID: 6435450260794138107}
 --- !u!1 &1533799327699558656
 GameObject:
   m_ObjectHideFlags: 0
@@ -5346,7 +5339,6 @@ GameObject:
   - component: {fileID: 2711024220737952475}
   - component: {fileID: 7869648833469743507}
   - component: {fileID: 7257628685052550808}
-  - component: {fileID: 8594927019701778428}
   m_Layer: 7
   m_Name: chiso
   m_TagString: Untagged
@@ -5416,21 +5408,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8594927019701778428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7541405833160879792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0733fc9ed9b9a8640912c6eb2984bad4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthText: {fileID: 5424515554211309777}
-  manaText: {fileID: 586641663803667804}
-  damageText: {fileID: 1894656834988675996}
 --- !u!1 &7618589868048859547
 GameObject:
   m_ObjectHideFlags: 0
@@ -8807,10 +8784,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8449777841244222155, guid: 584fea4489c8f9d4a85d5cd9281ae1ab, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3851733836995819982}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2181373099486448356, guid: 584fea4489c8f9d4a85d5cd9281ae1ab, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8275881918100741348}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 584fea4489c8f9d4a85d5cd9281ae1ab, type: 3}
 --- !u!224 &417122628532099975 stripped
 RectTransform:
@@ -8822,24 +8796,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3436337547540427173, guid: 584fea4489c8f9d4a85d5cd9281ae1ab, type: 3}
   m_PrefabInstance: {fileID: 8109380938694846796}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7984747695480857512 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2181373099486448356, guid: 584fea4489c8f9d4a85d5cd9281ae1ab, type: 3}
-  m_PrefabInstance: {fileID: 8109380938694846796}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8275881918100741348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7984747695480857512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deba5df4bcfc13c4baba99385f13734a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomCodeText: {fileID: 4629182709884656881}
 --- !u!1001 &9051213035558828775
 PrefabInstance:
   m_ObjectHideFlags: 0

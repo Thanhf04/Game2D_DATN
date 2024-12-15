@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyControl : MonoBehaviour
 {
     public float start; // Điểm bắt đầu tuần tra
-    public float end;   // Điểm kết thúc tuần tra
+    public float end; // Điểm kết thúc tuần tra
     public bool isRight;
     public float speed;
     public float attackRange = 2.0f;
@@ -21,10 +21,10 @@ public class EnemyControl : MonoBehaviour
     {
         if (player == null)
         {
-            player = GameObject.FindWithTag("Player"); 
+            player = GameObject.FindWithTag("Player");
             if (player == null)
             {
-                return; 
+                return;
             }
         }
 
@@ -35,16 +35,16 @@ public class EnemyControl : MonoBehaviour
 
         if (distanceToPlayer <= attackRange)
         {
-            AttackPlayer(); 
+            AttackPlayer();
         }
         else if (distanceToPlayer <= chaseRange)
         {
-            ChasePlayer(playerPosition); 
+            ChasePlayer(playerPosition);
         }
         else
         {
-            animator.SetBool("isAttacking", false); 
-            Patrol(quai); 
+            animator.SetBool("isAttacking", false);
+            Patrol(quai);
         }
     }
 
@@ -120,6 +120,9 @@ public class EnemyControl : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, chaseRange);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(new Vector3(start, transform.position.y, 0), new Vector3(end, transform.position.y, 0));
+        Gizmos.DrawLine(
+            new Vector3(start, transform.position.y, 0),
+            new Vector3(end, transform.position.y, 0)
+        );
     }
 }

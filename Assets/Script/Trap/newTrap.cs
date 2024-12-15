@@ -7,6 +7,7 @@ public class newTrap : MonoBehaviour
     public Transform diemA;
     public Transform diemB;
     private Vector3 diemMucTieu;
+
     void Start()
     {
         diemMucTieu = diemA.position;
@@ -15,7 +16,11 @@ public class newTrap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, diemMucTieu, tocDoDiChuyen * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            diemMucTieu,
+            tocDoDiChuyen * Time.deltaTime
+        );
         if (Vector3.Distance(transform.position, diemMucTieu) < 0.1f)
         {
             if (transform.position == diemA.position)
@@ -33,7 +38,9 @@ public class newTrap : MonoBehaviour
     {
         transform.Rotate(0, 0, tocDoXoay);
     }
-    private void OnTriggerEnter2D(Collider2D other) {
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.CompareTag("Player"))
         {
             // Gây sát thương cho người chơi nếu vùng sát thương chạm

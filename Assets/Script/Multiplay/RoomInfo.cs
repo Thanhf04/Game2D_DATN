@@ -10,7 +10,7 @@ public class RoomInfo : MonoBehaviour
         // Lấy mã phòng từ PlayerPrefs
         if (PlayerPrefs.HasKey("RoomCode"))
         {
-            roomCodeText.text =PlayerPrefs.GetString("RoomCode");
+            roomCodeText.text = PlayerPrefs.GetString("RoomCode");
         }
         else
         {

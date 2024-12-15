@@ -8,6 +8,7 @@ public class Model_Shop
         HP_1,
         MP_1
     }
+
     private static Dictionary<ItemType, ItemClass> itemTypeToScriptableObject;
 
     private void Awake()
@@ -19,6 +20,7 @@ public class Model_Shop
             // Thêm các item khác
         };
     }
+
     public static ItemClass GetItemByType(ItemType itemType)
     {
         if (itemTypeToScriptableObject.TryGetValue(itemType, out ItemClass item))
@@ -34,18 +36,22 @@ public class Model_Shop
         switch (itemType)
         {
             default:
-            case ItemType.HP_1: return 10;
-            case ItemType.MP_1: return 5;
+            case ItemType.HP_1:
+                return 10;
+            case ItemType.MP_1:
+                return 5;
         }
     }
+
     public static Sprite GetSprite(ItemType itemType)
     {
         switch (itemType)
         {
             default:
-            case ItemType.HP_1: return GameAssets.i.s_HP_1;
-            case ItemType.MP_1: return GameAssets.i.s_MP_1;
+            case ItemType.HP_1:
+                return GameAssets.i.s_HP_1;
+            case ItemType.MP_1:
+                return GameAssets.i.s_MP_1;
         }
     }
 }
-

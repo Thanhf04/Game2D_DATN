@@ -13,7 +13,7 @@ public class ArrowSpawner : MonoBehaviour
     {
         // Tạo mũi tên mới
         GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
-        
+
         // Lấy Rigidbody2D từ mũi tên và thiết lập tốc độ
         Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
         rb.velocity = shootPoint.right * arrowSpeed; // Thiết lập hướng mũi tên

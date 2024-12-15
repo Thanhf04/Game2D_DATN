@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public GameObject prefabsItem; // Vật phẩm rơi ra
     public event Action OnDeath;
     public EnemyRespawn respawnManager; // Quản lý respawn
-    private NPCQuest npcQuest; 
+    private NPCQuest npcQuest;
     private Dichuyennv1 player;
 
     void Start()
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
         // Tìm EnemyRespawn nếu chưa được gán
         if (respawnManager == null)
         {
-            respawnManager = FindObjectOfType<EnemyRespawn>(); 
+            respawnManager = FindObjectOfType<EnemyRespawn>();
         }
     }
 
@@ -36,17 +36,16 @@ public class Enemy : MonoBehaviour
         UpdateHealthSlider();
     }
 
-
     // Hàm nhận sát thương
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth -= (int)damage;
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Die();  // Gọi Die khi chết
+            Die(); // Gọi Die khi chết
         }
-        UpdateHealthSlider();  // Cập nhật thanh sức khỏe
+        UpdateHealthSlider(); // Cập nhật thanh sức khỏe
     }
 
     // Cập nhật thanh sức khỏe
@@ -74,7 +73,7 @@ public class Enemy : MonoBehaviour
         {
             npcQuest.KillMonster(); // Gọi hàm KillMonster trong NPCQuest khi quái vật chết
         }
-        DropItem();  // Rơi vật phẩm khi chết
+        DropItem(); // Rơi vật phẩm khi chết
         if (OnDeath != null)
         {
             OnDeath(); // Gọi sự kiện OnDeath nếu có

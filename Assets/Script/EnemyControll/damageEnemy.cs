@@ -1,5 +1,3 @@
-using Photon.Pun;
-using System.Collections;
 using UnityEngine;
 
 public class damageEnemy : MonoBehaviour
@@ -23,31 +21,11 @@ public class damageEnemy : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (playerHealth == null)
         {
             playerHealth = FindObjectOfType<Dichuyennv1>();
-        }
-        StartCoroutine(WaitForPlayerSpawn());
-    }
-
-    IEnumerator WaitForPlayerSpawn()
-    {
-        while (playerHealth == null)
-        {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (var playerObj in players)
-            {
-                var playerPhotonView = playerObj.GetComponent<PhotonView>();
-                if (playerPhotonView != null && playerPhotonView.IsMine)
-                {
-                    playerHealth = playerObj.GetComponent<Dichuyennv1>();
-                    break;
-                }
-            }
-            yield return new WaitForSeconds(0.1f);
         }
     }
 

@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Boss_Health : MonoBehaviour
 {
-    [SerializeField] private Slider HealthBoss;
-    [SerializeField] private GameObject Boss;
+    [SerializeField]
+    private Slider HealthBoss;
+
+    [SerializeField]
+    private GameObject Boss;
     public int maxHealth = 100;
     public int currentHealth;
     Animator animator;
@@ -32,9 +36,9 @@ public class Boss_Health : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth -= (int)damage;
         if (currentHealth <= 0)
         {
             Die();

@@ -13,12 +13,15 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public Text nextText;
     public UI_Coin uiCoin;
     public static bool isQuestAppleArmor = false;
-    private FirebaseManager1 firebaseManager1;
+
+    // private FirebaseManager1 firebaseManager1;
     public Image lockSkill1;
 
-    private string encouragementText = "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
+    private string encouragementText =
+        "Giỏi lắm chàng trai, bạn đã đi được tới đây, hãy tiếp tục cuộc hành trình nào!";
     private string appleQuestText = "Nhiệm vụ mới: Thu thập 3 quả táo để tiếp tục hành trình!";
-    private string appleCompletionText = "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
+    private string appleCompletionText =
+        "Chúc mừng bạn đã thu thập đủ 3 quả táo, nhận thêm 20 vàng!";
     private string armorQuestText = "Nhiệm vụ mới: Thu thập 1 bộ giáp để tiếp tục hành trình!";
     private string armorCompletionText = "Chúc mừng bạn đã thu thập đủ giáp, nhận thêm 30 vàng!";
 
@@ -34,7 +37,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
     void Start()
     {
-        firebaseManager1 = FindObjectOfType<FirebaseManager1>();
+        // firebaseManager1 = FindObjectOfType<FirebaseManager1>();
 
         if (questPanel != null)
         {
@@ -77,7 +80,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
         // Load quest status from Firebase when the game starts
         //LoadQuestStatusFromFirebase();
-
     }
 
     // Load quest status from Firebase
@@ -137,10 +139,10 @@ public class NPCAppleArmorQuest : MonoBehaviour
         //LoadQuestStatusFromFirebase();
 
         // Debug logs to check if data is updated correctly
-        Debug.Log("Apple Count from Firebase: " + appleCount);
-        Debug.Log("Armor Count from Firebase: " + armorCount);
-        Debug.Log("Has Completed Apple Quest: " + isCompletedAppleQuest);
-        Debug.Log("Has Completed Armor Quest: " + isCompletedArmorQuest);
+        // Debug.Log("Apple Count from Firebase: " + appleCount);
+        // Debug.Log("Armor Count from Firebase: " + armorCount);
+        // Debug.Log("Has Completed Apple Quest: " + isCompletedAppleQuest);
+        // Debug.Log("Has Completed Armor Quest: " + isCompletedArmorQuest);
 
         // Check quest status and update UI accordingly
         if (!isCompletedAppleQuest)
@@ -168,7 +170,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
         }
     }
 
-
     // Handle confirm button click
     private void OnConfirm()
     {
@@ -183,7 +184,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             {
                 if (uiCoin != null)
                 {
-                    uiCoin.AddCoins(30); // Reward gold when completing armor quest
+                    PlayerStats.Instance.gold += 30; // Reward gold when completing armor quest
                 }
                 armorCountText.gameObject.SetActive(false);
                 //firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
@@ -192,7 +193,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             {
                 if (uiCoin != null)
                 {
-                    uiCoin.AddCoins(20); // Reward gold when completing apple quest
+                    PlayerStats.Instance.gold += 20; // Reward gold when completing apple quest
                 }
                 Destroy(lockSkill1);
                 appleCountText.gameObject.SetActive(false);
@@ -222,7 +223,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
             if (uiCoin != null)
             {
-                uiCoin.AddCoins(20); // Reward gold when completing the apple quest
+                PlayerStats.Instance.gold += 20; // Reward gold when completing the apple quest
             }
         }
     }
@@ -235,7 +236,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
         if (armorCount >= 1 && !isCompletedArmorQuest)
         {
-           isCompletedArmorQuest = true;
+            isCompletedArmorQuest = true;
             questText.text = armorCompletionText;
             armorCountText.color = Color.yellow;
             //firebaseQuestManager.SetArmorCount(armorCount);
@@ -244,7 +245,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
 
             if (uiCoin != null)
             {
-                uiCoin.AddCoins(30);
+                PlayerStats.Instance.gold += 30;
             }
         }
     }
