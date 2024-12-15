@@ -214,9 +214,10 @@ public class Dichuyennv1 : MonoBehaviour
             firebaseManager1.UpdatePlayerStats(playerData, this);
 
             // Cập nhật các trạng thái nhiệm vụ (quest)
-            isQuest1Complete = playerData.isQuest1Complete;
-            isAppleQuestComplete = playerData.isAppleQuestComplete;
+            //isQuest1Complete = playerData.isQuest1Complete;
+            //isAppleQuestComplete = playerData.isAppleQuestComplete;
 
+            // Debug thông báo trạng thái nhiệm vụ đã được cập nhật
             Debug.Log("Apple Armor Quest Completed: " + isAppleQuestComplete);
             Debug.Log("Quest 1 Completed: " + isQuest1Complete);
             //UpdateQuestUI();
@@ -952,8 +953,8 @@ public class Dichuyennv1 : MonoBehaviour
                 npcapple.CollectApple();
             }
 
-            // Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
-            firebaseManager1.SavePlayerData(this);
+            //// Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
+            //firebaseManager1.SavePlayerData(this);
 
             // Thông báo hoàn thành nhiệm vụ (có thể hiển thị UI hoặc popup)
             Debug.Log("Nhiệm vụ táo đã hoàn thành.");

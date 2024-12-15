@@ -89,94 +89,108 @@ public class QuizGame : MonoBehaviour
             }
         }
 
-        UpdateScore();
-    }
+    //    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //{
+    //    // Di chuyển đối tượng Player về vị trí (2.0, 3.0, 0.0)
+    //    GameObject player = GameObject.Find("Player"); // Thay "Player" bằng tên đối tượng của bạn
+    //    if (player != null)
+    //    {
+    //        player.transform.position = new Vector3(2.0f, 3.0f, 0.0f); // Thay (2.0, 3.0, 0.0) bằng vị trí bạn muốn
+    //    }
 
-    void UpdateScore()
+    //    // Đảm bảo sau khi di chuyển xong, hủy sự kiện để tránh gọi nhiều lần
+    //    SceneManager.sceneLoaded -= OnSceneLoaded;
+    //}
+
+
+    UpdateScore();
+}
+
+void UpdateScore()
+{
+    scoreText.text = "Số câu trả lời đúng: " + $"{correctAnswers}/4";
+}
+
+IEnumerator HandleWrongAnswer()
+{
+    yield return new WaitForSeconds(1.5f);
+    HideAllFeedback();
+    ResetQuiz();
+}
+
+void ResetQuiz()
+{
+    correctAnswers = 0;
+    currentQuestionIndex = 0;
+    ShowQuestion();
+    UpdateScore();
+}
+
+private void OnCollisionEnter2D(Collision2D collision)
+{
+    if (collision.collider.CompareTag("Player"))
     {
-        scoreText.text = "Số câu trả lời đúng: " + $"{correctAnswers}/4";
+        ShowMessage("Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa.");
     }
+}
 
-    IEnumerator HandleWrongAnswer()
+void ShowMessage(string message)
+{
+    messageText.text = message;
+    messagePanel.SetActive(true);
+}
+
+public void StartQuiz()
+{
+    messagePanel.SetActive(false);
+    quizPanel.SetActive(true);
+    ShowQuestion();
+}
+
+public void CloseQuiz()
+{
+    quizPanel.SetActive(false);
+    HideAllFeedback();
+}
+
+void CreateFeedback(int questionIndex, string message, bool isCorrect)
+{
+    if (questionIndex < feedbackTexts.Length)
     {
-        yield return new WaitForSeconds(1.5f);
-        HideAllFeedback();
-        ResetQuiz();
+        Text feedbackText = feedbackTexts[questionIndex];
+        feedbackText.text = message;
+        feedbackText.color = isCorrect ? Color.green : Color.red;
+        feedbackText.gameObject.SetActive(true);
+
+        StartCoroutine(HideFeedbackAfterDelay(feedbackText, 1.5f));
     }
+}
 
-    void ResetQuiz()
+IEnumerator HideFeedbackAfterDelay(Text feedback, float delay)
+{
+    yield return new WaitForSeconds(delay);
+    if (feedback != null)
     {
-correctAnswers = 0;
-        currentQuestionIndex = 0;
-        ShowQuestion();
-        UpdateScore();
+        feedback.gameObject.SetActive(false);
     }
+}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+void HideAllFeedback()
+{
+    foreach (var feedback in feedbackTexts)
     {
-        if (collision.collider.CompareTag("Player"))
-        {
-            ShowMessage("Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa.");
-        }
-    }
-
-    void ShowMessage(string message)
-    {
-        messageText.text = message;
-        messagePanel.SetActive(true);
-    }
-
-    public void StartQuiz()
-    {
-        messagePanel.SetActive(false);
-        quizPanel.SetActive(true);
-        ShowQuestion();
-    }
-
-    public void CloseQuiz()
-    {
-        quizPanel.SetActive(false);
-        HideAllFeedback();
-    }
-
-    void CreateFeedback(int questionIndex, string message, bool isCorrect)
-    {
-        if (questionIndex < feedbackTexts.Length)
-        {
-            Text feedbackText = feedbackTexts[questionIndex];
-            feedbackText.text = message;
-            feedbackText.color = isCorrect ? Color.green : Color.red;
-            feedbackText.gameObject.SetActive(true);
-
-            StartCoroutine(HideFeedbackAfterDelay(feedbackText, 1.5f));
-        }
-    }
-
-    IEnumerator HideFeedbackAfterDelay(Text feedback, float delay)
-    {
-        yield return new WaitForSeconds(delay);
         if (feedback != null)
         {
             feedback.gameObject.SetActive(false);
         }
     }
+}
 
-    void HideAllFeedback()
-    {
-        foreach (var feedback in feedbackTexts)
-        {
-            if (feedback != null)
-            {
-                feedback.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    [System.Serializable]
-    public class Question
-    {
-        public string questionText;
-        public string[] options;
-        public int correctAnswerIndex;
-    }
+[System.Serializable]
+public class Question
+{
+    public string questionText;
+    public string[] options;
+    public int correctAnswerIndex;
+}
 }
