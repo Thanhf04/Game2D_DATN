@@ -102,4 +102,5 @@ public class Enemy : MonoBehaviour
         ResetHealth(); // Đặt lại sức khỏe
         UpdateHealthSlider(); // Cập nhật lại thanh sức khỏe nếu cần
     }
+
 }

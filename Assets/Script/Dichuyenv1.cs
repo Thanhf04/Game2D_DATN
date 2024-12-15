@@ -237,17 +237,6 @@ public class Dichuyennv1 : MonoBehaviour
         }
 
 
-        //if (Quest_3.isWolfQuest)
-        //{
-        //    isJump = false;
-        //    anim.SetBool("isJump", false);
-        //    Debug.Log("Khóa");
-        //    return;
-
-        //}
-
-
-
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
@@ -465,16 +454,45 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
     }
 
+private float lastGroundY = 0f; // Lưu tọa độ Y cuối cùng khi nhân vật ở trên mặt đất
+public float fallDamageThreshold = 8f; // Ngưỡng chiều cao rơi để bắt đầu tính sát thương
+private int fallDamage = 50; // Lượng máu bị trừ khi rơi từ độ cao vượt ngưỡng
+public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
+    {
+        isGrounded = true;
+        isJump = false;
+        anim.SetBool("isJump", false);
+        anim.SetBool("isAttack2", false);
+        jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
+
+        // Tính toán độ cao rơi
+        float fallHeight = lastGroundY - transform.position.y;
+
+        // Nếu độ cao rơi vượt ngưỡng, trừ máu
+        if (fallHeight > fallDamageThreshold)
         {
-            isGrounded = true;
-            isJump = false;
-            anim.SetBool("isJump", false);
-            anim.SetBool("isAttack2", false);
-            jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
+            currentHealth -= fallDamage; // Trừ máu
+            healthSlider.value = currentHealth; // Cập nhật thanh máu
+            // Hiển thị hiệu ứng rơi nếu nhân vật mất máu
+             if (fallEffectPrefab != null && fallDamage > 0)
+             {
+                 GameObject effect = Instantiate(fallEffectPrefab, transform.position, Quaternion.identity); // Tạo instance
+        Destroy(effect, 2f); // Hủy instance sau 2 giây
+            }
+            // Hiển thị thông báo nếu cần
+            notificationText.SetText($"Rơi từ độ cao {fallHeight:F1}! Bị trừ {fallDamage} máu.");
+            
+            // Kiểm tra nếu máu <= 0 thì gọi hàm GameOver
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
         }
+    }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -482,6 +500,7 @@ public class Dichuyennv1 : MonoBehaviour
         if (collision.gameObject.CompareTag("NenDat"))
         {
             isGrounded = false;
+            lastGroundY = transform.position.y;
         }
     }
 
