@@ -3,9 +3,9 @@ using UnityEngine;
 public class DamagePlayerSkill : MonoBehaviour
 {
     public int DamageSkill;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.CompareTag("enemy") || collision.CompareTag("Boss"))
         {
             Enemy e = collision.GetComponent<Enemy>();

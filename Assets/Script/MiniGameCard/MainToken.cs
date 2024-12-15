@@ -57,12 +57,12 @@ public class MainToken : MonoBehaviour, IPointerClickHandler
     {
         imageRenderer.sprite = back; // Đặt lại hình ảnh là mặt sau
     }
+
     private IEnumerator FlipBackAfterDelay()
     {
-        yield return new WaitForSeconds(1.0f);// Chờ 1 giây
+        yield return new WaitForSeconds(1.0f); // Chờ 1 giây
 
         // Úp lại thẻ không khớp
         gameManager.ResetVisibleFaces();
     }
-
 }

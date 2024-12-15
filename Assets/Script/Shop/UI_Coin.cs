@@ -1,4 +1,4 @@
-﻿using Firebase;
+using Firebase;
 using Firebase.Database;
 using System.Threading.Tasks;  // Thêm dòng này để sử dụng Task
 using UnityEngine;
@@ -149,3 +149,4 @@ public class UI_Coin : MonoBehaviour
         panelShop.SetActive(true);
     }
 }
+

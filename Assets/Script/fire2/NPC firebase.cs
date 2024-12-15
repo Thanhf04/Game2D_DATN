@@ -1,9 +1,11 @@
-﻿using Firebase;
+﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Collections.Generic;
+using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine;
-using System.Collections.Generic;
-using System;
 
 public class FirebaseQuestManager : MonoBehaviour
 {
@@ -15,68 +17,83 @@ public class FirebaseQuestManager : MonoBehaviour
 
     void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            if (task.IsFaulted || task.IsCanceled)
+        FirebaseApp
+            .CheckAndFixDependenciesAsync()
+            .ContinueWithOnMainThread(task =>
             {
-                Debug.LogError("Firebase initialization failed.");
-            }
-            else
-            {
-                Debug.Log("Firebase initialized successfully.");
-                userName = PlayerPrefs.GetString("username", "");
-
-                if (string.IsNullOrEmpty(userName))
+                if (task.IsFaulted || task.IsCanceled)
                 {
-                    Debug.LogError("Username is empty. Cannot load player data.");
-                    return;
+                    Debug.LogError("Firebase initialization failed.");
                 }
+                else
+                {
+                    Debug.Log("Firebase initialized successfully.");
+                    userName = PlayerPrefs.GetString("username", "");
 
-                LoadQuestStatus(); // Load quest status when the game starts
-            }
-        });
+                    if (string.IsNullOrEmpty(userName))
+                    {
+                        Debug.LogError("Username is empty. Cannot load player data.");
+                        return;
+                    }
+
+                    LoadQuestStatus(); // Load quest status when the game starts
+                }
+            });
     }
 
     public void LoadQuestStatus()
     {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference.Child("quests").Child(userName);
+        DatabaseReference reference = FirebaseDatabase
+            .DefaultInstance.RootReference.Child("quests")
+            .Child(userName);
 
-        reference.GetValueAsync().ContinueWithOnMainThread(task => {
-            if (task.IsCompleted)
+        reference
+            .GetValueAsync()
+            .ContinueWithOnMainThread(task =>
             {
-                DataSnapshot snapshot = task.Result;
-
-                if (snapshot.Exists)
+                if (task.IsCompleted)
                 {
-                    appleCount = Convert.ToInt32(snapshot.Child("appleCount").Value);
-                    armorCount = Convert.ToInt32(snapshot.Child("armorCount").Value);
-                    hasCompletedAppleQuest = Convert.ToBoolean(snapshot.Child("hasCompletedAppleQuest").Value);
-                    hasCompletedArmorQuest = Convert.ToBoolean(snapshot.Child("hasCompletedArmorQuest").Value);
+                    DataSnapshot snapshot = task.Result;
 
-                    Debug.Log("Quest status loaded from Firebase.");
-
-                    // After loading data, call UpdateUI to update the UI
-                    NPCAppleArmorQuest npcAppleArmorQuest = FindObjectOfType<NPCAppleArmorQuest>();
-                    if (npcAppleArmorQuest != null)
+                    if (snapshot.Exists)
                     {
-                        npcAppleArmorQuest.UpdateUI();
+                        appleCount = Convert.ToInt32(snapshot.Child("appleCount").Value);
+                        armorCount = Convert.ToInt32(snapshot.Child("armorCount").Value);
+                        hasCompletedAppleQuest = Convert.ToBoolean(
+                            snapshot.Child("hasCompletedAppleQuest").Value
+                        );
+                        hasCompletedArmorQuest = Convert.ToBoolean(
+                            snapshot.Child("hasCompletedArmorQuest").Value
+                        );
+
+                        Debug.Log("Quest status loaded from Firebase.");
+
+                        // After loading data, call UpdateUI to update the UI
+                        NPCAppleArmorQuest npcAppleArmorQuest =
+                            FindObjectOfType<NPCAppleArmorQuest>();
+                        if (npcAppleArmorQuest != null)
+                        {
+                            npcAppleArmorQuest.UpdateUI();
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("No quest data found for this user. Initializing quest...");
+                        InitializeQuest();
                     }
                 }
                 else
                 {
-                    Debug.Log("No quest data found for this user. Initializing quest...");
-                    InitializeQuest();
+                    Debug.LogError("Failed to get quest data from Firebase.");
                 }
-            }
-            else
-            {
-                Debug.LogError("Failed to get quest data from Firebase.");
-            }
-        });
+            });
     }
 
     public void SaveQuestStatus()
     {
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference.Child("quests").Child(userName);
+        DatabaseReference reference = FirebaseDatabase
+            .DefaultInstance.RootReference.Child("quests")
+            .Child(userName);
 
         Dictionary<string, object> questData = new Dictionary<string, object>
         {
@@ -86,27 +103,60 @@ public class FirebaseQuestManager : MonoBehaviour
             { "hasCompletedArmorQuest", hasCompletedArmorQuest }
         };
 
-        reference.SetValueAsync(questData).ContinueWithOnMainThread(task => {
-            if (task.IsCompleted)
+        reference
+            .SetValueAsync(questData)
+            .ContinueWithOnMainThread(task =>
             {
-                Debug.Log("Quest status saved to Firebase successfully.");
-            }
-            else
-            {
-                Debug.LogError("Failed to save quest status to Firebase: " + task.Exception);
-            }
-        });
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Quest status saved to Firebase successfully.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to save quest status to Firebase: " + task.Exception);
+                }
+            });
     }
 
-    public void SetAppleCount(int count) { appleCount = count; }
-    public void SetArmorCount(int count) { armorCount = count; }
-    public void SetHasCompletedAppleQuest(bool completed) { hasCompletedAppleQuest = completed; }
-    public void SetHasCompletedArmorQuest(bool completed) { hasCompletedArmorQuest = completed; }
+    public void SetAppleCount(int count)
+    {
+        appleCount = count;
+    }
 
-    public int GetAppleCount() { return appleCount; }
-    public int GetArmorCount() { return armorCount; }
-    public bool GetHasCompletedAppleQuest() { return hasCompletedAppleQuest; }
-    public bool GetHasCompletedArmorQuest() { return hasCompletedArmorQuest; }
+    public void SetArmorCount(int count)
+    {
+        armorCount = count;
+    }
+
+    public void SetHasCompletedAppleQuest(bool completed)
+    {
+        hasCompletedAppleQuest = completed;
+    }
+
+    public void SetHasCompletedArmorQuest(bool completed)
+    {
+        hasCompletedArmorQuest = completed;
+    }
+
+    public int GetAppleCount()
+    {
+        return appleCount;
+    }
+
+    public int GetArmorCount()
+    {
+        return armorCount;
+    }
+
+    public bool GetHasCompletedAppleQuest()
+    {
+        return hasCompletedAppleQuest;
+    }
+
+    public bool GetHasCompletedArmorQuest()
+    {
+        return hasCompletedArmorQuest;
+    }
 
     private void InitializeQuest()
     {

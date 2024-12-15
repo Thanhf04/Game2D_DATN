@@ -9,7 +9,8 @@ public class Ui_CoinApply : MonoBehaviour
     public Image coinImage;
 
     [Header("References")]
-    [SerializeField] private UI_Coin uiCoin; // Tham chiếu đến UI_Coin
+    [SerializeField]
+    private UI_Coin uiCoin; // Tham chiếu đến UI_Coin
 
     private void Start()
     {

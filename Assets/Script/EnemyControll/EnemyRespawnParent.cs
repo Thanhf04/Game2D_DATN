@@ -20,15 +20,15 @@ public class EnemyRespawnParent1 : MonoBehaviour
     }
 
     public void RespawnEnemy()
-{
-    Debug.Log("RespawnEnemy called at " + Time.time);
-    StartCoroutine(RespawnAfterDelay());
-}
+    {
+        Debug.Log("RespawnEnemy called at " + Time.time);
+        StartCoroutine(RespawnAfterDelay());
+    }
 
-private IEnumerator RespawnAfterDelay()
-{
-    // Đợi một thời gian trước khi hồi sinh
-    yield return new WaitForSeconds(2f); // Thời gian hồi sinh có thể thay đổi
-    Debug.Log("Hồi sinh quái vật");
-}
+    private IEnumerator RespawnAfterDelay()
+    {
+        // Đợi một thời gian trước khi hồi sinh
+        yield return new WaitForSeconds(2f); // Thời gian hồi sinh có thể thay đổi
+        Debug.Log("Hồi sinh quái vật");
+    }
 }
