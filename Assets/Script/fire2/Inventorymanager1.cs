@@ -87,6 +87,7 @@ public class PlayerProfileManager : MonoBehaviour
         {
             Debug.LogError("Username không hợp lệ!");
             return;
+            
         }
 
         // Tạo reference đến dữ liệu người chơi trong Firebase

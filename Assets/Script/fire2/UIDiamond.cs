@@ -4,7 +4,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using TMPro;  // Thêm thư viện TMP_Text
 
-public class FirebaseManager : MonoBehaviour
+public class Firebaseposition : MonoBehaviour
 {
     private DatabaseReference reference;  // Tham chiếu đến Firebase Database
     public TMP_Text goldText;  // Tham chiếu đến TMP_Text trong UI

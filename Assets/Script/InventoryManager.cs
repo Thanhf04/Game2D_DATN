@@ -95,8 +95,8 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.LogWarning("Player data not found or loading failed.");
         }
-    } 
-        private void Update()
+    }
+    private void Update()
     {
 
         {
@@ -374,14 +374,14 @@ public class InventoryManager : MonoBehaviour
                 player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
                 healthSlider.value = player1.currentHealth;
                 RemoveItem(item, 1);
-                 // Save data after decreasing mana
+                // Save data after decreasing mana
                 FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
                 firebaseManager.SavePlayerData(player1);
                 if (firebaseInventory != null)
                 {
                     firebaseInventory.RemoveItemFromFirebase(item, 1);
                 }
-                
+
                 UpdateButtonQuantity(Btn_Health, item);
                 StartCoroutine(ItemCooldown(Btn_Health, healthButtonText, true));
             }
@@ -455,6 +455,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+    public void SetInventoryItems(SlotClass[] loadedItems)
+    {
+        // Cập nhật kho đồ trong InventoryManager từ dữ liệu tải về
+        items = loadedItems;
+        // Cập nhật giao diện người dùng
+        RefreshUI();
+    }
+
 
     private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
     {

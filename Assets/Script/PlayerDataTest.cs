@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;  // Để quản lý việc chuyển cảnh
+using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
 using UnityEngine.UI;
 
 public class PlayerDataTest : MonoBehaviour
@@ -19,38 +19,44 @@ public class PlayerDataTest : MonoBehaviour
     public Slider expSlider;     // Slider cho exp
     public GameObject player;    // Nhân vật trong game
 
+    // Các biến public cho phép bạn thay đổi giá trị Gold và Diamond từ Unity Editor
     public int gold = 0;
     public int diamond = 0;
 
     private DatabaseReference databaseReference;
     private string username;
     private Vector3 lastSavedPosition;
+    private bool isFirebaseInitialized = false;  // Biến để kiểm tra Firebase đã khởi tạo chưa
 
+    // Kiểm tra xem player có được gán chưa trước khi truy cập
     private async void Start()
     {
         // Kiểm tra và khởi tạo Firebase
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus == DependencyStatus.Available)
         {
+            // Khởi tạo reference của Firebase Database sau khi Firebase đã sẵn sàng
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+            isFirebaseInitialized = true;  // Đánh dấu Firebase đã được khởi tạo thành công
+            Debug.Log("Firebase initialized successfully.");
         }
         else
         {
             Debug.LogError("Firebase không thể khởi tạo: " + dependencyStatus);
-            return;
+            return;  // Dừng lại nếu Firebase không khởi tạo được
         }
 
         // Lấy username từ PlayerPrefs
         username = PlayerPrefs.GetString("username", "");
 
-        // Kiểm tra username hợp lệ
+        // Kiểm tra username có hợp lệ không
         if (string.IsNullOrEmpty(username))
         {
             Debug.LogError("Username is empty. Cannot load player data.");
             return;
         }
 
-        // Kiểm tra player
+        // Kiểm tra xem player có null không trước khi thao tác
         if (player == null)
         {
             Debug.LogError("Player GameObject is null. Cannot track position.");
@@ -62,15 +68,31 @@ public class PlayerDataTest : MonoBehaviour
         if (energySlider != null) energySlider.onValueChanged.AddListener(UpdateEnergy);
         if (expSlider != null) expSlider.onValueChanged.AddListener(UpdateExp);
 
-        // Lấy dữ liệu người chơi từ Firebase khi game bắt đầu
-        await LoadPlayerDataFromFirebase(username);
-        await LoadPlayerPositionFromFirebase(username);
+        // Kiểm tra nếu databaseReference đã được khởi tạo và player không phải là null
+        if (isFirebaseInitialized && !string.IsNullOrEmpty(username))
+        {
+            //Tải dữ liệu người chơi từ Firebase
+           await LoadPlayerDataFromFirebase(username);
+            //Tải vị trí người chơi từ Firebase
+           await LoadPlayerPositionFromFirebase(username);
+        }
+        else
+        {
+            Debug.LogError("DatabaseReference is null or Username is invalid. Cannot load player data.");
+        }
 
         // Lưu vị trí ban đầu của người chơi
-        lastSavedPosition = player.transform.position;
+        if (player != null)
+        {
+            lastSavedPosition = player.transform.position;
+        }
+        else
+        {
+            Debug.LogError("Player GameObject is null. Cannot track position.");
+        }
     }
 
-    // Cập nhật giá trị khi slider thay đổi
+    // Cập nhật các giá trị khi slider thay đổi
     private void UpdateHealth(float value)
     {
         if (healthText != null)
@@ -114,20 +136,22 @@ public class PlayerDataTest : MonoBehaviour
     // Lưu dữ liệu người chơi vào Firebase
     private async void SavePlayerData(string field, int value)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null)
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null)
         {
-            Debug.LogError("SavePlayerData failed: Username is empty or Firebase is not initialized.");
+            Debug.LogError("SavePlayerData failed: Firebase not initialized or Username is empty.");
             return;
         }
 
+        // Lưu dữ liệu vào Firebase
         await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
     }
 
     // Lưu vị trí của người chơi vào Firebase
     private async void SavePlayerPosition(Vector3 position)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null || player == null) return;
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null || player == null) return;
 
+        // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
         var positionDict = new Dictionary<string, object>
         {
             { "PositionX", position.x },
@@ -135,23 +159,25 @@ public class PlayerDataTest : MonoBehaviour
             { "PositionZ", position.z }
         };
 
+        // Lưu thông tin vị trí vào Firebase
         await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
     }
 
     // Lưu tên scene hiện tại vào Firebase
     private async void SavePlayerScene(string sceneName)
     {
-        if (string.IsNullOrEmpty(username) || databaseReference == null) return;
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null) return;
 
+        // Lưu tên scene vào Firebase
         await databaseReference.Child("players").Child(username).Child("Scene").SetValueAsync(sceneName);
     }
 
     // Tải lại tất cả dữ liệu người chơi từ Firebase
     private async Task LoadPlayerDataFromFirebase(string username)
     {
-        if (databaseReference == null || string.IsNullOrEmpty(username))
+        if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username))
         {
-            Debug.LogError("Database reference or username is null. Cannot load player data.");
+            Debug.LogError("Firebase is not initialized or username is invalid. Cannot load player data.");
             return;
         }
 
@@ -165,9 +191,9 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
                 if (healthSlider != null)
-                    healthSlider.value = health;
+                    healthSlider.value = health;  // Cập nhật giá trị cho slider health
                 if (healthText != null)
-                    healthText.text = "Health: " + health.ToString();
+                    healthText.text = "Health: " + health.ToString();  // Hiển thị giá trị trên UI
             }
 
             // Lấy và cập nhật giá trị Energy
@@ -175,9 +201,9 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
                 if (energySlider != null)
-                    energySlider.value = energy;
+                    energySlider.value = energy;  // Cập nhật giá trị cho slider energy
                 if (energyText != null)
-                    energyText.text = "Energy: " + energy.ToString();
+                    energyText.text = "Energy: " + energy.ToString();  // Hiển thị giá trị trên UI
             }
 
             // Lấy và cập nhật giá trị EXP
@@ -185,27 +211,27 @@ public class PlayerDataTest : MonoBehaviour
             {
                 int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
                 if (expSlider != null)
-                    expSlider.value = exp;
+                    expSlider.value = exp;  // Cập nhật giá trị cho slider
                 if (expText != null)
-                    expText.text = "EXP: " + exp.ToString();
+                    expText.text = "EXP: " + exp.ToString();  // Hiển thị giá trị trên UI
             }
 
             // Lấy và cập nhật giá trị Gold
             if (snapshot.Child("Gold").Exists)
             {
                 int gold = int.Parse(snapshot.Child("Gold").Value.ToString());
-                this.gold = gold;
+                this.gold = gold;  // Cập nhật giá trị Gold
                 if (goldText != null)
-                    goldText.text = "Gold: " + gold.ToString();
+                    goldText.text = "Gold: " + gold.ToString();  // Hiển thị Gold trên UI
             }
 
             // Lấy và cập nhật giá trị Diamond
             if (snapshot.Child("Diamond").Exists)
             {
                 int diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
-                this.diamond = diamond;
+                this.diamond = diamond;  // Cập nhật giá trị Diamond
                 if (diamondText != null)
-                    diamondText.text = "Diamond: " + diamond.ToString();
+                    diamondText.text = "Diamond: " + diamond.ToString();  // Hiển thị Diamond trên UI
             }
         }
         else
@@ -217,9 +243,9 @@ public class PlayerDataTest : MonoBehaviour
     // Tải vị trí của người chơi từ Firebase
     private async Task LoadPlayerPositionFromFirebase(string username)
     {
-        if (databaseReference == null || string.IsNullOrEmpty(username) || player == null)
+        if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username) || player == null)
         {
-            Debug.LogError("Database reference, username or player object is null. Cannot load player position.");
+            Debug.LogError("Firebase is not initialized or Database reference, username, or player object is null.");
             return;
         }
 
@@ -242,9 +268,17 @@ public class PlayerDataTest : MonoBehaviour
         }
     }
 
+    private bool isDataLoaded = false;
     // Kiểm tra và lưu vị trí người chơi mỗi frame nếu có thay đổi
     private void Update()
     {
+        //if (!isDataLoaded && isFirebaseInitialized)
+        //{
+        //    LoadPlayerDataFromFirebase(username);
+        //    LoadPlayerPositionFromFirebase(username);
+        //    isDataLoaded = true;
+        //}
+
         if (player != null)
         {
             Vector3 currentPosition = player.transform.position;
