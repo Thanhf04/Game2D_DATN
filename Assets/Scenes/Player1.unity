@@ -1633,6 +1633,7 @@ GameObject:
   - component: {fileID: 562431292}
   - component: {fileID: 562431291}
   - component: {fileID: 562431290}
+  - component: {fileID: 562431293}
   m_Layer: 9
   m_Name: map
   m_TagString: NenDat
@@ -44566,7 +44567,7 @@ PrefabInstance:
     - target: {fileID: 4517792737403707682, guid: c46fc9623f8e375499b680bc4a93951b, type: 3}
       propertyPath: NVtimThoRenText
       value: 
-      objectReference: {fileID: 2072235151}
+      objectReference: {fileID: 0}
     - target: {fileID: 4517792737403707682, guid: c46fc9623f8e375499b680bc4a93951b, type: 3}
       propertyPath: monsterCountText
       value: 
@@ -45628,7 +45629,7 @@ MonoBehaviour:
   confirmButton: {fileID: 857834095}
   swordCountText: {fileID: 839148735}
   monsterCountText: {fileID: 1829010119}
-  NVtimThoRenText: {fileID: 2072235151}
+  NVtimThoRenText: {fileID: 0}
   completionText: {fileID: 203040016}
 --- !u!114 &839148735 stripped
 MonoBehaviour:
@@ -45952,7 +45953,7 @@ MonoBehaviour:
   continueButton: {fileID: 1407552945}
   confirmButton: {fileID: 616870494}
   fireEnemyCountText: {fileID: 336024838}
-  textNPCApple: {fileID: 541064198}
+  textNPCApple: {fileID: 0}
   completionText: {fileID: 0}
   imageLock2: {fileID: 1713483811}
 --- !u!212 &882914511
@@ -47262,7 +47263,7 @@ MonoBehaviour:
   appleCountText: {fileID: 134623462}
   armorCountText: {fileID: 247341684}
   completionText: {fileID: 203040016}
-  nextText: {fileID: 541064198}
+  nextText: {fileID: 0}
   uiCoin: {fileID: 0}
   lockSkill1: {fileID: 0}
   isCompletedArmorQuest: 0
@@ -47718,6 +47719,11 @@ PrefabInstance:
 --- !u!1 &1317362448 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8772316197954589328, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
+  m_PrefabInstance: {fileID: 1317362447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1317362449 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4767108531367030340, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
   m_PrefabInstance: {fileID: 1317362447}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1320145067 stripped
@@ -49213,7 +49219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8662288516649370422, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8880052446964132990, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -49247,9 +49253,7 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
-    m_RemovedComponents:
-    - {fileID: 6073535254716935610, guid: 228517ab120b86742a0bffee13763592, type: 3}
-    - {fileID: 8662288516649370422, guid: 228517ab120b86742a0bffee13763592, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2128966728063684889, guid: 228517ab120b86742a0bffee13763592, type: 3}
     - {fileID: 2550916623428193319, guid: 228517ab120b86742a0bffee13763592, type: 3}
@@ -52340,6 +52344,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5075724464822452332, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
       insertIndex: 7
       addedObject: {fileID: 961186979}
+    - targetCorrespondingSourceObject: {fileID: 5075724464822452332, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1317362449}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1566264166446376173, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
       insertIndex: -1
@@ -52349,8 +52356,7 @@ PrefabInstance:
       addedObject: {fileID: 448342099152898470}
     - targetCorrespondingSourceObject: {fileID: 4398339858554775854, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1317362448}
-    m_AddedComponents: []
+      addedObject: {fileID: 448342099152898467}
   m_SourcePrefab: {fileID: 100100000, guid: 97d108c9cc13c4944b01c6488304f2ba, type: 3}
 --- !u!1 &448342099152898466 stripped
 GameObject:

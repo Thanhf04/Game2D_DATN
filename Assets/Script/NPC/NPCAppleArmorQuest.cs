@@ -214,7 +214,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
             isCompletedAppleQuest = true;
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
-
+           
             // Save quest status to Firebase
             //firebaseQuestManager.SetAppleCount(appleCount);
             //firebaseQuestManager.SetHasCompletedAppleQuest(true);
