@@ -218,11 +218,11 @@ public class Dichuyennv1 : MonoBehaviour
     void Update()
     {
 
-        {
-            //Gọi hàm LoadPlayerData từ FirebaseManager1
-            firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
+        //{
+        //    //Gọi hàm LoadPlayerData từ FirebaseManager1
+        //    firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
 
-        }
+        //}
 
         if (quizGamePanel.activeSelf || tbaoQuizGamePanel.activeSelf)
         {

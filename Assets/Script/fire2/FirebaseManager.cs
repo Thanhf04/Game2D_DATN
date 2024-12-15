@@ -46,7 +46,7 @@ public class FirebaseManager1 : MonoBehaviour
         // Kiểm tra nếu Firebase chưa được khởi tạo
         if (!isFirebaseInitialized)
         {
-            Debug.LogError("Firebase Database reference is not initialized.");
+            Debug.Log("Firebase Database reference is not initialized.");
             return;
         }
 
