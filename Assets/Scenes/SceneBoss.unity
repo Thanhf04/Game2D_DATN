@@ -487,7 +487,7 @@ Transform:
   m_GameObject: {fileID: 255648899}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3657598, y: -0.6899998, z: -10}
+  m_LocalPosition: {x: -4.174778, y: -0.6899998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -928,7 +928,7 @@ Transform:
   m_GameObject: {fileID: 374165066}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3657598, y: -0.6899998, z: -10}
+  m_LocalPosition: {x: -4.174778, y: -0.6899998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5647,9 +5647,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: jump
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: quizGamePanel
       value: 
       objectReference: {fileID: 798923036}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: isPlayerNearby
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: skill1Cooldown
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: skill2Cooldown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: skill3Cooldown
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: tbaoQuizGamePanel
       value: 
@@ -6109,8 +6129,8 @@ MonoBehaviour:
   m_YDamping: 0
   m_ZDamping: 0
   m_TargetMovementOnly: 1
-  m_ScreenX: 0.14
-  m_ScreenY: 0.73
+  m_ScreenX: 0.5
+  m_ScreenY: 0.7
   m_CameraDistance: 10
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0

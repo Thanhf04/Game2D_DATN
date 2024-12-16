@@ -64,7 +64,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.25083014, y: 0.053326726}
+  m_Offset: {x: 0.25083014, y: 0.14138027}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -75,7 +75,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4482581, y: 0.7846552}
+  m_Size: {x: 0.4482581, y: 0.60854816}
   m_EdgeRadius: 0
 --- !u!1 &1245922545194077751
 GameObject:
@@ -541,12 +541,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55605fb16d50a0e459f958edee3a1566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: 0
-  end: 0
+  start: 88.2
+  end: 97.78265
   isRight: 0
-  speed: 0
-  attackRange: 1.2
-  chaseRange: 2
+  speed: 2
+  attackRange: 0.98
+  chaseRange: 5
 --- !u!114 &5192177271319977302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563,7 +563,7 @@ MonoBehaviour:
   currentHealth: 100
   healthSlider: {fileID: 3537243832446458229}
   damageAmount: 1
-  prefabsItem: {fileID: 0}
+  prefabsItem: {fileID: 4010455052967803832, guid: adf23443e7ca76f49b208ec93c31b83c, type: 3}
   respawnManager: {fileID: 0}
 --- !u!95 &754269614285079369
 Animator:
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

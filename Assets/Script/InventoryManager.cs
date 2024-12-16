@@ -17,7 +17,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private SlotClass tempSlot;
 
     public Image itemCursor;
-    public FirebaseManager1 firebaseManager;
+    private FirebaseManager1 firebaseManager;
 
 
     [SerializeField] private GameObject[] slots;
@@ -85,6 +85,7 @@ public class InventoryManager : MonoBehaviour
             player1.currentMana = playerData.currentMana;
             player1.maxHealth = playerData.maxHealth;
             player1.maxMana = playerData.maxMana;
+
             // Giả sử bạn có cách lưu trữ các vật phẩm từ PlayerData vào kho (items).
             // Cập nhật dữ liệu các vật phẩm
             // Ví dụ:
@@ -296,6 +297,7 @@ public class InventoryManager : MonoBehaviour
         isMoving = true;
         RefreshUI();
     }
+
     private void EndMove()
     {
         originalSlot = GetClosestSlot();
@@ -475,6 +477,7 @@ public class InventoryManager : MonoBehaviour
 
         button.interactable = true;
         buttonText.text = "";
+
         if (isHealth)
         {
             isHealthOnCooldown = false;

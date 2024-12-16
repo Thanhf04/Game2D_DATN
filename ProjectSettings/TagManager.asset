@@ -3,30 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - NenDat
-  - Chest
-  - kiem
-  - enemy
-  - Boss
-  - Token
-  - Wolf
-  - Armor
-  - Apple
-  - NPC
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Boss
+  - 
   - Water
   - UI
   - 
-  - Player
-  - Enemy
-  - bg
-  - gamexephinh
-  - NPC
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -50,10 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: New Layer 1
-    uniqueID: 2047268047
-    locked: 0
-  - name: New Layer 2
-    uniqueID: 1617167489
     locked: 0
