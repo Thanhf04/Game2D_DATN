@@ -16,6 +16,9 @@ public class Gamesapxep : MonoBehaviour
     private bool shuffling = false;
     public int completionCount = 0; // Biến đếm số lần hoàn thành
 
+    public GameObject player;
+    private Dichuyennv1 dichuyen1Script;
+
     public GameObject completionMessage;
     public GameObject openxephinh;
     public bool isGameCompleted = false; // Cờ để kiểm tra game đã hoàn thành hay chưa
@@ -76,6 +79,7 @@ public class Gamesapxep : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        dichuyen1Script = player.GetComponent<Dichuyennv1>();
         completionMessage.SetActive(false); // Đảm bảo panel thông báo bị tắt lúc đầu
         pieces = new List<Transform>();
         size = 3;
@@ -184,6 +188,10 @@ public class Gamesapxep : MonoBehaviour
                     completionMessage.SetActive(true); // Hiển thị thông báo hoàn thành
                     StartCoroutine(HideCompletionMessage()); // Tắt thông báo sau 3 giây
                 }
+            }
+            if (dichuyen1Script != null)
+            {
+                dichuyen1Script.enabled = true;
             }
             completionCount++;
         }

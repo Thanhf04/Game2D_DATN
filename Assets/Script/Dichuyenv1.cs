@@ -107,7 +107,7 @@ public class Dichuyennv1 : MonoBehaviour
     // Các biến level và điểm nâng
     public int level = 1;
     public float currentLevel;
-    public int upgradePoints = 5;
+    public int upgradePoints = 1;
 
     // Các biến UI
     [SerializeField]
@@ -213,14 +213,21 @@ public class Dichuyennv1 : MonoBehaviour
             // Cập nhật thông tin người chơi vào script Dichuyennv1
             firebaseManager1.UpdatePlayerStats(playerData, this);
 
-            // Kiểm tra lại trạng thái nhiệm vụ
-            Debug.Log("Apple Armor Quest Completed: " + NPCAppleArmorQuest.isCompletedAppleQuest);
+            // Cập nhật các trạng thái nhiệm vụ (quest)
+            //isQuest1Complete = playerData.isQuest1Complete;
+            //isAppleQuestComplete = playerData.isAppleQuestComplete;
+
+            // Debug thông báo trạng thái nhiệm vụ đã được cập nhật
+            Debug.Log("Apple Armor Quest Completed: " + isAppleQuestComplete);
+            Debug.Log("Quest 1 Completed: " + isQuest1Complete);
+            //UpdateQuestUI();
         }
         else
         {
             Debug.Log("Player data not found or loading failed.");
         }
     }
+
 
 
 
@@ -310,15 +317,15 @@ public class Dichuyennv1 : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.isCompletedAppleQuest == true)
         {
-            firebaseManager1.SavePlayerData(this);
+            
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
                 string userName = PlayerPrefs.GetString("username", "");
-
+                firebaseManager1.SavePlayerData(this);
 
             }
-
+          
         }
         if (Input.GetKeyDown(KeyCode.E) && NPCQuestSkill2.hasCompletedQuest == true)
         {
@@ -424,7 +431,7 @@ public class Dichuyennv1 : MonoBehaviour
             BreathFire();
             skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
-
+          
         }
     }
 
@@ -435,7 +442,7 @@ public class Dichuyennv1 : MonoBehaviour
             FireHand();
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
-
+            
         }
     }
 
@@ -502,7 +509,7 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
         Destroy(effect, 2f); // Hủy instance sau 2 giây
             }
             // Hiển thị thông báo nếu cần
-            notificationText.SetText($"Rơi từ độ cao {fallHeight:F1}! Bị trừ {fallDamage} máu.");
+            // notificationText.SetText($"Rơi từ độ cao {fallHeight:F1}! Bị trừ {fallDamage} máu.");
             if (currentHealth <= 0)
             {
                 Die();
@@ -766,13 +773,21 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
 
     public void UpdateStatsText()
     {
+        // Hiển thị các thông tin cơ bản về sức khỏe, mana, damage, level, points
         healthText.text = ((maxHealth - 100) / 100).ToString();
         manaText.text = ((maxMana - 100) / 100).ToString();
         damaText.text = ((damageAmount - 10) / 10).ToString();
         levelText.text = "Level: " + level;
         pointsText.text = "Points: " + upgradePoints;
+
+        //// Hiển thị trạng thái các nhiệm vụ
+        //questText.text = "Quest 1: " + (isQuest1Complete ? "Completed" : "In Progress") + "\n" +
+        //                 "Apple Quest: " + (isAppleQuestComplete ? "Completed" : "In Progress");
+
+        // Lưu lại dữ liệu người chơi sau khi cập nhật
         firebaseManager1.SavePlayerData(this);
     }
+
 
     void ShowNotification(string message)
     {
@@ -941,14 +956,32 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
     public void UpdateApple()
     {
         Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
+
         // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
-        if (npcapple != null)
+        if (!isAppleQuestComplete)
         {
+            // Cập nhật trạng thái nhiệm vụ
             isAppleQuestComplete = true;
-            npcapple.CollectApple();
-            firebaseManager1.SavePlayerData(this);
+
+            // Nếu bạn có một NPC hoặc một đối tượng liên quan đến nhiệm vụ, thực hiện hành động
+            if (npcapple != null)
+            {
+                // Cập nhật nhiệm vụ táo và làm gì đó với NPC (nếu cần)
+                npcapple.CollectApple();
+            }
+
+            //// Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
+            //firebaseManager1.SavePlayerData(this);
+
+            // Thông báo hoàn thành nhiệm vụ (có thể hiển thị UI hoặc popup)
+            Debug.Log("Nhiệm vụ táo đã hoàn thành.");
+        }
+        else
+        {
+            Debug.Log("Nhiệm vụ táo đã hoàn thành từ trước.");
         }
     }
+
     public void UpdateArmor()
     {
         Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
@@ -1010,22 +1043,26 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
         OpenQuizGamePanel(); // Mở panel quiz game
     }
 
-    // Phương thức cập nhật UI sau khi dữ liệu người chơi được tải
-    //private void UpdateUI(FirebaseManager1.PlayerData playerData)
+    //private void CheckSkillUnlocks()
     //{
-    //    if (playerData != null)
+    //    // Kiểm tra nếu nhiệm vụ 1 đã hoàn thành, mở khóa kỹ năng 1
+    //    if (isQuest1Complete && !NPCQuestSkill1.isSkill1Unlocked)
     //    {
-    //        // Cập nhật các trường UI với dữ liệu người chơi
-    //        healthText.text = "Health: " + playerData.currentHealth;
-    //        manaText.text = "Mana: " + playerData.currentMana;
-    //        levelText.text = "Level: " + playerData.level;
-    //        expText.text = "EXP: " + playerData.expCurrent + "/" + playerData.expMax;
+    //        NPCQuestSkill1.isSkill1Unlocked = true;  // Đánh dấu là đã mở khóa kỹ năng
+    //        Debug.Log("Skill 1 has been unlocked!");
     //    }
-    //    else
+
+    //    // Kiểm tra nếu nhiệm vụ Apple Armor đã hoàn thành, mở khóa kỹ năng 2
+    //    if (isAppleQuestComplete && !NPCAppleArmorQuest.isSkill2Unlocked)
     //    {
-    //        Debug.LogWarning("Player data is null, UI will not be updated.");
+    //        NPCAppleArmorQuest.isSkill2Unlocked = true;
+    //        Debug.Log("Skill 2 has been unlocked!");
     //    }
+
+    //    // Kiểm tra các kỹ năng khác nếu cần
+    //    // ...
     //}
+
 
 }
 

@@ -423,6 +423,7 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("Mana của bạn đã đầy!");
             }
+            
         }
     }
 
@@ -438,6 +439,7 @@ public class InventoryManager : MonoBehaviour
                 if (quantity > 0)
                 {
                     buttonText.text = quantity.ToString();
+                    
                 }
                 else
                 {

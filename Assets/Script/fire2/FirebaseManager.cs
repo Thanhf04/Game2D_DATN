@@ -1,4 +1,4 @@
-using Firebase;
+﻿using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
@@ -67,24 +67,21 @@ public class FirebaseManager1 : MonoBehaviour
     }
 
     // Tải dữ liệu người chơi từ Firebase
+    // Sửa lại hàm LoadPlayerData trong FirebaseManager1
     public void LoadPlayerData(Action<PlayerData> onDataLoaded)
     {
-        // Lấy giá trị username từ PlayerPrefs
         string username = PlayerPrefs.GetString("username", "");
-
-        // Kiểm tra nếu username là null hoặc rỗng
         if (string.IsNullOrEmpty(username))
         {
             Debug.Log("Username is null or empty.");
-            onDataLoaded?.Invoke(null); // Gửi giá trị null nếu username không hợp lệ
+            onDataLoaded?.Invoke(null);
             return;
         }
 
-        // Kiểm tra nếu Firebase chưa được khởi tạo
         if (!isFirebaseInitialized)
         {
             Debug.Log("Firebase Database reference is not initialized.");
-            onDataLoaded?.Invoke(null); // Gửi giá trị null nếu Firebase chưa được khởi tạo
+            onDataLoaded?.Invoke(null);
             return;
         }
 
@@ -93,7 +90,7 @@ public class FirebaseManager1 : MonoBehaviour
             if (task.IsFaulted)
             {
                 Debug.Log("Error loading player data: " + task.Exception);
-                onDataLoaded?.Invoke(null); // Gửi giá trị null nếu có lỗi
+                onDataLoaded?.Invoke(null);
             }
             else if (task.IsCompleted)
             {
@@ -102,16 +99,19 @@ public class FirebaseManager1 : MonoBehaviour
                 {
                     string json = snapshot.GetRawJsonValue();
                     PlayerData playerData = JsonUtility.FromJson<PlayerData>(json);
+
+                    // Truyền PlayerData đã tải lên hàm onDataLoaded
                     onDataLoaded?.Invoke(playerData);
                 }
                 else
                 {
                     Debug.LogWarning("No data found for player: " + username);
-                    onDataLoaded?.Invoke(null); // Gửi giá trị null nếu không có dữ liệu
+                    onDataLoaded?.Invoke(null);
                 }
             }
         });
     }
+
 
     // Cập nhật dữ liệu người chơi trong game sau khi tải từ Firebase
     public void UpdatePlayerStats(PlayerData playerData, Dichuyennv1 playerStats)
@@ -186,7 +186,7 @@ public class FirebaseManager1 : MonoBehaviour
             // Nhiệm vụ
             isQuest1Complete = playerStats?.isQuest1Complete ?? false;
             isAppleQuestComplete = playerStats?.isAppleQuestComplete ?? false;
-            isPlayerNearby = playerStats?.isPlayerNearby ?? false;
+            isPlayerNearby= playerStats?.isPlayerNearby ?? false;
             //hasCompletedQuestInput=playerStats?.hasCompletedQuestInput ?? false;
         }
     }

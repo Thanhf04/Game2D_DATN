@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
+
             Die();  // Gọi Die khi chết
         }
         UpdateHealthSlider();  // Cập nhật thanh sức khỏe
@@ -70,6 +71,7 @@ public class Enemy : MonoBehaviour
     // Quái vật chết
     private void Die()
     {
+        player.LevelSlider(50);
         if (npcQuest != null)
         {
             npcQuest.KillMonster(); // Gọi hàm KillMonster trong NPCQuest khi quái vật chết
