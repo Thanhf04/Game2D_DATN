@@ -1034,7 +1034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8769711408511466197, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
       propertyPath: attackRange
-      value: 0.98
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 8772316197954589328, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
       propertyPath: m_Name
@@ -44961,6 +44961,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kitsune
       objectReference: {fileID: 0}
+    - target: {fileID: 5623437003688405919, guid: c46fc9623f8e375499b680bc4a93951b, type: 3}
+      propertyPath: m_SortingOrder
+      value: -10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45447,6 +45451,10 @@ PrefabInstance:
       propertyPath: vaChamEffectPrefab
       value: 
       objectReference: {fileID: 7596260667496805670, guid: 275d9f2451076a54d9facfff5b9d3435, type: 3}
+    - target: {fileID: 1575002358564130999, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1624467804064258011, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
       propertyPath: m_Name
       value: trap (1)
@@ -47989,6 +47997,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 8769711408511466197, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
+      propertyPath: attackRange
+      value: 1.3
+      objectReference: {fileID: 0}
     - target: {fileID: 8772316197954589328, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
       propertyPath: m_Name
       value: mushroom (1)
@@ -49350,7 +49362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3413795889310764670, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3500891142027880186, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_SizeDelta.x
@@ -49465,6 +49477,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: tryAgainButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: fallEffectPrefab
       value: 
       objectReference: {fileID: 7596260667496805670, guid: 275d9f2451076a54d9facfff5b9d3435, type: 3}
@@ -49476,6 +49492,10 @@ PrefabInstance:
       propertyPath: tbaoQuizGamePanel
       value: 
       objectReference: {fileID: 1778879010}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: damageEffectPrefab
+      value: 
+      objectReference: {fileID: 7596260667496805670, guid: 275d9f2451076a54d9facfff5b9d3435, type: 3}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: playerStatsManager1
       value: 
@@ -49590,7 +49610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8662415830285130911, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8880052446964132990, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -50361,7 +50381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BoundingShape2D: {fileID: 0}
+  m_BoundingShape2D: {fileID: 261189775}
   m_Damping: 0
   m_MaxWindowSize: 0
 --- !u!114 &1619453005 stripped
@@ -50553,7 +50573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8769711408511466197, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
       propertyPath: attackRange
-      value: 0.98
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 8772316197954589328, guid: 82d3477cf7793dd4e9306adf701d9532, type: 3}
       propertyPath: m_Name
@@ -52768,12 +52788,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 820494039557530814, guid: 303f2433711221c4cb89834756ba3430, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1013458975877571309, guid: 303f2433711221c4cb89834756ba3430, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 1013458975877571309, guid: 303f2433711221c4cb89834756ba3430, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 2047268047
+      objectReference: {fileID: 0}
     - target: {fileID: 1294224075410732258, guid: 303f2433711221c4cb89834756ba3430, type: 3}
       propertyPath: m_Pivot.x
       value: 0

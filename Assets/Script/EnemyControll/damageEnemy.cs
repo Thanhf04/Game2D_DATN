@@ -67,7 +67,8 @@ public class damageEnemy : MonoBehaviour
 
             if (enemy != null)
             {
-                playerHealth.TakeDamage(enemy.damageAmount); // Gây sát thương cho người chơi
+                playerHealth.TakeDamage(enemy.damageAmount);
+                 // Gây sát thương cho người chơi
             }
             else
             {

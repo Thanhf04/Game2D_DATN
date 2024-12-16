@@ -508,8 +508,6 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
                  GameObject effect = Instantiate(fallEffectPrefab, transform.position, Quaternion.identity); // Tạo instance
         Destroy(effect, 2f); // Hủy instance sau 2 giây
             }
-            // Hiển thị thông báo nếu cần
-            // notificationText.SetText($"Rơi từ độ cao {fallHeight:F1}! Bị trừ {fallDamage} máu.");
             if (currentHealth <= 0)
             {
                 Die();
@@ -616,19 +614,32 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
         Destroy(fireHand);
     }
 
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount;
-        //firebaseManager1.SavePlayerData(username, this);
-        if (currentHealth <= 0)
-        {
-            Die();
-            // Save data after decreasing mana
-        }
-        firebaseManager1.SavePlayerData(this);
-        healthSlider.value = currentHealth;
+    public GameObject damageEffectPrefab; // Prefab cho hiệu ứng mất máu
 
+public void TakeDamage(int amount)
+{
+    // Giảm máu hiện tại
+    currentHealth -= amount;
+
+    // Hiển thị hiệu ứng mất máu
+    if (damageEffectPrefab != null)
+    {
+        // Tạo hiệu ứng tại vị trí của Player
+        GameObject effect = Instantiate(damageEffectPrefab, transform.position, Quaternion.identity);
+        Destroy(effect, 2f); // Hủy hiệu ứng sau 2 giây
     }
+
+    // Kiểm tra nếu máu <= 0 thì chết
+    if (currentHealth <= 0)
+    {
+        Die();
+    }
+
+    // Lưu dữ liệu và cập nhật thanh máu
+    firebaseManager1.SavePlayerData(this);
+    healthSlider.value = currentHealth;
+}
+
 
     void Die()
     {
