@@ -49226,6 +49226,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 1295183212747430641, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295183212747430641, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295183212747430641, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1336220454910111331, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -49253,6 +49265,10 @@ PrefabInstance:
     - target: {fileID: 1336220454910111331, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1448422743436206416, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Name
+      value: ButtonReset
       objectReference: {fileID: 0}
     - target: {fileID: 2080887829636775083, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: Priority
@@ -49438,6 +49454,10 @@ PrefabInstance:
       propertyPath: playerStatsManager1
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5240018021462465952, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Name
+      value: ButtonTryAgain
+      objectReference: {fileID: 0}
     - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: resetar
       value: 
@@ -49446,6 +49466,10 @@ PrefabInstance:
       propertyPath: tryagain
       value: 
       objectReference: {fileID: 1485258563}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: firebaseManager
+      value: 
+      objectReference: {fileID: 629054491}
     - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: fullHealthButton
       value: 
@@ -49486,6 +49510,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6815520926494258436, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Text
+      value: Reset
+      objectReference: {fileID: 0}
     - target: {fileID: 6875979760696248621, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -49505,6 +49533,10 @@ PrefabInstance:
     - target: {fileID: 7656872166877977400, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7672693089832997387, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Text
+      value: TryAgain
       objectReference: {fileID: 0}
     - target: {fileID: 8321736796979795715, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_SizeDelta.y
