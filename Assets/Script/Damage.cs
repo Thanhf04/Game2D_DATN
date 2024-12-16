@@ -2,6 +2,8 @@
 
 public class Damage : MonoBehaviour
 {
+    private Dichuyennv1 player;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("enemy"))
@@ -9,9 +11,19 @@ public class Damage : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(PlayerStats.Instance.damage);
+                enemy.TakeDamage(player.damageAmount);
             }
+
         }
     }
-    
+
+    void Start()
+    {
+        player = GetComponentInParent<Dichuyennv1>();
+        if (player == null)
+        {
+            Debug.LogError("Không tìm thấy NewPlayer trong đối tượng cha của Damage.");
+        }
+    }
+
 }

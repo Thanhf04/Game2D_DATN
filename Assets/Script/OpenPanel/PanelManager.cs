@@ -32,6 +32,8 @@ public class PanelManager : MonoBehaviour
             OpenChiSoCaNhan.ischisoCaNhan = false;
             Dichuyennv1.isStatsPanelOpen = false;
             Dichuyennv1.isStatsDisplayOpen = false;
+            Boss_Health.isPanelKillDeathBoss = false;
+            Boss_Health_Elite.isPanelKillBossElite = false;
         }
 
         currentPanel = panel; // Ghi nhận panel mới

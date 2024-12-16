@@ -478,7 +478,6 @@ GameObject:
   - component: {fileID: 7848322691208232323}
   - component: {fileID: 8686360861098437557}
   - component: {fileID: 8561158351635875286}
-  - component: {fileID: 8506431407222573692}
   - component: {fileID: 3582688213973200550}
   - component: {fileID: 4179456450177716154}
   - component: {fileID: 5999959650235669395}
@@ -580,24 +579,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8506431407222573692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7379808862616306625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a588221f583b824ebee4a0fad971de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBoss: {fileID: 3381873287412989487}
-  Boss: {fileID: 7379808862616306625}
-  maxHealth: 10
-  currentHealth: 0
-  prefabsItem: {fileID: 2871288779878838566, guid: b0e729b0922face4190160e2e44492af, type: 3}
-  PanelSkillBoss: {fileID: 0}
 --- !u!114 &3582688213973200550
 MonoBehaviour:
   m_ObjectHideFlags: 0

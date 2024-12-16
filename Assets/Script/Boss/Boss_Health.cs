@@ -16,11 +16,7 @@ public class Boss_Health : MonoBehaviour
     public GameObject prefabsItem;
     public GameObject PanelSkillBoss;
     Dichuyennv1 Player1;
-    public static bool isDeath = false;
-
-    // Tham chiếu đến script nhiệm vụ
-    public NPCQuestSkill2 npcQuestskill2;
-
+    public static bool isPanelKillDeathBoss = false;
     void Start()
     {
         HealthBoss.maxValue = maxHealth;
@@ -28,17 +24,11 @@ public class Boss_Health : MonoBehaviour
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         Player1 = FindObjectOfType<Dichuyennv1>();
-
-        // Tìm script nhiệm vụ nếu chưa được gán
-        if (npcQuestskill2 == null)
-        {
-            npcQuestskill2 = FindObjectOfType<NPCQuestSkill2>();
-        }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
-        currentHealth -= (int)damage;
+        currentHealth -= damage;
         if (currentHealth <= 0)
         {
             Die();
@@ -52,15 +42,10 @@ public class Boss_Health : MonoBehaviour
     {
         Player1.LevelSlider(100);
         animator.SetBool("Death", true);
-        isDeath = true;
-        // Cập nhật nhiệm vụ khi boss bị tiêu diệt
-        if (CompareTag("Boss") && npcQuestskill2 != null)
-        {
-            npcQuestskill2.DefeatFireEnemy();
-        }
-
         Destroy(gameObject, 2f);
         PanelSkillBoss.SetActive(true);
+        isPanelKillDeathBoss = true;
+        SceneManager.LoadScene(6);
         DropItem();
     }
 
@@ -75,6 +60,7 @@ public class Boss_Health : MonoBehaviour
     public void ClosePanel()
     {
         PanelSkillBoss.SetActive(false);
+        isPanelKillDeathBoss = false;
     }
 
     private IEnumerator ResetHitAnimation()
