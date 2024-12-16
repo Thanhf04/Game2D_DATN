@@ -882,7 +882,6 @@ GameObject:
   - component: {fileID: 4328548008151545056}
   - component: {fileID: 3602421658511329304}
   - component: {fileID: 5086096181596214633}
-  - component: {fileID: 6073535254716935610}
   - component: {fileID: 8662288516649370422}
   m_Layer: 7
   m_Name: Player1
@@ -1087,6 +1086,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1e74d9fb1ba59141b37e1f7cd83b57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 0}
+  playerStatsManager1: {fileID: 0}
+  isQuest1Complete: 0
+  isAppleQuestComplete: 0
+  isPlayerNearby: 0
   quizGamePanel: {fileID: 0}
   tbaoQuizGamePanel: {fileID: 0}
   inventoryManager: {fileID: 8648698930812060973}
@@ -1155,35 +1159,17 @@ MonoBehaviour:
   skill1Cooldown: 2
   skill2Cooldown: 3
   skill3Cooldown: 5
+  skill1Timer: 0
+  skill2Timer: 0
+  skill3Timer: 0
   skill1Image: {fileID: 8131438306323783435}
   skill2Image: {fileID: 6389858565631506210}
   skill3Image: {fileID: 8917510537294569328}
   skill1CooldownText: {fileID: 7226372181953794399}
   skill2CooldownText: {fileID: 4278483182084296310}
   skill3CooldownText: {fileID: 2445024903085022730}
---- !u!114 &6073535254716935610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155822586552047254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1976b103c86205540953606a606ad799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthText: {fileID: 4263657306266918941}
-  energyText: {fileID: 6959671926524806319}
-  expText: {fileID: 8065223221535033573}
-  goldText: {fileID: 6522323899898029768}
-  diamondText: {fileID: 8422249978913096799}
-  healthSlider: {fileID: 3727628083030222106}
-  energySlider: {fileID: 50341388188801143}
-  expSlider: {fileID: 6463134651474476217}
-  player: {fileID: 1155822586552047254}
-  gold: 0
-  diamond: 0
+  fallDamageThreshold: 8
+  fallEffectPrefab: {fileID: 0}
 --- !u!114 &8662288516649370422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,7 +1561,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 2087710978050009072}
-  toggleButton: {fileID: 6435450260794138107}
 --- !u!114 &5537508462075078972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589,7 +1574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 2087710978050009072}
-  toggleButton: {fileID: 6435450260794138107}
 --- !u!1 &1533799327699558656
 GameObject:
   m_ObjectHideFlags: 0
@@ -8448,17 +8432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6522323899898029768 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1176710865276682171, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
-  m_PrefabInstance: {fileID: 5392910245278177651}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6523370756218277614 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1175681843686610845, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
@@ -8483,17 +8456,6 @@ MonoBehaviour:
 --- !u!114 &8065223221535033573 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2682485675622470038, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
-  m_PrefabInstance: {fileID: 5392910245278177651}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8422249978913096799 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4482947431913676076, guid: b0db6127f73df8047a104509a8ddb836, type: 3}
   m_PrefabInstance: {fileID: 5392910245278177651}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
