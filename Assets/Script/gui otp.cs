@@ -44,9 +44,10 @@ public class FirebaseAuthManager : MonoBehaviour
         string email = emailInput.text;
         string password = passwordInput.text;
         string confirmPassword = confirmPasswordInput.text;
+        string username = usernameInput.text;
 
         // Kiểm tra tính hợp lệ của các trường
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword) || string.IsNullOrEmpty(username))
         {
             UpdateFeedback("Vui lòng điền tất cả các trường.");
             return;
@@ -64,6 +65,14 @@ public class FirebaseAuthManager : MonoBehaviour
             return;
         }
 
+        // Kiểm tra xem tên người dùng đã tồn tại chưa
+        bool usernameExists = await CheckUsernameExists(username);
+        if (usernameExists)
+        {
+            UpdateFeedback("Tên người dùng này đã tồn tại. Vui lòng chọn tên khác.");
+            return;
+        }
+
         try
         {
             AuthResult result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
@@ -73,6 +82,9 @@ public class FirebaseAuthManager : MonoBehaviour
             await SendEmailVerification(newUser);
             UpdateFeedback("Email xác minh đã được gửi đến: " + newUser.Email);
 
+            // Lưu thông tin người dùng vào Firebase
+            await SaveUserData(newUser.UserId, username, newUser.Email);
+
             // Hiện nút xác minh
             verifyButton.gameObject.SetActive(true);
         }
@@ -81,6 +93,7 @@ public class FirebaseAuthManager : MonoBehaviour
             UpdateFeedback("Đăng ký gặp lỗi: " + ex.Message);
         }
     }
+
 
     private async Task SendEmailVerification(FirebaseUser user)
     {
@@ -117,9 +130,18 @@ public class FirebaseAuthManager : MonoBehaviour
         User user = new User { Username = username, Email = email };
         string json = JsonUtility.ToJson(user);
 
+        // Lưu thông tin người dùng vào Firebase
         await databaseReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
         UpdateFeedback("Tên người dùng và email đã được lưu.");
     }
+    private async Task<bool> CheckUsernameExists(string username)
+    {
+        // Truy vấn vào Firebase để kiểm tra xem tên người dùng đã tồn tại
+        DataSnapshot snapshot = await databaseReference.Child("users").OrderByChild("Username").EqualTo(username).GetValueAsync();
+
+        return snapshot.Exists; // Nếu có dữ liệu trả về, tức là tên người dùng đã tồn tại
+    }
+
 
     public async void LoginUser()
     {

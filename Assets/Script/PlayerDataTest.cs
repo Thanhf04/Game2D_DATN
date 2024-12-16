@@ -31,6 +31,21 @@ public class PlayerDataTest : MonoBehaviour
     private bool isPlayerMoving = false;  // Biến theo dõi liệu người chơi có đang di chuyển hay không
 
     private bool isDataLoaded = false;
+    public Button savePositionButton;  // Thêm biến tham chiếu đến nút lưu vị trí
+
+    // Phương thức để lưu vị trí mới về (1, 2, 0)
+    private void SavePositionToFixedCoordinates()
+    {
+        if (player != null)
+        {
+            Vector3 fixedPosition = new Vector3(1, 2, 0);  // Tọa độ cần lưu
+            player.transform.position = fixedPosition;  // Di chuyển nhân vật tới vị trí này
+
+            // Lưu vị trí này vào Firebase
+            SavePlayerPosition(fixedPosition);
+        }
+    }
+
     private void TeleportPlayer()
     {
         if (player != null)
@@ -72,10 +87,15 @@ public class PlayerDataTest : MonoBehaviour
             lastSavedPosition = player.transform.position;
 
             // Kiểm tra và tải dữ liệu từ Firebase
-
             if (teleportButton != null)
             {
                 teleportButton.onClick.AddListener(TeleportPlayer);  // Gọi phương thức TeleportPlayer khi nhấn nút
+            }
+
+            // Thêm sự kiện cho nút lưu vị trí
+            if (savePositionButton != null)
+            {
+                savePositionButton.onClick.AddListener(SavePositionToFixedCoordinates);  // Gọi phương thức SavePositionToFixedCoordinates khi nhấn nút
             }
         }
         else

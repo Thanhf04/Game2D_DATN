@@ -67,7 +67,7 @@ public class FirebaseInventoryManager1 : MonoBehaviour
             items[i] = new SlotClass();
         }
 
-        RefreshUI();
+        //RefreshUI();
     }
 
     public void RefreshUI()
@@ -77,37 +77,70 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         {
             try
             {
+                // Kiểm tra slot có tồn tại trong kho đồ
+                if (i >= items.Length)
+                {
+                    Debug.LogWarning($"Không có item tại slot {i}");
+                    continue; // Bỏ qua slot nếu không có item tương ứng
+                }
+
                 SlotClass slot = items[i]; // Lấy Slot hiện tại từ `items`
 
-                // Cập nhật hình ảnh item
+                // Kiểm tra item có tồn tại trong slot hay không
                 if (slot.GetItem() != null)
                 {
-                    slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                    slots[i].transform.GetChild(0).GetComponent<Image>().sprite = slot.GetItem().itemIcon;
-                }
-                else
-                {
-                    slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
-                }
+                    // Cập nhật hình ảnh item
+                    Image itemImage = slots[i].transform.GetChild(0).GetComponent<Image>();
+                    if (itemImage != null)
+                    {
+                        itemImage.enabled = true;
+                        itemImage.sprite = slot.GetItem().itemIcon;
+                    }
 
-                // Kiểm tra xem item có stackable hay không
-                TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-                if (slot.GetItem() != null && slot.GetItem().isStackable)
-                {
-                    quantityText.text = slot.GetQuantity().ToString(); // Hiển thị số lượng
+                    // Cập nhật số lượng nếu item là stackable
+                    TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+                    if (quantityText != null && slot.GetItem().isStackable)
+                    {
+                        quantityText.text = slot.GetQuantity().ToString(); // Hiển thị số lượng
+                    }
+                    else
+                    {
+                        quantityText.text = ""; // Nếu không stackable, thì không hiển thị số lượng
+                    }
                 }
                 else
                 {
-                    quantityText.text = ""; // Nếu không stackable, thì không hiển thị số lượng
+                    // Nếu không có item, ẩn hình ảnh và số lượng
+                    Image itemImage = slots[i].transform.GetChild(0).GetComponent<Image>();
+                    if (itemImage != null)
+                    {
+                        itemImage.enabled = false;
+                    }
+
+                    TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+                    if (quantityText != null)
+                    {
+                        quantityText.text = ""; // Xóa số lượng nếu không có item
+                    }
                 }
             }
             catch (System.Exception ex)
             {
-                Debug.LogError("Error refreshing UI: " + ex.Message);
+                Debug.LogError($"Error refreshing UI for slot {i}: {ex.Message}");
+
                 // Reset UI cho slot khi có lỗi
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
-                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
-                slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                Image itemImage = slots[i].transform.GetChild(0).GetComponent<Image>();
+                if (itemImage != null)
+                {
+                    itemImage.sprite = null;
+                    itemImage.enabled = false;
+                }
+
+                TextMeshProUGUI quantityText = slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+                if (quantityText != null)
+                {
+                    quantityText.text = "";
+                }
             }
         }
     }
@@ -173,27 +206,34 @@ public class FirebaseInventoryManager1 : MonoBehaviour
     // Đồng bộ hóa AddItem từ InventoryManager
     public void AddItemToFirebase(ItemClass item, int quantity)
     {
+        // Tìm slot chứa item hoặc tạo slot mới nếu không có
         SlotClass slot = ContainsItem(item);
         if (slot != null && slot.GetItem().isStackable)
         {
-            slot.AddQuantity(quantity);
+            // Nếu vật phẩm đã tồn tại và là stackable, chỉ thêm số lượng vào mà không tạo thêm slot mới
+            slot.AddQuantity(quantity);  // Cộng thêm số lượng vật phẩm vào kho
         }
         else
         {
+            // Nếu không có slot trống, hãy tìm slot trống và thêm vật phẩm vào
             for (int i = 0; i < items.Length; i++)
             {
                 if (items[i].GetItem() == null)
                 {
-                    items[i].AddItem(item, quantity);
+                    items[i].AddItem(item, quantity);  // Thêm vật phẩm vào kho (1 vật phẩm)
                     break;
                 }
             }
         }
 
-        // Cập nhật Firebase
+        // Đồng bộ hóa kho đồ lên Firebase ngay sau khi thay đổi
         SaveInventoryToFirebase(username);
+
+        // Cập nhật lại giao diện UI để hiển thị kho đồ mới
         RefreshUI();
     }
+
+
 
     // Đồng bộ hóa RemoveItem từ InventoryManager
     public void RemoveItemFromFirebase(ItemClass item, int quantity)
@@ -201,12 +241,13 @@ public class FirebaseInventoryManager1 : MonoBehaviour
         SlotClass slot = ContainsItem(item);
         if (slot != null)
         {
-            if (slot.GetQuantity() > quantity)
+            if (slot.GetQuantity() >= quantity)
             {
-                slot.SubQuantity(quantity);
+                slot.SubQuantity(quantity);  // Trừ đi số lượng vật phẩm khi sử dụng
             }
             else
             {
+                // Nếu số lượng vật phẩm ít hơn số lượng yêu cầu, xóa hết vật phẩm khỏi slot
                 int slotToRemoveIndex = 0;
                 for (int i = 0; i < items.Length; i++)
                 {
@@ -217,14 +258,17 @@ public class FirebaseInventoryManager1 : MonoBehaviour
                     }
                 }
 
-                items[slotToRemoveIndex].RemoveItem();
+                items[slotToRemoveIndex].RemoveItem();  // Xóa vật phẩm khỏi kho nếu không đủ số lượng
             }
 
-            // Cập nhật Firebase
+            // Đồng bộ hóa kho đồ lên Firebase ngay sau khi thay đổi
             SaveInventoryToFirebase(username);
+
+            // Cập nhật lại giao diện UI để hiển thị kho đồ mới
+            RefreshUI();
         }
     }
-
+ 
     private SlotClass ContainsItem(ItemClass item)
     {
         for (int i = 0; i < items.Length; i++)

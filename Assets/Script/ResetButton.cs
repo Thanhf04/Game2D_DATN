@@ -11,9 +11,9 @@ public class ResetButtonHandler : MonoBehaviour
     public Slider healthSlider; // Slider cho health
     public Slider energySlider; // Slider cho energy
     public GameObject player;   // Nhân vật trong game
-    private FirebaseManager1 firebaseManager;
-    //public Button tryagain; // Nút bấm để phục hồi đầy máu
-    //public Button resetar; // Nút bấm để phục hồi đầy máu
+    public FirebaseManager1 firebaseManager;
+    public Button tryagain; // Nút bấm để phục hồi đầy máu
+    public Button resetar; // Nút bấm để phục hồi đầy máu
     Dichuyennv1 player1;
     private void Start()
     {
@@ -106,12 +106,12 @@ public class ResetButtonHandler : MonoBehaviour
             Debug.LogError($"Error saving player position: {ex.Message}");
         }
     }
-    void OnFullHealthButtonClick()
+    public void OnFullHealthButtonClick()
     {
         // Kiểm tra xem máu hiện tại có nhỏ hơn máu tối đa không
         if (player1.currentHealth < player1.maxHealth)
         {
-            // Cộng đầy máu (set máu hiện tại bằng máu tối đa)
+            
             player1.currentHealth = player1.maxHealth;
 
             // Cập nhật lại thanh máu

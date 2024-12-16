@@ -659,7 +659,7 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
     {
         // Quay lại menu chính
         Time.timeScale = 1f;
-        SceneManager.LoadScene("SampleScene"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
+        SceneManager.LoadScene("Login"); // Thay "MainMenu" bằng tên cảnh menu chính của bạn
     }
 
     // kiểm tra âm thanh
