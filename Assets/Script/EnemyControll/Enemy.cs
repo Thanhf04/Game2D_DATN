@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour
     // Quái vật chết
     private void Die()
     {
-        player.LevelSlider(50);
+        player.LevelSlider(20);
         if (npcQuest != null)
         {
             npcQuest.KillMonster(); // Gọi hàm KillMonster trong NPCQuest khi quái vật chết

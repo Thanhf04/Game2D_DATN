@@ -942,8 +942,10 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
     private void CollectApple(GameObject apple)
     {
         AddAppleToInventory(); // Thêm táo vào Inventory
-        UpdateApple(); // Cập nhật nhiệm vụ (nếu cần)
+        // UpdateApple(); // Cập nhật nhiệm vụ (nếu cần)
+        npcapple.CollectApple();
         Destroy(apple); // Hủy object táo trong game
+        isAppleQuestComplete =true;
     }
 
     private void CollectArmor(GameObject armor)
@@ -951,35 +953,6 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
         AddArmorToInventory(); // Thêm giáp vào Inventory
         UpdateArmor(); // Cập nhật nhiệm vụ giáp (nếu cần)
         Destroy(armor); // Hủy object giáp trong game
-    }
-
-    public void UpdateApple()
-    {
-        Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
-
-        // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
-        if (!isAppleQuestComplete)
-        {
-            // Cập nhật trạng thái nhiệm vụ
-            isAppleQuestComplete = true;
-
-            // Nếu bạn có một NPC hoặc một đối tượng liên quan đến nhiệm vụ, thực hiện hành động
-            if (npcapple != null)
-            {
-                // Cập nhật nhiệm vụ táo và làm gì đó với NPC (nếu cần)
-                npcapple.CollectApple();
-            }
-
-            //// Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
-            //firebaseManager1.SavePlayerData(this);
-
-            // Thông báo hoàn thành nhiệm vụ (có thể hiển thị UI hoặc popup)
-            Debug.Log("Nhiệm vụ táo đã hoàn thành.");
-        }
-        else
-        {
-            Debug.Log("Nhiệm vụ táo đã hoàn thành từ trước.");
-        }
     }
 
     public void UpdateArmor()
@@ -1017,7 +990,6 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
             Debug.LogWarning("Không tìm thấy InventoryManager!");
         }
     }
-    // Mở panel quiz game
     // Mở panel quiz game
     public void OpenQuizGamePanel()
     {

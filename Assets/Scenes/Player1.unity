@@ -46796,6 +46796,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008682189}
   m_CullTransparentMesh: 1
+--- !u!114 &1025100198 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1295183212747430641, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1031783723 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6759534472527737417, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
@@ -49299,6 +49310,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Dichuyennv1, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 3413795889310764670, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3500891142027880186, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_SizeDelta.x
       value: 39.9952
@@ -49384,6 +49399,10 @@ PrefabInstance:
       value: giap123
       objectReference: {fileID: 0}
     - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: damageTrap
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: quizGamePanel
       value: 
       objectReference: {fileID: 834312308}
@@ -49415,6 +49434,26 @@ PrefabInstance:
       propertyPath: tbaoQuizGamePanel
       value: 
       objectReference: {fileID: 1778879010}
+    - target: {fileID: 5086096181596214633, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: playerStatsManager1
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: resetar
+      value: 
+      objectReference: {fileID: 1025100198}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: tryagain
+      value: 
+      objectReference: {fileID: 1485258563}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: fullHealthButton
+      value: 
+      objectReference: {fileID: 1025100198}
+    - target: {fileID: 6073535254716935610, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6435450260794138107, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: 
       value: 1
@@ -49466,6 +49505,14 @@ PrefabInstance:
     - target: {fileID: 7656872166877977400, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321736796979795715, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.40149
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321736796979795715, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.20074
       objectReference: {fileID: 0}
     - target: {fileID: 8607509316915318015, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_SizeDelta.y
@@ -49659,6 +49706,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
+--- !u!114 &1485258563 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9164066928136404605, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1490163531
 GameObject:
   m_ObjectHideFlags: 0
@@ -50011,6 +50069,7 @@ MonoBehaviour:
   energySlider: {fileID: 1552597536}
   expSlider: {fileID: 1585957975}
   player: {fileID: 1552597535}
+  teleportButton: {fileID: 1485258563}
   gold: 0
   diamond: 0
 --- !u!1 &1572081284
@@ -51149,6 +51208,10 @@ PrefabInstance:
     - target: {fileID: 3381873287412989487, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: m_Direction
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582688213973200550, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
+      propertyPath: damageBoss
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4179456450177716154, guid: 274bde7974e113b4f820d92f399b59f6, type: 3}
       propertyPath: patrolPoints.Array.data[0]

@@ -28,7 +28,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public bool isCompletedArmorQuest = false;
     private bool isShownEncouragement = false;
 
-    private int appleCount = 3;
+    private int appleCount = 0;
     private int armorCount = 0;
 
     //private FirebaseQuestManager firebaseQuestManager;
@@ -208,17 +208,12 @@ public class NPCAppleArmorQuest : MonoBehaviour
             isCompletedAppleQuest = true;
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
-           
-            // Save quest status to Firebase
-            //firebaseQuestManager.SetAppleCount(appleCount);
-            //firebaseQuestManager.SetHasCompletedAppleQuest(true);
 
-            // Update UI
-            completionText.text = "Báo cáo với thợ rèn.";
+            ShowCompletionText("Đã hoàn thành nhiệm vụ, hãy quay lại NPC để nhận thưởng!"); // Gọi hàm hiển thị thông báo
 
             if (uiCoin != null)
             {
-                uiCoin.AddCoins(20); // Reward gold when completing the apple quest
+                uiCoin.AddCoins(20);
             }
         }
     }
