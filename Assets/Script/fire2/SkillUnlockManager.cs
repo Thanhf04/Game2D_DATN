@@ -48,7 +48,7 @@ public class SkillUnlockManager : MonoBehaviour
     {
         // Lấy trạng thái mở khóa skill từ Firebase
         FirebaseDatabase.DefaultInstance
-            .GetReference("skills/" + skillId)  // Lấy trạng thái của khóa từ Firebase
+            .GetReference("players/" + username + "/skills/" + skillId)  // Lấy trạng thái của khóa từ Firebase theo player
             .GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted)
@@ -95,8 +95,8 @@ public class SkillUnlockManager : MonoBehaviour
 
     void UpdateFirebaseUnlockStatus(string skillId, string status)
     {
-        // Lưu trạng thái mở khóa skill vào Firebase
-        databaseReference.Child("skills").Child(skillId).SetValueAsync(status);
+        // Lưu trạng thái mở khóa skill vào Firebase dưới người chơi cụ thể
+        databaseReference.Child("players").Child(username).Child("skills").Child(skillId).SetValueAsync(status);
     }
 
     void SaveSkillUnlockStatusToPlayerPrefs()

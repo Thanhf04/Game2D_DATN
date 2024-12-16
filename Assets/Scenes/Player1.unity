@@ -49705,7 +49705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8321736796979795715, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.20074
+      value: -0.20074463
       objectReference: {fileID: 0}
     - target: {fileID: 8607509316915318015, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_SizeDelta.y
@@ -49759,7 +49759,8 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 883913654540379565, guid: 228517ab120b86742a0bffee13763592, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2128966728063684889, guid: 228517ab120b86742a0bffee13763592, type: 3}
     m_AddedGameObjects:

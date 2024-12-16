@@ -239,7 +239,7 @@ public class PlayerDataTest : MonoBehaviour
     {
         if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username) || player == null)
         {
-            Debug.LogError("Firebase is not initialized or Database reference, username, or player object is null.");
+            Debug.Log("Firebase is not initialized or Database reference, username, or player object is null.");
             return;
         }
 
