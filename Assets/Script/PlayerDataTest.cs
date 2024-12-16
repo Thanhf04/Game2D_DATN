@@ -1,139 +1,83 @@
-﻿using Firebase;
+using Firebase;
 using Firebase.Database;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;  // Thêm namespace này để sử dụng SceneManager
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerDataTest : MonoBehaviour
 {
-    public TMP_Text healthText;  // Hiển thị giá trị health
-    public TMP_Text energyText;  // Hiển thị giá trị energy
-    public TMP_Text expText;     // Hiển thị giá trị exp
-    public TMP_Text goldText;    // Hiển thị giá trị gold
-    public TMP_Text diamondText; // Hiển thị giá trị diamond
-    public Slider healthSlider;  // Slider cho health
-    public Slider energySlider;  // Slider cho energy
-    public Slider expSlider;     // Slider cho exp
-    public GameObject player;    // Nhân vật trong game
+    public TMP_Text healthText;
+    public TMP_Text energyText;
+    public TMP_Text expText;
+    public TMP_Text goldText;
+    public TMP_Text diamondText;
+    public Slider healthSlider;
+    public Slider energySlider;
+    public Slider expSlider;
+    public GameObject player;
 
-    // Các biến public cho phép bạn thay đổi giá trị Gold và Diamond từ Unity Editor
     public int gold = 0;
     public int diamond = 0;
 
     private DatabaseReference databaseReference;
     private string username;
     private Vector3 lastSavedPosition;
-    private bool isFirebaseInitialized = false;  // Biến để kiểm tra Firebase đã khởi tạo chưa
+    private bool isFirebaseInitialized = false;
+    private bool isPlayerMoving = false;  // Biến theo dõi liệu người chơi có đang di chuyển hay không
 
-    // Kiểm tra xem player có được gán chưa trước khi truy cập
+    private bool isDataLoaded = false;
+
     private async void Start()
     {
-        // Kiểm tra và khởi tạo Firebase
+        // Kiểm tra các phụ thuộc của Firebase
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+
         if (dependencyStatus == DependencyStatus.Available)
         {
-            // Khởi tạo reference của Firebase Database sau khi Firebase đã sẵn sàng
+            // Firebase đã sẵn sàng, có thể sử dụng các tính năng Firebase
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-            isFirebaseInitialized = true;  // Đánh dấu Firebase đã được khởi tạo thành công
+            isFirebaseInitialized = true;
             Debug.Log("Firebase initialized successfully.");
-        }
-        else
-        {
-            Debug.LogError("Firebase không thể khởi tạo: " + dependencyStatus);
-            return;  // Dừng lại nếu Firebase không khởi tạo được
-        }
 
-        // Lấy username từ PlayerPrefs
-        username = PlayerPrefs.GetString("username", "");
+            // Sau khi Firebase đã được khởi tạo, tiếp tục thực hiện các thao tác khác
+            username = PlayerPrefs.GetString("username", "");
+            if (string.IsNullOrEmpty(username))
+            {
+                Debug.LogError("Username is empty. Cannot load player data.");
+                return;
+            }
 
-        // Kiểm tra username có hợp lệ không
-        if (string.IsNullOrEmpty(username))
-        {
-            Debug.LogError("Username is empty. Cannot load player data.");
-            return;
-        }
+            if (player == null)
+            {
+                Debug.LogError("Player GameObject is null. Cannot track position.");
+                return;
+            }
 
-        // Kiểm tra xem player có null không trước khi thao tác
-        if (player == null)
-        {
-            Debug.LogError("Player GameObject is null. Cannot track position.");
-            return;
-        }
+            if (healthSlider != null) healthSlider.onValueChanged.AddListener(UpdateHealth);
+            if (energySlider != null) energySlider.onValueChanged.AddListener(UpdateEnergy);
+            if (expSlider != null) expSlider.onValueChanged.AddListener(UpdateExp);
 
-        // Gán các listener cho các slider
-        if (healthSlider != null) healthSlider.onValueChanged.AddListener(UpdateHealth);
-        if (energySlider != null) energySlider.onValueChanged.AddListener(UpdateEnergy);
-        if (expSlider != null) expSlider.onValueChanged.AddListener(UpdateExp);
-
-        // Kiểm tra nếu databaseReference đã được khởi tạo và player không phải là null
-        if (isFirebaseInitialized && !string.IsNullOrEmpty(username))
-        {
-            //Tải dữ liệu người chơi từ Firebase
-           await LoadPlayerDataFromFirebase(username);
-            //Tải vị trí người chơi từ Firebase
-           await LoadPlayerPositionFromFirebase(username);
-        }
-        else
-        {
-            Debug.LogError("DatabaseReference is null or Username is invalid. Cannot load player data.");
-        }
-
-        // Lưu vị trí ban đầu của người chơi
-        if (player != null)
-        {
             lastSavedPosition = player.transform.position;
+
+            // Kiểm tra và tải dữ liệu từ Firebase
+            
         }
         else
         {
-            Debug.LogError("Player GameObject is null. Cannot track position.");
+            // Nếu không thể khởi tạo Firebase, hiển thị lỗi
+            Debug.LogError("Firebase không thể khởi tạo: " + dependencyStatus);
         }
     }
 
-    // Cập nhật các giá trị khi slider thay đổi
-    private void UpdateHealth(float value)
-    {
-        if (healthText != null)
-            healthText.text = "Health: " + value.ToString("F0");
+    private void UpdateHealth(float value) => SavePlayerData("HealthCurrent", (int)value);
+    private void UpdateEnergy(float value) => SavePlayerData("EnergyCurrent", (int)value);
+    private void UpdateExp(float value) => SavePlayerData("Exp", (int)value);
+    private void UpdateGold(int value) => SavePlayerData("Gold", value);
+    private void UpdateDiamond(int value) => SavePlayerData("Diamond", value);
 
-        SavePlayerData("HealthCurrent", (int)value);  // Lưu giá trị health vào Firebase
-    }
-
-    private void UpdateEnergy(float value)
-    {
-        if (energyText != null)
-            energyText.text = "Energy: " + value.ToString("F0");
-
-        SavePlayerData("EnergyCurrent", (int)value);  // Lưu giá trị energy vào Firebase
-    }
-
-    private void UpdateExp(float value)
-    {
-        if (expText != null)
-            expText.text = "EXP: " + value.ToString("F0");
-
-        SavePlayerData("Exp", (int)value);  // Lưu giá trị exp vào Firebase
-    }
-
-    private void UpdateGold(int value)
-    {
-        if (goldText != null)
-            goldText.text = "Gold: " + value.ToString();
-
-        SavePlayerData("Gold", value); // Lưu giá trị Gold vào Firebase
-    }
-
-    private void UpdateDiamond(int value)
-    {
-        if (diamondText != null)
-            diamondText.text = "Diamond: " + value.ToString();
-
-        SavePlayerData("Diamond", value); // Lưu giá trị Diamond vào Firebase
-    }
-
-    // Lưu dữ liệu người chơi vào Firebase
     private async void SavePlayerData(string field, int value)
     {
         if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null)
@@ -141,17 +85,13 @@ public class PlayerDataTest : MonoBehaviour
             Debug.LogError("SavePlayerData failed: Firebase not initialized or Username is empty.");
             return;
         }
-
-        // Lưu dữ liệu vào Firebase
         await databaseReference.Child("players").Child(username).Child(field).SetValueAsync(value);
     }
 
-    // Lưu vị trí của người chơi vào Firebase
     private async void SavePlayerPosition(Vector3 position)
     {
         if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null || player == null) return;
 
-        // Tạo Dictionary chứa các thành phần Position (X, Y, Z)
         var positionDict = new Dictionary<string, object>
         {
             { "PositionX", position.x },
@@ -159,88 +99,109 @@ public class PlayerDataTest : MonoBehaviour
             { "PositionZ", position.z }
         };
 
-        // Lưu thông tin vị trí vào Firebase
-        await databaseReference.Child("players").Child(username).Child("Position").SetValueAsync(positionDict);
+        string currentScene = SceneManager.GetActiveScene().name;  // Lấy tên scene hiện tại
+        await databaseReference.Child("players").Child(username).Child("Positions").Child(currentScene).SetValueAsync(positionDict);
     }
 
-    // Lưu tên scene hiện tại vào Firebase
     private async void SavePlayerScene(string sceneName)
     {
         if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null) return;
-
-        // Lưu tên scene vào Firebase
         await databaseReference.Child("players").Child(username).Child("Scene").SetValueAsync(sceneName);
     }
 
-    // Tải lại tất cả dữ liệu người chơi từ Firebase
+    private async Task CheckAndLoadPlayerData(string username)
+    {
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null) return;
+
+        var playerRef = databaseReference.Child("players").Child(username);
+        var snapshot = await playerRef.GetValueAsync();
+
+        if (!snapshot.Exists)
+        {
+            Debug.LogWarning("No data found for player, creating default data...");
+            CreateDefaultPlayerData(username);
+        }
+        else
+        {
+            Debug.Log("Player data found. Loading data...");
+            await LoadPlayerDataFromFirebase(username);
+            await LoadPlayerPositionFromFirebase(username);
+        }
+    }
+
+    private void CreateDefaultPlayerData(string username)
+    {
+        var defaultData = new Dictionary<string, object>
+        {
+            { "HealthCurrent", 100 },
+            { "EnergyCurrent", 50 },
+            { "Exp", 0 },
+            { "Gold", 0 },
+            { "Diamond", 0 },
+            { "Position", new Dictionary<string, object>
+                {
+                    { "PositionX", 17 },
+                    { "PositionY", 5 },
+                    { "PositionZ", 0 }
+                }
+            }
+        };
+
+        databaseReference.Child("players").Child(username).SetValueAsync(defaultData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Default data created successfully.");
+            }
+            else
+            {
+                Debug.LogError("Failed to create default data.");
+            }
+        });
+    }
+
     private async Task LoadPlayerDataFromFirebase(string username)
     {
-        if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username))
-        {
-            Debug.LogError("Firebase is not initialized or username is invalid. Cannot load player data.");
-            return;
-        }
+        if (!isFirebaseInitialized || string.IsNullOrEmpty(username) || databaseReference == null) return;
 
         var playerRef = databaseReference.Child("players").Child(username);
         var snapshot = await playerRef.GetValueAsync();
 
         if (snapshot.Exists)
         {
-            // Lấy và cập nhật giá trị Health
             if (snapshot.Child("HealthCurrent").Exists)
             {
                 int health = int.Parse(snapshot.Child("HealthCurrent").Value.ToString());
-                if (healthSlider != null)
-                    healthSlider.value = health;  // Cập nhật giá trị cho slider health
-                if (healthText != null)
-                    healthText.text = "Health: " + health.ToString();  // Hiển thị giá trị trên UI
+                if (healthSlider != null) healthSlider.value = health;
+                if (healthText != null) healthText.text = "Health: " + health;
             }
-
-            // Lấy và cập nhật giá trị Energy
             if (snapshot.Child("EnergyCurrent").Exists)
             {
                 int energy = int.Parse(snapshot.Child("EnergyCurrent").Value.ToString());
-                if (energySlider != null)
-                    energySlider.value = energy;  // Cập nhật giá trị cho slider energy
-                if (energyText != null)
-                    energyText.text = "Energy: " + energy.ToString();  // Hiển thị giá trị trên UI
+                if (energySlider != null) energySlider.value = energy;
+                if (energyText != null) energyText.text = "Energy: " + energy;
             }
-
-            // Lấy và cập nhật giá trị EXP
             if (snapshot.Child("Exp").Exists)
             {
                 int exp = int.Parse(snapshot.Child("Exp").Value.ToString());
-                if (expSlider != null)
-                    expSlider.value = exp;  // Cập nhật giá trị cho slider
-                if (expText != null)
-                    expText.text = "EXP: " + exp.ToString();  // Hiển thị giá trị trên UI
+                if (expSlider != null) expSlider.value = exp;
+                if (expText != null) expText.text = "EXP: " + exp;
             }
-
-            // Lấy và cập nhật giá trị Gold
             if (snapshot.Child("Gold").Exists)
             {
                 int gold = int.Parse(snapshot.Child("Gold").Value.ToString());
-                this.gold = gold;  // Cập nhật giá trị Gold
-                if (goldText != null)
-                    goldText.text = "Gold: " + gold.ToString();  // Hiển thị Gold trên UI
+                this.gold = gold;
+                if (goldText != null) goldText.text = "Gold: " + gold;
             }
-
-            // Lấy và cập nhật giá trị Diamond
             if (snapshot.Child("Diamond").Exists)
             {
                 int diamond = int.Parse(snapshot.Child("Diamond").Value.ToString());
-                this.diamond = diamond;  // Cập nhật giá trị Diamond
-                if (diamondText != null)
-                    diamondText.text = "Diamond: " + diamond.ToString();  // Hiển thị Diamond trên UI
+                this.diamond = diamond;
+                if (diamondText != null) diamondText.text = "Diamond: " + diamond;
             }
-        }
-        else
-        {
-            Debug.LogWarning("No data found for player: " + username);
         }
     }
 
-    // Tải vị trí của người chơi từ Firebase
     private async Task LoadPlayerPositionFromFirebase(string username)
     {
         if (!isFirebaseInitialized || databaseReference == null || string.IsNullOrEmpty(username) || player == null)
@@ -249,49 +210,51 @@ public class PlayerDataTest : MonoBehaviour
             return;
         }
 
+        string currentScene = SceneManager.GetActiveScene().name; // Lấy tên scene hiện tại
         var playerRef = databaseReference.Child("players").Child(username);
         var snapshot = await playerRef.GetValueAsync();
 
-        if (snapshot.Exists && snapshot.Child("Position").Exists)
+        if (snapshot.Exists && snapshot.Child("Positions").Child(currentScene).Exists)
         {
-            // Lấy giá trị Position từ Firebase
-            float positionX = float.Parse(snapshot.Child("Position").Child("PositionX").Value.ToString());
-            float positionY = float.Parse(snapshot.Child("Position").Child("PositionY").Value.ToString());
-            float positionZ = float.Parse(snapshot.Child("Position").Child("PositionZ").Value.ToString());
+            float positionX = float.Parse(snapshot.Child("Positions").Child(currentScene).Child("PositionX").Value.ToString());
+            float positionY = float.Parse(snapshot.Child("Positions").Child(currentScene).Child("PositionY").Value.ToString());
+            float positionZ = float.Parse(snapshot.Child("Positions").Child(currentScene).Child("PositionZ").Value.ToString());
 
-            // Cập nhật vị trí của nhân vật trong game
             player.transform.position = new Vector3(positionX, positionY, positionZ);
         }
         else
         {
-            Debug.LogWarning("No position data found for player: " + username);
+            Debug.LogWarning("No position data found for player: " + username + " in scene: " + currentScene);
         }
     }
 
-    private bool isDataLoaded = false;
-    // Kiểm tra và lưu vị trí người chơi mỗi frame nếu có thay đổi
+    // Kiểm tra sự điều khiển của người chơi mỗi frame
     private void Update()
     {
-        //if (!isDataLoaded && isFirebaseInitialized)
-        //{
-        //    LoadPlayerDataFromFirebase(username);
-        //    LoadPlayerPositionFromFirebase(username);
-        //    isDataLoaded = true;
-        //}
+        if (!isDataLoaded && isFirebaseInitialized)
+        {
+            LoadPlayerDataFromFirebase(username);
+            LoadPlayerPositionFromFirebase(username);
+            isDataLoaded = true;
+            CheckAndLoadPlayerData(username);
+        }
 
-        if (player != null)
+        // Kiểm tra nếu người chơi đang di chuyển
+        isPlayerMoving = Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0;
+
+        // Chỉ lưu vị trí khi người chơi thực sự điều khiển nhân vật
+        if (isPlayerMoving && player != null)
         {
             Vector3 currentPosition = player.transform.position;
 
-            // Kiểm tra sự thay đổi vị trí
-            if (Vector3.Distance(currentPosition, lastSavedPosition) > 0.1f) // Chỉ lưu khi có thay đổi vị trí
+            if (Vector3.Distance(currentPosition, lastSavedPosition) > 0.1f) // Chỉ lưu khi có sự thay đổi vị trí
             {
                 SavePlayerPosition(currentPosition);
-                lastSavedPosition = currentPosition; // Cập nhật vị trí đã lưu
+                lastSavedPosition = currentPosition;
             }
-
-            // Lưu tên scene hiện tại vào Firebase khi chuyển màn hình
-            SavePlayerScene(SceneManager.GetActiveScene().name);
         }
+
+        // Lưu tên scene hiện tại vào Firebase khi chuyển màn hình
+        SavePlayerScene(SceneManager.GetActiveScene().name);
     }
 }
