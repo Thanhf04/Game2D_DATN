@@ -326,10 +326,10 @@ public class Dichuyennv1 : MonoBehaviour
             {
                 Skill1();
                 string userName = PlayerPrefs.GetString("username", "");
-              
+
 
             }
-          
+
         }
         if (Input.GetKeyDown(KeyCode.E) && NPCQuestSkill2.hasCompletedQuest == true)
         {
@@ -435,7 +435,6 @@ public class Dichuyennv1 : MonoBehaviour
             BreathFire();
             skill2Timer = skill2Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
-          
         }
     }
 
@@ -446,7 +445,6 @@ public class Dichuyennv1 : MonoBehaviour
             FireHand();
             skill3Timer = skill3Cooldown; // Bắt đầu thời gian hồi chiêu
             UpdateStatsText(); // Cập nhật giao diện người dùng
-            
         }
     }
 

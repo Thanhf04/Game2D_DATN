@@ -1,4 +1,4 @@
-﻿using Firebase;
+using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
@@ -186,7 +186,7 @@ public class FirebaseManager1 : MonoBehaviour
             // Nhiệm vụ
             isQuest1Complete = playerStats?.isQuest1Complete ?? false;
             isAppleQuestComplete = playerStats?.isAppleQuestComplete ?? false;
-            isPlayerNearby= playerStats?.isPlayerNearby ?? false;
+            isPlayerNearby = playerStats?.isPlayerNearby ?? false;
             //hasCompletedQuestInput=playerStats?.hasCompletedQuestInput ?? false;
         }
     }

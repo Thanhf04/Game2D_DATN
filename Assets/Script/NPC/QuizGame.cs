@@ -106,7 +106,7 @@ public class QuizGame : MonoBehaviour
 
     void ResetQuiz()
     {
-correctAnswers = 0;
+        correctAnswers = 0;
         currentQuestionIndex = 0;
         ShowQuestion();
         UpdateScore();
