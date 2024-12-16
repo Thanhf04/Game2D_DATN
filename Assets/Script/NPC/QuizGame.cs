@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class QuizGame : MonoBehaviour
@@ -19,16 +20,9 @@ public class QuizGame : MonoBehaviour
 
     private int currentQuestionIndex = 0;
     private int correctAnswers = 0;
-    Saveloadgame saveloadgame;
 
     void Start()
     {
-        saveloadgame = FindAnyObjectByType<Saveloadgame>();
-        saveloadgame = FindObjectOfType<Saveloadgame>();
-        if (saveloadgame == null)
-        {
-            Debug.Log("Saveloadgame không được tìm thấy trong scene!");
-        }
         quizPanel.SetActive(false);
         messagePanel.SetActive(false);
         confirmButton.onClick.AddListener(StartQuiz);
@@ -67,11 +61,7 @@ public class QuizGame : MonoBehaviour
         }
         else
         {
-            CreateFeedback(
-                currentQuestionIndex,
-                "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.",
-                false
-            );
+            CreateFeedback(currentQuestionIndex, "Thật tiếc bạn đã trả lời sai! Bạn sẽ phải trả lời lại từ đầu.", false);
             StartCoroutine(HandleWrongAnswer());
             return;
         }
@@ -89,7 +79,7 @@ public class QuizGame : MonoBehaviour
         {
             quizPanel.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            saveloadgame.ChangeScene("Player2");
+            SceneManager.LoadScene(4);
         }
         else
         {
@@ -98,6 +88,20 @@ public class QuizGame : MonoBehaviour
                 ShowQuestion();
             }
         }
+
+        //    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        //{
+        //    // Di chuyển đối tượng Player về vị trí (2.0, 3.0, 0.0)
+        //    GameObject player = GameObject.Find("Player"); // Thay "Player" bằng tên đối tượng của bạn
+        //    if (player != null)
+        //    {
+        //        player.transform.position = new Vector3(2.0f, 3.0f, 0.0f); // Thay (2.0, 3.0, 0.0) bằng vị trí bạn muốn
+        //    }
+
+        //    // Đảm bảo sau khi di chuyển xong, hủy sự kiện để tránh gọi nhiều lần
+        //    SceneManager.sceneLoaded -= OnSceneLoaded;
+        //}
+
 
         UpdateScore();
     }
@@ -126,9 +130,7 @@ public class QuizGame : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            ShowMessage(
-                "Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa."
-            );
+            ShowMessage("Thật không may, cánh cửa này đã bị đóng.\nBạn phải trả lời đúng 4 câu hỏi để mở khóa được cánh cửa.");
         }
     }
 
