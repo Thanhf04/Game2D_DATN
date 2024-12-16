@@ -107,7 +107,7 @@ public class Dichuyennv1 : MonoBehaviour
     // Các biến level và điểm nâng
     public int level = 1;
     public float currentLevel;
-    public int upgradePoints = 5;
+    public int upgradePoints = 1;
 
     // Các biến UI
     [SerializeField]
