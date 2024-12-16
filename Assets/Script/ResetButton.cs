@@ -12,14 +12,14 @@ public class ResetButtonHandler : MonoBehaviour
     public Slider energySlider; // Slider cho energy
     public GameObject player;   // Nhân vật trong game
     private FirebaseManager1 firebaseManager;
-    public Button tryagain; // Nút bấm để phục hồi đầy máu
-    public Button resetar; // Nút bấm để phục hồi đầy máu
+    //public Button tryagain; // Nút bấm để phục hồi đầy máu
+    //public Button resetar; // Nút bấm để phục hồi đầy máu
     Dichuyennv1 player1;
     private void Start()
     {
         firebaseManager.LoadPlayerData(OnPlayerDataLoaded);
-        tryagain.onClick.AddListener(OnFullHealthButtonClick);
-        resetar.onClick.AddListener(OnFullHealthButtonClick);
+        //tryagain.onClick.AddListener(OnFullHealthButtonClick);
+        //resetar.onClick.AddListener(OnFullHealthButtonClick);
         // Gán sự kiện khi nhấn nút reset
         resetButton.onClick.AddListener(ResetPlayerValues);
     }

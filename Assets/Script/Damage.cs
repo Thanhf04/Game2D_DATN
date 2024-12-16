@@ -25,4 +25,5 @@ public class Damage : MonoBehaviour
             Debug.LogError("Không tìm thấy NewPlayer trong đối tượng cha của Damage.");
         }
     }
+    
 }

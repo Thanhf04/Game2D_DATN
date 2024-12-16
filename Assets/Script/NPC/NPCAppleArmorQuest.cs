@@ -28,7 +28,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public bool isCompletedArmorQuest = false;
     private bool isShownEncouragement = false;
 
-    private int appleCount = 3;
+    private int appleCount = 0;
     private int armorCount = 0;
 
     //private FirebaseQuestManager firebaseQuestManager;

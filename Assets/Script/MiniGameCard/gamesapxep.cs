@@ -38,7 +38,7 @@ public class Gamesapxep : MonoBehaviour
                 piece.localPosition = new Vector3(
                     -1 + (2 * width * col) + width,
                     +1 - (2 * width * row) - width,
-                    0
+                    5f
                 );
                 piece.localScale = ((2 * width) - gapThickness) * Vector3.one;
                 piece.name = $"{(row * size) + col}";
@@ -245,4 +245,5 @@ public class Gamesapxep : MonoBehaviour
             }
         }
     }
+    
 }

@@ -255,17 +255,6 @@ public class Dichuyennv1 : MonoBehaviour
         }
 
 
-        //if (Quest_3.isWolfQuest)
-        //{
-        //    isJump = false;
-        //    anim.SetBool("isJump", false);
-        //    Debug.Log("Khóa");
-        //    return;
-
-        //}
-
-
-
         // Dừng di chuyển nếu đang mở cửa hàng hoặc panel stats
         if (ShopOpen.isOpenShop || isStatsPanelOpen || NPC_Controller.isDialogue || GameManager.isMiniGame || OpenSettings.isSettings
             || OpenChiSoCaNhan.ischisoCaNhan || isStatsDisplayOpen || Quest_3.isQuest3 || OpenMiniGame_Input.isMiniGameInput
@@ -490,16 +479,43 @@ public class Dichuyennv1 : MonoBehaviour
         isRoll = false;
     }
 
+private float lastGroundY = 0f; // Lưu tọa độ Y cuối cùng khi nhân vật ở trên mặt đất
+public float fallDamageThreshold = 8f; // Ngưỡng chiều cao rơi để bắt đầu tính sát thương
+private int fallDamage = 50; // Lượng máu bị trừ khi rơi từ độ cao vượt ngưỡng
+public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("NenDat"))
+    {
+        isGrounded = true;
+        isJump = false;
+        anim.SetBool("isJump", false);
+        anim.SetBool("isAttack2", false);
+        jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
+
+        // Tính toán độ cao rơi
+        float fallHeight = lastGroundY - transform.position.y;
+
+        // Nếu độ cao rơi vượt ngưỡng, trừ máu
+        if (fallHeight > fallDamageThreshold)
         {
-            isGrounded = true;
-            isJump = false;
-            anim.SetBool("isJump", false);
-            anim.SetBool("isAttack2", false);
-            jumpCount = 0; // Đặt lại số lần nhảy khi nhân vật chạm đất
+            currentHealth -= fallDamage; // Trừ máu
+            healthSlider.value = currentHealth; // Cập nhật thanh máu
+            // Hiển thị hiệu ứng rơi nếu nhân vật mất máu
+             if (fallEffectPrefab != null && fallDamage > 0)
+             {
+                 GameObject effect = Instantiate(fallEffectPrefab, transform.position, Quaternion.identity); // Tạo instance
+        Destroy(effect, 2f); // Hủy instance sau 2 giây
+            }
+            // Hiển thị thông báo nếu cần
+            // notificationText.SetText($"Rơi từ độ cao {fallHeight:F1}! Bị trừ {fallDamage} máu.");
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
         }
+    }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -507,6 +523,7 @@ public class Dichuyennv1 : MonoBehaviour
         if (collision.gameObject.CompareTag("NenDat"))
         {
             isGrounded = false;
+            lastGroundY = transform.position.y;
         }
     }
 
@@ -925,8 +942,10 @@ public class Dichuyennv1 : MonoBehaviour
     private void CollectApple(GameObject apple)
     {
         AddAppleToInventory(); // Thêm táo vào Inventory
-        UpdateApple(); // Cập nhật nhiệm vụ (nếu cần)
+        // UpdateApple(); // Cập nhật nhiệm vụ (nếu cần)
+        npcapple.CollectApple();
         Destroy(apple); // Hủy object táo trong game
+        isAppleQuestComplete =true;
     }
 
     private void CollectArmor(GameObject armor)
@@ -934,35 +953,6 @@ public class Dichuyennv1 : MonoBehaviour
         AddArmorToInventory(); // Thêm giáp vào Inventory
         UpdateArmor(); // Cập nhật nhiệm vụ giáp (nếu cần)
         Destroy(armor); // Hủy object giáp trong game
-    }
-
-    public void UpdateApple()
-    {
-        Debug.Log("Cập nhật nhiệm vụ cho NPCApple");
-
-        // Chỉ cập nhật nếu nhiệm vụ táo chưa hoàn thành
-        if (!isAppleQuestComplete)
-        {
-            // Cập nhật trạng thái nhiệm vụ
-            isAppleQuestComplete = true;
-
-            // Nếu bạn có một NPC hoặc một đối tượng liên quan đến nhiệm vụ, thực hiện hành động
-            if (npcapple != null)
-            {
-                // Cập nhật nhiệm vụ táo và làm gì đó với NPC (nếu cần)
-                npcapple.CollectApple();
-            }
-
-            //// Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
-            //firebaseManager1.SavePlayerData(this);
-
-            // Thông báo hoàn thành nhiệm vụ (có thể hiển thị UI hoặc popup)
-            Debug.Log("Nhiệm vụ táo đã hoàn thành.");
-        }
-        else
-        {
-            Debug.Log("Nhiệm vụ táo đã hoàn thành từ trước.");
-        }
     }
 
     public void UpdateArmor()
@@ -1000,7 +990,6 @@ public class Dichuyennv1 : MonoBehaviour
             Debug.LogWarning("Không tìm thấy InventoryManager!");
         }
     }
-    // Mở panel quiz game
     // Mở panel quiz game
     public void OpenQuizGamePanel()
     {

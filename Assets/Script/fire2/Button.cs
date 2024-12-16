@@ -1,24 +1,81 @@
-﻿//using UnityEngine;
-//using UnityEngine.SceneManagement; // Thư viện để chuyển cảnh
+﻿using UnityEngine;
+using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;  // Để sử dụng SceneManager
 
-//public class SceneController : MonoBehaviour
-//{
-//    // Tham chiếu đến GameObject mà bạn muốn di chuyển
-//    public GameObject objectToMove;
+public class DeleteUserData : MonoBehaviour
+{
+    private DatabaseReference databaseReference;
 
-//    // Vị trí mà GameObject sẽ di chuyển đến
-//    private Vector3 targetPosition = new Vector3(175, 2, 0);
+    // Khai báo Button để liên kết với UI
+    public Button deleteButton;
 
-//    // Hàm này sẽ chuyển cảnh và đặt vị trí của đối tượng
-//    public void GoToPlayer1Scene()
-//    {
-//        // Chuyển sang Scene có tên "Player1"
-//        SceneManager.LoadScene("Player1");
+    void Start()
+    {
+        // Khởi tạo Firebase
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+            if (task.IsCompleted)
+            {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                Debug.Log("Firebase đã được khởi tạo thành công.");
+            }
+            else
+            {
+                Debug.LogError("Lỗi khi khởi tạo Firebase.");
+            }
+        });
 
-//        // Đặt vị trí của đối tượng này (hoặc đối tượng cụ thể bạn muốn) ở vị trí (175, 2, 0)
-//        if (objectToMove != null)
-//        {
-//            objectToMove.transform.position = targetPosition;
-//        }
-//    }
-//}
+        // Đăng ký sự kiện click cho nút delete
+        deleteButton.onClick.AddListener(DeleteUserDataAction);
+    }
+
+    void DeleteUserDataAction()
+    {
+        // Lấy username từ PlayerPrefs (dữ liệu lưu trong PlayerPrefs)
+        string username = PlayerPrefs.GetString("username", "");  // "username" là khóa đã lưu trong PlayerPrefs
+
+        if (!string.IsNullOrEmpty(username))
+        {
+            // Xóa dữ liệu của player1 tại đường dẫn "players/player1"
+            databaseReference.Child("players").Child(username).RemoveValueAsync().ContinueWithOnMainThread(task => {
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Dữ liệu của player1 đã được xóa.");
+
+                    // Xóa dữ liệu của player2 tại đường dẫn "players/player2"
+                    databaseReference.Child("player").Child(username).RemoveValueAsync().ContinueWithOnMainThread(subTask => {
+                        if (subTask.IsCompleted)
+                        {
+                            Debug.Log("Dữ liệu của player2 đã được xóa.");
+
+                            // Sau khi xóa dữ liệu, chuyển màn hình về scene "Player1"
+                            LoadNewScene(); // Hàm chuyển màn hình
+                        }
+                        else
+                        {
+                            Debug.LogError("Lỗi khi xóa dữ liệu của player2.");
+                        }
+                    });
+                }
+                else
+                {
+                    Debug.LogError("Lỗi khi xóa dữ liệu của player1.");
+                }
+            });
+        }
+        else
+        {
+            Debug.LogWarning("Không có username lưu trong PlayerPrefs.");
+        }
+    }
+
+    // Hàm chuyển màn hình
+    void LoadNewScene()
+    {
+        // Chuyển đến scene "Player1"
+        SceneManager.LoadScene("Player1");
+    }
+}
