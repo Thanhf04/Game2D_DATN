@@ -188,7 +188,7 @@ public class Dichuyennv1 : MonoBehaviour
         gameOverPanel.SetActive(false);
 
         // Gán các sự kiện cho các nút
-        tryAgainButton.onClick.AddListener(OnTryAgain);
+        // tryAgainButton.onClick.AddListener(OnTryAgain);
         resetButton.onClick.AddListener(OnReset);
         mainMenuButton.onClick.AddListener(OnMainMenu);
 
@@ -642,12 +642,12 @@ public GameObject fallEffectPrefab; // Gán Prefab hiệu ứng rớt
         Time.timeScale = 0f; // Tạm dừng game
     }
 
-    void OnTryAgain()
-    {
-        // Tải lại cảnh hiện tại để chơi lại
-        Time.timeScale = 1f; // Tiếp tục game
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    // void OnTryAgain()
+    // {
+    //     // Tải lại cảnh hiện tại để chơi lại
+    //     Time.timeScale = 1f; // Tiếp tục game
+    //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    // }
 
     void OnReset()
     {
