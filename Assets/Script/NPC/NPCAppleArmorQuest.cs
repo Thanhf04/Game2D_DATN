@@ -28,7 +28,7 @@ public class NPCAppleArmorQuest : MonoBehaviour
     public bool isCompletedArmorQuest = false;
     private bool isShownEncouragement = false;
 
-    private int appleCount = 0;
+    private int appleCount = 3;
     private int armorCount = 0;
 
     //private FirebaseQuestManager firebaseQuestManager;
@@ -131,7 +131,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
     }
 
     // Handle continue button click
-    // Handle continue button click
     private void OnContinue()
     {
         // Load latest data from Firebase before continuing
@@ -169,8 +168,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
             armorCountText.gameObject.SetActive(false);
         }
     }
-
-
     // Handle confirm button click
     private void OnConfirm()
     {
@@ -183,11 +180,8 @@ public class NPCAppleArmorQuest : MonoBehaviour
             // Update UI after quest completion
             if (isCompletedArmorQuest)
             {
-                if (uiCoin != null)
-                {
-                    uiCoin.AddCoins(30); // Reward gold when completing armor quest
-                }
                 armorCountText.gameObject.SetActive(false);
+                CollectArmor();
                 //firebaseQuestManager.SaveQuestStatus(); // Save quest status to Firebase
             }
             else if (isCompletedAppleQuest)
@@ -214,11 +208,6 @@ public class NPCAppleArmorQuest : MonoBehaviour
             isCompletedAppleQuest = true;
             questText.text = appleCompletionText;
             appleCountText.color = Color.yellow;
-           
-            // Save quest status to Firebase
-            //firebaseQuestManager.SetAppleCount(appleCount);
-            //firebaseQuestManager.SetHasCompletedAppleQuest(true);
-
             // Update UI
             completionText.text = "Báo cáo với thợ rèn.";
 

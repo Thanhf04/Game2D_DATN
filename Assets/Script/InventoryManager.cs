@@ -5,68 +5,48 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject slotsHolder;
 
-    [SerializeField]
-    private ItemClass itemToAdd;
+    [SerializeField] private GameObject slotsHolder;
+    [SerializeField] private ItemClass itemToAdd;
+    [SerializeField] private ItemClass itemToRemove;
+    [SerializeField] private SlotClass[] items;
+    [SerializeField] private SlotClass[] startingItems;
 
-    [SerializeField]
-    private ItemClass itemToRemove;
-
-    [SerializeField]
-    private SlotClass[] items;
-
-    [SerializeField]
-    private SlotClass[] startingItems;
-
-    [SerializeField]
-    private SlotClass movingSlot;
-
-    [SerializeField]
-    private SlotClass originalSlot;
-
-    [SerializeField]
-    private SlotClass tempSlot;
+    [SerializeField] private SlotClass movingSlot;
+    [SerializeField] private SlotClass originalSlot;
+    [SerializeField] private SlotClass tempSlot;
 
     public Image itemCursor;
+    public FirebaseManager1 firebaseManager;
 
-    [SerializeField]
-    private GameObject[] slots;
+
+    [SerializeField] private GameObject[] slots;
     public bool isMoving;
 
     // use item
     [Header("Use Item")]
-    [SerializeField]
-    private Button Btn_Health;
-
-    [SerializeField]
-    private Button Btn_Mana;
-
-    [SerializeField]
-    private ItemClass healthItem;
-
-    [SerializeField]
-    private ItemClass manaItem;
-
-    [SerializeField]
-    public Slider healthSlider;
-
-    [SerializeField]
-    public Slider manaSlider;
-
-    [SerializeField]
-    private TextMeshProUGUI healthButtonText;
-
-    [SerializeField]
-    private TextMeshProUGUI manaButtonText;
+    [SerializeField] private Button Btn_Health;
+    [SerializeField] private Button Btn_Mana;
+    [SerializeField] private ItemClass healthItem;
+    [SerializeField] private ItemClass manaItem;
+    [SerializeField] public Slider healthSlider;
+    [SerializeField] public Slider manaSlider;
+    [SerializeField] private TextMeshProUGUI healthButtonText;
+    [SerializeField] private TextMeshProUGUI manaButtonText;
     private float itemCooldownTime = 2f;
     private bool isHealthOnCooldown;
     private bool isManaOnCooldown;
+    Dichuyennv1 player1;
+    //FirebaseManager1 firebaseManager1;
+    //private string playerId = "";
 
     // Start is called before the first frame update
     void Start()
     {
+        firebaseManager = FindObjectOfType<FirebaseManager1>(); // Tìm đối tượng FirebaseManager1
+
+        // Tải dữ liệu người chơi từ Firebase
+        firebaseManager.LoadPlayerData(OnPlayerDataLoaded);
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
         healthButtonText.text = "";
@@ -96,9 +76,43 @@ public class InventoryManager : MonoBehaviour
 
         RefreshUI();
     }
-
+    private void OnPlayerDataLoaded(FirebaseManager1.PlayerData playerData)
+    {
+        if (playerData != null)
+        {
+            // Cập nhật các thông tin về sức khỏe, mana và các vật phẩm
+            player1.currentHealth = playerData.currentHealth;
+            player1.currentMana = playerData.currentMana;
+            player1.maxHealth = playerData.maxHealth;
+            player1.maxMana = playerData.maxMana;
+            // Giả sử bạn có cách lưu trữ các vật phẩm từ PlayerData vào kho (items).
+            // Cập nhật dữ liệu các vật phẩm
+            // Ví dụ:
+            // AddItem(item, quantity); (Đảm bảo bạn có phương thức để thêm item từ PlayerData)
+        }
+        else
+        {
+            Debug.LogWarning("Player data not found or loading failed.");
+        }
+    }
     private void Update()
     {
+
+        {
+            //Gọi hàm LoadPlayerData từ FirebaseManager1
+            //firebaseManager1.LoadPlayerData(OnPlayerDataLoaded);
+
+        }
+        if (player1 == null)
+        {
+            player1 = FindObjectOfType<Dichuyennv1>();
+            if (player1 == null)
+            {
+                return;
+            }
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             if (isMoving)
@@ -143,9 +157,7 @@ public class InventoryManager : MonoBehaviour
             try
             {
                 slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i]
-                    .GetItem()
-                    .itemIcon;
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].GetItem().itemIcon;
 
                 if (!items[i].GetItem().isStackable)
                 {
@@ -153,9 +165,7 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i]
-                        .GetQuantity()
-                        .ToString();
+                    slots[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = items[i].GetQuantity().ToString();
                     if (items[i].GetItem() == healthItem)
                     {
                         UpdateButtonQuantity(Btn_Health, items[i].GetItem());
@@ -227,8 +237,7 @@ public class InventoryManager : MonoBehaviour
                 items[slotToRemoveIndex].RemoveItem();
             }
 
-            FirebaseInventoryManager1 firebaseInventory =
-                FindObjectOfType<FirebaseInventoryManager1>();
+            FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
             if (firebaseInventory != null)
             {
                 firebaseInventory.RemoveItemFromFirebase(item, quantity);
@@ -265,8 +274,7 @@ public class InventoryManager : MonoBehaviour
     private void BeginMove()
     {
         originalSlot = GetClosestSlot();
-        if (originalSlot == null || originalSlot.GetItem() == null)
-            return;
+        if (originalSlot == null || originalSlot.GetItem() == null) return;
 
         movingSlot.AddItem(originalSlot.GetItem(), originalSlot.GetQuantity());
         originalSlot.RemoveItem();
@@ -278,22 +286,16 @@ public class InventoryManager : MonoBehaviour
     private void BeginSplit()
     {
         originalSlot = GetClosestSlot();
-        if (originalSlot == null || originalSlot.GetItem() == null)
-            return;
+        if (originalSlot == null || originalSlot.GetItem() == null) return;
 
-        if (originalSlot.GetQuantity() <= 1)
-            return;
+        if (originalSlot.GetQuantity() <= 1) return;
 
-        movingSlot.AddItem(
-            originalSlot.GetItem(),
-            Mathf.CeilToInt(originalSlot.GetQuantity() / 2f)
-        );
+        movingSlot.AddItem(originalSlot.GetItem(), Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
         originalSlot.SubQuantity(Mathf.CeilToInt(originalSlot.GetQuantity() / 2f));
 
         isMoving = true;
         RefreshUI();
     }
-
     private void EndMove()
     {
         originalSlot = GetClosestSlot();
@@ -365,18 +367,14 @@ public class InventoryManager : MonoBehaviour
 
         if (item is ConsumableClass consumable)
         {
-            if (PlayerStats.Instance.hp < PlayerStats.Instance.maxHp)
+            if (player1.currentHealth < player1.maxHealth)
             {
-                PlayerStats.Instance.hp = Mathf.Min(
-                    PlayerStats.Instance.hp + 50,
-                    PlayerStats.Instance.maxHp
-                );
-                healthSlider.value = PlayerStats.Instance.hp;
-                PlayerStats.Instance.SaveStats();
+                player1.currentHealth = Mathf.Min(player1.currentHealth + 50, player1.maxHealth);
+                healthSlider.value = player1.currentHealth;
                 RemoveItem(item, 1);
-
-                FirebaseInventoryManager1 firebaseInventory =
-                    FindObjectOfType<FirebaseInventoryManager1>();
+                // Save data after decreasing mana
+                FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
+                firebaseManager.SavePlayerData(player1);
                 if (firebaseInventory != null)
                 {
                     firebaseInventory.RemoveItemFromFirebase(item, 1);
@@ -403,19 +401,14 @@ public class InventoryManager : MonoBehaviour
 
         if (item is ConsumableClass consumable)
         {
-            if (PlayerStats.Instance.mana < PlayerStats.Instance.maxMana)
+            if (player1.currentMana < player1.maxMana)
             {
-                PlayerStats.Instance.mana = Mathf.Min(
-                    PlayerStats.Instance.mana + 50,
-                    PlayerStats.Instance.maxMana
-                );
-                manaSlider.value = PlayerStats.Instance.mana;
-                PlayerStats.Instance.SaveStats();
+                player1.currentMana = Mathf.Min(player1.currentMana + 50, player1.maxMana);
+                manaSlider.value = player1.currentMana;
 
                 RemoveItem(item, 1);
-
-                FirebaseInventoryManager1 firebaseInventory =
-                    FindObjectOfType<FirebaseInventoryManager1>();
+                firebaseManager.SavePlayerData(player1);
+                FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
                 if (firebaseInventory != null)
                 {
                     firebaseInventory.RemoveItemFromFirebase(item, 1);
@@ -428,6 +421,7 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("Mana của bạn đã đầy!");
             }
+
         }
     }
 
@@ -443,6 +437,7 @@ public class InventoryManager : MonoBehaviour
                 if (quantity > 0)
                 {
                     buttonText.text = quantity.ToString();
+
                 }
                 else
                 {
@@ -458,6 +453,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+    public void SetInventoryItems(SlotClass[] loadedItems)
+    {
+        // Cập nhật kho đồ trong InventoryManager từ dữ liệu tải về
+        items = loadedItems;
+        // Cập nhật giao diện người dùng
+        RefreshUI();
+    }
+
 
     private IEnumerator ItemCooldown(Button button, TextMeshProUGUI buttonText, bool isHealth)
     {
@@ -472,7 +475,6 @@ public class InventoryManager : MonoBehaviour
 
         button.interactable = true;
         buttonText.text = "";
-
         if (isHealth)
         {
             isHealthOnCooldown = false;

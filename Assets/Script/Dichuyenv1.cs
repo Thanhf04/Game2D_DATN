@@ -1,4 +1,3 @@
-
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -108,7 +107,7 @@ public class Dichuyennv1 : MonoBehaviour
     // Các biến level và điểm nâng
     public int level = 1;
     public float currentLevel;
-    public int upgradePoints = 5;
+    public int upgradePoints = 1;
 
     // Các biến UI
     [SerializeField]
@@ -215,9 +214,11 @@ public class Dichuyennv1 : MonoBehaviour
             firebaseManager1.UpdatePlayerStats(playerData, this);
 
             // Cập nhật các trạng thái nhiệm vụ (quest)
-            isQuest1Complete = playerData.isQuest1Complete;
-            isAppleQuestComplete = playerData.isAppleQuestComplete;
 
+            //isQuest1Complete = playerData.isQuest1Complete;
+            //isAppleQuestComplete = playerData.isAppleQuestComplete;
+
+            // Debug thông báo trạng thái nhiệm vụ đã được cập nhật
             Debug.Log("Apple Armor Quest Completed: " + isAppleQuestComplete);
             Debug.Log("Quest 1 Completed: " + isQuest1Complete);
             //UpdateQuestUI();
@@ -328,13 +329,11 @@ public class Dichuyennv1 : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Q) && NPCAppleArmorQuest.isCompletedAppleQuest == true)
         {
-
             if (skill1Timer <= 0 && currentMana >= 20)
             {
                 Skill1();
                 string userName = PlayerPrefs.GetString("username", "");
-                //firebaseManager1.SavePlayerData(this);
-
+                firebaseManager1.SavePlayerData(this);
             }
 
         }
@@ -768,7 +767,7 @@ public class Dichuyennv1 : MonoBehaviour
         //                 "Apple Quest: " + (isAppleQuestComplete ? "Completed" : "In Progress");
 
         // Lưu lại dữ liệu người chơi sau khi cập nhật
-        //firebaseManager1.SavePlayerData(this);
+        firebaseManager1.SavePlayerData(this);
     }
 
 
@@ -925,7 +924,7 @@ public class Dichuyennv1 : MonoBehaviour
     private void CollectApple(GameObject apple)
     {
         AddAppleToInventory(); // Thêm táo vào Inventory
-        UpdateApple(); // Cập nhật nhiệm vụ (nếu cần)
+        npcapple.CollectApple();
         Destroy(apple); // Hủy object táo trong game
     }
 
@@ -952,7 +951,6 @@ public class Dichuyennv1 : MonoBehaviour
                 // Cập nhật nhiệm vụ táo và làm gì đó với NPC (nếu cần)
                 npcapple.CollectApple();
             }
-
             // Lưu lại dữ liệu người chơi với trạng thái nhiệm vụ mới
             //firebaseManager1.SavePlayerData(this);
 
@@ -1048,6 +1046,3 @@ public class Dichuyennv1 : MonoBehaviour
 
 
 }
-
-
-//    currentHealth expCurrent isQuest1Complete isAppleQuestComple
