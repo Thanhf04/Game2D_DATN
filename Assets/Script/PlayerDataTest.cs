@@ -275,6 +275,7 @@ public class PlayerDataTest : MonoBehaviour
     public Slider energySlider;
     public Slider expSlider;
     public GameObject player;
+    public Button teleportButton;  // Biến tham chiếu đến nút
 
     public int gold = 0;
     public int diamond = 0;
@@ -286,6 +287,13 @@ public class PlayerDataTest : MonoBehaviour
     private bool isPlayerMoving = false;  // Biến theo dõi liệu người chơi có đang di chuyển hay không
 
     private bool isDataLoaded = false;
+    private void TeleportPlayer()
+    {
+        if (player != null)
+        {
+            player.transform.position = new Vector3(-1, 0, 1);  // Di chuyển về vị trí (-1, 0, 1)
+        }
+    }
 
     private async void Start()
     {
@@ -320,7 +328,11 @@ public class PlayerDataTest : MonoBehaviour
             lastSavedPosition = player.transform.position;
 
             // Kiểm tra và tải dữ liệu từ Firebase
-            
+
+            if (teleportButton != null)
+            {
+                teleportButton.onClick.AddListener(TeleportPlayer);  // Gọi phương thức TeleportPlayer khi nhấn nút
+            }
         }
         else
         {

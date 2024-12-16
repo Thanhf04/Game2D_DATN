@@ -1330,7 +1330,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2077808, y: 3.8000002, z: -10}
+  m_LocalPosition: {x: -1.6041088, y: 3.8000002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46310,6 +46310,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008682189}
   m_CullTransparentMesh: 1
+--- !u!114 &1025100198 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1295183212747430641, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1031783723 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6759534472527737417, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
@@ -48849,6 +48860,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Dichuyennv1, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 3413795889310764670, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3554322544792035224, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -48917,6 +48932,18 @@ PrefabInstance:
       propertyPath: playerStatsManager1
       value: 
       objectReference: {fileID: 2070156010}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: resetar
+      value: 
+      objectReference: {fileID: 1025100198}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: tryagain
+      value: 
+      objectReference: {fileID: 1485258563}
+    - target: {fileID: 5379192530875543663, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: fullHealthButton
+      value: 
+      objectReference: {fileID: 1025100198}
     - target: {fileID: 6073535254716935610, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -49145,6 +49172,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d890664e3d60a64ea27ff1476f4e54c, type: 3}
+--- !u!114 &1485258563 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9164066928136404605, guid: 228517ab120b86742a0bffee13763592, type: 3}
+  m_PrefabInstance: {fileID: 1478235196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1490163531
 GameObject:
   m_ObjectHideFlags: 0
@@ -49539,7 +49577,7 @@ MonoBehaviour:
   energySlider: {fileID: 1552597536}
   expSlider: {fileID: 1585957975}
   player: {fileID: 1552597535}
-  reloadPositionButton: {fileID: 0}
+  teleportButton: {fileID: 1485258563}
   gold: 0
   diamond: 0
 --- !u!114 &1552597540
@@ -49769,7 +49807,7 @@ Transform:
   m_GameObject: {fileID: 1617019410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2077808, y: 3.8000002, z: -10}
+  m_LocalPosition: {x: -1.6041088, y: 3.8000002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
