@@ -5692,6 +5692,10 @@ PrefabInstance:
       propertyPath: ObservedComponents.Array.data[1]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8152223349698346572, guid: 228517ab120b86742a0bffee13763592, type: 3}
+      propertyPath: m_SortingOrder
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8413585810571147445, guid: 228517ab120b86742a0bffee13763592, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
