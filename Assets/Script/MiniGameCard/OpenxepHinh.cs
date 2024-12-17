@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,19 +64,20 @@ public class OpenxepHinh : MonoBehaviour
         {
             isPlayerInRange = true; // Bật cờ khi player vào vùng va chạm
         }
+
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        // Tắt cờ khi player rời khỏi vùng va chạm
-        if (other.CompareTag("Player"))
-        {
-            isPlayerInRange = false;
-            if (isPanelOpen)
-            {
-                panel.SetActive(false); // Đóng panel nếu player rời vùng
-                isPanelOpen = false;
-            }
-        }
-    }
+    //private void OnTriggerExit2D(Collider2D other)
+    //{
+    //    // Tắt cờ khi player rời khỏi vùng va chạm
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        isPlayerInRange = false;
+    //        if (isPanelOpen)
+    //        {
+    //            panel.SetActive(false); // Đóng panel nếu player rời vùng
+    //            isPanelOpen = false;
+    //        }
+    //    }
+    //}
 }

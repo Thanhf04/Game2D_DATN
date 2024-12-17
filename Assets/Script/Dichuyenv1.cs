@@ -9,6 +9,10 @@ public class Dichuyennv1 : MonoBehaviour
 {
     #region Khai báo các biến
 
+
+
+
+
     public Dichuyennv1 playerStats;
     private FirebaseManager1 firebaseManager1;
     private string username = ""; // Đây là ID người chơi, bạn có thể lấy từ hệ thống đăng nhập

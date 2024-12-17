@@ -19,6 +19,11 @@ public class DamagePlayerSkill : MonoBehaviour
             {
                 boss_Health.TakeDamage(DamageSkill);
             }
+            Boss_Health_Elite boss_Health_Elite = collision.GetComponent<Boss_Health_Elite>();
+            if (boss_Health_Elite != null)
+            {
+                boss_Health_Elite.TakeDamage(DamageSkill);
+            }
         }
     }
 }

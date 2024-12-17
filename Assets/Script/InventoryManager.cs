@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    [SerializeField] private Button Btn_FullHealth;
 
     [SerializeField] private GameObject slotsHolder;
     [SerializeField] private ItemClass itemToAdd;
@@ -49,6 +50,7 @@ public class InventoryManager : MonoBehaviour
         firebaseManager.LoadPlayerData(OnPlayerDataLoaded);
         Btn_Health.onClick.AddListener(() => UseHealth(healthItem));
         Btn_Mana.onClick.AddListener(() => UseMana(manaItem));
+        Btn_FullHealth.onClick.AddListener(SetFullHealth);  // Gán hàm khi nhấn nút
         healthButtonText.text = "";
         manaButtonText.text = "";
 
@@ -356,6 +358,29 @@ public class InventoryManager : MonoBehaviour
 
         isMoving = false;
         RefreshUI();
+    }
+    public void SetFullHealth()
+    {
+        if (player1 != null)
+        {
+            // Đặt currentHealth bằng maxHealth
+            player1.currentHealth += 200;
+            player1.healthSlider.value = player1.currentHealth;
+
+            // Cập nhật giá trị thanh sức khỏe
+
+            // Lưu dữ liệu của player (bao gồm currentHealth)
+            firebaseManager.SavePlayerData(player1);
+
+            // Cập nhật lại giao diện
+            RefreshUI();
+
+            Debug.Log("Sức khỏe đã được phục hồi hoàn toàn!");
+        }
+        else
+        {
+            Debug.LogWarning("Player chưa được khởi tạo.");
+        }
     }
 
     public void UseHealth(ItemClass item)

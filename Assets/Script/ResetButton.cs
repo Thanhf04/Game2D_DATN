@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using Firebase.Database;
-using System.Threading.Tasks;
+﻿using Firebase.Database;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
 
 
 public class ResetButtonHandler : MonoBehaviour
@@ -13,13 +13,10 @@ public class ResetButtonHandler : MonoBehaviour
     public GameObject player;   // Nhân vật trong game
     private FirebaseManager1 firebaseManager;
     public Button tryagain; // Nút bấm để phục hồi đầy máu
-    public Button resetar; // Nút bấm để phục hồi đầy máu
     Dichuyennv1 player1;
     private void Start()
     {
         firebaseManager.LoadPlayerData(OnPlayerDataLoaded);
-        tryagain.onClick.AddListener(OnFullHealthButtonClick);
-        resetar.onClick.AddListener(OnFullHealthButtonClick);
         // Gán sự kiện khi nhấn nút reset
         resetButton.onClick.AddListener(ResetPlayerValues);
     }
@@ -104,30 +101,6 @@ public class ResetButtonHandler : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError($"Error saving player position: {ex.Message}");
-        }
-    }
-    void OnFullHealthButtonClick()
-    {
-        // Kiểm tra xem máu hiện tại có nhỏ hơn máu tối đa không
-        if (player1.currentHealth < player1.maxHealth)
-        {
-            // Cộng đầy máu (set máu hiện tại bằng máu tối đa)
-            player1.currentHealth = player1.maxHealth;
-
-            // Cập nhật lại thanh máu
-            healthSlider.value = player1.currentHealth;
-
-            // Có thể lưu dữ liệu người chơi sau khi phục hồi máu (nếu cần thiết)
-            // FirebaseInventoryManager1 firebaseInventory = FindObjectOfType<FirebaseInventoryManager1>();
-            // firebaseInventory.SavePlayerData(player1);
-
-            Debug.Log("Máu đã được phục hồi đầy!");
-            firebaseManager.SavePlayerData(player1);
-        }
-        else
-        {
-            // Nếu máu đã đầy
-            Debug.Log("Máu của bạn đã đầy!");
         }
     }
 }

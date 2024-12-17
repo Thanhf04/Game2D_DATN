@@ -30,7 +30,7 @@ public class PanelManager : MonoBehaviour
             OpenMiniGame_Input.isDialogue_MiniGameInput = false;
             OpenSettings.isSettings = false;
             OpenChiSoCaNhan.ischisoCaNhan = false;
-            Dichuyennv1.isStatsPanelOpen = false;
+            //Dichuyennv1.isStatsPanelOpen = false;
             Dichuyennv1.isStatsDisplayOpen = false;
             Boss_Health.isPanelKillDeathBoss = false;
             Boss_Health_Elite.isPanelKillBossElite = false;

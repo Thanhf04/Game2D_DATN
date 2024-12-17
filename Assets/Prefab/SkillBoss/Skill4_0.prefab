@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2542859855516814467}
   - component: {fileID: -4237346728992330546}
   - component: {fileID: 4825594160155572335}
+  - component: {fileID: 441255448949017335}
   m_Layer: 0
   m_Name: Skill4_0
   m_TagString: Untagged
@@ -75,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -672402153
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 389539418, guid: 550f674f9a0a8034fbb5d4bbd8c7082b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -194,3 +195,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.85, y: 1.4}
   m_EdgeRadius: 0
+--- !u!114 &441255448949017335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5289713676190867915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4c2d27145a3e574e8a26a457011554a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageSkill: 10
